@@ -135,7 +135,7 @@ UF.CreatePowerBar = function(self, height)
 end
 
 --[[
-	 	Extra powerbar display
+		Extra powerbar display
 --]]
 UF.CreateExtraPowerBar = function(self, point, anchor, relpoint, offsetX, offsetY)
 	local pp = CreateFrame("StatusBar", nil, self)
@@ -442,7 +442,7 @@ do
 
 		button.duration = (duration == 0) and huge or duration
 		button.caster = caster
-		button.dtype=  dtype
+		button.dtype = dtype
 
 		if (T.db["frames"].auras.blacklistAuraFilter[name]) then
 			return false
@@ -529,7 +529,7 @@ do
 		debuffs.filter = "HARMFUL" -- Explicitly set the filter or the first customFilter call won"t work
 		debuffs.showDebuffType = true
 
-		debuffs.PreUpdate = DebuffPreUpdate
+--		debuffs.PreUpdate = DebuffPreUpdate
 		debuffs.CustomFilter = CustomFilter
 		debuffs.CreateIcon = CreateAuraIcon
 		debuffs.PostUpdateIcon = PostUpdateIcon
@@ -559,7 +559,7 @@ do
 		buffs.showBuffType = true
 		buffs.showStealableBuffs = T.playerClass == "MAGE" and T.db["frames"].showStealableBuffs or false
 
-		buffs.PreUpdate = BuffPreUpdate
+--		buffs.PreUpdate = BuffPreUpdate
 		buffs.CreateIcon = CreateAuraIcon
 		buffs.PostUpdateIcon = PostUpdateIcon
 		buffs.CustomFilter = filter or CustomFilter
