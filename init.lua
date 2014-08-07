@@ -48,6 +48,7 @@ end
 T.OnEnable = function(self)
 --	self:UIScaling()
 	self:UpdateBlizzardFonts()
+	self:InitializeConsoleCommands()
 
 	local viewportEdgeBot = CreateFrame("Frame", nil, UIParent)
 	viewportEdgeBot:SetFrameStrata("BACKGROUND")
