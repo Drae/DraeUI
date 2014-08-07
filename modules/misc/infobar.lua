@@ -145,9 +145,11 @@ do
 
 		if (C["infobar"].showXP and UnitLevel("player") < MAX_PLAYER_LEVEL and not IsXPUserDisabled()) then
 			curXP, maxXP, restedXP = UnitXP("player"), UnitXPMax("player"), GetXPExhaustion()
-			pct = (curXP / maxXP) * 100
+			if (maxXp ~= 0) then
+				pct = (curXP / maxXP) * 100
 
-			affix = "xp" .. (restedXP and format("/|cff%02x%02x%02x%d|r|cff%02x%02x%02x%%rested|r", 0, 255, 0, restedXP / maxXP * 100, 255, 255, 255) or "")
+				affix = "xp" .. (restedXP and format("/|cff%02x%02x%02x%d|r|cff%02x%02x%02x%%rested|r", 0, 255, 0, restedXP / maxXP * 100, 255, 255, 255) or "")
+			end
 		elseif (C["infobar"].showReputation) then
 			repName, standingId, repMin, repMax, repValue, repId = GetWatchedFactionInfo()
 			if (repName) then
