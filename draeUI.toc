@@ -1,4 +1,4 @@
-## Interface: 50400
+## Interface: 60000
 ## Author: Drae
 ## Title: draeUI
 ## Version: 3.0
@@ -81,7 +81,6 @@ modules\misc\enhanceraidbrowser.lua
 modules\misc\helmsaver.lua
 modules\misc\infobar.lua
 modules\misc\openall.lua
-modules\misc\randommount.lua
 modules\misc\switchset.lua
 
 # Blizzard

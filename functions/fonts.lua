@@ -46,6 +46,7 @@ T.UpdateBlizzardFonts = function(self)
 	ChangeFont(SystemFont_Shadow_Med3            , FontStandard, SizeMedium, nil)
 	ChangeFont(SystemFont_Large                  , FontStandard, SizeLarge , nil)
 	ChangeFont(SystemFont_Shadow_Large           , FontStandard, SizeLarge , nil)
+	ChangeFont(SystemFont_Shadow_Large_Outline   , FontCombat,   SizeHuge , "OUTLINE")
 	ChangeFont(SystemFont_Shadow_Huge1           , FontStandard, SizeHuge  , nil)
 	ChangeFont(SystemFont_OutlineThick_Huge2     , FontStandard, SizeHuge  , "THICKOUTLINE")
 	ChangeFont(SystemFont_Shadow_Outline_Huge2   , FontStandard, SizeHuge  , "THICKOUTLINE")
@@ -99,7 +100,7 @@ T.UpdateBlizzardFonts = function(self)
 		COMBAT_TEXT_TYPE_INFO["COMBO_POINTS"] = {r = 1.0, g = 1.0, b = 0.0, var = "COMBAT_TEXT_SHOW_COMBO_POINTS"}
 		COMBAT_TEXT_TYPE_INFO["MANA_LOW"] = {r = 0, g = 144/255, b = 1, var = "COMBAT_TEXT_SHOW_LOW_HEALTH_MANA"}
 
-		if (C.combatText.showHealing) then
+		if (C["combatText"].showHealing) then
 			COMBAT_TEXT_TYPE_INFO["PERIODIC_HEAL"] = {r = 0.1, g = 1, b = 0.1, show = 1}
 			COMBAT_TEXT_TYPE_INFO["HEAL_CRIT"] = {r = 0.1, g = 1, b = 0.1, show = 1}
 			COMBAT_TEXT_TYPE_INFO["HEAL"] = {r = 0.1, g = 1, b = 0.1, show = 1}
@@ -115,7 +116,7 @@ T.UpdateBlizzardFonts = function(self)
 			COMBAT_TEXT_TYPE_INFO["HEAL_ABSORB"] = {r = 0.1, g = 1, b = 0.1}
 		end
 
-		if (C.combatText.hideDebuffs) then
+		if (C["combatText"].hideDebuffs) then
 			COMBAT_TEXT_TYPE_INFO["SPELL_AURA_START_HARMFUL"] = {r = 1.0, g = 0.0, b = 0.0, var = "COMBAT_TEXT_SHOW_AURAS"}
 			COMBAT_TEXT_TYPE_INFO["SPELL_AURA_END_HARMFUL"] = {r = 1.0, g = 0.0, b = 0.0, var = "COMBAT_TEXT_SHOW_AURAS"}
 		else

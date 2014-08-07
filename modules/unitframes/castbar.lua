@@ -49,7 +49,7 @@ do
 
 	SetBarTicks = function(castBar, ticknum)
 		if (ticknum and ticknum > 0) then
-			local castTime = select(7, GetSpellInfo(2060))
+			local castTime = select(4, GetSpellInfo(2060))
 
 			if (not castTime or (castTime == 0)) then
 				castTime = 2500 / (1 + (GetCombatRatingBonus(CR_HASTE_SPELL) or 0) / 100)

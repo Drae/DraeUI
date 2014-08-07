@@ -375,7 +375,7 @@ do
 		local overlay = button:CreateTexture(nil, "OVERLAY")
 		button.overlay = overlay
 
-		local cd = CreateFrame("Cooldown", nil, button)
+		local cd = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
 		cd:SetReverse(true)
 		cd:SetAllPoints(button)
 		button.cd = cd

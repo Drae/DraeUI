@@ -327,3 +327,8 @@ G["minimap"] = {
 		["TimeManagerClockButton"] 		= { anchorat = "BOTTOM", anchorto = "BOTTOM", posx = 0, posy = -11 }, -- The clock
 	},
 }
+
+C["combatText"] = {
+	showHealing = true,
+	hideDebuffs = true,
+}

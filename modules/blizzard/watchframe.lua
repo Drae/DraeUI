@@ -12,16 +12,16 @@ local B = T:GetModule("Blizzard")
 local noop = function() end
 
 B.MoveWatchFrame = function(self)
-	WatchFrame:SetMovable(true)
-	WatchFrame:SetResizable(true)
-	WatchFrame:SetClampedToScreen(false)
-	WatchFrame:ClearAllPoints()
-	WatchFrame:SetPoint("TOPRIGHT", MinimapCluster, "BOTTOMRIGHT", -5, -40)
-	WatchFrame:SetHeight(WatchFrame:GetTop() - CONTAINER_OFFSET_Y)
-	WatchFrame:SetScale(0.95)
-	WatchFrame:SetUserPlaced(true)
-	WatchFrame:SetMovable(false)
-	WatchFrame:SetResizable(false)
+	ObjectiveTrackerFrame:SetMovable(true)
+	ObjectiveTrackerFrame:SetResizable(true)
+	ObjectiveTrackerFrame:SetClampedToScreen(false)
+	ObjectiveTrackerFrame:ClearAllPoints()
+	ObjectiveTrackerFrame:SetPoint("TOPRIGHT", MinimapCluster, "BOTTOMRIGHT", -5, -40)
+	ObjectiveTrackerFrame:SetHeight(ObjectiveTrackerFrame:GetTop() - CONTAINER_OFFSET_Y)
+	ObjectiveTrackerFrame:SetScale(0.95)
+	ObjectiveTrackerFrame:SetUserPlaced(true)
+	ObjectiveTrackerFrame:SetMovable(false)
+	ObjectiveTrackerFrame:SetResizable(false)
 
-	WatchFrame.SetPoint = noop
+	ObjectiveTrackerFrame.SetPoint = noop
 end
