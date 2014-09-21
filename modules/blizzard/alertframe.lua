@@ -131,6 +131,33 @@ B.AlertFrame_SetGuildChallengeAnchors = function(self, alertAnchor)
 	end
 end
 
+B.AlertFrame_SetGarrisonBuildingAlertFrameAnchors = function(self, alertAnchor)
+	local frame = GarrisonBuildingAlertFrame
+
+	if (frame:IsShown()) then
+		frame:ClearAllPoints()
+		frame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+	end
+end
+
+B.AlertFrame_SetGarrisonMissionAlertFrameAnchors = function(self, alertAnchor)
+	local frame = GarrisonMissionAlertFrame
+
+	if (frame:IsShown()) then
+		frame:ClearAllPoints()
+		frame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+	end
+end
+
+B.AlertFrame_SetGarrisonFollowerAlertFrameAnchors = function(self, alertAnchor)
+	local frame = GarrisonFollowerAlertFrame
+
+	if (frame:IsShown()) then
+		frame:ClearAllPoints()
+		frame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+	end
+end
+
 B.AlertMovers = function(self)
 	AlertFrameHolder = CreateFrame("Frame", "AlertFrameHolder", UIParent)
 	AlertFrameHolder:SetWidth(180)
@@ -147,6 +174,9 @@ B.AlertMovers = function(self)
 	self:SecureHook("AlertFrame_SetDungeonCompletionAnchors")
 	self:SecureHook("AlertFrame_SetScenarioAnchors")
 	self:SecureHook("AlertFrame_SetGuildChallengeAnchors")
+	self:SecureHook("AlertFrame_SetGarrisonBuildingAlertFrameAnchors")
+	self:SecureHook("AlertFrame_SetGarrisonMissionAlertFrameAnchors")
+	self:SecureHook("AlertFrame_SetGarrisonFollowerAlertFrameAnchors")
 
 	UIPARENT_MANAGED_FRAME_POSITIONS["GroupLootContainer"] = nil
 end
