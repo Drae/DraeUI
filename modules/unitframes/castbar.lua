@@ -126,7 +126,7 @@ local OnCastbarUpdate = function(self, elapsed)
 end
 
 local OnCastSent = function(self, event, unit, spell, rank)
-	if (self.unit ~= unit or not self.Castbar.SafeZone) then return end
+	if ((self.unit ~= unit and self.realUnit ~= unit) or not self.Castbar.SafeZone) then return end
 
 	self.Castbar.SafeZone.sendTime = GetTime()
 end

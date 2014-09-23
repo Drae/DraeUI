@@ -12,7 +12,7 @@
  .Icon     - A Texture to represent spell icon.
  .Time     - A FontString to represent spell duration.
  .Shield   - A Texture to represent if it's possible to interrupt or spell
-             steal.
+			steal.
  .SafeZone - A Texture to represent latency.
 
  Credits
@@ -26,52 +26,52 @@
 
  Examples
 
-   -- Position and size
-   local Castbar = CreateFrame("StatusBar", nil, self)
-   Castbar:SetSize(20, 20)
-   Castbar:SetPoint('TOP')
-   Castbar:SetPoint('LEFT')
-   Castbar:SetPoint('RIGHT')
+	-- Position and size
+	local Castbar = CreateFrame("StatusBar", nil, self)
+	Castbar:SetSize(20, 20)
+	Castbar:SetPoint('TOP')
+	Castbar:SetPoint('LEFT')
+	Castbar:SetPoint('RIGHT')
 
-   -- Add a background
-   local Background = Castbar:CreateTexture(nil, 'BACKGROUND')
-   Background:SetAllPoints(Castbar)
-   Background:SetTexture(1, 1, 1, .5)
+	-- Add a background
+	local Background = Castbar:CreateTexture(nil, 'BACKGROUND')
+	Background:SetAllPoints(Castbar)
+	Background:SetTexture(1, 1, 1, .5)
 
-   -- Add a spark
-   local Spark = Castbar:CreateTexture(nil, "OVERLAY")
-   Spark:SetSize(20, 20)
-   Spark:SetBlendMode("ADD")
+	-- Add a spark
+	local Spark = Castbar:CreateTexture(nil, "OVERLAY")
+	Spark:SetSize(20, 20)
+	Spark:SetBlendMode("ADD")
 
-   -- Add a timer
-   local Time = Castbar:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-   Time:SetPoint("RIGHT", Castbar)
+	-- Add a timer
+	local Time = Castbar:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+	Time:SetPoint("RIGHT", Castbar)
 
-   -- Add spell text
-   local Text = Castbar:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-   Text:SetPoint("LEFT", Castbar)
+	-- Add spell text
+	local Text = Castbar:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+	Text:SetPoint("LEFT", Castbar)
 
-   -- Add spell icon
-   local Icon = Castbar:CreateTexture(nil, "OVERLAY")
-   Icon:SetSize(20, 20)
-   Icon:SetPoint("TOPLEFT", Castbar, "TOPLEFT")
+	-- Add spell icon
+	local Icon = Castbar:CreateTexture(nil, "OVERLAY")
+	Icon:SetSize(20, 20)
+	Icon:SetPoint("TOPLEFT", Castbar, "TOPLEFT")
 
-   -- Add Shield
-   local Shield = Castbar:CreateTexture(nil, "OVERLAY")
-   Shield:SetSize(20, 20)
-   Shield:SetPoint("CENTER", Castbar)
+	-- Add Shield
+	local Shield = Castbar:CreateTexture(nil, "OVERLAY")
+	Shield:SetSize(20, 20)
+	Shield:SetPoint("CENTER", Castbar)
 
-   -- Add safezone
-   local SafeZone = Castbar:CreateTexture(nil, "OVERLAY")
+	-- Add safezone
+	local SafeZone = Castbar:CreateTexture(nil, "OVERLAY")
 
-   -- Register it with oUF
-   self.Castbar = Castbar
-   self.Castbar.bg = Background
-   self.Castbar.Spark = Spark
-   self.Castbar.Time = Time
-   self.Castbar.Text = Text
-   self.Castbar.Icon = Icon
-   self.Castbar.SafeZone = SafeZone
+	-- Register it with oUF
+	self.Castbar = Castbar
+	self.Castbar.bg = Background
+	self.Castbar.Spark = Spark
+	self.Castbar.Time = Time
+	self.Castbar.Text = Text
+	self.Castbar.Icon = Icon
+	self.Castbar.SafeZone = SafeZone
 
  Hooks and Callbacks
 
@@ -102,7 +102,7 @@ local updateSafeZone = function(self)
 end
 
 local UNIT_SPELLCAST_START = function(self, event, unit, spell)
-	if(self.unit ~= unit) then return end
+	if(self.unit ~= unit and self.realUnit ~= unit) then return end
 
 	local castbar = self.Castbar
 	local name, _, text, texture, startTime, endTime, _, castid, interrupt = UnitCastingInfo(unit)
@@ -152,7 +152,7 @@ local UNIT_SPELLCAST_START = function(self, event, unit, spell)
 end
 
 local UNIT_SPELLCAST_FAILED = function(self, event, unit, spellname, _, castid)
-	if(self.unit ~= unit) then return end
+	if(self.unit ~= unit and self.realUnit ~= unit) then return end
 
 	local castbar = self.Castbar
 	if(castbar.castid ~= castid) then
@@ -170,7 +170,7 @@ local UNIT_SPELLCAST_FAILED = function(self, event, unit, spellname, _, castid)
 end
 
 local UNIT_SPELLCAST_INTERRUPTED = function(self, event, unit, spellname, _, castid)
-	if(self.unit ~= unit) then return end
+	if(self.unit ~= unit and self.realUnit ~= unit) then return end
 
 	local castbar = self.Castbar
 	if(castbar.castid ~= castid) then
@@ -188,7 +188,7 @@ local UNIT_SPELLCAST_INTERRUPTED = function(self, event, unit, spellname, _, cas
 end
 
 local UNIT_SPELLCAST_INTERRUPTIBLE = function(self, event, unit)
-	if(self.unit ~= unit) then return end
+	if(self.unit ~= unit and self.realUnit ~= unit) then return end
 
 	local shield = self.Castbar.Shield
 	if(shield) then
@@ -202,7 +202,7 @@ local UNIT_SPELLCAST_INTERRUPTIBLE = function(self, event, unit)
 end
 
 local UNIT_SPELLCAST_NOT_INTERRUPTIBLE = function(self, event, unit)
-	if(self.unit ~= unit) then return end
+	if(self.unit ~= unit and self.realUnit ~= unit) then return end
 
 	local shield = self.Castbar.Shield
 	if(shield) then
@@ -216,7 +216,7 @@ local UNIT_SPELLCAST_NOT_INTERRUPTIBLE = function(self, event, unit)
 end
 
 local UNIT_SPELLCAST_DELAYED = function(self, event, unit, spellname, _, castid)
-	if(self.unit ~= unit) then return end
+	if(self.unit ~= unit and self.realUnit ~= unit) then return end
 
 	local castbar = self.Castbar
 	local name, _, text, texture, startTime, endTime = UnitCastingInfo(unit)
@@ -236,7 +236,7 @@ local UNIT_SPELLCAST_DELAYED = function(self, event, unit, spellname, _, castid)
 end
 
 local UNIT_SPELLCAST_STOP = function(self, event, unit, spellname, _, castid)
-	if(self.unit ~= unit) then return end
+	if(self.unit ~= unit and self.realUnit ~= unit) then return end
 
 	local castbar = self.Castbar
 	if(castbar.castid ~= castid) then
@@ -254,7 +254,7 @@ local UNIT_SPELLCAST_STOP = function(self, event, unit, spellname, _, castid)
 end
 
 local UNIT_SPELLCAST_CHANNEL_START = function(self, event, unit, spellname)
-	if(self.unit ~= unit) then return end
+	if(self.unit ~= unit and self.realUnit ~= unit) then return end
 
 	local castbar = self.Castbar
 	local name, _, text, texture, startTime, endTime, isTrade, interrupt = UnitChannelInfo(unit)
@@ -307,7 +307,7 @@ local UNIT_SPELLCAST_CHANNEL_START = function(self, event, unit, spellname)
 end
 
 local UNIT_SPELLCAST_CHANNEL_UPDATE = function(self, event, unit, spellname)
-	if(self.unit ~= unit) then return end
+	if(self.unit ~= unit and self.realUnit ~= unit) then return end
 
 	local castbar = self.Castbar
 	local name, _, text, texture, startTime, endTime, oldStart = UnitChannelInfo(unit)
@@ -330,7 +330,7 @@ local UNIT_SPELLCAST_CHANNEL_UPDATE = function(self, event, unit, spellname)
 end
 
 local UNIT_SPELLCAST_CHANNEL_STOP = function(self, event, unit, spellname)
-	if(self.unit ~= unit) then return end
+	if(self.unit ~= unit and self.realUnit ~= unit) then return end
 
 	local castbar = self.Castbar
 	if(castbar:IsShown()) then
