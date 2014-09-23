@@ -2,7 +2,7 @@
 
 
 --]]
-local T, C, G, P, U, _ = unpack(select(2, ...))
+local T, C, G, P, U, _ = select(2, ...):unpack()
 
 local M = T:NewModule("Infobar", "AceEvent-3.0", "AceTimer-3.0")
 
@@ -141,25 +141,26 @@ do
 	local curXP, maxXP, restedXP, repName, standingId, repMin, repMax, repValue, repId
 
 	XPorRepChanged = function(self)
-		local pct, affix
+		local pct = 0
+		local affix = ""
 
 		if (C["infobar"].showXP and UnitLevel("player") < MAX_PLAYER_LEVEL and not IsXPUserDisabled()) then
 			curXP, maxXP, restedXP = UnitXP("player"), UnitXPMax("player"), GetXPExhaustion()
-			if (maxXp ~= 0) then
+			if (maxXP and maxXP ~= 0) then
 				pct = (curXP / maxXP) * 100
 
 				affix = "xp" .. (restedXP and format("/|cff%02x%02x%02x%d|r|cff%02x%02x%02x%%rested|r", 0, 255, 0, restedXP / maxXP * 100, 255, 255, 255) or "")
 			end
 		elseif (C["infobar"].showReputation) then
 			repName, standingId, repMin, repMax, repValue, repId = GetWatchedFactionInfo()
-			if (repName) then
+			if (repName ~= nil) then
 				pct = (repValue - repMin) / (repMax - repMin) * 100
-			end
 
-			affix = standings[standingId]
+				affix = standings[standingId]
+			end
 		end
 
-		if (pct) then
+		if (affix ~= "") then
 			local r1, g1, b1 = T.ColorGradient(pct / 100 - 0.001, 1, 0, 0, 1, 1, 0, 0, 1, 0)
 			infoBarTextXP:SetFormattedText("|cff%02x%02x%02x%d|r|cff%02x%02x%02x%%%s|r", r1 * 255, g1 * 255, b1 * 255, pct, cr * 255, cg * 255, cb * 255, affix or "")
 		else
@@ -541,9 +542,6 @@ M.OnEnable = function(self)
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", PlayerEnteringWorld)
 
 	local tooltipRenew
-
-
-
 
 	-- Memory tooltip handling
 	infoBarMem:RegisterForClicks("AnyUp", "AnyDown")
