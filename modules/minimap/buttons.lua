@@ -2,7 +2,7 @@
 		Basically rMinimap customied a bit!
 		zoomscript taken from pminimap by p3lim - http://www.wowinterface.com/downloads/info8389-pTM.html
 --]]
-local T, C, G, P, U, _ = unpack(select(2, ...))
+local T, C, G, P, U, _ = select(2, ...):unpack()
 
 local MM = T:GetModule("Minimap")
 

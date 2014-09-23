@@ -19,15 +19,18 @@ ns[3] = addonDraeUI.VC["global"]
 ns[4] = addonDraeUI.VC["class"]
 ns[5] = addonDraeUI.VC["char"]
 
+ns.unpack = function(self)
+	return self[1], self[2], self[3], self[4], self[5]
+end
+
 -- Add this addon into the global space
 _G.draeUI = ns
 
--- as per ns[]
-local T, C, G, P, U, _ = unpack(select(2, ...))
-
 --[[
-		Load variables when addon loaded
+
 --]]
+local  T, C, G, P, U, _ = select(2, ...):unpack()
+
 T.OnInitialize = function(self)
 	--[[
 		C == config/.db.profile -> data stored under "name-realm" tables and available to all chars on this account
@@ -39,7 +42,7 @@ T.OnInitialize = function(self)
 	self.dbObj = db
 
 	self.db = db.profile
-	self.dbClass = db.class[T.playerClass]
+	self.dbClass = db.class[ns[1].playerClass]
 	self.dbGlobal = db.global
 
 	self.dbChar = LibStub("AceDB-3.0"):New("draeUICharDB")["profile"]	-- Pull the profile specifically

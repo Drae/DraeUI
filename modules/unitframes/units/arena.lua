@@ -7,7 +7,7 @@ local _, ns = ...
 local oUF = ns.oUF or oUF
 
 --
-local T, C, G, P, U, _ = unpack(select(2, ...))
+local T, C, G, P, U, _ = select(2, ...):unpack()
 local UF = T:GetModule("UnitFrames")
 
 --[[

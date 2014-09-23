@@ -2,14 +2,21 @@
 
 
 --]]
-local T, C, G, P, U, _ = unpack(select(2, ...))
+local T, C, G, P, U, _ = select(2, ...):unpack()
 
 local B = T:GetModule("Blizzard")
 
 --
-local AlertFrameHolder
 local POSITION, ANCHOR_POINT, YOFFSET = "TOP", "BOTTOM", -10
 local FORCE_POSITION = false
+
+--[[
+
+--]]
+local AlertFrameHolder = CreateFrame("Frame", "AlertFrameHolder", UIParent)
+AlertFrameHolder:SetWidth(180)
+AlertFrameHolder:SetHeight(20)
+AlertFrameHolder:SetPoint("TOP", UIParent, "TOP", 0, -25)
 
 --[[
 
@@ -41,9 +48,31 @@ B.AlertFrame_SetLootAnchors = function(self, alertAnchor)
 	end
 end
 
+B.AlertFrame_SetStorePurchaseAnchors = function(self, alertAnchor)
+	local frame = StorePurchaseAlertFrame
+
+	if (frame:IsShown()) then
+		frame:ClearAllPoints()
+		frame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+	end
+end
+
 B.AlertFrame_SetLootWonAnchors = function(self, alertAnchor)
 	for i=1, #LOOT_WON_ALERT_FRAMES do
 		local frame = LOOT_WON_ALERT_FRAMES[i]
+
+		if (frame:IsShown()) then
+			frame:ClearAllPoints()
+			frame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+
+			alertAnchor = frame
+		end
+	end
+end
+
+B.AlertFrame_SetLootUpgradeFrameAnchors = function(self, alertAnchor)
+	for i=1, #LOOT_UPGRADE_ALERT_FRAMES do
+		local frame = LOOT_UPGRADE_ALERT_FRAMES[i]
 
 		if (frame:IsShown()) then
 			frame:ClearAllPoints()
@@ -131,6 +160,15 @@ B.AlertFrame_SetGuildChallengeAnchors = function(self, alertAnchor)
 	end
 end
 
+B.AlertFrame_SetDigsiteCompleteToastFrameAnchors = function(self, alertAnchor)
+	local frame = DigsiteCompleteToastFrame
+
+	if (frame and frame:IsShown()) then
+		frame:ClearAllPoints()
+		frame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+	end
+end
+
 B.AlertFrame_SetGarrisonBuildingAlertFrameAnchors = function(self, alertAnchor)
 	local frame = GarrisonBuildingAlertFrame
 
@@ -159,14 +197,11 @@ B.AlertFrame_SetGarrisonFollowerAlertFrameAnchors = function(self, alertAnchor)
 end
 
 B.AlertMovers = function(self)
-	AlertFrameHolder = CreateFrame("Frame", "AlertFrameHolder", UIParent)
-	AlertFrameHolder:SetWidth(180)
-	AlertFrameHolder:SetHeight(20)
-	AlertFrameHolder:SetPoint("TOP", UIParent, "TOP", 0, -18)
-
 	self:SecureHook("AlertFrame_FixAnchors", "PostAlertMove")
 	self:SecureHook("AlertFrame_SetLootAnchors")
+	self:SecureHook("AlertFrame_SetStorePurchaseAnchors")
 	self:SecureHook("AlertFrame_SetLootWonAnchors")
+	self:SecureHook("AlertFrame_SetLootUpgradeFrameAnchors")
 	self:SecureHook("AlertFrame_SetMoneyWonAnchors")
 	self:SecureHook("AlertFrame_SetAchievementAnchors")
 	self:SecureHook("AlertFrame_SetCriteriaAnchors")
@@ -174,6 +209,7 @@ B.AlertMovers = function(self)
 	self:SecureHook("AlertFrame_SetDungeonCompletionAnchors")
 	self:SecureHook("AlertFrame_SetScenarioAnchors")
 	self:SecureHook("AlertFrame_SetGuildChallengeAnchors")
+	self:SecureHook("AlertFrame_SetDigsiteCompleteToastFrameAnchors") --
 	self:SecureHook("AlertFrame_SetGarrisonBuildingAlertFrameAnchors")
 	self:SecureHook("AlertFrame_SetGarrisonMissionAlertFrameAnchors")
 	self:SecureHook("AlertFrame_SetGarrisonFollowerAlertFrameAnchors")

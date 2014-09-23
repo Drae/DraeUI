@@ -1,7 +1,7 @@
 --[[
 
 --]]
-local T, C, G, P, U, _ = unpack(select(2, ...))
+local T, C, G, P, U, _ = select(2, ...):unpack()
 
 -- Register with SharedMedia
 local LSM = LibStub("LibSharedMedia-3.0")
@@ -76,7 +76,7 @@ T.UpdateBlizzardFonts = function(self)
 	ChangeFont(FriendsFont_Normal                , FontStandard, SizeMedium, nil)
 	ChangeFont(FriendsFont_Small                 , FontSmall   , SizeSmall , nil)
 	ChangeFont(FriendsFont_Large                 , FontStandard, SizeLarge , nil)
-	ChangeFont(CombatTextFont					 , FontCombat  , 100       , "THINOUTLINE", nil, nil, nil, nil, nil, nil, 1, -1)
+	ChangeFont(CombatTextFont					 , FontCombat  , 150       , "THINOUTLINE")
 
 	-- Game engine fonts
 	STANDARD_TEXT_FONT = FontStandard
@@ -86,9 +86,9 @@ T.UpdateBlizzardFonts = function(self)
 
 	-- Combat text
 	local UpdateBlizzardCombatText = function()
-		COMBAT_TEXT_HEIGHT = 100
-		COMBAT_TEXT_CRIT_MAXHEIGHT = 100
-		COMBAT_TEXT_CRIT_MINHEIGHT = 100
+		COMBAT_TEXT_HEIGHT = 150
+		COMBAT_TEXT_CRIT_MAXHEIGHT = 150
+		COMBAT_TEXT_CRIT_MINHEIGHT = 150
 		COMBAT_TEXT_MAX_OFFSET = 100
 		COMBAT_TEXT_X_ADJUSTMENT = 100
 		COMBAT_TEXT_Y_SCALE = 0.2

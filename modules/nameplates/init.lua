@@ -2,7 +2,7 @@
 
 
 --]]
-local T, C, G, P, U, _ = unpack(select(2, ...))
+local T, C, G, P, U, _ = select(2, ...):unpack()
 
 -- Saved Variables
 local PL = T:NewModule("Nameplates", "AceEvent-3.0", "AceTimer-3.0", "AceHook-3.0")
