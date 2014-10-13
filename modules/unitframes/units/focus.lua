@@ -7,7 +7,7 @@ local _, ns = ...
 local oUF = ns.oUF or oUF
 
 --
-local T, C, G, P, U, _ = select(2, ...):unpack()
+local T, C, G, P, U, _ = select(2, ...):UnPack()
 local UF = T:GetModule("UnitFrames")
 
 -- Focus is a common frame type used for most other frames inc. pet, pettarget, etc.

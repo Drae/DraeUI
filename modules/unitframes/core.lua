@@ -6,7 +6,7 @@ local _, ns = ...
 local oUF = ns.oUF or oUF
 
 --
-local T, C, G, P, U, _ = select(2, ...):unpack()
+local T, C, G, P, U, _ = select(2, ...):UnPack()
 local UF = T:GetModule("UnitFrames")
 
 -- Local copies
@@ -233,7 +233,7 @@ do
 end
 
 do
-	local pvptimer, pvpTimerIsRunning
+	local timer, pvptimer, pvpTimerIsRunning
 
 	local UpdateTimer = function()
 		local pvpTime = GetPVPTimer()
@@ -242,7 +242,8 @@ do
 			pvptimer:SetFormattedText(("|cffB62220%d:%02d|r"):format((pvpTime / 1000) / 60, (pvpTime / 1000) % 60))
 		else
 			pvptimer:SetText("")
-			UF:CancelTimer(pvpTimerIsRunning, true)
+			timer:Cancel()
+--			UF:CancelTimer(pvpTimerIsRunning, true)
 
 			pvpTimerIsRunning = nil
 		end

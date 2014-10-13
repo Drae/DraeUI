@@ -1,7 +1,7 @@
 --[[
 
 --]]
-local T, C, G, P, U, _ = select(2, ...):unpack()
+local T, C, G, P, U, _ = select(2, ...):UnPack()
 
 local TS = T:NewModule('SwitchSet', 'AceEvent-3.0')
 

@@ -2,7 +2,7 @@
 		Sourced from ElvUI
 
 --]]
-local T, C, G, P, U, _ = select(2, ...):unpack()
+local T, C, G, P, U, _ = select(2, ...):UnPack()
 
 local RB = T:NewModule("RaidBrowser", "AceEvent-3.0", "AceHook-3.0")
 

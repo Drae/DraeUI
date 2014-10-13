@@ -2,7 +2,7 @@
 
 
 --]]
-local T, C, G, P, U, _ = select(2, ...):unpack()
+local T, C, G, P, U, _ = select(2, ...):UnPack()
 
 -- Localise a bunch of functions
 local _G = _G
@@ -287,36 +287,20 @@ T.CreateFontObject = function(parent, size, font, anchorAt, oX, oY, type, anchor
 end
 
 -- Print out money in a nicely formatted way
-T.IntToGold = function(i, showIcons)
-	local g = i > 10000 and i / 10000 or 0
-	local s = i > 100 and (i / 100) % 100 or 0
-	local c = i % 100
+T.IntToGold = function(coins, showIcons)
+	local g = floor(coins / (COPPER_PER_SILVER * SILVER_PER_GOLD))
+	local s = floor((coins - (g * COPPER_PER_SILVER * SILVER_PER_GOLD)) / COPPER_PER_SILVER)
+	local c = coins % COPPER_PER_SILVER
 
 	local gText = showIcons and format("\124TInterface\\MoneyFrame\\UI-GoldIcon:%d:%d:1:0\124t", 12, 12) or "|cffffd700g|r"
 	local sText = showIcons and format("\124TInterface\\MoneyFrame\\UI-SilverIcon:%d:%d:1:0\124t", 12, 12) or "|cffc7c7cfs|r"
 	local cText = showIcons and format("\124TInterface\\MoneyFrame\\UI-CopperIcon:%d:%d:1:0\124t", 12, 12) or "|cffeda55fc|r"
 
 	if (g) then
-		return ("%d%s %d%s %d%s"):format(g, gText, s, sText, c, cText)
+		return ("%d%s %d%s %d%s"):format(g or 0, gText, s or 0, sText, c or 0, cText)
 	elseif (s) then
-		return ("%d%s %d%s"):format(s, sText, c, cText)
+		return ("%d%s %d%s"):format(s or 0, sText, c or 0, cText)
 	else
-		return ("%d%s"):format(c, cText)
-	end
-end
-
-
-function tprint (tbl, indent)
-	if not indent then indent = 0 end
-	for k, v in pairs(tbl) do
-	formatting = string.rep("  ", indent) .. k .. ": "
-	if type(v) == "table" then
-		print(formatting)
-		tprint(v, indent+1)
-	elseif type(v) == 'boolean' then
-		print(formatting .. tostring(v))
-	else
-		print(formatting .. tostring(v))
-	end
+		return ("%d%s"):format(c or 0, cText)
 	end
 end
