@@ -2,7 +2,7 @@
 
 
 --]]
-local T, C, G, P, U, _ = select(2, ...):unpack()
+local T, C, G, P, U, _ = select(2, ...):UnPack()
 
 -- Register with SharedMedia
 local LSM = LibStub("LibSharedMedia-3.0")
@@ -500,9 +500,6 @@ C["nameplates"] = {
 				[114165] = true, -- holy prism
 				[114916] = true, -- execution sentence dot
 				[114917] = true, -- stay of execution hot
-
-				[20217] = true,
-
 			},
 			WARLOCK = { -- 5.2 COMPLETE
 				[5697]  = true,  -- unending breath
@@ -694,4 +691,8 @@ G["minimap"] = {
 C["combatText"] = {
 	showHealing = true,
 	hideDebuffs = true,
+}
+
+C["bags"] = {
+	itemSize = 24,
 }

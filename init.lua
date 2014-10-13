@@ -5,22 +5,30 @@
 local addon, ns = ...
 
 -- Saved Variables
-local addonDraeUI = LibStub("AceAddon-3.0"):NewAddon(addon, "AceConsole-3.0")
-addonDraeUI.VC= {}
-addonDraeUI.VC["profile"] = {}
-addonDraeUI.VC["global"] = {}
-addonDraeUI.VC["class"] = {}
-addonDraeUI.VC["char"] = {}
+local AddonDraeUI = LibStub("AceAddon-3.0"):NewAddon(addon, "AceConsole-3.0")
+local Classy = LibStub("Classy-1.0")
+
+AddonDraeUI.VC= {}
+AddonDraeUI.VC["profile"] = {}
+AddonDraeUI.VC["global"] = {}
+AddonDraeUI.VC["class"] = {}
+AddonDraeUI.VC["char"] = {}
 
 -- Define common elements for our namespace T, C, G, P
-ns[1] = addonDraeUI
-ns[2] = addonDraeUI.VC["profile"]
-ns[3] = addonDraeUI.VC["global"]
-ns[4] = addonDraeUI.VC["class"]
-ns[5] = addonDraeUI.VC["char"]
+ns[1] = AddonDraeUI
+ns[2] = AddonDraeUI.VC["profile"]
+ns[3] = AddonDraeUI.VC["global"]
+ns[4] = AddonDraeUI.VC["class"]
+ns[5] = AddonDraeUI.VC["char"]
 
-ns.unpack = function(self)
+ns.UnPack = function(self)
 	return self[1], self[2], self[3], self[4], self[5]
+end
+
+ns.NewClass = function(self, name, ...)
+	local class = Classy:New(...)
+	self[name] = class
+	return class
 end
 
 -- Add this addon into the global space
@@ -29,7 +37,7 @@ _G.draeUI = ns
 --[[
 
 --]]
-local  T, C, G, P, U, _ = select(2, ...):unpack()
+local  T, C, G, P, U, _ = select(2, ...):UnPack()
 
 T.OnInitialize = function(self)
 	--[[

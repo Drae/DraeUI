@@ -2,7 +2,7 @@
 		Inspired by various auto-loot mail apps including
 		OpenAll, Postal and MailOpener
 --]]
-local T, C, G, P, U, _ = select(2, ...):unpack()
+local T, C, G, P, U, _ = select(2, ...):UnPack()
 
 local OA = T:NewModule("OpenAll", "AceEvent-3.0", "AceHook-3.0", "AceTimer-3.0")
 
