@@ -9,6 +9,12 @@ local LSM = LibStub("LibSharedMedia-3.0")
 
 --[[
 		Default configuration settings
+
+		Try not to change settings in this file, instead create
+		a new file in this folder called config.lua. Then copy
+		the section/s containing the variables you want to alter
+		into that new file. You don't need to copy the entire
+		section just the variable/s you want to change.
 --]]
 
 -- Media and font sizing
@@ -211,8 +217,8 @@ C["castbar"] = {
 
 -- Secondary resource bar
 C["resourcebar"] = {
-	xOffset  = -400,
-	yOffset  = -45,
+	xOffset  = 0,
+	yOffset  = 20,
 }
 
 -- Equipment set mappings
