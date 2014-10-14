@@ -6,7 +6,6 @@ local addon, ns = ...
 
 -- Saved Variables
 local AddonDraeUI = LibStub("AceAddon-3.0"):NewAddon(addon, "AceConsole-3.0")
-local Classy = LibStub("Classy-1.0")
 
 AddonDraeUI.VC= {}
 AddonDraeUI.VC["profile"] = {}
@@ -23,12 +22,6 @@ ns[5] = AddonDraeUI.VC["char"]
 
 ns.UnPack = function(self)
 	return self[1], self[2], self[3], self[4], self[5]
-end
-
-ns.NewClass = function(self, name, ...)
-	local class = Classy:New(...)
-	self[name] = class
-	return class
 end
 
 -- Add this addon into the global space
