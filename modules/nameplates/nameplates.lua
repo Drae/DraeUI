@@ -269,6 +269,7 @@ local OnFrameHide = function(f)
 	frame.lastAlpha = nil
 	frame.fadingTo  = nil
 	frame.hasThreat = nil
+	frame.targetDelay = nil
 
 	frame.StdElapsed = 0
 	frame.ImpElapsed = 0
@@ -446,26 +447,51 @@ local UpdateFrameImp = function(frame)
 
 	if (targetExists and frame.defaultAlpha == 1) then
 		if (not frame.target) then
-			-- this frame just became targeted
-			frame.target = true
-			PL:StoreGUID(frame, "target")
+			if (frame.guid and frame.guid == UnitGUID("target")) then
+				-- this is definitely the target
+				frame.targetDelay = 1
+			else
+				-- this -may- be the target's frame but we need to wait a moment
+				-- before we can be sure.
+				-- this alpha update delay is a blizzard issue.
+				frame.targetDelay = (frame.targetDelay and frame.targetDelay + 1) or 0
+			end
 
-			frame:SetFrameLevel(10)
+			if (frame.targetDelay >= 1) then
+				-- this is almost probably certainly maybe the target
+				-- (the delay may not be long enough, but it already feels
+				-- laggy so i'd prefer not to make it longer)
+				frame.target = true
+				frame.targetDelay = nil
 
-			if (frame.targetGlow) then
-				frame.targetGlow:Show()
+				-- this frame just became targeted
+				frame.target = true
+				PL:StoreGUID(frame, "target")
+
+				frame:SetFrameLevel(10)
+
+				if (frame.targetGlow) then
+					frame.targetGlow:Show()
+				end
 			end
 		end
-	elseif (frame.target) then
-		frame.target = nil
+	else
+		if (frame.targetDelay) then
+			-- it wasn't the target after all. phew.
+			frame.targetDelay = nil
+		end
 
-		frame:SetFrameLevel(0)
+		if (frame.target) then
+			-- or it was, but no longer is.
+			frame.target = nil
 
-		if (frame.targetGlow) then
-			frame.targetGlow:Hide()
+			frame:SetFrameLevel(0)
+
+			if (frame.targetGlow) then
+				frame.targetGlow:Hide()
+			end
 		end
 	end
-
 end
 
 --[[
@@ -677,6 +703,7 @@ do
 	function PL:StoreGUID(f, unit)
 		if not unit then return end
 		local guid = UnitGUID(unit)
+
 		if not guid then return end
 
 		if f.guid and loadedGUIDs[f.guid] then
@@ -709,6 +736,7 @@ do
 
 	function PL:StoreName(f)
 		if not f.overlay.text or f.guid then return end
+
 		if not loadedNames[f.overlay.text] then
 			loadedNames[f.overlay.text] = f
 		end
