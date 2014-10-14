@@ -24,7 +24,7 @@ modules\unitframes\elements\sword.lua
 init.lua
 
 config\config.defaults.lua
-config\config.mounts.lua
+config\config.lua
 
 functions\variables.lua
 functions\colours.lua
