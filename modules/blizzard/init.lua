@@ -2,7 +2,7 @@
 
 
 --]]
-local T, C, G, P, U, _ = unpack(select(2, ...))
+local T, C, G, P, U, _ = select(2, ...):UnPack()
 
 local B = T:NewModule("Blizzard", "AceEvent-3.0", "AceHook-3.0")
 
@@ -17,6 +17,7 @@ B.OnEnable = function(self)
 	self:PositionVehicleFrame()
 	self:MoveWatchFrame()
 	self:PositionAltPowerBar()
+	self:PositionDraenorSpellBtn()
 
 	CreateFrame("Frame"):SetScript("OnUpdate", function(self, elapsed)
 		if (LFRBrowseFrame.timeToClear) then

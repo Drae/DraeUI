@@ -1,7 +1,8 @@
 --[[
 
+
 --]]
-local T, C, G, P, U, _ = unpack(select(2, ...))
+local T, C, G, P, U, _ = select(2, ...):UnPack()
 
 --
 local PL = T:GetModule("Nameplates")
@@ -43,7 +44,7 @@ end
 
 -- Frame fading functions
 -- (without the taint of UIFrameFade & the lag of AnimationGroups)
-PL.frameFadeFrame = CreateFrame('Frame')
+PL.frameFadeFrame = CreateFrame("Frame")
 PL.FADEFRAMES = {}
 
 PL.frameIsFading = function(frame)
@@ -70,13 +71,13 @@ PL.frameFadeOnUpdate = function(self, elapsed)
 
 			if info.fadeTimer < info.timeToFade then
 				-- perform animation in either direction
-				if info.mode == 'IN' then
+				if info.mode == "IN" then
 					frame:SetAlpha(
 						(info.fadeTimer / info.timeToFade) *
 						(info.endAlpha - info.startAlpha) +
 						info.startAlpha
 					)
-				elseif info.mode == 'OUT' then
+				elseif info.mode == "OUT" then
 					frame:SetAlpha(
 						((info.timeToFade - info.fadeTimer) / info.timeToFade) *
 						(info.startAlpha - info.endAlpha) + info.endAlpha
@@ -100,8 +101,8 @@ PL.frameFadeOnUpdate = function(self, elapsed)
 		end
 	end
 
-	if #PL.FADEFRAMES == 0 then
-		self:SetScript('OnUpdate', nil)
+	if (#PL.FADEFRAMES == 0) then
+		self:SetScript("OnUpdate", nil)
 	end
 end
 
@@ -130,12 +131,12 @@ PL.frameFade = function(frame, info)
 	end
 
 	info		= info or {}
-	info.mode	= info.mode or 'IN'
+	info.mode	= info.mode or "IN"
 
-	if info.mode == 'IN' then
+	if info.mode == "IN" then
 		info.startAlpha	= info.startAlpha or 0
 		info.endAlpha	= info.endAlpha or 1
-	elseif info.mode == 'OUT' then
+	elseif info.mode == "OUT" then
 		info.startAlpha	= info.startAlpha or 1
 		info.endAlpha	= info.endAlpha or 0
 	end
@@ -144,7 +145,7 @@ PL.frameFade = function(frame, info)
 	frame.fadeInfo = info
 
 	tinsert(PL.FADEFRAMES, frame)
-	PL.frameFadeFrame:SetScript('OnUpdate', PL.frameFadeOnUpdate)
+	PL.frameFadeFrame:SetScript("OnUpdate", PL.frameFadeOnUpdate)
 end
 
 --[[
@@ -221,14 +222,21 @@ local CheckBlacklist = function(frame)
 	end
 end
 
+local SetName = function(frame)
+	frame.overlay.text = frame.oldName:GetText()
+	frame.overlay.name:SetText(frame.overlay.text)
+end
+
 --[[
 
 --]]
 PL.PLAYER_TARGET_CHANGED = function(self)
-	targetExists = UnitExists('target')
+	targetExists = UnitExists("target")
 end
 
 local OnFrameEnter = function(frame)
+	PL:StoreGUID(frame, "mouseover")
+
 	frame.highlighted = true
 
 	if (frame.overlay.highlight) then
@@ -266,6 +274,10 @@ local OnFrameHide = function(f)
 	frame.ImpElapsed = 0
 
 	frame:SetScript("OnUpdate", nil)
+
+	PL:ClearName(frame)
+
+	PL:SendMessage('DraeUI_Nameplates_PostHide', frame)
 end
 
 -- OnShow,
@@ -290,7 +302,7 @@ local OnFrameShow = function(f)
 	frame.hp:SetPoint("TOP", frame, "TOP", 0, -15)
 
 	--Set the name text
-	frame.overlay.name:SetText(frame.oldName:GetText())
+--	frame.overlay.name:SetText(frame.oldName:GetText())
 
 	if (frame.boss:IsShown()) then
 		frame.level:SetText("??")
@@ -298,6 +310,11 @@ local OnFrameShow = function(f)
 	elseif (frame.state:IsShown()) then
 		frame.level:SetText(frame.level:GetText() .. "+")
 		frame.level:Show()
+	end
+
+	-- hide the elite/rare dragon
+	if (frame.state:IsVisible()) then
+		frame.state:Hide()
 	end
 
 	-- reset glow colour
@@ -391,10 +408,16 @@ end
 
 -- This is called per frame every StdElapsed seconds - so every half second
 local UpdateFrameStd = function(frame)
+	frame:SetName()
+	PL:StoreName(frame)
+
 	SetHealthBarColour(frame)
 
 	if (frame.PostOnFrameShow) then
 		frame:OnHealthValueChanged()
+
+		PL:GetGUID(frame)
+		PL:SendMessage("DraeUI_Nameplates_PostShow", frame)
 
 		frame.PostOnFrameShow = nil
 	end
@@ -425,6 +448,7 @@ local UpdateFrameImp = function(frame)
 		if (not frame.target) then
 			-- this frame just became targeted
 			frame.target = true
+			PL:StoreGUID(frame, "target")
 
 			frame:SetFrameLevel(10)
 
@@ -462,7 +486,8 @@ PL.StyleNameplate = function(self, frame)
 	stateIconRegion:SetTexture(nil)
 	castbarOverlay:SetTexture(nil)
 	glowRegion:SetTexture(nil)
-	spellIconRegion:SetTexCoord(0, 0, 0, 0)
+	spellIconRegion:SetSize(.001,.001)
+
 	nameText:Hide()
 
 	-- Create our plate frame
@@ -496,6 +521,8 @@ PL.StyleNameplate = function(self, frame)
 	plate.UpdateFrameImp = UpdateFrameImp
 	plate.SetGlowColour = SetGlowColour
 	plate.SetCentre = SetFrameCentre
+	plate.SetName = SetName
+
 	plate.OnHealthValueChanged = OnHealthValueChanged
 
 	-- Initial setup of our plate
@@ -512,7 +539,7 @@ PL.StyleNameplate = function(self, frame)
 	healthBar:SetFrameLevel(2)
 	healthBar:SetStatusBarTexture(T.db["media"].texture)
 	healthBar:SetSize(PL.db.hpWidth, PL.db.hpHeight)
-	healthBar:SetPoint('BOTTOM', plate, 'BOTTOM', 0, 5)
+	healthBar:SetPoint("BOTTOM", plate, "BOTTOM", 0, 5)
 	healthBar.percent = 100
 
 	healthBar.hpbg = healthBar:CreateTexture(nil, "BACKGROUND")
@@ -548,11 +575,11 @@ PL.StyleNameplate = function(self, frame)
 	overlay.value:SetTextColor(1, 1, 1)
 
 	-- Highlight
-	overlay.highlight = overlay:CreateTexture(nil, 'ARTWORK')
+	overlay.highlight = overlay:CreateTexture(nil, "ARTWORK")
 	overlay.highlight:SetTexture(T.db["media"].texture)
 	overlay.highlight:SetAllPoints(healthBar)
 	overlay.highlight:SetVertexColor(1, 1, 1)
-	overlay.highlight:SetBlendMode('ADD')
+	overlay.highlight:SetBlendMode("ADD")
 	overlay.highlight:SetAlpha(.4)
 	overlay.highlight:Hide()
 
@@ -568,7 +595,7 @@ PL.StyleNameplate = function(self, frame)
 	local targetGlow = healthBar:CreateTexture(nil, "BACKGROUND")
 	targetGlow:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\target-glow")
 	targetGlow:SetTexCoord(0, .593, 0, .875)
-	targetGlow:SetPoint('TOP', healthBar, 'BOTTOM', 0, 2)
+	targetGlow:SetPoint("TOP", healthBar, "BOTTOM", 0, 2)
 	targetGlow:SetWidth(PL.db.hpWidth)
 	targetGlow:SetVertexColor(1, 1, 1)
 
@@ -620,11 +647,104 @@ PL.StyleNameplate = function(self, frame)
 	frame:HookScript("OnUpdate", OnFrameUpdate)
 	healthBar:HookScript("OnValueChanged", OnHealthValueChanged)
 
+	self:SendMessage('DraeUI_Nameplates_PostCreate', plate)
+
+
 	if (frame:IsShown()) then
 		OnFrameShow(frame)
 		UpdateCastbar(castBar)
 	else
 		plate:Hide()
+	end
+end
+
+--[[
+
+--]]
+do
+	local loadedGUIDs, loadedNames = {}, {}
+	local knownGUIDs = {} -- GUIDs that we can relate to names (i.e. players)
+	local knownIndex = {}
+
+	function PL:GetGUID(f)
+		-- give this frame a guid if we think we already know it
+		if knownGUIDs[f.overlay.text] then
+			f.guid = knownGUIDs[f.overlay.text]
+			loadedGUIDs[f.guid] = f
+		end
+	end
+
+	function PL:StoreGUID(f, unit)
+		if not unit then return end
+		local guid = UnitGUID(unit)
+		if not guid then return end
+
+		if f.guid and loadedGUIDs[f.guid] then
+			if f.guid ~= guid then
+				-- the currently stored guid is incorrect
+				loadedGUIDs[f.guid] = nil
+			else
+				return
+			end
+		end
+
+		f.guid = guid
+		loadedGUIDs[guid] = f
+
+		if UnitIsPlayer(unit) then
+			-- we can probably assume this unit has a unique name
+			-- nevertheless, overwrite this each time. just in case.
+			knownGUIDs[f.overlay.text] = guid
+			tinsert(knownIndex, f.overlay.text)
+
+			-- and start purging > 100 names
+			if #knownIndex > 100 then
+				knownGUIDs[tremove(knownIndex, 1)] = nil
+			end
+		elseif loadedNames[f.overlay.text] == f then
+			-- force the registered f for this name to change
+			loadedNames[f.overlay.text] = nil
+		end
+	end
+
+	function PL:StoreName(f)
+		if not f.overlay.text or f.guid then return end
+		if not loadedNames[f.overlay.text] then
+			loadedNames[f.overlay.text] = f
+		end
+	end
+
+	function PL:FrameHasName(f)
+		return loadedNames[f.overlay.text] == f
+	end
+
+	function PL:FrameHasGUID(f)
+		return loadedGUIDs[f.guid] == f
+	end
+
+	function PL:ClearName(f)
+		if self:FrameHasName(f) then
+			loadedNames[f.overlay.text] = nil
+		end
+	end
+
+	function PL:ClearGUID(f)
+		if self:FrameHasGUID(f) then
+			loadedGUIDs[f.guid] = nil
+		end
+		f.guid = nil
+	end
+
+	function PL:GetNameplate(guid, name)
+		local gf, nf = loadedGUIDs[guid], loadedNames[name]
+
+		if gf then
+			return gf
+		elseif nf then
+			return nf
+		else
+			return nil
+		end
 	end
 end
 
@@ -660,6 +780,7 @@ do
 
 				if (IsNameplate(f) and not f.draePlate) then
 					self:StyleNameplate(f)
+					tinsert(self.frameList, f)
 				end
 			end
 

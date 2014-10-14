@@ -2,7 +2,7 @@
 		Largely copied from oRA3
 
 --]]
-local T, C, G, P, U, _ = unpack(select(2, ...))
+local T, C, G, P, U, _ = select(2, ...):UnPack()
 
 local TI = T:NewModule('AutoInvite', 'AceEvent-3.0')
 

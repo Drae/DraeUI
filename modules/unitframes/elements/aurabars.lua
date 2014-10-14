@@ -48,8 +48,8 @@ local function SetAnchors(self)
 		local frame = bars[index]
 		local anchor = frame.anchor
 		frame:SetHeight(self.auraBarHeight or 20)
-		frame.statusBar.iconHolder:Size(frame:GetHeight())			
-		frame:SetWidth((self.auraBarWidth or self:GetWidth()) - (frame:GetHeight() + (self.gap or 0)))	
+		frame.statusBar.iconHolder:SetSize(frame:GetHeight())
+		frame:SetWidth((self.auraBarWidth or self:GetWidth()) - (frame:GetHeight() + (self.gap or 0)))
 		frame:ClearAllPoints()
 		if self.down == true then
 			if self == anchor then -- Root frame so indent for icon
@@ -69,20 +69,20 @@ end
 
 local function CreateAuraBar(oUF, anchor)
 	local auraBarParent = oUF.AuraBars
-	
+
 	local frame = CreateFrame("Frame", nil, auraBarParent)
 	frame:SetHeight(auraBarParent.auraBarHeight or 20)
 	frame:SetWidth((auraBarParent.auraBarWidth or auraBarParent:GetWidth()) - (frame:GetHeight() + (auraBarParent.gap or 0)))
 	frame.anchor = anchor
-	
+
 	-- the main bar
 	local statusBar = CreateFrame("StatusBar", nil, frame)
 	statusBar:SetStatusBarTexture(auraBarParent.auraBarTexture or [[Interface\TargetingFrame\UI-StatusBar]])
 	statusBar:SetAlpha(auraBarParent.fgalpha or 1)
 	statusBar:SetAllPoints(frame)
-	
+
 	frame.statusBar = statusBar
-	
+
 	if auraBarParent.down == true then
 		if auraBarParent == anchor then -- Root frame so indent for icon
 			frame:SetPoint('TOPLEFT', anchor, 'TOPLEFT', (frame:GetHeight() + (auraBarParent.gap or 0) ), -1)
@@ -96,14 +96,14 @@ local function CreateAuraBar(oUF, anchor)
 			frame:SetPoint('BOTTOMLEFT', anchor, 'TOPLEFT', 0, (auraBarParent.spacing or 0))
 		end
 	end
-	
+
 	local spark = statusBar:CreateTexture(nil, "OVERLAY", nil);
 	spark:SetTexture([[Interface\CastingBar\UI-CastingBar-Spark]]);
 	spark:SetWidth(12);
 	spark:SetBlendMode("ADD");
-	spark:SetPoint('CENTER', statusBar:GetStatusBarTexture(), 'RIGHT')		
+	spark:SetPoint('CENTER', statusBar:GetStatusBarTexture(), 'RIGHT')
 	statusBar.spark = spark
-	
+
 	statusBar.iconHolder = CreateFrame('Button', nil, statusBar)
 	statusBar.iconHolder:SetHeight(frame:GetHeight())
 	statusBar.iconHolder:SetWidth(frame:GetHeight())
@@ -112,7 +112,7 @@ local function CreateAuraBar(oUF, anchor)
 	statusBar.iconHolder:SetScript('OnEnter', OnEnter)
 	statusBar.iconHolder:SetScript('OnLeave', OnLeave)
 	statusBar.iconHolder.UpdateTooltip = UpdateTooltip
-	
+
 	statusBar.icon = statusBar.iconHolder:CreateTexture(nil, 'BACKGROUND')
 	statusBar.icon:SetTexCoord(.07, .93, .07, .93)
 	statusBar.icon:SetAllPoints()
@@ -143,7 +143,7 @@ local function CreateAuraBar(oUF, anchor)
 	if auraBarParent.PostCreateBar then
 		auraBarParent.PostCreateBar(frame)
 	end
-	
+
 	return frame
 end
 
@@ -188,7 +188,7 @@ local function Update(self, event, unit)
 	local auraBars = self.AuraBars
 	local helpOrHarm
 	local isFriend = UnitIsFriend('player', unit)
-	
+
 	if auraBars.friendlyAuraType and auraBars.enemyAuraType then
 		if isFriend then
 			helpOrHarm = auraBars.friendlyAuraType
@@ -205,7 +205,7 @@ local function Update(self, event, unit)
 	for index = 1, 40 do
 		local name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellID = UnitAura(unit, index, helpOrHarm)
 		if not name then break end
-		
+
 		if (auraBars.filter or DefaultFilter)(self, unit, name, rank, icon, count, debuffType, duration, expirationTime, unitCaster, isStealable, shouldConsolidate, spellID) then
 			lastAuraIndex = lastAuraIndex + 1
 			auras[lastAuraIndex] = {}
@@ -234,12 +234,12 @@ local function Update(self, event, unit)
 	if lastAuraIndex == 0 then
 		self.AuraBars:SetHeight(1)
 	end
-	
+
 	for index = 1 , lastAuraIndex do
 		if auraBars:GetWidth() == 0 then break; end
 		local aura = auras[index]
 		local frame = bars[index]
-		
+
 		if not frame then
 			frame = CreateAuraBar(self, index == 1 and auraBars or bars[index - 1])
 			bars[index] = frame
@@ -251,13 +251,13 @@ local function Update(self, event, unit)
 			elseif frame:GetTop() and self.AuraBars:GetBottom() then
 				self.AuraBars:SetHeight(frame:GetTop() - self.AuraBars:GetBottom())
 			else
-				self.AuraBars:Height(20)
+				self.AuraBars:SetHeight(20)
 			end
 		end
-		
+
 		local bar = frame.statusBar
 		frame.index = index
-		
+
 		-- Backup the details of the aura onto the bar, so the OnUpdate function can use it
 		bar.aura = aura
 
@@ -288,11 +288,11 @@ local function Update(self, event, unit)
 		local r, g, b = .2, .6, 1 -- Colour for buffs
 		if auraBars.buffColor then
 			r, g, b = unpack(auraBars.buffColor)
-		end		
-		
+		end
+
 		if helpOrHarm == 'HARMFUL' then
 			local debuffType = bar.aura.debuffType and bar.aura.debuffType or 'none'
-			
+
 			r, g, b = DebuffTypeColor[debuffType].r, DebuffTypeColor[debuffType].g, DebuffTypeColor[debuffType].b
 			if auraBars.debuffColor then
 				r, g, b = unpack(auraBars.debuffColor)
@@ -300,7 +300,7 @@ local function Update(self, event, unit)
 				if debuffType == 'none' and auraBars.defaultDebuffColor then
 					r, g, b = unpack(auraBars.defaultDebuffColor)
 				end
-			end			
+			end
 		end
 		bar:SetStatusBarColor(r, g, b)
 		frame:Show()
@@ -310,7 +310,7 @@ local function Update(self, event, unit)
 	for index = lastAuraIndex + 1, #bars do
 		bars[index]:Hide()
 	end
-	
+
 	if auraBars.PostUpdate then
 		auraBars:PostUpdate(event, unit)
 	end

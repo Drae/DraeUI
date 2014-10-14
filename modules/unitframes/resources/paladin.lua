@@ -5,7 +5,7 @@
 local _, ns = ...
 local oUF = ns.oUF or oUF
 
-local T, C, G, P, U, _ = unpack(select(2, ...))
+local T, C, G, P, U, _ = select(2, ...):UnPack()
 local UF = T:GetModule("UnitFrames")
 
 -- Localise a bunch of functions
@@ -64,107 +64,14 @@ do
 		end
 	end
 
-	local UpdatePaladinRegen, UpdatePaladinManaRegen, UpdateDivinePleaUseable
-	do
-		local manaRegenBase, manaRegenCombat, baseSpirit, divinePleaUseable
-		local divinePleaTimer = CreateFrame("Frame")
-
-		UpdatePaladinRegen = function(self, event, unit)
-			manaRegenBase, manaRegenCombat = GetManaRegen()
-			baseSpirit = select(2, UnitStat("player", 5))
-		end
-
-		UpdateDivinePleaUseable = function(self, event)
-			local start, duration, _ = GetSpellCooldown("Divine Plea")
-
-			-- The GCD causes issues here so check for > 1.5 duration
-			local testPlea = true
-			if (start and duration > 1.5) then
-				testPlea = false
-			end
-
-			if (testPlea ~= divinePleaUseable) then
-				divinePleaUseable = testPlea
-
-				-- Because it's not really "possible" to obtain accurate
-				-- cooldown information we're going to use a timer here
-				if (not divinePleaUseable) then
-					local waitFor = start - GetTime() + duration
-					local refresh = 0
-
-					divinePleaTimer:SetScript("OnUpdate", function(frame, elapsed)
-						if (refresh > waitFor) then
-							divinePleaTimer:SetScript("OnUpdate", nil)
-							UpdateDivinePleaUseable(self)
-						end
-						refresh = refresh + elapsed
-					end)
-				end
-
-				local pp = self.ExtraPower
-				local maxMana, curMana = UnitPowerMax("player"), UnitPower("player")
-
-				UpdatePaladinManaRegen(pp, "player", curMana, maxMana)
-			end
-		end
-
-		UpdatePaladinManaRegen = function(pp, unit, curMana, maxMana)
-			if (divinePleaUseable) then
-				local manaReturn = baseSpirit * 1.35 * 3
-				manaReturn = math.max(manaReturn, maxMana * 0.12)
-
-				if (InCombatLockdown()) then
-					manaReturn = manaReturn + manaRegenCombat * 9
-				else
-					manaReturn = manaReturn + manaRegenBase * 9
-				end
-
-				if (curMana + manaReturn >= maxMana) then
-					manaReturn = maxMana - curMana
-					pp.manaExcess:Show()
-				else
-					pp.manaExcess:Hide()
-				end
-
-				pp.mana:SetMinMaxValues(0, maxMana)
-				pp.mana:SetValue(manaReturn)
-
-				if (pp._manaRegen ~= true) then
-					pp.mana:Show()
-					pp._manaRegen = true
-				end
-			elseif (pp._manaRegen) then
-				pp.mana:Hide()
-				pp.manaExcess:Hide()
-
-				pp._manaRegen = nil
-			end
-		end
-	end
-
-	-- Store the current spec in ExtraPower._spec so we can avoid
+		-- Store the current spec in ExtraPower._spec so we can avoid
 	-- showing the extrapower bar, etc. for non-holy specs
 	local PlayerSpecChanged = function(self, event, unit)
 		local pp = self.ExtraPower
 		local spec = GetSpecialization()
 
 		-- Holy? Enable mana regen and shizzle
-		if (spec == 1) then
-			pp.PostUpdate = UpdatePaladinManaRegen
-
-			self:RegisterEvent("SPELL_UPDATE_USABLE", UpdateDivinePleaUseable, true)
-
-			UpdatePaladinRegen(self)
-			UpdateDivinePleaUseable(self)
-
-			pp._hide = false
-		else
-			pp.PostUpdate = nil
-
-			self:UnregisterEvent("SPELL_UPDATE_USABLE", UpdateDivinePleaUseable, true)
-
-			pp._hide = true
-		end
+		pp._hide = (spec == 1) and false or true
 	end
 
 	local EnablePaladinPowerBar = function(self)
@@ -203,34 +110,10 @@ do
 		-- Create power bar - only displayed for Holy
 		local pp = UF.CreateExtraPowerBar(self, point, anchor, relpoint, 0, 32)
 
-		-- Mana feedback
-		local ppmana = CreateFrame("StatusBar", nil, pp)
-		ppmana:SetHeight(12)
-		ppmana:SetWidth(T.db["frames"].largeWidth)
-		ppmana:SetStatusBarTexture(T.db["media"].texture, "BORDER")
-		ppmana:SetPoint("TOPLEFT", pp:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
-		ppmana:SetPoint("BOTTOMLEFT", pp:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
-		ppmana:SetStatusBarColor(0.8, 0.8, 0.8, 0.75)
-		ppmana:Hide()
-		pp.mana = ppmana
-
-		local excessMana = pp:CreateTexture(nil, "OVERLAY")
-		excessMana:SetTexture(1.0, 1.0, 1.0, 0.75) -- Always white
-		excessMana:SetBlendMode("ADD")
-		excessMana:SetPoint("TOP")
-		excessMana:SetPoint("BOTTOM")
-		excessMana:SetPoint("RIGHT")
-		excessMana:SetWidth(2)
-		excessMana:Hide()
-		pp.manaExcess = excessMana
-
 		self.ExtraPower = pp
 		self.resourceBar = rs
 
 		self:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", PlayerSpecChanged, true)
-		self:RegisterEvent("FORGE_MASTER_ITEM_CHANGED", UpdatePaladinRegen, true)
-		self:RegisterEvent("ITEM_UPGRADE_MASTER_UPDATE", UpdatePaladinRegen, true)
-		self:RegisterEvent("PLAYER_EQUIPMENT_CHANGED", UpdatePaladinRegen, true)
 		self:RegisterEvent("PLAYER_LEVEL_UP", EnablePaladinPowerBar, true)
 
 		-- Run stuff that requires us to be in-game before it returns any

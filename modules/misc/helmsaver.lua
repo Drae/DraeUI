@@ -2,7 +2,7 @@
 	Blatantly adapted from d87's HelmSaver
 	http://www.wowinterface.com/downloads/info19713-HelmSaver.html
 --]]
-local T, C, G, P, U, _ = unpack(select(2, ...))
+local T, C, G, P, U, _ = select(2, ...):UnPack()
 
 local TH = T:NewModule("HelmSaver", "AceEvent-3.0", "AceHook-3.0")
 

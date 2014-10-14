@@ -1,7 +1,7 @@
 --[[
 
 --]]
-local T, C, G, P, U, _ = unpack(select(2, ...))
+local T, C, G, P, U, _ = select(2, ...):UnPack()
 
 local M = T:NewModule("Misc", "AceEvent-3.0", "AceTimer-3.0")
 
@@ -100,6 +100,9 @@ end
 		PLAYER_LOGIN
 --]]
 M.OnEnable = function(self)
+--	self:LoadLoot()
+--	self:LoadLootRoll()
+
 	self:RegisterEvent("PLAYER_REGEN_DISABLED", "ErrorFrameToggle")
 	self:RegisterEvent("PLAYER_REGEN_ENABLED", "ErrorFrameToggle")
 	self:RegisterEvent("MERCHANT_SHOW")
