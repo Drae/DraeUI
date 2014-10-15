@@ -9,7 +9,7 @@
  Sub-Widgets
 
  .bg - A Texture which functions as a background. It will inherit the color of
-       the main StatusBar.
+		the main StatusBar.
 
  Notes
 
@@ -19,78 +19,78 @@
  Options
 
  .displayAltPower   - Use this to let the widget display alternate power if the
-                      unit has one. If no alternate power the display will fall
-                      back to primary power.
+						unit has one. If no alternate power the display will fall
+						back to primary power.
 
  The following options are listed by priority. The first check that returns
  true decides the color of the bar.
 
  .colorTapping      - Use `self.colors.tapping` to color the bar if the unit
-                      isn't tapped by the player.
+						isn't tapped by the player.
  .colorDisconnected - Use `self.colors.disconnected` to color the bar if the
-                      unit is offline.
+						unit is offline.
  .colorPower        - Use `self.colors.power[token]` to color the bar based on
-                      the unit's power type. This method will fall-back to
-                      `:GetAlternativeColor()` if it can't find a color matching
-                      the token. If this function isn't defined, then it will
-                      attempt to color based upon the alternative power colors
-                      returned by [UnitPowerType](http://wowprogramming.com/docs/api/UnitPowerType).
-                      Finally, if these aren't defined, then it will attempt to
-                      color the bar based upon `self.colors.power[type]`.
+						the unit's power type. This method will fall-back to
+						`:GetAlternativeColor()` if it can't find a color matching
+						the token. If this function isn't defined, then it will
+						attempt to color based upon the alternative power colors
+						returned by [UnitPowerType](http://wowprogramming.com/docs/api/UnitPowerType).
+						Finally, if these aren't defined, then it will attempt to
+						color the bar based upon `self.colors.power[type]`.
  .colorClass        - Use `self.colors.class[class]` to color the bar based on
-                      unit class. `class` is defined by the second return of
-                      [UnitClass](http://wowprogramming.com/docs/api/UnitClass).
+						unit class. `class` is defined by the second return of
+						[UnitClass](http://wowprogramming.com/docs/api/UnitClass).
  .colorClassNPC     - Use `self.colors.class[class]` to color the bar if the
-                      unit is a NPC.
+						unit is a NPC.
  .colorClassPet     - Use `self.colors.class[class]` to color the bar if the
-                      unit is player controlled, but not a player.
+						unit is player controlled, but not a player.
  .colorReaction     - Use `self.colors.reaction[reaction]` to color the bar
-                      based on the player's reaction towards the unit.
-                      `reaction` is defined by the return value of
-                      [UnitReaction](http://wowprogramming.com/docs/api/UnitReaction).
+						based on the player's reaction towards the unit.
+						`reaction` is defined by the return value of
+						[UnitReaction](http://wowprogramming.com/docs/api/UnitReaction).
  .colorSmooth       - Use `self.colors.smooth` to color the bar with a smooth
-                      gradient based on the player's current health percentage.
+						gradient based on the player's current health percentage.
 
  Sub-Widget Options
 
  .multiplier - Defines a multiplier, which is used to tint the background based
-               on the main widgets R, G and B values. Defaults to 1 if not
-               present.
+				on the main widgets R, G and B values. Defaults to 1 if not
+				present.
 
  Examples
 
-   -- Position and size
-   local Power = CreateFrame("StatusBar", nil, self)
-   Power:SetHeight(20)
-   Power:SetPoint('BOTTOM')
-   Power:SetPoint('LEFT')
-   Power:SetPoint('RIGHT')
+	-- Position and size
+	local Power = CreateFrame("StatusBar", nil, self)
+	Power:SetHeight(20)
+	Power:SetPoint('BOTTOM')
+	Power:SetPoint('LEFT')
+	Power:SetPoint('RIGHT')
 
-   -- Add a background
-   local Background = Power:CreateTexture(nil, 'BACKGROUND')
-   Background:SetAllPoints(Power)
-   Background:SetTexture(1, 1, 1, .5)
+	-- Add a background
+	local Background = Power:CreateTexture(nil, 'BACKGROUND')
+	Background:SetAllPoints(Power)
+	Background:SetTexture(1, 1, 1, .5)
 
-   -- Options
-   Power.frequentUpdates = true
-   Power.colorTapping = true
-   Power.colorDisconnected = true
-   Power.colorPower = true
-   Power.colorClass = true
-   Power.colorReaction = true
+	-- Options
+	Power.frequentUpdates = true
+	Power.colorTapping = true
+	Power.colorDisconnected = true
+	Power.colorPower = true
+	Power.colorClass = true
+	Power.colorReaction = true
 
-   -- Make the background darker.
-   Background.multiplier = .5
+	-- Make the background darker.
+	Background.multiplier = .5
 
-   -- Register it with oUF
-   self.Power = Power
-   self.Power.bg = Background
+	-- Register it with oUF
+	self.Power = Power
+	self.Power.bg = Background
 
  Hooks
 
  Override(self) - Used to completely override the internal update function.
-                  Removing the table key entry will make the element fall-back
-                  to its internal function again.
+					Removing the table key entry will make the element fall-back
+					to its internal function again.
 ]]
 
 local parent, ns = ...
@@ -114,10 +114,10 @@ oUF.colors.power[7] = oUF.colors.power["SOUL_SHARDS"]
 oUF.colors.power[8] = oUF.colors.power["ECLIPSE"]
 oUF.colors.power[9] = oUF.colors.power["HOLY_POWER"]
 
-local GetDisplayPower = function(power, unit)
-	local _, _, _, _, _, _, showOnRaid = UnitAlternatePowerInfo(unit)
+local GetDisplayPower = function(unit)
+	local _, min, _, _, _, _, showOnRaid = UnitAlternatePowerInfo(unit)
 	if(showOnRaid) then
-		return ALTERNATE_POWER_INDEX
+		return ALTERNATE_POWER_INDEX, min
 	end
 end
 
@@ -127,15 +127,18 @@ local Update = function(self, event, unit)
 
 	if(power.PreUpdate) then power:PreUpdate(unit) end
 
-	local displayType = power.displayAltPower and GetDisplayPower(power, unit)
-	local min, max = UnitPower(unit, displayType), UnitPowerMax(unit, displayType)
+	local displayType, min
+	if power.displayAltPower then
+		displayType, min = GetDisplayPower(unit)
+	end
+	local cur, max = UnitPower(unit, displayType), UnitPowerMax(unit, displayType)
 	local disconnected = not UnitIsConnected(unit)
-	power:SetMinMaxValues(0, max)
+	power:SetMinMaxValues(min or 0, max)
 
 	if(disconnected) then
 		power:SetValue(max)
 	else
-		power:SetValue(min)
+		power:SetValue(cur)
 	end
 
 	power.disconnected = disconnected
@@ -145,7 +148,7 @@ local Update = function(self, event, unit)
 		UnitIsTapped(unit) and not UnitIsTappedByPlayer(unit) and not
 		UnitIsTappedByAllThreatList(unit)) then
 		t = self.colors.tapped
-	elseif(power.colorDisconnected and not UnitIsConnected(unit)) then
+	elseif(power.colorDisconnected and disconnected) then
 		t = self.colors.disconnected
 	elseif(power.colorPower) then
 		local ptype, ptoken, altR, altG, altB = UnitPowerType(unit)
@@ -168,7 +171,8 @@ local Update = function(self, event, unit)
 	elseif(power.colorReaction and UnitReaction(unit, 'player')) then
 		t = self.colors.reaction[UnitReaction(unit, "player")]
 	elseif(power.colorSmooth) then
-		r, g, b = self.ColorGradient(min, max, unpack(power.smoothGradient or self.colors.smooth))
+		local adjust = 0 - (min or 0)
+		r, g, b = self.ColorGradient(cur + adjust, max + adjust, unpack(power.smoothGradient or self.colors.smooth))
 	end
 
 	if(t) then
@@ -186,7 +190,7 @@ local Update = function(self, event, unit)
 	end
 
 	if(power.PostUpdate) then
-		return power:PostUpdate(unit, min, max)
+		return power:PostUpdate(unit, cur, max, min)
 	end
 end
 
