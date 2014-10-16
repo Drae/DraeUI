@@ -35,15 +35,5 @@ UF.CreateEclipseBar = function(self, point, anchor, relpoint, xOffset, yOffset)
 	_G["EclipseBarFrame"]:SetPoint(point, anchor, relpoint, xOffset / scale, yOffset / scale)
 	_G["EclipseBarFrame"]:SetScale(scale)
 
-	_G["EclipseBarFrameBar"]:SetTexture("Interface\\AddOns\\draeUI\\media\\resourcebars\\DruidEclipse")
-	_G["EclipseBarFrameSun"]:SetTexture("Interface\\AddOns\\draeUI\\media\\resourcebars\\DruidEclipse")
-	_G["EclipseBarFrameMoon"]:SetTexture("Interface\\AddOns\\draeUI\\media\\resourcebars\\DruidEclipse")
-	_G["EclipseBarFrameDarkSun"]:SetTexture("Interface\\AddOns\\draeUI\\media\\resourcebars\\DruidEclipse")
-	_G["EclipseBarFrameDarkMoon"]:SetTexture("Interface\\AddOns\\draeUI\\media\\resourcebars\\DruidEclipse")
-	_G["EclipseBarFrameSunBar"]:SetTexture("Interface\\AddOns\\draeUI\\media\\resourcebars\\DruidEclipse")
-	_G["EclipseBarFrameMoonBar"]:SetTexture("Interface\\AddOns\\draeUI\\media\\resourcebars\\DruidEclipse")
-	_G["EclipseBarFrameMarker"]:SetTexture("Interface\\AddOns\\draeUI\\media\\resourcebars\\DruidEclipse")
-	_G["EclipseBarFrameGlow"]:SetTexture("Interface\\AddOns\\draeUI\\media\\resourcebars\\DruidEclipse")
-
 	self.resourceBar = rs
 end
