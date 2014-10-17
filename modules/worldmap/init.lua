@@ -9,6 +9,11 @@ local M = T:NewModule("Worldmap", "AceEvent-3.0", "AceTimer-3.0", "AceHook-3.0")
 --[[
 
 --]]
+M.OnInitialize = function(self)
+	-- Foglight init
+	M.FogLightSetMode(T.db["worldMap"].fogLightMode)
+end
+
 M.OnEnable = function(self)
 	setfenv(WorldMapFrame_OnShow, setmetatable({ UpdateMicroButtons = function() end }, { __index = _G })) --blizzard taint fix
 
@@ -22,7 +27,7 @@ M.OnEnable = function(self)
 	CoordsHolder.playerCoords = CoordsHolder:CreateFontString(nil, 'OVERLAY')
 	CoordsHolder.playerCoords:SetFontObject(NumberFontNormal)
 	CoordsHolder.playerCoords:SetTextColor(1, 1 ,0)
-	CoordsHolder.playerCoords:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, "BOTTOMLEFT", 5, 5)
+	CoordsHolder.playerCoords:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, "BOTTOMLEFT", 8, 8)
 	CoordsHolder.playerCoords:SetText(PLAYER..":   0, 0")
 
 	CoordsHolder.mouseCoords = CoordsHolder:CreateFontString(nil, 'OVERLAY')

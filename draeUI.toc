@@ -97,3 +97,5 @@ modules\blizzard\watchframe.lua
 # Worldmap
 modules\worldmap\init.lua
 modules\worldmap\worldmap.lua
+modules\worldmap\foglight.lua
+

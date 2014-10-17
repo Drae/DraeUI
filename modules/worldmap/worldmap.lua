@@ -7,8 +7,9 @@ local T, C, G, P, U, _ = select(2, ...):UnPack()
 local M = T:GetModule("Worldmap")
 
 --[[
+
 --]]
-local coordsTimer
+local hidePlayerCoords = false
 
 --[[
 
@@ -22,9 +23,19 @@ function M:UpdateCoords()
 	x = T.Round(100 * x, 2)
 	y = T.Round(100 * y, 2)
 
-	if x ~= 0 and y ~= 0 then
+	if (x ~= 0 and y ~= 0) then
+		if (hidePlayerCoords) then
+			CoordsHolder.mouseCoords:SetPoint("BOTTOMLEFT", CoordsHolder.playerCoords, "BOTTOMRIGHT", 20, 0)
+			hidePlayerCoords = false
+		end
+
 		CoordsHolder.playerCoords:SetText(PLAYER..":   "..x..", "..y)
 	else
+		if (not hidePlayerCoords) then
+			CoordsHolder.mouseCoords:SetPoint("BOTTOMLEFT", CoordsHolder.playerCoords, "BOTTOMRIGHT", 0, 0)
+			hidePlayerCoords = true
+		end
+
 		CoordsHolder.playerCoords:SetText("")
 	end
 
@@ -45,14 +56,18 @@ function M:UpdateCoords()
 	end
 end
 
-function M:WorldMapFrame_OnShow()
-	if (not coordsTimer) then
-		coordsTimer = self:ScheduleRepeatingTimer('UpdateCoords', 0.05)
+do
+	local coordsTimer
+
+	function M:WorldMapFrame_OnShow()
+		if (not coordsTimer) then
+			coordsTimer = self:ScheduleRepeatingTimer('UpdateCoords', 0.05)
+		end
 	end
-end
 
 
-function M:WorldMapFrame_OnHide()
-	self:CancelTimer(coordsTimer)
-	coordsTimer = nil
+	function M:WorldMapFrame_OnHide()
+		self:CancelTimer(coordsTimer)
+		coordsTimer = nil
+	end
 end
