@@ -699,6 +699,9 @@ C["combatText"] = {
 	hideDebuffs = true,
 }
 
-C["bags"] = {
-	itemSize = 24,
+C["worldMap"] = {
+	fogLightMode = 1, -- 0 = disable, 1 = hybrid, 2 = full terrain, 3 = no terrain
+	terrainAlpha = 0.5, -- transparency of the terrain overlay (if used)
+
+	unexploredColor = { r = 0.7, g = 0.7, b = 0.7, a = 0.9 }, -- Unexplored areas will still be highlighted in this colour overlay
 }
