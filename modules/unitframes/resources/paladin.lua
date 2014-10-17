@@ -18,7 +18,6 @@ local UnitExists, GetComboPoints = UnitExists, GetComboPoints
 		Paladin
 		This hijacks the existing Blizzard power bar and builds
 		around it - includes extra power bar for Holy specs
-		TODO: Mana regen for Holy?
 --]]
 do
 	local SPELL_POWER_HOLY_POWER, PALADINPOWERBAR_SHOW_LEVEL = SPELL_POWER_HOLY_POWER, PALADINPOWERBAR_SHOW_LEVEL
