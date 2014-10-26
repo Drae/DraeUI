@@ -8,6 +8,7 @@ local M = T:NewModule("Infobar", "AceEvent-3.0", "AceTimer-3.0")
 
 -- Localise a bunch of functions
 local _G = _G
+local IsEncounterInProgress = IsEncounterInProgress
 local pairs, ipairs, format, gupper, gsub, floor, abs, mmin, type, unpack = pairs, ipairs, string.format, string.upper, string.gsub, math.floor, math.abs, math.min, type, unpack
 local tinsert = table.insert
 
@@ -30,28 +31,32 @@ local infoBarGold = CreateFrame("Button", nil, infoBar)
 local infoBarTextGold
 local infoBarXP = CreateFrame("Button", nil, infoBar)
 local infoBarTextXP
+local infoBarRes = CreateFrame("Button", nil, infoBar)
+local infoBarTextRes
 
 --[[
 		Calculation and display functions
 --]]
 local RepositionElements = function()
-	local elements = { infoBarGold, infoBarXP }
-	local elementsText = { infoBarTextGold, infoBarTextXP }
-	local elementsOffsets = { 35, 0 }
+	local elements = { infoBarGold, infoBarXP, infoBarRes }
+	local elementsText = { infoBarTextGold, infoBarTextXP, infoBarTextRes }
+	local elementsOffsets = { 35, 35, 0 }
 	local startLeft = 320
 	local width
 
 	for i = 1, #elements do
-		if (elements[i]:IsVisible()) then
+		if (elements[i]:IsVisible() and elementsText[i]:GetText() ~= "" and elementsText[i]:GetText() ~= nil) then
 			width = elementsText[i]:GetWidth()
 			width = width + elementsOffsets[i]
 
 			elements[i]:SetWidth(width - elementsOffsets[i])
+		else
+			width = 0
+		end
 
-			if (i <= #elements - 1) then
-				elements[i + 1]:SetPoint("TOPLEFT", startLeft + width, 0)
-				startLeft = startLeft + width
-			end
+		if (i <= #elements - 1) then
+			elements[i + 1]:SetPoint("TOPLEFT", startLeft + width, 0)
+			startLeft = startLeft + width
 		end
 	end
 end
@@ -163,9 +168,13 @@ do
 		if (affix ~= "") then
 			local r1, g1, b1 = T.ColorGradient(pct / 100 - 0.001, 1, 0, 0, 1, 1, 0, 0, 1, 0)
 			infoBarTextXP:SetFormattedText("|cff%02x%02x%02x%d|r|cff%02x%02x%02x%%%s|r", r1 * 255, g1 * 255, b1 * 255, pct, cr * 255, cg * 255, cb * 255, affix or "")
+			infoBarXP:Show()
 		else
 			infoBarTextXP:SetText("")
+			infoBarXP:Hide()
 		end
+
+		M:SendMessage("INFOBAR_ELEMENT_SIZE_CHANGE")
 	end
 
 	TooltipXP = function(self)
@@ -472,6 +481,132 @@ local UpdateMemory = function()
 	infoBarTextMem:SetFormattedText("|cff%02x%02x%02x%d|r|cff%02x%02x%02xMB|r   ", r2 * 255, g2 * 255, b2 * 255, memory, cr * 255, cg * 255, cb * 255)
 end
 
+local TooltipRes
+do
+	local resAmount = 1
+	local ticker = 0
+	local timeToGo = 0
+	local inCombat = false
+	local redemption, feign = GetSpellInfo(27827), GetSpellInfo(5384)
+	local theDead = {}
+	local theRes = {}
+	local addResTimer, updateResTimer
+	local class
+
+	local UpdateTimer = function()
+		ticker = ticker + 1
+
+		local time = timeToGo - ticker
+		local m = floor(time / 60)
+		local s = mod(time, 60)
+
+		if (next(theDead)) then
+			for k, v in next, theDead do
+				if (UnitBuff(k, redemption) or UnitBuff(k, feign) or UnitIsFeignDeath(k)) then -- The backup plan, you need one with Blizz
+					theDead[k] = nil
+				elseif (not UnitIsDeadOrGhost(k) and UnitIsConnected(k) and UnitAffectingCombat(k)) then
+					if (v == "br") then
+						resAmount = resAmount - 1
+					else
+						class = select(2, UnitClass(k))
+
+						if (class ~= "SHAMAN") then
+							resAmount = resAmount - 1
+						end
+					end
+
+					theDead[k] = nil
+				end
+			end
+		end
+
+		infoBarTextRes:SetFormattedText("|cff00ff00%d|rres (%d:%02d)", resAmount, m, s)
+	end
+
+	local AddRes = function()
+		resAmount = resAmount + 1
+		ticker = 0
+	end
+
+	M.ResTimerUpdate = function(self, event)
+		if (not inCombat and event == "PLAYER_REGEN_DISABLED" and IsEncounterInProgress()) then
+			local instanceGroupSize = select(9, GetInstanceInfo())
+			timeToGo = (90 / instanceGroupSize) * 60
+
+			if (timeToGo < 1) then return end
+
+			inCombat = true
+
+			wipe(theDead)
+			wipe(theRes)
+
+			resAmount = 1
+			ticker = 0
+
+			addResTimer = self:ScheduleRepeatingTimer(AddRes, timeToGo)
+			updateResTimer = self:ScheduleRepeatingTimer(UpdateTimer, 1)
+
+			self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+
+			infoBarRes:Show()
+		elseif (inCombat and event == "PLAYER_REGEN_ENABLED" and not IsEncounterInProgress()) then
+			inCombat = false
+
+			self:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+
+			self:CancelTimer(addResTimer)
+			self:CancelTimer(updateResTimer)
+
+			infoBarTextRes:SetText("")
+
+			infoBarRes:Hide()
+		end
+	end
+
+	M.COMBAT_LOG_EVENT_UNFILTERED = function(self, ...)
+		local _, _, event, _, sGuid, name, _, _, tarGuid, tarName = ...
+
+		if (event == "SPELL_RESURRECT") then
+			theDead[tarName] = "br"
+			theRes[tarName] = name
+		-- Lots of lovely checks before adding someone to the deaths table
+		elseif (event == "UNIT_DIED") then
+			if (UnitIsPlayer(tarName) and UnitGUID(tarName) == tarGuid and not UnitIsFeignDeath(tarName) and not UnitBuff(tarName, redemption) and not UnitBuff(tarName, feign)) then
+				theDead[tarName] = true
+			end
+		end
+	end
+
+	TooltipRes = function(self)
+		GameTooltip:SetOwner(infoBarRes, "ANCHOR_NONE")
+		GameTooltip:SetPoint("TOPLEFT", infoBarRes, "BOTTOMLEFT", 0, -10)
+
+		GameTooltip:AddLine("Players Ressed:")
+		GameTooltip:AddLine(" ")
+
+		if (next(theRes)) then
+			for tarName, name in pairs(theRes) do
+				local class
+
+				_, class = UnitClass(tarName)
+				local t = class and RAID_CLASS_COLORS[class] or GRAY_FONT_COLOR -- Failsafe, rarely UnitClass can return nil
+
+				_, class = UnitClass(name)
+				local s = class and RAID_CLASS_COLORS[class] or GRAY_FONT_COLOR -- Failsafe, rarely UnitClass can return nil
+
+				local shortName = name:gsub("%-.+", "*")
+				local shortTarName = tarName:gsub("%-.+", "*")
+
+				GameTooltip:AddDoubleLine(("|H%s|h|cFF%02x%02x%02x%s|r|h"):format(name, s.r * 255, s.g * 255, s.b * 255, shortName), ("by |H%s|h|cFF%02x%02x%02x%s|r|h"):format(tarName, t.r * 255, t.g * 255, t.b * 255, shortTarName))
+			end
+		else
+			GameTooltip:AddLine("|cffffffffNone|r")
+		end
+
+		GameTooltip:Show()
+	end
+end
+
 local PlayerEnteringWorld = function(self)
 	UpdateFPS()
 	UpdateLatency()
@@ -520,6 +655,10 @@ M.OnEnable = function(self)
 	infoBarXP:SetSize(100, 15)
 	infoBarTextXP = T.CreateFontObject(infoBarXP, C.media.fontsize1, C.media.font, "LEFT", 0, 0)
 
+	-- Res info (5th)
+	infoBarRes:SetSize(100, 15)
+	infoBarTextRes = T.CreateFontObject(infoBarRes, C.media.fontsize1, C.media.font, "LEFT", 0, 0)
+
 	-- Schedule timers for the various updates
 	self.timerFPS = self:ScheduleRepeatingTimer(UpdateFPS, 1.0)
 	self.timerLatency = self:ScheduleRepeatingTimer(UpdateLatency, 10.0)
@@ -535,6 +674,8 @@ M.OnEnable = function(self)
 	self:RegisterEvent("SEND_MAIL_COD_CHANGED", GoldChanged)
 	self:RegisterEvent("PLAYER_TRADE_MONEY", GoldChanged)
 	self:RegisterEvent("TRADE_MONEY_CHANGED", GoldChanged)
+	self:RegisterEvent("PLAYER_REGEN_DISABLED", "ResTimerUpdate")
+	self:RegisterEvent("PLAYER_REGEN_ENABLED", "ResTimerUpdate")
 
 	self:RegisterMessage("INFOBAR_ELEMENT_SIZE_CHANGE", RepositionElements)
 
@@ -583,4 +724,11 @@ M.OnEnable = function(self)
 	infoBarXP:SetScript("OnEnter", function() TooltipXP() end)
 	infoBarXP:SetScript("OnLeave", function() GameTooltip:Hide() end)
 	infoBarXP:SetScript("OnClick", function(self) ToggleCharacter("ReputationFrame") end)
+
+	-- Res tooltip handling
+	infoBarRes:SetScript("OnEnter", function() TooltipRes() end)
+	infoBarRes:SetScript("OnLeave", function() GameTooltip:Hide() end)
+
+	infoBarXP:Hide()
+	infoBarRes:Hide()
 end
