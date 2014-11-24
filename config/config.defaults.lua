@@ -685,7 +685,7 @@ G["minimap"] = {
 	buttons	= {
 		["MiniMapTracking"] 			= { angle = 10 },  -- The tracking button/menu
 		["MiniMapMailFrame"] 			= { angle = 310 }, -- New mail alert
-		["QueueStatusMinimapButton"] 	= { angle = 235 }, -- Dungeon Finder
+		["QueueStatusMinimapButton"] 	= { angle = 212 }, -- Dungeon Finder
 		["GameTimeFrame"] 				= { angle = 45 },  -- The Calendar
 		["MiniMapInstanceDifficulty"] 	= { angle = 126 }, -- Instance difficulty
 		["GuildInstanceDifficulty"] 	= { angle = 126 }, -- As above when in guild group
