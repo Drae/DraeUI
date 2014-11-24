@@ -13,7 +13,7 @@ AddonDraeUI.VC["global"] = {}
 AddonDraeUI.VC["class"] = {}
 AddonDraeUI.VC["char"] = {}
 
--- Define common elements for our namespace T, C, G, P
+-- Define common elements for our namespace T, C, G, P, U
 ns[1] = AddonDraeUI
 ns[2] = AddonDraeUI.VC["profile"]
 ns[3] = AddonDraeUI.VC["global"]

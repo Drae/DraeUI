@@ -58,6 +58,9 @@ modules\unitframes\units\targettarget.lua
 modules\unitframes\units\boss.lua
 modules\unitframes\units\arena.lua
 
+# Chat
+modules\chat\init.lua
+
 # Minimap
 modules\minimap\init.lua
 modules\minimap\minimap.lua
