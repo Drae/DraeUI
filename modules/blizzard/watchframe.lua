@@ -9,19 +9,22 @@ local B = T:GetModule("Blizzard")
 --[[
 
 --]]
-local noop = function() end
+local ObjectiveFrameHolder = CreateFrame("Frame", "ObjectiveFrameHolder", UIParent)
+ObjectiveFrameHolder:SetWidth(ObjectiveTrackerFrame:GetWidth())
+ObjectiveFrameHolder:SetHeight(ObjectiveTrackerFrame:GetTop() - CONTAINER_OFFSET_Y)
+ObjectiveFrameHolder:SetPoint("TOPRIGHT", MinimapCluster, "BOTTOMRIGHT", -5, -40)
 
 B.MoveWatchFrame = function(self)
-	ObjectiveTrackerFrame:SetMovable(true)
-	ObjectiveTrackerFrame:SetResizable(true)
-	ObjectiveTrackerFrame:SetClampedToScreen(false)
+	ObjectiveFrameHolder:SetScale(0.95)
+	
 	ObjectiveTrackerFrame:ClearAllPoints()
-	ObjectiveTrackerFrame:SetPoint("TOPRIGHT", MinimapCluster, "BOTTOMRIGHT", -5, -40)
+	ObjectiveTrackerFrame:SetPoint("TOP", ObjectiveFrameHolder, "TOP")
 	ObjectiveTrackerFrame:SetHeight(ObjectiveTrackerFrame:GetTop() - CONTAINER_OFFSET_Y)
-	ObjectiveTrackerFrame:SetScale(0.95)
-	ObjectiveTrackerFrame:SetUserPlaced(true)
-	ObjectiveTrackerFrame:SetMovable(false)
-	ObjectiveTrackerFrame:SetResizable(false)
 
-	ObjectiveTrackerFrame.SetPoint = noop
+	hooksecurefunc(ObjectiveTrackerFrame,"SetPoint", function(_, _, parent)
+		if (parent ~= ObjectiveFrameHolder) then
+			ObjectiveTrackerFrame:ClearAllPoints()
+            ObjectiveTrackerFrame:SetPoint("TOP", ObjectiveFrameHolder, "TOP")
+		end
+	end)
 end
