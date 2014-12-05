@@ -104,8 +104,8 @@ local updateStyle = function(self, event, unit)
 		if (btn ~= wEnch1 and btn ~= wEnch2) then updateAuraButtonStyle(self, btn, "HELPFUL") end
 	end
 
-	if (wEnch1) then updateWeaponEnchantButtonStyle(wEnch1, "MainHandSlot", hasMHe, MHrTime) end
-	if (wEnch2) then updateWeaponEnchantButtonStyle(wEnch2, "SecondaryHandSlot", hasOHe, OHrTime) end
+	if (wEnch1 and MHrTime) then updateWeaponEnchantButtonStyle(wEnch1, "MainHandSlot", hasMHe, MHrTime) end
+	if (wEnch2 and OHrTime) then updateWeaponEnchantButtonStyle(wEnch2, "SecondaryHandSlot", hasOHe, OHrTime) end
 end
 
 local SetHeaderAttributes = function(header, template, isBuff)
