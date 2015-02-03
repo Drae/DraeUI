@@ -20,24 +20,24 @@ local UnitExists, GetComboPoints = UnitExists, GetComboPoints
 --]]
 do
 	local SPELL_POWER_CHI = SPELL_POWER_CHI
-	local chi = 0
+	local curChi = 0
 
 	local OnPower = function(self, event, unit, powerType)
 		if (powerType ~= "CHI" or InCombatLockdown()) then return end
 
 		local rs = self.resourceBar
 		local pp = self.ExtraPower
-		local curChi = UnitPower("player", SPELL_POWER_CHI)
+		local chi = UnitPower("player", SPELL_POWER_CHI)
 
-		if (curChi == 0) then
+		if (chi == 0) then
 			rs:SetAlpha(0)
 			pp:Hide()
-		elseif (chi == 0 and curChi > 0) then
+		elseif (curChi == 0 and chi > 0) then
 			rs:SetAlpha(1.0)
 			pp:Show()
 		end
 
-		chi = curChi
+		curChi = chi
 	end
 
 	local OnEvent = function(self, event, arg1, arg2)
@@ -59,18 +59,18 @@ do
 	local UpdateChi = function(self, event, unit, powerType)
 		if (unit ~= "player" ) then return end
 
-		local chi = self.resourceBar
-		local curChi = UnitPower(unit, SPELL_POWER_CHI)
+		local chiBar = self.resourceBar
+		local chi = UnitPower(unit, SPELL_POWER_CHI)
 
 		for i = 1, UnitPowerMax(unit, SPELL_POWER_CHI) do
-			local isShown = ((chi[i].lit:GetAlpha() > 0 and not chi[i].animHide:IsPlaying()) or chi[i].animShow:IsPlaying()) and true or false
-			local shouldShow = i <= curChi and true or false
+			local isShown = ((chiBar[i].lit:GetAlpha() > 0 and not chiBar[i].animHide:IsPlaying()) or chiBar[i].animShow:IsPlaying()) and true or false
+			local shouldShow = i <= chi and true or false
 
 			if (isShown ~= shouldShow) then
 				if (isShown) then
-					chi[i].animHide:Play()
+					chiBar[i].animHide:Play()
 				else
-					chi[i].animShow:Play()
+					chiBar[i].animShow:Play()
 				end
 			end
 		end
@@ -137,9 +137,9 @@ do
 		if (rs.maxChi ~= maxChi) then
 			for i = 1, maxChi do
 				if (i == 1) then
-					rs[i]:SetPoint("LEFT", maxChi == 5 and 8 or 28, -2)
+					rs[i]:SetPoint("LEFT", maxChi == 5 and 8 or maxChi == 6 and 12 or 28, -2)
 				else
-					rs[i]:SetPoint("LEFT", rs[i - 1], "RIGHT", 10, 0)
+					rs[i]:SetPoint("LEFT", rs[i - 1], "RIGHT", maxChi == 6 and 0 or 10, 0)
 				end
 				rs[i]:SetAlpha(1.0)
 			end
@@ -189,7 +189,7 @@ do
 		rs.animShow 	= {}
 		rs.animHide 	= {}
 
-		for i = 1, 5 do
+		for i = 1, 6 do
 			rs[i] = CreateFrame("Frame", nil, rs)
 			rs[i]:SetSize(30, 30)
 			rs[i]:SetAlpha(0)
