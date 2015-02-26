@@ -41,7 +41,7 @@ do
 
 		_G["WarlockPowerFrame"]:SetParent(rs)
 		_G["WarlockPowerFrame"]:ClearAllPoints()
-		_G["WarlockPowerFrame"]:SetPoint(point, anchor, relpoint, xOffset / scale, yOffset / scale)
+		_G["WarlockPowerFrame"]:Point(point, anchor, relpoint, xOffset / scale, yOffset / scale)
 		_G["WarlockPowerFrame"]:SetScale(scale)
 
 		rs:SetAlpha(0)

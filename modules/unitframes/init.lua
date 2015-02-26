@@ -23,23 +23,23 @@ UF.OnEnable = function(self)
 
 	-- Target of target
 	oUF:SetActiveStyle("DraeTargetTarget")
-	oUF:Spawn("targettarget", "DraeTargetTarget"):SetPoint("BOTTOMLEFT", "DraeTarget", "BOTTOMRIGHT", T.db["frames"].totXoffset, T.db["frames"].totYoffset)
+	oUF:Spawn("targettarget", "DraeTargetTarget"):Point("BOTTOMLEFT", "DraeTarget", "BOTTOMRIGHT", T.db["frames"].totXoffset, T.db["frames"].totYoffset)
 
 	-- Focus
 	oUF:SetActiveStyle("DraeFocus")
-	oUF:Spawn("focus", "DraeFocus"):SetPoint("TOPLEFT", "DraeTarget", "BOTTOMLEFT", T.db["frames"].focusXoffset, T.db["frames"].focusYoffset)
+	oUF:Spawn("focus", "DraeFocus"):Point("TOPLEFT", "DraeTarget", "BOTTOMLEFT", T.db["frames"].focusXoffset, T.db["frames"].focusYoffset)
 
 	-- Focus target
 	oUF:SetActiveStyle("DraeFocus")
-	oUF:Spawn("focustarget", "DraeFocusTarget"):SetPoint("TOPRIGHT", "DraeTarget", "BOTTOMRIGHT", T.db["frames"].focusTargetXoffset, T.db["frames"].focusTargetYoffset)
+	oUF:Spawn("focustarget", "DraeFocusTarget"):Point("TOPRIGHT", "DraeTarget", "BOTTOMRIGHT", T.db["frames"].focusTargetXoffset, T.db["frames"].focusTargetYoffset)
 
 	-- Pet
 	oUF:SetActiveStyle("DraePet")
-	oUF:Spawn("pet", "DraePet"):SetPoint("TOPLEFT", "DraePlayer", "BOTTOMLEFT", T.db["frames"].petXoffset, T.db["frames"].petYoffset)
+	oUF:Spawn("pet", "DraePet"):Point("TOPLEFT", "DraePlayer", "BOTTOMLEFT", T.db["frames"].petXoffset, T.db["frames"].petYoffset)
 
 	-- Pet target
 	oUF:SetActiveStyle("DraeFocus")
-	oUF:Spawn("pettarget", "DraePetTarget"):SetPoint("TOPRIGHT", "DraePlayer", "BOTTOMRIGHT", T.db["frames"].petTargetXoffset, T.db["frames"].petTargetYoffset)
+	oUF:Spawn("pettarget", "DraePetTarget"):Point("TOPRIGHT", "DraePlayer", "BOTTOMRIGHT", T.db["frames"].petTargetXoffset, T.db["frames"].petTargetYoffset)
 
 	-- Boss frames
 	if (T.db["frames"].showBoss) then
@@ -50,9 +50,9 @@ UF.OnEnable = function(self)
 			local frame = oUF:Spawn("boss" .. i, "DraeBoss" .. i)
 
 			if (i == 1) then
-				frame:SetPoint("LEFT", "DraeTargetTarget", "RIGHT", T.db["frames"].bossXoffset, T.db["frames"].bossYoffset)
+				frame:Point("LEFT", "DraeTargetTarget", "RIGHT", T.db["frames"].bossXoffset, T.db["frames"].bossYoffset)
 			else
-				frame:SetPoint("BOTTOM", boss[i - 1], "TOP", 0, 35)
+				frame:Point("BOTTOM", boss[i - 1], "TOP", 0, 35)
 			end
 
 			boss[i] = frame
@@ -69,9 +69,9 @@ UF.OnEnable = function(self)
 			local frame = oUF:Spawn("arena"..i, "DraeArenaPlayer"..i)
 
 			if (i == 1) then
-				frame:SetPoint("LEFT", "DraePlayer", "LEFT", T.db["frames"].arenaXoffset, T.db["frames"].arenaYoffset)
+				frame:Point("LEFT", "DraePlayer", "LEFT", T.db["frames"].arenaXoffset, T.db["frames"].arenaYoffset)
 			else
-				frame:SetPoint("BOTTOM", arena[i - 1], "TOP", 0, 35)
+				frame:Point("BOTTOM", arena[i - 1], "TOP", 0, 35)
 			end
 
 			arena[i] = frame

@@ -38,8 +38,8 @@ do
 
 		local rs = CreateFrame("Frame", nil, self)
 		rs:SetFrameLevel(12)
-		rs:SetPoint(point, anchor, relpoint, 0, 8)
-		rs:SetSize((MAX_COMBO_POINTS * spacedWidth) + spacedWidth, 32)
+		rs:Point(point, anchor, relpoint, 0, 8)
+		rs:Size((MAX_COMBO_POINTS * spacedWidth) + spacedWidth, 32)
 		rs:SetScale(1.2)
 		rs:SetAlpha(0)
 
@@ -58,7 +58,7 @@ do
 		for i = 1, MAX_COMBO_POINTS do
 			rs[i] = CreateFrame("Frame", nil, rs)
 			rs[i]:SetPoint("LEFT", spacedWidth * (i - 1), 0)
-			rs[i]:SetSize(32, 32)
+			rs[i]:Size(32, 32)
 
 			local bg = rs[i]:CreateTexture(nil, "ARTWORK")
 			bg:SetTexture("Interface\\AddOns\\draeUI\\media\\resourcebars\\arcanecharge")

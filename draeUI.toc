@@ -31,7 +31,10 @@ functions\colours.lua
 functions\fonts.lua
 functions\functions.lua
 functions\maths.lua
+functions\toolkit.lua
+functions\pixelperfect.lua
 functions\console.lua
+functions\animation.lua
 
 # Unitframes
 modules\unitframes\init.lua
@@ -58,6 +61,13 @@ modules\unitframes\units\targettarget.lua
 modules\unitframes\units\boss.lua
 modules\unitframes\units\arena.lua
 
+# Bags
+modules\bags\frame.xml
+modules\bags\components.xml
+modules\bags\bags.lua
+#modules\bags\bagbar.lua
+modules\bags\sort.lua
+
 # Chat
 modules\chat\init.lua
 
@@ -69,12 +79,15 @@ modules\minimap\buttons.lua
 # Nameplates
 modules\nameplates\init.lua
 modules\nameplates\nameplates.lua
-modules\nameplates\auras.lua
+#modules\nameplates\auras.lua
 
 # Buffbar
 modules\buffbar\templates.xml
 modules\buffbar\init.lua
 modules\buffbar\buffbar.lua
+
+# Infobar
+modules\infobar\init.lua
 
 # Misc
 modules\misc\init.lua
@@ -82,7 +95,6 @@ modules\misc\alreadyknown.lua
 modules\misc\autoinvite.lua
 modules\misc\enhanceraidbrowser.lua
 modules\misc\helmsaver.lua
-modules\misc\infobar.lua
 modules\misc\openall.lua
 modules\misc\switchset.lua
 
@@ -101,4 +113,3 @@ modules\blizzard\watchframe.lua
 modules\worldmap\init.lua
 modules\worldmap\worldmap.lua
 modules\worldmap\foglight.lua
-

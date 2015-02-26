@@ -69,14 +69,14 @@ TH.OnEnable = function(self)
 
 	-- Add the select boxes to the char paperdoll equip frame
 	hcb = CreateFrame("CheckButton", nil, CharacterHeadSlotPopoutButton, "UICheckButtonTemplate")
-	hcb:SetSize(26, 26)
-	hcb:SetPoint("RIGHT", CharacterHeadSlotPopoutButton, "LEFT", -13, 0)
+	hcb:Size(26, 26)
+	hcb:Point("RIGHT", CharacterHeadSlotPopoutButton, "LEFT", -13, 0)
 	hcb:SetScript("OnClick", OnCheckBoxClick)
 	hcb:SetChecked(ShowingHelm())
 
 	ccb = CreateFrame("CheckButton", nil, CharacterBackSlotPopoutButton, "UICheckButtonTemplate")
-	ccb:SetSize(26, 26)
-	ccb:SetPoint("RIGHT", CharacterBackSlotPopoutButton, "LEFT", -13, 0)
+	ccb:Size(26, 26)
+	ccb:Point("RIGHT", CharacterBackSlotPopoutButton, "LEFT", -13, 0)
 	ccb:SetScript("OnClick", OnCheckBoxClick)
 	ccb:SetChecked(ShowingCloak())
 

@@ -4,9 +4,6 @@
 --]]
 local T, C, G, P, U, _ = select(2, ...):UnPack()
 
--- Register with SharedMedia
-local LSM = LibStub("LibSharedMedia-3.0")
-
 --[[
 		Default configuration settings
 
@@ -17,23 +14,28 @@ local LSM = LibStub("LibSharedMedia-3.0")
 		section just the variable/s you want to change.
 --]]
 
--- Media and font sizing
-C["media"] = {
-	texture = LSM:Fetch("statusbar", "Striped"),
+C["general"] = {
+-- Textures
+	statusbar = "Striped", 
 
 	-- Fonts
-	font = LSM:Fetch("font", "Diavlo"),
-	fontOther = LSM:Fetch("font", "Liberation Sans"),
+	font = "Liberation Sans",
+	fontFancy = "Morpheus",
+	fontTimers = "Bignoodle",
+	fontCombat = "Bignoodle",
+	
 	fontsize1 = 13,
 	fontsize2 = 12,
 	fontsize3 = 10,
 	fontsize4 = 9,
 
-	-- Unitframe border colour
+	-- Metalic frame/border colour
 	color_rb = 0.40,	-- default 0.40
 	color_gb = 0.40,	-- default 0.40
 	color_bb = 0.40,	-- default 0.40
 	color_ab = 1.00,	-- default 1.00
+	
+	pixelPerfect = true,
 }
 
 -- Unit Frame settings
@@ -58,8 +60,8 @@ C["frames"] = {
 	petYoffset			= -40,
 	petTargetXoffset	= 0,  	-- Relative to right of player
 	petTargetYoffset	= -40,
-	bossXoffset			= 20,	-- Relative to target of target
-	bossYoffset			= 0,
+	bossXoffset			= -140,	-- Relative to target of target
+	bossYoffset			= 120,
 	arenaXoffset		= 0, -- Relative to player
 	arenaYoffset		= 140,
 
@@ -148,7 +150,6 @@ C["frames"] = {
 			["BUFF"] = {
 				["Vengeance"]				= true,
 				["Beacon of Light"]			= true,
-				["Thorns"]					= true,
 				["Hand of Protection"]		= true,
 				["Hand of Freedom"]			= true,
 				["Hand of Sacrifice"]		= true,
@@ -159,9 +160,7 @@ C["frames"] = {
 				["Aspect of the Fox"]		= true,
 				["Aspect of the Pack"]		= true,
 				["Aspect of the Cheetah"]	= true,
-				["Aspect of the Wild"]		= true,
 				["Rune of Power"]			= true,
-				["Light of the Ancient Kings"] = true, -- Haste buff from Holy GoAK
 				["Invoker's Energy"]		= true, -- Invocation buff
 				["The Light of Day"]		= true,
 				["Renewing Mist"]			= true,
@@ -221,22 +220,28 @@ C["resourcebar"] = {
 	yOffset  = 20,
 }
 
--- Equipment set mappings
-C["equipSets"] = {
-	["PALADIN"]	= {
-		[1] = "Holy",
-		[2] = "Protection",
-		[3] = "Retribution",
-	},
-	["MAGE"]	= {
-		[1] = "Arcane",
-		[2] = "Fire",
-		[3] = "Frost",
-	},
-	["MONK"]	= {
-		[1]	= "Brewmaster",
-		[2]	= "Mistweaver",
-		[3]	= "Windwalker",
+-- Bags
+C["bags"] = {
+    ["sortInverted"] = true,
+	["xOffset"] = -20,
+	["yOffset"] = 20,
+	["xOffsetBank"] = 20,
+	["yOffsetBank"] = -40,
+	["bagSize"] = 32,
+	["bankSize"] = 32,
+	["bagWidth"] = 450,
+	["bankWidth"] = 656,
+	["currencyFormat"] = "ICON_TEXT",
+	["moneyFormat"] = "SMART",
+	["moneyCoins"] = true,
+	["ignoreItems"] = "",
+	["bagBar"] = {
+		["growthDirection"] = "VERTICAL",
+		["sortDirection"] = "ASCENDING",
+		["size"] = 30,
+		["spacing"] = 4,
+		["showBackdrop"] = false,
+		["mouseover"] = false,
 	},
 }
 
@@ -680,20 +685,6 @@ C["nameplates"] = {
 	},
 }
 
--- Minimap (global variable space)
-G["minimap"] = {
-	buttons	= {
-		["MiniMapTracking"] 			= { angle = 10 },  -- The tracking button/menu
-		["MiniMapMailFrame"] 			= { angle = 310 }, -- New mail alert
-		["QueueStatusMinimapButton"] 	= { angle = 212 }, -- Dungeon Finder
-		["GameTimeFrame"] 				= { angle = 45 },  -- The Calendar
-		["MiniMapInstanceDifficulty"] 	= { angle = 126 }, -- Instance difficulty
-		["GuildInstanceDifficulty"] 	= { angle = 126 }, -- As above when in guild group
-		["MiniMapChallengeMode"] 		= { angle = 126 }, -- As above when in doing challenge modes
-		["TimeManagerClockButton"] 		= { anchorat = "BOTTOM", anchorto = "BOTTOM", posx = 0, posy = -11 }, -- The clock
-	},
-}
-
 C["combatText"] = {
 	showHealing = true,
 	hideDebuffs = true,
@@ -704,4 +695,56 @@ C["worldMap"] = {
 	terrainAlpha = 0.5, -- transparency of the terrain overlay (if used)
 
 	unexploredColor = { r = 0.7, g = 0.7, b = 0.7, a = 0.9 }, -- Unexplored areas will still be highlighted in this colour overlay
+}
+
+--[[
+		Global variables - for all chars
+--]]
+G["general"] = {
+	["autoScale"] = true,
+	["eyefinity"] = false,
+}
+
+G["chat"] = {
+	sticky = true,
+	shortChannels = true,
+	
+	timeStampFormat = "%H:%M ",
+	scrollDownInterval = 15,
+	throttleInterval = 45,
+	
+	keywords = "%MYNAME%",
+}
+
+-- Minimap
+G["minimap"] = {
+	buttons	= {
+		["MiniMapTracking"] 			= { angle = 25 },  -- The tracking button/menu
+		["MiniMapMailFrame"] 			= { angle = 310 }, -- New mail alert
+		["QueueStatusMinimapButton"] 	= { angle = 212 }, -- Dungeon Finder
+		["GameTimeFrame"] 				= { angle = 50 },  -- The Calendar
+		["MiniMapInstanceDifficulty"] 	= { angle = 126 }, -- Instance difficulty
+		["GuildInstanceDifficulty"] 	= { angle = 126 }, -- As above when in guild group
+		["MiniMapChallengeMode"] 		= { angle = 126 }, -- As above when in doing challenge modes
+		["TimeManagerClockButton"] 		= { anchorat = "BOTTOM", anchorto = "BOTTOM", posx = 0, posy = -11 }, -- The clock
+	},
+}
+
+-- Equipment set mappings
+G["equipSets"] = {
+	["PALADIN"]	= {
+		[1] = "Holy",
+		[2] = "Protection",
+		[3] = "Retribution",
+	},
+	["MAGE"]	= {
+		[1] = "Arcane",
+		[2] = "Fire",
+		[3] = "Frost",
+	},
+	["MONK"]	= {
+		[1]	= "Brewmaster",
+		[2]	= "Mistweaver",
+		[3]	= "Windwalker",
+	},
 }

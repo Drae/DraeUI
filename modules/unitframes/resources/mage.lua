@@ -112,7 +112,7 @@ do
 			pp.gemUse:SetWidth(1)
 			pp.gemUse:SetHeight(pp:GetHeight())
 			pp.gemUse:ClearAllPoints()
-			pp.gemUse:SetPoint("BOTTOMRIGHT", pp, "BOTTOMRIGHT", -manaGemPos, 0)
+			pp.gemUse:Point("BOTTOMRIGHT", pp, "BOTTOMRIGHT", -manaGemPos, 0)
 			pp.gemUse:Show()
 
 			-- Mark evo use
@@ -124,7 +124,7 @@ do
 			pp.evoUse:SetWidth(1)
 			pp.evoUse:SetHeight(pp:GetHeight())
 			pp.evoUse:ClearAllPoints()
-			pp.evoUse:SetPoint("BOTTOMRIGHT", pp, "BOTTOMRIGHT", -evoPos, 0)
+			pp.evoUse:Point("BOTTOMRIGHT", pp, "BOTTOMRIGHT", -evoPos, 0)
 			pp.evoUse:Show()
 
 			pp.PostUpdate = UpdateMageManaColor
@@ -156,7 +156,7 @@ do
 
 		local rs = CreateFrame("Frame", nil, self)
 		rs:SetFrameLevel(12)
-		rs:SetPoint(point, anchor, relpoint, 0, 12)
+		rs:Point(point, anchor, relpoint, 0, 12)
 		rs:SetSize((MAX_ARCANE_CHARGES * spacedWidth) + spacedWidth, 32)
 		rs:SetScale(1.3)
 		rs:Hide()

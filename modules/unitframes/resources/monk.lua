@@ -137,9 +137,9 @@ do
 		if (rs.maxChi ~= maxChi) then
 			for i = 1, maxChi do
 				if (i == 1) then
-					rs[i]:SetPoint("LEFT", maxChi == 5 and 8 or maxChi == 6 and 12 or 28, -2)
+					rs[i]:Point("LEFT", maxChi == 5 and 8 or maxChi == 6 and 12 or 28, -2)
 				else
-					rs[i]:SetPoint("LEFT", rs[i - 1], "RIGHT", maxChi == 6 and 0 or 10, 0)
+					rs[i]:Point("LEFT", rs[i - 1], "RIGHT", maxChi == 6 and 0 or 10, 0)
 				end
 				rs[i]:SetAlpha(1.0)
 			end
@@ -177,8 +177,8 @@ do
 
 		local rs = CreateFrame("Frame", nil, self)
 		rs:SetFrameLevel(12)
-		rs:SetPoint(point, anchor, relpoint, xOffset, yOffset)
-		rs:SetSize(256 * 0.8, 128 * 0.8)
+		rs:Point(point, anchor, relpoint, xOffset, yOffset)
+		rs:Size(256 * 0.8, 128 * 0.8)
 		rs:SetAlpha(0)
 
 		local t = rs:CreateTexture(nil, "ARTWORK", self, -5)
@@ -191,7 +191,7 @@ do
 
 		for i = 1, 6 do
 			rs[i] = CreateFrame("Frame", nil, rs)
-			rs[i]:SetSize(30, 30)
+			rs[i]:Size(30, 30)
 			rs[i]:SetAlpha(0)
 
 			local r = rs[i]:CreateTexture(nil, "ARTWORK")
@@ -229,11 +229,11 @@ do
 
 		-- Mana feedback
 		local ppmana = CreateFrame("StatusBar", nil, pp)
-		ppmana:SetHeight(12)
-		ppmana:SetWidth(T.db["frames"].largeWidth)
-		ppmana:SetStatusBarTexture(T.db["media"].texture, "BORDER")
-		ppmana:SetPoint("TOPLEFT", pp:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
-		ppmana:SetPoint("BOTTOMLEFT", pp:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
+		ppmana:Height(12)
+		ppmana:Width(T.db["frames"].largeWidth)
+		ppmana:SetStatusBarTexture(T["media"].statusbar, "BORDER")
+		ppmana:Point("TOPLEFT", pp:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+		ppmana:Point("BOTTOMLEFT", pp:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
 		ppmana:SetStatusBarColor(0.8, 0.8, 0.8, 0.75)
 		ppmana:Hide()
 		pp.mana = ppmana
@@ -244,7 +244,7 @@ do
 		excessMana:SetPoint("TOP")
 		excessMana:SetPoint("BOTTOM")
 		excessMana:SetPoint("RIGHT")
-		excessMana:SetWidth(2)
+		excessMana:Width(2)
 		excessMana:Hide()
 		pp.manaExcess = excessMana
 

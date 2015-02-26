@@ -239,9 +239,9 @@ end
 do
 	local MakeButton = function(id, text, w, h, x, y)
 		local button = CreateFrame("Button", id, InboxFrame, "UIPanelButtonTemplate")
-		button:SetWidth(w)
-		button:SetHeight(h)
-		button:SetPoint("CENTER", InboxFrame, "TOP", x, y)
+		button:Width(w)
+		button:Height(h)
+		button:Point("CENTER", InboxFrame, "TOP", x, y)
 		button:SetText(text)
 
 		return button

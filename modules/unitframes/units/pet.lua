@@ -15,12 +15,12 @@ local StyleDrae_Pet = function(frame, unit, isSingle)
 	UF.CommonInit(frame)
 
 	frame.Health = UF.CreateHealthBar(frame, T.db["frames"].smallHeight)
-	frame.Health.value = T.CreateFontObject(frame.Health, T.db["media"].fontsize2, T.db["media"].font, "RIGHT", -4, 12)
+	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize2, T["media"].font, "RIGHT", -4, 12)
 	frame.Health.colorClassPet = true -- else colour by creature type
 	frame.Health.colorReaction = false -- but don"t colour by reaction
 
-	local info = T.CreateFontObject(frame.Health, T.db["media"].fontsize2, T.db["media"].font, "LEFT", 4, -13)
-	info:SetSize(T.db["frames"].smallWidth - 4, 20)
+	local info = T.CreateFontObject(frame.Health, T.db["general"].fontsize2, T["media"].font, "LEFT", 4, -13)
+	info:Size(T.db["frames"].smallWidth - 4, 20)
 	frame:Tag(info, "[level] [drae:unitcolour][name][drae:afk]")
 
 	UF.CommonPostInit(frame, 20)
@@ -30,7 +30,7 @@ local StyleDrae_Pet = function(frame, unit, isSingle)
 	UF.AddDebuffs(frame, "TOPRIGHT", frame, "BOTTOMRIGHT", 1, -17, T.db["frames"].auras.maxOtherDebuff or 2, T.db["frames"].auras.auraTny, 10, "LEFT", "DOWN")
 
 	if (isSingle) then
-		frame:SetSize(T.db["frames"].smallWidth, T.db["frames"].smallHeight)
+		frame:Size(T.db["frames"].smallWidth, T.db["frames"].smallHeight)
 	end
 end
 

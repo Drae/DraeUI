@@ -14,7 +14,7 @@
 
 				hilight:SetSize(auraSize * 1.8, auraSize * 1.8);
 				hilight.border:SetSize(auraSize * 1.8 * 1.1, auraSize * 1.8 * 1.1);
-				hilight:SetPoint("TOPLEFT", self, "TOPLEFT", -(auraSize * 1.8 - auraSize) / 2, (auraSize * 1.8 - auraSize) / 2);
+				hilight:Point("TOPLEFT", self, "TOPLEFT", -(auraSize * 1.8 - auraSize) / 2, (auraSize * 1.8 - auraSize) / 2);
 				hilight.icon:SetSize(auraSize * 1.8, auraSize * 1.8);
 				hilight.icon:SetTexture(self.icon.tex:GetTexture());
 				hilight:Show();

@@ -63,14 +63,14 @@ do
             while (delta * k) < width do
                 if (not ticks[k]) then
                     ticks[k] = castBar:CreateTexture(nil, "OVERLAY")
-                    ticks[k]:SetTexture(T.db["media"].texture)
+                    ticks[k]:SetTexture(T["media"].statusbar)
                     ticks[k]:SetVertexColor(0.8, 0.7, 0.7)
-                    ticks[k]:SetWidth(1)
-                    ticks[k]:SetHeight(castBar:GetHeight())
+                    ticks[k]:Width(1)
+                    ticks[k]:Height(castBar:GetHeight())
                 end
 
                 ticks[k]:ClearAllPoints()
-                ticks[k]:SetPoint("CENTER", castBar, "LEFT", delta * k, 0)
+                ticks[k]:Point("CENTER", castBar, "LEFT", delta * k, 0)
                 ticks[k]:Show()
 
                 k = k + 1
@@ -111,7 +111,7 @@ local OnCastbarUpdate = function(self, elapsed)
 
         self.duration = duration
         self:SetValue(duration)
-        self.Spark:SetPoint("CENTER", self, "LEFT", (duration / self.max) * self:GetWidth(), 0)
+        self.Spark:Point("CENTER", self, "LEFT", (duration / self.max) * self:GetWidth(), 0)
     else
         self.Spark:Hide()
         local alpha = self:GetAlpha() - 0.02
@@ -147,7 +147,7 @@ local PostCastStart = function(self, unit, name, rank, text)
         else
             sf.timeDiff = GetTime() - sf.sendTime
             sf.timeDiff = sf.timeDiff > self.max and self.max or sf.timeDiff
-            sf:SetWidth(self:GetWidth() * sf.timeDiff / self.max)
+            sf:Width(self:GetWidth() * sf.timeDiff / self.max)
 
             sf:Show()
 
@@ -191,7 +191,7 @@ local PostCastStop = function(self, unit, name, rank, castid)
         self.fadeOut = nil
 
         local sparkPosition = (self.duration / self.max) * self:GetWidth()
-        self.Spark:SetPoint("CENTER", self, "LEFT", sparkPosition, 2)
+        self.Spark:Point("CENTER", self, "LEFT", sparkPosition, 2)
         self.Spark:Show()
     else
         if (not self.fadeOut) then
@@ -240,10 +240,10 @@ end
 
 UF.CreateCastBar = function(self, width, height, anchor, anchorAt, anchorTo, xOffset, yOffset, showLatency, showShield, showIcon, hideBorder)
     local s = CreateFrame("StatusBar", nil, self)
-    s:SetHeight(height)
-    s:SetWidth(width)
-    s:SetPoint(anchorAt, anchor, anchorTo, xOffset, yOffset)
-    s:SetStatusBarTexture(T.db["media"].texture)
+    s:Height(height)
+    s:Width(width)
+    s:Point(anchorAt, anchor, anchorTo, xOffset, yOffset)
+    s:SetStatusBarTexture(T["media"].statusbar)
     s:SetStatusBarColor(0.5, 0.5, 1, 1)
 
     --color
@@ -272,7 +272,7 @@ UF.CreateCastBar = function(self, width, height, anchor, anchorAt, anchorTo, xOf
 
     --backdrop
     local b = s:CreateTexture(nil, "BACKGROUND")
-    b:SetTexture(T.db["media"].texture)
+    b:SetTexture(T["media"].statusbar)
     b:SetAllPoints(s)
     b:SetVertexColor(.5 * 0.2, .5 * 0.2, 1 * 0.2, 0.7)
 
@@ -280,34 +280,34 @@ UF.CreateCastBar = function(self, width, height, anchor, anchorAt, anchorTo, xOf
     local sp = s:CreateTexture(nil, "OVERLAY")
     sp:SetBlendMode("ADD")
     sp:SetAlpha(0.75)
-    sp:SetHeight(s:GetHeight() * 2.75)
+    sp:Height(s:GetHeight() * 2.75)
     self.Castbar.Spark = sp
 
     --time
     if (not hideBorder) then
-        self.Castbar.Time = T.CreateFontObject(s, T.db["media"].fontsize3, T.db["media"].fontOther, "RIGHT", -5, 0, "NONE")
+        self.Castbar.Time = T.CreateFontObject(s, T.db["general"].fontsize3, T["media"].font, "RIGHT", -5, 0, "NONE")
     end
 
     --spell text
     if (hideBorder) then
-        self.Castbar.Text = T.CreateFontObject(s, T.db["media"].fontsize3, T.db["media"].fontOther, "LEFT", 2, 0, "NONE")
+        self.Castbar.Text = T.CreateFontObject(s, T.db["general"].fontsize3, T["media"].font, "LEFT", 2, 0, "NONE")
     else
-        self.Castbar.Text = T.CreateFontObject(s, T.db["media"].fontsize3, T.db["media"].fontOther, "LEFT", 5, 0, "NONE")
+        self.Castbar.Text = T.CreateFontObject(s, T.db["general"].fontsize3, T["media"].font, "LEFT", 5, 0, "NONE")
     end
 
     --icon
     if (showIcon) then
         local i = s:CreateTexture(nil, "ARTWORK")
-        i:SetSize(s:GetHeight(), s:GetHeight())
-        i:SetPoint("RIGHT", s, "LEFT", -4.5, 0)
+        i:Size(s:GetHeight(), s:GetHeight())
+        i:Point("RIGHT", s, "LEFT", -4.5, 0)
         i:SetTexCoord(0.1, 0.9, 0.1, 0.9)
         self.Castbar.Icon = i
 
         --helper2 for icon
         local h2 = CreateFrame("Frame", nil, s)
         h2:SetFrameLevel(0)
-        h2:SetPoint("TOPLEFT", i, "TOPLEFT", -6, 6)
-        h2:SetPoint("BOTTOMRIGHT", i, "BOTTOMRIGHT", 6, -6)
+        h2:Point("TOPLEFT", i, "TOPLEFT", -6, 6)
+        h2:Point("BOTTOMRIGHT", i, "BOTTOMRIGHT", 6, -6)
         CastbarBackground(h2)
     end
 
@@ -325,7 +325,7 @@ UF.CreateCastBar = function(self, width, height, anchor, anchorAt, anchorTo, xOf
     -- latency only for player unit same for tradeskill merging
     if (self.unit == "player") then
         local z = s:CreateTexture(nil, "OVERLAY")
-        z:SetTexture(T.db["media"].texture)
+        z:SetTexture(T["media"].statusbar)
         z:SetVertexColor(1, 0, 0, .6)
         z:SetPoint("TOPRIGHT")
         z:SetPoint("BOTTOMRIGHT")
@@ -333,7 +333,7 @@ UF.CreateCastBar = function(self, width, height, anchor, anchorAt, anchorTo, xOf
         s.SafeZone = z
 
         --custom latency display
-        local l = T.CreateFontObject(hideBorder and b or border, T.db["media"].fontsize4, T.db["media"].fontOther, "RIGHT", 6, -12, "THINOUTLINE")
+        local l = T.CreateFontObject(hideBorder and b or border, T.db["general"].fontsize4, T["media"].font, "RIGHT", 6, -12, "THINOUTLINE")
         s.Lag = l
 
         self:RegisterEvent("UNIT_SPELLCAST_SENT", OnCastSent, true)
@@ -379,31 +379,31 @@ do
 
             _G[bar]:SetParent(UIParent)
             _G[bar]:SetScale(1)
-            _G[bar]:SetHeight(T.db["castbar"].player.height / 1.25)
-            _G[bar]:SetWidth(T.db["castbar"].player.width / 2)
+            _G[bar]:Height(T.db["castbar"].player.height / 1.25)
+            _G[bar]:Width(T.db["castbar"].player.width / 2)
             if (bar == "MirrorTimer1") then
                 _G[bar]:ClearAllPoints()
-                _G[bar]:SetPoint("RIGHT", self.Castbar, "RIGHT", 0, 100)
+                _G[bar]:Point("RIGHT", self.Castbar, "RIGHT", 0, 100)
             else
                 _G[bar]:ClearAllPoints()
-                _G[bar]:SetPoint("BOTTOM", _G["MirrorTimer"..(barId - 1)], "TOP", 0, 5)
+                _G[bar]:Point("BOTTOM", _G["MirrorTimer"..(barId - 1)], "TOP", 0, 5)
             end
 
             _G[bar.."Background"] = _G[bar]:CreateTexture(bar.."Background", "BACKGROUND", _G[bar])
-            _G[bar.."Background"]:SetTexture(T.db["media"].texture)
+            _G[bar.."Background"]:SetTexture(T["media"].statusbar)
             _G[bar.."Background"]:SetAllPoints(bar)
             _G[bar.."Background"]:SetVertexColor(0, 0, 0, 0)
 
             _G[bar.."Border"]:Hide()
 
             _G[bar.."Text"]:ClearAllPoints()
-            _G[bar.."Text"]:SetFont(T.db["media"].fontOther, 10)
+            _G[bar.."Text"]:SetFont(T["media"].font, 10)
             _G[bar.."Text"]:SetPoint("LEFT", _G[bar.."StatusBar"], 5, 1)
 
-            _G[bar.."TextTime"] = T.CreateFontObject(_G[bar.."StatusBar"], 10, T.db["media"].fontOther, "RIGHT", -5, 1, "NONE") -- Our timer
+            _G[bar.."TextTime"] = T.CreateFontObject(_G[bar.."StatusBar"], 10, T["media"].font, "RIGHT", -5, 1, "NONE") -- Our timer
 
             _G[bar.."StatusBar"]:ClearAllPoints()
-            _G[bar.."StatusBar"]:SetStatusBarTexture(T.db["media"].texture)
+            _G[bar.."StatusBar"]:SetStatusBarTexture(T["media"].statusbar)
             _G[bar.."StatusBar"]:SetAllPoints(_G[bar])
 
             local timeMsg = ""

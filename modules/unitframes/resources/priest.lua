@@ -42,7 +42,7 @@ do
 
 		_G["PriestBarFrame"]:SetParent(rs)
 		_G["PriestBarFrame"]:ClearAllPoints()
-		_G["PriestBarFrame"]:SetPoint(point, anchor, relpoint, xOffset / scale, yOffset / scale)
+		_G["PriestBarFrame"]:Point(point, anchor, relpoint, xOffset / scale, yOffset / scale)
 		_G["PriestBarFrame"]:SetScale(scale)
 		rs:SetAlpha(0)
 

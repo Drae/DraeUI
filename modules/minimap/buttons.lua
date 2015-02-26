@@ -65,7 +65,7 @@ local setPosition = function(frame, angle)
 	local bx, by = GetPosition(angle, radius)
 
 	frame:ClearAllPoints()
-	frame:SetPoint("CENTER", Minimap, "CENTER", bx, by)
+	frame:Point("CENTER", Minimap, "CENTER", bx, by)
 end
 
 do
@@ -150,7 +150,7 @@ do
 			if (db.angle) then
 				setPosition(f, db.angle)
 			else
-				f:SetPoint(db.anchorat, Minimap, db.anchorto, db.posx, db.posy)
+				f:Point(db.anchorat, Minimap, db.anchorto, db.posx, db.posy)
 			end
 		end
 

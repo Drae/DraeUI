@@ -32,7 +32,7 @@ UF.CreateEclipseBar = function(self, point, anchor, relpoint, xOffset, yOffset)
 
 	_G["EclipseBarFrame"]:SetParent(rs)
 	_G["EclipseBarFrame"]:ClearAllPoints()
-	_G["EclipseBarFrame"]:SetPoint(point, anchor, relpoint, xOffset / scale, yOffset / scale)
+	_G["EclipseBarFrame"]:Point(point, anchor, relpoint, xOffset / scale, yOffset / scale)
 	_G["EclipseBarFrame"]:SetScale(scale)
 
 	self.resourceBar = rs

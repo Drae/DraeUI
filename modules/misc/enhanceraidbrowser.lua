@@ -232,7 +232,7 @@ RB.OnEnable = function(self)
 	for i=1, NUM_LFR_LIST_BUTTONS do
 		local button = _G["LFRBrowseFrameListButton" .. i]
 		button:SetScript("OnEnter", self.Button_OnEnter)
-		button.level:SetWidth(30)
+		button.level:Width(30)
 	end
 
 	for i = 1, 7 do

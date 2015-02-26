@@ -103,8 +103,8 @@ do
 		if (not grid or (gridSize and grid.gridSize ~= gridSize)) then
 			grid = nil
 
-			grid = CreateFrame("Frame", nil, UIParent)
-			grid:SetAllPoints(UIParent)
+			grid = CreateFrame("Frame", nil, T.UIParent)
+			grid:SetAllPoints(T.UIParent)
 		end
 
 		gridSize = gridSize or 128
@@ -127,8 +127,8 @@ do
 				tx:SetTexture(0, 0, 0, 0.5)
 			end
 
-			tx:SetPoint("TOPLEFT", grid, "TOPLEFT", i * wStep - (size / 2), 0)
-			tx:SetPoint("BOTTOMRIGHT", grid, "BOTTOMLEFT", i * wStep + (size / 2), 0)
+			tx:Point("TOPLEFT", grid, "TOPLEFT", i * wStep - (size / 2), 0)
+			tx:Point("BOTTOMRIGHT", grid, "BOTTOMLEFT", i * wStep + (size / 2), 0)
 		end
 
 		height = T.screenHeight
@@ -136,22 +136,22 @@ do
 		do
 			local tx = grid:CreateTexture(nil, "BACKGROUND")
 			tx:SetTexture(1, 0, 0, 0.5)
-			tx:SetPoint("TOPLEFT", grid, "TOPLEFT", 0, -(height / 2) + (size / 2))
-			tx:SetPoint("BOTTOMRIGHT", grid, "TOPRIGHT", 0, -(height / 2 + size / 2))
+			tx:Point("TOPLEFT", grid, "TOPLEFT", 0, -(height / 2) + (size / 2))
+			tx:Point("BOTTOMRIGHT", grid, "TOPRIGHT", 0, -(height / 2 + size / 2))
 		end
 
 		for i = 1, floor((height / 2) / hStep) do
 			local tx = grid:CreateTexture(nil, "BACKGROUND")
 			tx:SetTexture(0, 0, 0, 0.5)
 
-			tx:SetPoint("TOPLEFT", grid, "TOPLEFT", 0, -(height / 2 + i * hStep) + (size / 2))
-			tx:SetPoint("BOTTOMRIGHT", grid, "TOPRIGHT", 0, -(height / 2 + i * hStep + size / 2))
+			tx:Point("TOPLEFT", grid, "TOPLEFT", 0, -(height / 2 + i * hStep) + (size / 2))
+			tx:Point("BOTTOMRIGHT", grid, "TOPRIGHT", 0, -(height / 2 + i * hStep + size / 2))
 
 			tx = grid:CreateTexture(nil, "BACKGROUND")
 			tx:SetTexture(0, 0, 0, 0.5)
 
-			tx:SetPoint("TOPLEFT", grid, "TOPLEFT", 0, -(height / 2 - i * hStep) + (size / 2))
-			tx:SetPoint("BOTTOMRIGHT", grid, "TOPRIGHT", 0, -(height / 2 - i * hStep + size / 2))
+			tx:Point("TOPLEFT", grid, "TOPLEFT", 0, -(height / 2 - i * hStep) + (size / 2))
+			tx:Point("BOTTOMRIGHT", grid, "TOPRIGHT", 0, -(height / 2 - i * hStep + size / 2))
 		end
 	end
 end
@@ -216,7 +216,7 @@ T.CreateBorder = function(self, sizing)
 
 			local width = (i == 3 or i == 6) and size * 2 or size
 			local height = (i == 7 or i == 8) and size * 2 or size
-			tex[i]:SetSize(k == "shadow" and width * 1.25 or width, k == "shadow" and height * 1.25 or height)
+			tex[i]:Size(k == "shadow" and width * 1.25 or width, k == "shadow" and height * 1.25 or height)
 		end
 
 		local x = size / 2 - 5
@@ -224,19 +224,19 @@ T.CreateBorder = function(self, sizing)
 
 		tex[1].id = "TOPLEFT"
 		tex[1]:SetTexCoord(0, 1/4, 0, 1/4)-- 0, 1/4, 0, 1/4
-		tex[1]:SetPoint("TOPLEFT", border, -4 - x - space, 4 + x + space)
+		tex[1]:Point("TOPLEFT", border, -4 - x - space, 4 + x + space)
 
 		tex[2].id = "TOPRIGHT"
 		tex[2]:SetTexCoord(3/4, 1, 0, 1/4) -- 3/4, 1, 0, 1/4
-		tex[2]:SetPoint("TOPRIGHT", border, 4 + x + space, 4 + x + space)
+		tex[2]:Point("TOPRIGHT", border, 4 + x + space, 4 + x + space)
 
 		tex[4].id = "BOTTOMLEFT"
 		tex[4]:SetTexCoord(0, 1/4, 3/4, 1) -- 0, 1/4, 3/4, 1
-		tex[4]:SetPoint("BOTTOMLEFT", border, -4 - x - space, -4 - x - space)
+		tex[4]:Point("BOTTOMLEFT", border, -4 - x - space, -4 - x - space)
 
 		tex[5].id = "BOTTOMRIGHT"
 		tex[5]:SetTexCoord(3/4, 1, 3/4, 1) -- 3/4, 1, 3/4, 1
-		tex[5]:SetPoint("BOTTOMRIGHT", border, 4 + x + space, -4 - x - space)
+		tex[5]:Point("BOTTOMRIGHT", border, 4 + x + space, -4 - x - space)
 
 		-- width = 2 * nornal width
 		tex[3].id = "TOP"
@@ -252,14 +252,14 @@ T.CreateBorder = function(self, sizing)
 
 		tex[7].id = "LEFT"
 		tex[7]:SetTexCoord(0, 1/4, 1/4, 3/4) -- 0, 1/4, 1/4, 3/4
-		tex[7]:SetPoint("TOPLEFT", tex[1], "BOTTOMLEFT")
-		tex[7]:SetPoint("BOTTOMLEFT", tex[4], "TOPLEFT")
+		tex[7]:Point("TOPLEFT", tex[1], "BOTTOMLEFT")
+		tex[7]:Point("BOTTOMLEFT", tex[4], "TOPLEFT")
 
 		-- width = 2 * nornal height
 		tex[8].id = "RIGHT"
 		tex[8]:SetTexCoord(3/4, 1, 1/4, 3/4) -- 3/4, 1, 1/4, 3/4
-		tex[8]:SetPoint("TOPRIGHT", tex[2], "BOTTOMRIGHT")
-		tex[8]:SetPoint("BOTTOMRIGHT", tex[5], "TOPRIGHT")
+		tex[8]:Point("TOPRIGHT", tex[2], "BOTTOMRIGHT")
+		tex[8]:Point("BOTTOMRIGHT", tex[5], "TOPRIGHT")
 	end
 
 	return border
@@ -267,12 +267,12 @@ end
 
 -- Create and set font
 T.CreateFontObject = function(parent, size, font, anchorAt, oX, oY, type, anchor, anchorTo)
-	local fo = parent:IsObjectType("FontString") and parent or parent:CreateFontString(nil, "OVERLAY")
+	local fo = parent:IsObjectType("EditBox") and parent or parent:IsObjectType("FontString") and parent or parent:CreateFontString(nil, "OVERLAY")
 
 	fo:SetFont(font, size, type or "OUTLINE")
 
 	if (anchor) then
-		fo:SetPoint(anchorAt, anchor, anchorTo, oX, oY)
+		fo:Point(anchorAt, anchor, anchorTo, oX, oY)
 	else
 		fo:SetJustifyH(anchorAt or "LEFT")
 

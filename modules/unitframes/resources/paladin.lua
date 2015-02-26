@@ -94,7 +94,7 @@ do
 		_G["PaladinPowerBar"]:SetParent(rs)
 		_G["PaladinPowerBar"]:EnableMouse(false)
 		_G["PaladinPowerBar"]:ClearAllPoints()
-		_G["PaladinPowerBar"]:SetPoint(point, anchor, relpoint, xOffset / scale, yOffset / scale)
+		_G["PaladinPowerBar"]:Point(point, anchor, relpoint, xOffset / scale, yOffset / scale)
 		_G["PaladinPowerBar"]:SetScale(scale)
 		rs:SetAlpha(0)
 

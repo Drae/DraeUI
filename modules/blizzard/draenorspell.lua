@@ -11,7 +11,7 @@ local B = T:GetModule("Blizzard")
 --]]
 function B:PositionDraenorSpellBtn()
 	DraenorZoneAbilityFrame:ClearAllPoints()
-	DraenorZoneAbilityFrame:SetPoint("CENTER", UIParent, "CENTER", 0, -370)
+	DraenorZoneAbilityFrame:Point("CENTER", T.UIParent, "CENTER", 0, 240)
 
 	DraenorZoneAbilityFrame.SetPoint = function() return end
 end
