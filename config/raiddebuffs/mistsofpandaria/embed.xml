@@ -1,0 +1,7 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="mogushanvaults.lua" />
+	<Script file="heartoffear.lua" />
+	<Script file="terraceofendlesssprings.lua" />
+	<Script file="throneofthunder.lua" />
+	<Script file="siegeoforgrimmar.lua" />
+</Ui>

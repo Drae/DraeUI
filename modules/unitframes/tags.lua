@@ -10,7 +10,7 @@ local T, C, G, P, U, _ = select(2, ...):UnPack()
 local UF = T:GetModule("UnitFrames")
 
 -- Localise a bunch of functions
-local UnitIsAFK, UnitIsDND, UnitPowerType = UnitIsAFK, UnitIsDND, UnitPowerType
+local UnitName, UnitIsAFK, UnitIsDND, UnitPowerType = UnitName, UnitIsAFK, UnitIsDND, UnitPowerType
 local UnitPlayerControlled, UnitIsTapped, UnitIsTappedByPlayer = UnitPlayerControlled, UnitIsTapped, UnitIsTappedByPlayer
 local UnitIsPlayer, UnitPlayerControlled, UnitReaction = UnitIsPlayer, UnitPlayerControlled, UnitReaction
 local UnitIsConnected, UnitClass, UnitIsTappedByAllThreatList = UnitIsConnected, UnitClass, UnitIsTappedByAllThreatList
@@ -51,3 +51,10 @@ oUF.Tags.Methods["drae:power"] = function(u, t)
 	return ("%s%s|r"):format(T.Hex(oUF.colors.power[str] or {1, 1, 1}), T.ShortVal(oUF.Tags.Methods["curpp"](u)))
 end
 oUF.Tags.Events["drae:power"] = "UNIT_POWER UNIT_MAXPOWER"
+
+oUF.Tags.Methods["draeraid:name"] =  function(u, r)
+	local name = UnitName(r or u) or "Unknown"
+
+	return T.UTF8(name, T.db["raidframes"].raidnamelength or 4, false) .. "|r"
+end
+oUF.Tags.Events["draeraid:name"] =  "UNIT_NAME_UPDATE UNIT_ENTERED_VEHICLE UNIT_EXITED_VEHICLE UNIT_PET"

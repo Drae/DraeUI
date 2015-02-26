@@ -1,0 +1,7 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="pvp.lua" />
+
+	<!-- Expacs -->
+	<Include file="warlordsofdraenor\embed.xml" />
+	<Include file="mistsofpandaria\embed.xml" />
+</Ui>
