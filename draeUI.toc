@@ -60,6 +60,13 @@ modules\unitframes\units\focus.lua
 modules\unitframes\units\targettarget.lua
 modules\unitframes\units\boss.lua
 modules\unitframes\units\arena.lua
+modules\unitframes\units\partyandraid.lua
+
+modules\unitframes\statuses\embed.xml
+
+config\indicators\embed.xml
+config\raiddebuffs\embed.xml
+config\instancedebuffs\embed.xml
 
 # Bags
 modules\bags\frame.xml
