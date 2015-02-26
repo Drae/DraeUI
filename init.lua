@@ -5,7 +5,7 @@
 local addon, ns = ...
 
 -- Saved Variables
-local AddonDraeUI = LibStub("AceAddon-3.0"):NewAddon(addon, "AceConsole-3.0")
+local AddonDraeUI = LibStub("AceAddon-3.0"):NewAddon(addon, "AceEvent-3.0", "AceConsole-3.0")
 
 AddonDraeUI.VC= {}
 AddonDraeUI.VC["profile"] = {}
@@ -31,6 +31,21 @@ _G.draeUI = ns
 
 --]]
 local  T, C, G, P, U, _ = select(2, ...):UnPack()
+local LSM = LibStub("LibSharedMedia-3.0")
+
+T.UIParent = CreateFrame("Frame", "DraeUIParent", UIParent)
+T.UIParent:SetFrameLevel(UIParent:GetFrameLevel())
+T.UIParent:SetPoint("CENTER", UIParent, "CENTER")
+T.UIParent:SetSize(UIParent:GetSize())
+
+T.HiddenFrame = CreateFrame("Frame")
+T.HiddenFrame:Hide()
+
+-- 
+T.TexCoords = {.08, .92, .08, .92}
+
+--
+T.media = {}
 
 T.OnInitialize = function(self)
 	--[[
@@ -47,34 +62,32 @@ T.OnInitialize = function(self)
 	self.dbGlobal = db.global
 
 	self.dbChar = LibStub("AceDB-3.0"):New("draeUICharDB")["profile"]	-- Pull the profile specifically
+	
+	if (self.db.general.pixelPerfect) then
+		self.Border = 1
+		self.Spacing = 0
+		self.PixelMode = true
+	end
+	
+	self:UpdateMedia()
 end
 
 T.OnEnable = function(self)
---	self:UIScaling()
+	self:UIScale("PLAYER_LOGIN")
+	
 	self:UpdateBlizzardFonts()
 	self:InitializeConsoleCommands()
 
-	local viewportEdgeBot = CreateFrame("Frame", nil, UIParent)
-	viewportEdgeBot:SetFrameStrata("BACKGROUND")
-	viewportEdgeBot:SetFrameLevel(3)
-	viewportEdgeBot:SetWidth(T.screenWidth)
-	viewportEdgeBot:SetHeight(5)
-	viewportEdgeBot:SetPoint("BOTTOMLEFT", 0, 0)
+	self:RegisterEvent("UI_SCALE_CHANGED", "UIScale")
+end
 
-	local botTex = viewportEdgeBot:CreateTexture(nil, "BACKGROUND")
-	botTex:SetTexture(0.35, 0.35, 0.50, 0.60)
-	botTex:SetAllPoints(viewportEdgeBot)
-
-	local viewportEdgeTop = CreateFrame("Frame", nil, UIParent)
-	viewportEdgeTop:SetFrameStrata("BACKGROUND")
-	viewportEdgeTop:SetFrameLevel(3)
-	viewportEdgeTop:SetWidth(T.screenWidth)
-	viewportEdgeTop:SetHeight(5)
-	viewportEdgeTop:SetPoint("TOPLEFT", 0, 0)
-
-	local topTex = viewportEdgeTop:CreateTexture(nil, "BACKGROUND")
-	topTex:SetTexture(0.35, 0.35, 0.50, 0.60)
-	topTex:SetAllPoints(viewportEdgeTop)
-
---	self:RegisterEvent("UI_SCALE_CHANGED", "UIScaling")
+T.UpdateMedia = function(self)
+	if (not self.db["general"]) then return end
+	
+	self["media"].font = LSM:Fetch("font", self.db["general"].font)
+	self["media"].fontFancy = LSM:Fetch("font", self.db["general"].fontFancy)
+	self["media"].fontTimers = LSM:Fetch("font", self.db["general"].fontTimers)
+	self["media"].fontCombat = LSM:Fetch("font", self.db["general"].fontCombat)
+		
+	self["media"].statusbar = LSM:Fetch("statusbar", self.db["general"].statusbar)
 end

@@ -14,9 +14,9 @@ local FORCE_POSITION = false
 
 --]]
 local AlertFrameHolder = CreateFrame("Frame", "AlertFrameHolder", UIParent)
-AlertFrameHolder:SetWidth(180)
-AlertFrameHolder:SetHeight(20)
-AlertFrameHolder:SetPoint("TOP", UIParent, "TOP", 0, -25)
+AlertFrameHolder:Width(180)
+AlertFrameHolder:Height(20)
+AlertFrameHolder:Point("TOP", UIParent, "TOP", 0, -25)
 
 --[[
 
@@ -40,7 +40,7 @@ B.AlertFrame_SetLootAnchors = function(self, alertAnchor)
 
 		if (GroupLootContainer:IsShown()) then
 			GroupLootContainer:ClearAllPoints()
-			GroupLootContainer:SetPoint(POSITION, MissingLootFrame, ANCHOR_POINT, 0, YOFFSET)
+			GroupLootContainer:Point(POSITION, MissingLootFrame, ANCHOR_POINT, 0, YOFFSET)
 		end
 	elseif (GroupLootContainer:IsShown() or FORCE_POSITION) then
 		GroupLootContainer:ClearAllPoints()
@@ -53,7 +53,7 @@ B.AlertFrame_SetStorePurchaseAnchors = function(self, alertAnchor)
 
 	if (frame:IsShown()) then
 		frame:ClearAllPoints()
-		frame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+		frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
 	end
 end
 
@@ -63,7 +63,7 @@ B.AlertFrame_SetLootWonAnchors = function(self, alertAnchor)
 
 		if (frame:IsShown()) then
 			frame:ClearAllPoints()
-			frame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+			frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
 
 			alertAnchor = frame
 		end
@@ -76,7 +76,7 @@ B.AlertFrame_SetLootUpgradeFrameAnchors = function(self, alertAnchor)
 
 		if (frame:IsShown()) then
 			frame:ClearAllPoints()
-			frame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+			frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
 
 			alertAnchor = frame
 		end
@@ -89,7 +89,7 @@ B.AlertFrame_SetMoneyWonAnchors = function(self, alertAnchor)
 
 		if (frame:IsShown()) then
 			frame:ClearAllPoints()
-			frame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+			frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
 
 			alertAnchor = frame
 		end
@@ -102,7 +102,7 @@ function B:AlertFrame_SetAchievementAnchors(alertAnchor)
 			local frame = _G["AchievementAlertFrame"..i]
 			if ( frame and frame:IsShown() ) then
 				frame:ClearAllPoints()
-				frame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+				frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
 				alertAnchor = frame
 			end
 		end
@@ -116,7 +116,7 @@ B.AlertFrame_SetCriteriaAnchors = function(self, alertAnchor)
 
 			if (frame and frame:IsShown()) then
 				frame:ClearAllPoints()
-				frame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+				frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
 
 				alertAnchor = frame
 			end
@@ -129,7 +129,7 @@ B.AlertFrame_SetChallengeModeAnchors = function(self, alertAnchor)
 
 	if (frame:IsShown()) then
 		frame:ClearAllPoints()
-		frame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+		frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
 	end
 end
 
@@ -138,7 +138,7 @@ B.AlertFrame_SetDungeonCompletionAnchors = function(self, alertAnchor)
 
 	if (frame:IsShown()) then
 		frame:ClearAllPoints()
-		frame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+		frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
 	end
 end
 
@@ -147,7 +147,7 @@ B.AlertFrame_SetScenarioAnchors = function(self, alertAnchor)
 
 	if (frame:IsShown()) then
 		frame:ClearAllPoints()
-		frame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+		frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
 	end
 end
 
@@ -156,7 +156,7 @@ B.AlertFrame_SetGuildChallengeAnchors = function(self, alertAnchor)
 
 	if (frame:IsShown()) then
 		frame:ClearAllPoints()
-		frame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+		frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
 	end
 end
 
@@ -165,7 +165,7 @@ B.AlertFrame_SetDigsiteCompleteToastFrameAnchors = function(self, alertAnchor)
 
 	if (frame and frame:IsShown()) then
 		frame:ClearAllPoints()
-		frame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+		frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
 	end
 end
 
@@ -174,7 +174,7 @@ B.AlertFrame_SetGarrisonBuildingAlertFrameAnchors = function(self, alertAnchor)
 
 	if (frame:IsShown()) then
 		frame:ClearAllPoints()
-		frame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+		frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
 	end
 end
 
@@ -183,7 +183,7 @@ B.AlertFrame_SetGarrisonMissionAlertFrameAnchors = function(self, alertAnchor)
 
 	if (frame:IsShown()) then
 		frame:ClearAllPoints()
-		frame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+		frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
 	end
 end
 
@@ -192,7 +192,7 @@ B.AlertFrame_SetGarrisonFollowerAlertFrameAnchors = function(self, alertAnchor)
 
 	if (frame:IsShown()) then
 		frame:ClearAllPoints()
-		frame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+		frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
 	end
 end
 

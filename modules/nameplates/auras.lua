@@ -90,11 +90,11 @@ local ArrangeButtons = function(self)
 			if (pv) then
 				if ((self.visible - 1) % (self.frame.trivial and 3 or 5) == 0) then
 					-- start of row
-					b:SetPoint("BOTTOMLEFT", pc, "TOPLEFT", 0, 1)
+					b:Point("BOTTOMLEFT", pc, "TOPLEFT", 0, 1)
 					pc = b
 				else
 					-- subsequent button in a row
-					b:SetPoint("LEFT", pv, "RIGHT", 1, 0)
+					b:Point("LEFT", pv, "RIGHT", 1, 0)
 				end
 			else
 				-- first button
@@ -236,8 +236,8 @@ local GetAuraButton = function(self, spellId, icon, count, duration, expirationT
 
 		local icon = button:CreateTexture(nil, "BACKGROUND")
 		icon:SetTexCoord(.07, .93, .07, .93)
-		icon:SetPoint("TOPLEFT", button, "TOPLEFT", -0.7, 0.93)
-		icon:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 0.7, -0.93)
+		icon:Point("TOPLEFT", button, "TOPLEFT", -0.7, 0.93)
+		icon:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 0.7, -0.93)
 		button.icon = icon
 
 		local overlay = button:CreateTexture(nil, "OVERLAY")
@@ -253,8 +253,8 @@ local GetAuraButton = function(self, spellId, icon, count, duration, expirationT
 		button.borderFrame = borderFrame
 
 		local count = borderFrame:CreateFontString(nil)
-		count:SetFont(T.db["media"].fontOther, T.db["media"].fontsize3, "OUTLINE")
-		count:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 7, -6)
+		count:SetFont(T["media"].font, T.db["general"].fontsize3, "OUTLINE")
+		count:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 7, -6)
 		button.count = count
 
 		tinsert(self.buttons, button)
@@ -263,7 +263,7 @@ local GetAuraButton = function(self, spellId, icon, count, duration, expirationT
 		button:SetScript("OnShow", OnAuraShow)
 	end
 
-	button:SetSize(PL.db.auraiconsize, PL.db.auraiconsize)
+	button:Size(PL.db.auraiconsize, PL.db.auraiconsize)
 	button.icon:SetTexture(icon)
 
 	if (count > 1 and not self.frame.trivial) then
@@ -296,8 +296,8 @@ function PLA:Create(msg, frame)
 	frame.auras = CreateFrame("Frame", nil, frame)
 	frame.auras.frame = frame
 
-	frame.auras:SetPoint("BOTTOMRIGHT", frame.hp, "TOPRIGHT", -3, 0)
-	frame.auras:SetHeight(50)
+	frame.auras:Point("BOTTOMRIGHT", frame.hp, "TOPRIGHT", -3, 0)
+	frame.auras:Height(50)
 	frame.auras:Hide()
 
 	frame.auras.visible = 0
@@ -318,10 +318,10 @@ end
 function PLA:Show(msg, frame)
 	-- set vertical position of the container frame
 	if (frame.trivial) then
-		frame.auras:SetPoint("BOTTOMLEFT", frame.hp, "TOPLEFT",
+		frame.auras:Point("BOTTOMLEFT", frame.hp, "TOPLEFT",
 			0, 8)
 	else
-		frame.auras:SetPoint("BOTTOMLEFT", frame.hp, "TOPLEFT",
+		frame.auras:Point("BOTTOMLEFT", frame.hp, "TOPLEFT",
 			0, 8)
 	end
 end

@@ -7,7 +7,7 @@ local T, C, G, P, U, _ = select(2, ...):UnPack()
 local BB = T:GetModule("Buffbar")
 
 -- init secure aura headers
-local buffHeader = CreateFrame("Frame", "DraeUIBuffBar", UIParent, "SecureAuraHeaderTemplate")
+local buffHeader = CreateFrame("Frame", "DraeUIBuffBar", T.UIParent, "SecureAuraHeaderTemplate")
 local ha
 
 --[[
@@ -17,14 +17,14 @@ local CreateAuraButton = function(btn, filter)
 	-- subframe for icon and border
 	btn.icon = CreateFrame("Frame", nil, btn)
 	btn.icon:SetFrameStrata("BACKGROUND")
-	btn.icon:SetPoint("TOPLEFT", btn, "TOPLEFT", -2, 2)
-	btn.icon:SetPoint("BOTTOMRIGHT", btn, "BOTTOMRIGHT", 2, -2)
+	btn.icon:Point("TOPLEFT", btn, "TOPLEFT", -2, 2)
+	btn.icon:Point("BOTTOMRIGHT", btn, "BOTTOMRIGHT", 2, -2)
 
 	-- icon texture
 	btn.icon.tex = btn.icon:CreateTexture(nil, "BACKGROUND")
 	btn.icon.tex:SetTexCoord(.09, .91, .09, .91)
-	btn.icon.tex:SetPoint("TOPLEFT", btn.icon, "TOPLEFT", -0.09, 0.91)
-	btn.icon.tex:SetPoint("BOTTOMRIGHT", btn.icon, "BOTTOMRIGHT", -0.09, -0.91)
+	btn.icon.tex:Point("TOPLEFT", btn.icon, "TOPLEFT", -0.09, 0.91)
+	btn.icon.tex:Point("BOTTOMRIGHT", btn.icon, "BOTTOMRIGHT", -0.09, -0.91)
 
 	-- duration spiral
 	btn.cd = CreateFrame("Cooldown", nil, btn.icon)
@@ -39,8 +39,8 @@ local CreateAuraButton = function(btn, filter)
 
 	-- stack count
 	btn.stacks = btn.vFrame:CreateFontString(nil, "OVERLAY")
-	btn.stacks:SetPoint("BOTTOMRIGHT", btn, "BOTTOMRIGHT", 7, -6)
-	btn.stacks:SetFont(C["media"].fontOther, 14, "OUTLINE")
+	btn.stacks:Point("BOTTOMRIGHT", btn, "BOTTOMRIGHT", 7, -6)
+	btn.stacks:SetFont(T["media"].font, 14, "OUTLINE")
 	btn.stacks:SetTextColor(1.0, 1.0, 1.0, 1)
 
 	btn.filter = filter
@@ -74,14 +74,14 @@ local updateWeaponEnchantButtonStyle = function(btn, slot, hasEnchant, rTime)
 		local icon = GetInventoryItemTexture("player", btn.slotID)
 		btn.icon.tex:SetTexture(icon)
 
-		local r, g, b = C["media"].color_rb, C["media"].color_gb, C["media"].color_bb
+		local r, g, b = T.db.media.color_rb, T.db.media.color_gb, T.db.media.color_bb
 
 		if (BB.db.colorBorderItem) then
 			local c = GetInventoryItemQuality("player", slotid)
 			r, g, b = GetItemQualityColor(c or 1)
 		end
 
-		T.SetBorderColor(btn, r, g, b, C["media"].color_ab or 1)
+		T.SetBorderColor(btn, r, g, b, T.db.media.color_ab or 1)
 
 		btn.rTime = rTime / 1000
 
@@ -141,7 +141,8 @@ end
 
 BB.OnEnable = function(self)
 	-- The highlight (magnified) frame
-	ha = CreateFrame("Frame", "DraeUIBuffsHighlight", UIParent)
+	ha = CreateFrame("Frame", "DraeUIBuffsHighlight", T.UIParent)
+	ha:Hide()
 	ha:SetScale(BB.db.buffScale)
 	ha:SetFrameLevel(5) -- Above auras (level 3) and their cooldown overlay (4)
 
@@ -151,7 +152,7 @@ BB.OnEnable = function(self)
 	ha.border = ha:CreateTexture(nil, "OVERLAY")
 	ha.border:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\textureNormal")
 	ha.border:SetPoint("CENTER")
-	ha.border:SetVertexColor(C["media"].color_rb, C["media"].color_gb, C["media"].color_bb, C["media"].color_ab or 1)
+	ha.border:SetVertexColor(T.db["general"].color_rb, T.db["general"].color_gb, T.db["general"].color_bb, T.db["general"].color_ab or 1)
 
 	-- Hide stuff
 	BuffFrame.Show = BuffFrame.Hide

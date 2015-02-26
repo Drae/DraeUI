@@ -25,14 +25,14 @@ function M:UpdateCoords()
 
 	if (x ~= 0 and y ~= 0) then
 		if (hidePlayerCoords) then
-			CoordsHolder.mouseCoords:SetPoint("BOTTOMLEFT", CoordsHolder.playerCoords, "BOTTOMRIGHT", 20, 0)
+			CoordsHolder.mouseCoords:Point("BOTTOMLEFT", CoordsHolder.playerCoords, "BOTTOMRIGHT", 20, 0)
 			hidePlayerCoords = false
 		end
 
 		CoordsHolder.playerCoords:SetText(PLAYER..":   "..x..", "..y)
 	else
 		if (not hidePlayerCoords) then
-			CoordsHolder.mouseCoords:SetPoint("BOTTOMLEFT", CoordsHolder.playerCoords, "BOTTOMRIGHT", 0, 0)
+			CoordsHolder.mouseCoords:Point("BOTTOMLEFT", CoordsHolder.playerCoords, "BOTTOMRIGHT", 0, 0)
 			hidePlayerCoords = true
 		end
 

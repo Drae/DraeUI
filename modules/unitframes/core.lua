@@ -49,7 +49,7 @@ UF.CommonPostInit = function(self, size, noRaidIcons)
 	local fbg = CreateFrame("Frame", nil, self)
 	fbg:SetFrameStrata("BACKGROUND")
 	fbg:SetPoint("TOPLEFT", self.Health, -2, 2)
-	fbg:SetPoint("BOTTOMRIGHT", self.Power or self.Health, "BOTTOMRIGHT", 2, -2)
+	fbg:Point("BOTTOMRIGHT", self.Power or self.Health, "BOTTOMRIGHT", 2, -2)
 	fbg:SetBackdrop({
 		bgFile = "Interface\\ChatFrame\\ChatFrameBackground",
 		insets = { left = 0, right = 0, top = 0, bottom = 0 }
@@ -63,8 +63,8 @@ UF.CommonPostInit = function(self, size, noRaidIcons)
 	if (not noRaidIcons) then
 		local raidIcon = self.Health:CreateTexture(nil, "OVERLAY")
 		raidIcon:SetTexture("Interface\\TargetingFrame\\UI-RaidTargetingIcons")
-		raidIcon:SetPoint("TOP", self.Power and self.Power or self.Health, "BOTTOM", 0, size / 2)
-		raidIcon:SetSize(size, size)
+		raidIcon:Point("TOP", self.Power and self.Power or self.Health, "BOTTOM", 0, size / 2)
+		raidIcon:Size(size, size)
 		self.RaidIcon = raidIcon
 	end
 
@@ -86,14 +86,14 @@ end
 
 UF.CreateHealthBar = function(self, height)
 	local hp = CreateFrame("StatusBar", nil, self)
-	hp:SetStatusBarTexture(T.db["media"].texture, "BORDER")
-	hp:SetHeight(height)
+	hp:SetStatusBarTexture(T["media"].statusbar, "BORDER")
+	hp:Height(height)
 	hp:SetPoint("TOPLEFT")
 	hp:SetPoint("TOPRIGHT")
 
 	hp.bg = hp:CreateTexture(nil, "BACKGROUND")
 	hp.bg:SetAllPoints(hp)
-	hp.bg:SetTexture(T.db["media"].texture)
+	hp.bg:SetTexture(T["media"].statusbar)
 	hp.bg.multiplier = 0.33
 
 	hp.colorClass = true
@@ -101,7 +101,7 @@ UF.CreateHealthBar = function(self, height)
 	hp.colorTapping = true
 	hp.colorReaction = true
 	hp.Smooth = true
-	hp.frequentUpdates = T.db["frames"].healthFrequentUpdates or false
+	hp.frequentUpdates = true
 
 	hp.PostUpdate = UF.PostUpdateHealth
 
@@ -111,17 +111,17 @@ end
 UF.CreatePowerBar = function(self, height)
 	if (height) then
 		local pp = CreateFrame("StatusBar", nil, self)
-		pp:SetHeight(3)
-		pp:SetWidth(T.db["frames"].largeWidth)
-		pp:SetStatusBarTexture(T.db["media"].texture, "BORDER")
+		pp:Height(3)
+		pp:Width(T.db["frames"].largeWidth)
+		pp:SetStatusBarTexture(T["media"].statusbar, "BORDER")
 		pp:SetPoint("LEFT")
 		pp:SetPoint("RIGHT")
-		pp:SetPoint("TOP", self.Health, "BOTTOM", 0, -1.25) -- Little offset to make it pretty
+		pp:Point("TOP", self.Health, "BOTTOM", 0, -1.25) -- Little offset to make it pretty
 
 		-- powerbar background
 		pp.bg = pp:CreateTexture(nil, "BACKGROUND")
 		pp.bg:SetAllPoints(pp)
-		pp.bg:SetTexture(T.db["media"].texture)
+		pp.bg:SetTexture(T["media"].statusbar)
 		pp.bg.multiplier = 0.33
 
 		pp.colorTapping = true
@@ -139,10 +139,10 @@ end
 --]]
 UF.CreateExtraPowerBar = function(self, point, anchor, relpoint, offsetX, offsetY)
 	local pp = CreateFrame("StatusBar", nil, self)
-	pp:SetHeight(12)
-	pp:SetWidth(T.db["frames"].largeWidth)
-	pp:SetStatusBarTexture(T.db["media"].texture, "BORDER")
-	pp:SetPoint(point, anchor, relpoint, offsetX or 0, offsetY or 42) -- Little offset to make it pretty
+	pp:Height(12)
+	pp:Width(T.db["frames"].largeWidth)
+	pp:SetStatusBarTexture(T["media"].statusbar, "BORDER")
+	pp:Point(point, anchor, relpoint, offsetX or 0, offsetY or 42) -- Little offset to make it pretty
 	pp:Hide()
 
 	-- powerbar background
@@ -160,7 +160,7 @@ UF.CreateExtraPowerBar = function(self, point, anchor, relpoint, offsetX, offset
 	-- powerbar background
 	pp.bg = pp:CreateTexture(nil, "BACKGROUND")
 	pp.bg:SetAllPoints(pp)
-	pp.bg:SetTexture(T.db["media"].texture)
+	pp.bg:SetTexture(T["media"].statusbar)
 	pp.bg.multiplier = 0.33
 
 	pp.animHideSelf = pp:CreateAnimationGroup()
@@ -193,12 +193,12 @@ do
 
 		if (height) then
 			local pp = CreateFrame("StatusBar", nil, self)
-			pp:SetHeight(height)
-			pp:SetStatusBarTexture(T.db["media"].texture, "BORDER")
+			pp:Height(height)
+			pp:SetStatusBarTexture(T["media"].statusbar, "BORDER")
 			pp:SetStatusBarColor(0, 0, 1)
 			pp:SetPoint("LEFT")
 			pp:SetPoint("RIGHT")
-			pp:SetPoint("TOP", self.Power, "BOTTOM", 0, -8) -- Place the bar below the main unit frame
+			pp:Point("TOP", self.Power, "BOTTOM", 0, -8) -- Place the bar below the main unit frame
 
 			local ppbg = CreateFrame("Frame", nil, pp)
 			ppbg:SetPoint("TOPLEFT", -6, 6)
@@ -216,7 +216,7 @@ do
 			-- powerbar background
 			pp.bg = pp:CreateTexture(nil, "BACKGROUND")
 			pp.bg:SetAllPoints(pp)
-			pp.bg:SetTexture(T.db["media"].texture)
+			pp.bg:SetTexture(T["media"].statusbar)
 			pp.bg.multiplier = 0.33
 
 			pp.colorTapping = true
@@ -262,7 +262,7 @@ do
 
 	-- Adds a realtime pvp timer
 	UF.AddPvPTimer = function(self)
-		pvptimer = T.CreateFontObject(self.Health, T.db["media"].fontsize2, T.db["media"].font, "TOPRIGHT", 5, -6, nil, self.PvP, "TOPLEFT")
+		pvptimer = T.CreateFontObject(self.Health, T.db["general"].fontsize2, T["media"].font, "TOPRIGHT", 5, -6, nil, self.PvP, "TOPLEFT")
 
 		self:RegisterEvent("PLAYER_FLAGS_CHANGED", CheckPvPTimer)
 	end
@@ -273,27 +273,27 @@ do
 
 		-- Leader icon
 		local leader = hp:CreateTexture(nil, "OVERLAY")
-		leader:SetPoint("CENTER", hp, "TOPLEFT", -1, 2)
-		leader:SetSize(16, 16)
+		leader:Point("CENTER", hp, "TOPLEFT", -1, 2)
+		leader:Size(16, 16)
 		self.Leader = leader
 
 		-- Assistant icon
 		local assistant = hp:CreateTexture(nil, "OVERLAY")
-		assistant:SetPoint("CENTER", hp, "TOPLEFT", -1, 2)
-		assistant:SetSize(16, 16)
+		assistant:Point("CENTER", hp, "TOPLEFT", -1, 2)
+		assistant:Size(16, 16)
 		self.Assistant = assistant
 
 		-- pvp icon
 		local pvp = hp:CreateTexture(nil, "OVERLAY")
-		pvp:SetPoint("CENTER", hp, "BOTTOMRIGHT", 8, -14)
-		pvp:SetSize(36, 36)
+		pvp:Point("CENTER", hp, "BOTTOMRIGHT", 8, -14)
+		pvp:Size(36, 36)
 		pvp.PostUpdate = CheckPvPTimer
 		self.PvP = pvp
 
 		-- Dungeon role
 		local lfdRole = hp:CreateTexture(nil, "OVERLAY")
-		lfdRole:SetPoint("CENTER", hp, "BOTTOMLEFT", -1, -7)
-		lfdRole:SetSize(16, 16)
+		lfdRole:Point("CENTER", hp, "BOTTOMLEFT", -1, -7)
+		lfdRole:Size(16, 16)
 		lfdRole:SetTexture("Interface\\LFGFrame\\UI-LFG-ICON-PORTRAITROLES")
 		self.LFDRole = lfdRole
 	end
@@ -308,12 +308,12 @@ do
 		local hilight 	= self.parent:GetParent().HighlightAura
 		local auraSize 	= self:GetParent().size
 
-		hilight:SetPoint("TOPLEFT", self, "TOPLEFT", -(auraSize * T.db["frames"].auras.auraMag - auraSize) / 2, (auraSize * T.db["frames"].auras.auraMag - auraSize) / 2)
-		hilight:SetSize(auraSize * T.db["frames"].auras.auraMag, auraSize * T.db["frames"].auras.auraMag)
+		hilight:Point("TOPLEFT", self, "TOPLEFT", -(auraSize * T.db["frames"].auras.auraMag - auraSize) / 2, (auraSize * T.db["frames"].auras.auraMag - auraSize) / 2)
+		hilight:Size(auraSize * T.db["frames"].auras.auraMag, auraSize * T.db["frames"].auras.auraMag)
 
-		hilight.border:SetSize(auraSize * T.db["frames"].auras.auraMag * 1.1, auraSize * T.db["frames"].auras.auraMag * 1.1)
+		hilight.border:Size(auraSize * T.db["frames"].auras.auraMag * 1.1, auraSize * T.db["frames"].auras.auraMag * 1.1)
 
-		hilight.icon:SetSize(auraSize * T.db["frames"].auras.auraMag, auraSize * T.db["frames"].auras.auraMag)
+		hilight.icon:Size(auraSize * T.db["frames"].auras.auraMag, auraSize * T.db["frames"].auras.auraMag)
 		hilight.icon:SetTexture(self.icon:GetTexture())
 
 		hilight:Show()
@@ -352,8 +352,8 @@ do
 		button:EnableMouse(true)
 		button:RegisterForClicks("RightButtonUp")
 
-		button:SetWidth(icons.size or 16)
-		button:SetHeight(icons.size or 16)
+		button:Width(icons.size or 16)
+		button:Height(icons.size or 16)
 
 		local border = CreateFrame("Frame", nil, button)
 		border:SetPoint("TOPLEFT", button, -6, 6)
@@ -369,8 +369,8 @@ do
 
 		local icon = button:CreateTexture(nil, "BACKGROUND")
 		icon:SetTexCoord(.07, .93, .07, .93)
-		icon:SetPoint("TOPLEFT", button, "TOPLEFT", -0.7, 0.93)
-		icon:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 0.7, -0.93)
+		icon:Point("TOPLEFT", button, "TOPLEFT", -0.7, 0.93)
+		icon:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 0.7, -0.93)
 		button.icon = icon
 
 		local overlay = button:CreateTexture(nil, "OVERLAY")
@@ -385,8 +385,8 @@ do
 		button.borderFrame = borderFrame
 
 		local count = borderFrame:CreateFontString(nil)
-		count:SetFont(T.db["media"].fontOther, T.db["media"].fontsize3, "OUTLINE")
-		count:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 7, -6)
+		count:SetFont(T["media"].font, T.db["general"].fontsize3, "OUTLINE")
+		count:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 7, -6)
 		button.count = count
 
 		local stealable = borderFrame:CreateTexture(nil, "OVERLAY")
@@ -518,8 +518,8 @@ do
 		local height= (spacing * (num / debuffsPerRow)) + (size * (num / debuffsPerRow))
 
 		local debuffs = CreateFrame("Frame", nil, self)
-		debuffs:SetPoint(point, relativeFrame, relativePoint, ofsx, ofsy)
-		debuffs:SetSize(width, height)
+		debuffs:Point(point, relativeFrame, relativePoint, ofsx, ofsy)
+		debuffs:Size(width, height)
 
 		debuffs.num = num
 		debuffs.size = size
@@ -545,8 +545,8 @@ do
 		local height = (spacing * (num / buffsPerRow)) + (size * (num / buffsPerRow))
 
 		local buffs = CreateFrame("Frame", nil, self)
-		buffs:SetPoint(point, relativeFrame, relativePoint, ofsx, ofsy)
-		buffs:SetSize(width, height)
+		buffs:Point(point, relativeFrame, relativePoint, ofsx, ofsy)
+		buffs:Size(width, height)
 
 		buffs.num = num
 		buffs.numBuffs = num

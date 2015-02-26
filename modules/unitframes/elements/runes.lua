@@ -102,7 +102,7 @@ local Enable = function(self, unit)
 
 			-- Need to shift the ring a bit ... fudge, hhmmmmmmm, nice
 			local point, relativeTo, relativePoint, xOfs, yOfs = ringBar:GetFrame():GetPoint()
-			ringBar:GetFrame():SetPoint(point, relativeTo, relativePoint, xOfs - 1, yOfs + 5)
+			ringBar:GetFrame():Point(point, relativeTo, relativePoint, xOfs - 1, yOfs + 5)
 
 			-- Scale it
 			ringBar:GetFrame():SetScale(0.16)

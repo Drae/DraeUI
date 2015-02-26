@@ -16,8 +16,8 @@ local StyleDrae_Player = function(frame, unit, isSingle)
 
 	local fbg = CreateFrame("Frame", nil, frame)
 	fbg:SetFrameStrata("BACKGROUND")
-	fbg:SetSize(277, 106)
-	fbg:SetPoint("RIGHT", frame, "RIGHT", 34, -6)
+	fbg:Size(277, 106)
+	fbg:Point("RIGHT", frame, "RIGHT", 34, -6)
 
 	local tex = fbg:CreateTexture(nil, "BORDER", nil, 0)
 	tex:SetTexCoord(0.0, 0.540, 0.411, 0.831)
@@ -25,9 +25,9 @@ local StyleDrae_Player = function(frame, unit, isSingle)
 	tex:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\Sword")
 
 	tex.overlay = fbg:CreateTexture(nil, "BORDER", nil, 7)
-	tex.overlay:SetSize(199, 103)
+	tex.overlay:Size(199, 103)
 	tex.overlay:SetTexCoord(0.540, 0.933, 0.411, 0.831)
-	tex.overlay:SetPoint("RIGHT", fbg, "RIGHT", 0, 0)
+	tex.overlay:Point("RIGHT", fbg, "RIGHT", 0, 0)
 	tex.overlay:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\Sword")
 	tex.overlay:Hide()
 
@@ -39,8 +39,8 @@ local StyleDrae_Player = function(frame, unit, isSingle)
 
 	UF.CommonPostInit(frame, 30)
 
-	frame.Health.value = T.CreateFontObject(frame.Health, T.db["media"].fontsize1, T.db["media"].font, "RIGHT", -4, 10)
-	local powervalue = T.CreateFontObject(frame.Health, T.db["media"].fontsize1, T.db["media"].font, "LEFT", 4, 10)
+	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "RIGHT", -4, 10)
+	local powervalue = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "LEFT", 4, 10)
 	frame:Tag(powervalue, "[drae:power]")
 
 	frame.DruidMana	= UF.CreateDruidManaBar(frame, 3)
@@ -50,7 +50,7 @@ local StyleDrae_Player = function(frame, unit, isSingle)
 
 	-- Combat icon
 	local combat = frame.Health:CreateTexture(nil, "OVERLAY")
-	combat:SetSize(16, 16)
+	combat:Size(16, 16)
 	combat:SetPoint("TOPLEFT", frame, -12, 10)
 	combat:SetTexture("Interface\\CharacterFrame\\UI-StateIcon")
 	combat:SetTexCoord(0.58, 0.90, 0.08, 0.41)
@@ -60,7 +60,7 @@ local StyleDrae_Player = function(frame, unit, isSingle)
 	if (UnitLevel("player") ~= MAX_PLAYER_LEVEL) then
 		-- resting icon
 		local resting = frame.Health:CreateTexture(nil, "OVERLAY")
-		resting:SetSize(20, 20)
+		resting:Size(20, 20)
 		resting:SetPoint("TOPLEFT", frame, -14, 12)
 		resting:SetTexture("Interface\\CharacterFrame\\UI-StateIcon")
 		resting:SetTexCoord(0, 0.5, 0, 0.421875)
@@ -106,7 +106,7 @@ local StyleDrae_Player = function(frame, unit, isSingle)
 	UF.CreateTotemBar(frame, "TOPRIGHT", frame, "BOTTOMRIGHT", 0, -20)
 
 	if (isSingle) then
-		frame:SetSize(T.db["frames"].largeWidth, T.db["frames"].largeHeight)
+		frame:Size(T.db["frames"].largeWidth, T.db["frames"].largeHeight)
 	end
 end
 

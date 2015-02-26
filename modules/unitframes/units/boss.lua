@@ -16,23 +16,23 @@ local StyleDrae_Boss = function(frame, unit, isSingle)
 
 	frame.healthHeight = T.db["frames"].smallHeight - 4.25 -- spacing
 	frame.Health = UF.CreateHealthBar(frame, frame.healthHeight)
-	frame.Health.value = T.CreateFontObject(frame.Health, T.db["media"].fontsize2, T.db["media"].font, "RIGHT", -4, 12)
+	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize2, T["media"].font, "RIGHT", -4, 12)
 	frame.Power = UF.CreatePowerBar(frame, 3)
 
 	-- Dragon texture on rare/elite
 	frame.Classification = {}
 	local cl = CreateFrame("Frame", nil, frame)
-	cl:SetSize(70, 70)
-	cl:SetPoint("TOPLEFT", frame.Health, "TOPRIGHT", -38, 22)
+	cl:Size(70, 70)
+	cl:Point("TOPLEFT", frame.Health, "TOPRIGHT", -38, 22)
 
 	local dragonElite = cl:CreateTexture(nil, "OVERLAY")
 	dragonElite:SetAllPoints(cl)
 	dragonElite:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\EliteLeft")
 	frame.Classification.elite = dragonElite
 
-	local info = T.CreateFontObject(frame.Health, T.db["media"].fontsize2, T.db["media"].font, "LEFT", 4, -13)
-	info:SetSize(T.db["frames"].smallWidth - 4, 20)
-	frame:Tag(info, "[level] [drae:unitcolour][name][drae:afk]")
+	local info = T.CreateFontObject(frame.Health, T.db["general"].fontsize2, T["media"].font, "LEFT", 4, -13)
+	info:Size(T.db["frames"].smallWidth - 4, 20)
+	frame:Tag(info, "[level] [drae:unitcolour][name]")
 
 	UF.CommonPostInit(frame, 20)
 
@@ -42,7 +42,7 @@ local StyleDrae_Boss = function(frame, unit, isSingle)
 	end
 
 	if (isSingle) then
-		frame:SetSize(T.db["frames"].mediumWidth, T.db["frames"].mediumHeight)
+		frame:Size(T.db["frames"].mediumWidth, T.db["frames"].mediumHeight)
 	end
 end
 

@@ -46,7 +46,7 @@ do
 		end
 
 		local maxWidth = (maxTotems * width) + ((maxTotems - 1) * 8) -- Total width of frame, totems + spacing
-		totem:SetSize(maxWidth, height)
+		totem:Size(maxWidth, height)
 	end
 
 	local TotemOnEnter = function(self)
@@ -69,7 +69,7 @@ do
 		if (T.playerClass == "WARRIOR" or T.playerClass == "ROGUE" or T.playerClass == "PRIEST" or T.playerClass == "HUNTER") then return end
 
 		local totem = CreateFrame("Frame", nil, self)
-		totem:SetPoint(point, anchor, relpoint, xOffset, yOffset)
+		totem:Point(point, anchor, relpoint, xOffset, yOffset)
 		totem:SetFrameLevel(12)
 
 		local width, height	= T.db["frames"].auras.auraLrg or 24, T.db["frames"].auras.auraLrg or 24
@@ -79,13 +79,13 @@ do
 
 		for i = 1, MAX_TOTEMS do
 			local t = CreateFrame("Button", nil, totem)
-			t:SetWidth(width)
-			t:SetHeight(height)
+			t:Width(width)
+			t:Height(height)
 
 			if (i == 1) then
-				t:SetPoint("RIGHT", totem, "RIGHT", 0, 0)
+				t:Point("RIGHT", totem, "RIGHT", 0, 0)
 			else
-				t:SetPoint("RIGHT", totem[i - 1], "LEFT", -8, 0)
+				t:Point("RIGHT", totem[i - 1], "LEFT", -8, 0)
 			end
 
 			local border = CreateFrame("Frame", nil, t)
@@ -99,10 +99,10 @@ do
 			t.border = border
 
 			local icon = t:CreateTexture(nil, "BACKGROUND")
-			icon:SetPoint("TOPLEFT", t, "TOPLEFT", -0.7, 0.93)
-			icon:SetPoint("BOTTOMRIGHT", t, "BOTTOMRIGHT", 0.7, -0.93)
-			icon:SetWidth(width)
-			icon:SetHeight(height)
+			icon:Point("TOPLEFT", t, "TOPLEFT", -0.7, 0.93)
+			icon:Point("BOTTOMRIGHT", t, "BOTTOMRIGHT", 0.7, -0.93)
+			icon:Width(width)
+			icon:Height(height)
 			icon:SetTexCoord(0.07, 0.93, 0.07, 0.93)
 			t.Icon = icon
 
@@ -115,8 +115,8 @@ do
 			t.borderFrame = borderFrame
 
 			local text = t:CreateFontString(nil, "OVERLAY")
-			text:SetFont(T.db["media"].fontOther, T.db["media"].fontsize3, "OUTLINE")
-			text:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 7, -6)
+			text:SetFont(T["media"].font, T.db["general"].fontsize3, "OUTLINE")
+			text:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 7, -6)
 			t.Text = text
 
 			t:SetScript("OnEnter", TotemOnEnter)

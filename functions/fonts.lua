@@ -3,9 +3,9 @@
 --]]
 local T, C, G, P, U, _ = select(2, ...):UnPack()
 
--- Register with SharedMedia
-local LSM = LibStub("LibSharedMedia-3.0")
+--[[
 
+--]]
 local ChangeFont = function(obj, font, size, style, r, g, b, sr, sg, sb, sox, soy)
 	obj:SetFont(font, size, style)
 
@@ -22,10 +22,11 @@ end
 
 T.UpdateBlizzardFonts = function(self)
 	-- Change fonts
-	local FontStandard = LSM:Fetch("font", "Liberation Sans")
-	local FontFancy = LSM:Fetch("font", "Liberation Sans")
-	local FontCombat = LSM:Fetch("font", "Bignoodle")
+	local FontStandard = self["media"].font
 	local FontSmall = FontStandard
+	local FontFancy = self["media"].fontFancy
+	local FontCombat = self["media"].fontCombat
+	local FontTimers = self["media"].fontTimers
 
 	local SizeSmall    = 10
 	local SizeMedium   = 12
@@ -46,7 +47,7 @@ T.UpdateBlizzardFonts = function(self)
 	ChangeFont(SystemFont_Shadow_Med3            , FontStandard, SizeMedium, nil)
 	ChangeFont(SystemFont_Large                  , FontStandard, SizeLarge , nil)
 	ChangeFont(SystemFont_Shadow_Large           , FontStandard, SizeLarge , nil)
-	ChangeFont(SystemFont_Shadow_Large_Outline   , FontCombat,   SizeHuge  , "OUTLINE")
+	ChangeFont(SystemFont_Shadow_Large_Outline   , FontTimers,   SizeLarge , "OUTLINE")
 	ChangeFont(SystemFont_Shadow_Huge1           , FontStandard, SizeHuge  , nil)
 	ChangeFont(SystemFont_OutlineThick_Huge2     , FontStandard, SizeHuge  , "THICKOUTLINE")
 	ChangeFont(SystemFont_Shadow_Outline_Huge2   , FontStandard, SizeHuge  , "THICKOUTLINE")

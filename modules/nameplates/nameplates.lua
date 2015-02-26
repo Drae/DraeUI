@@ -30,8 +30,8 @@ PL.CreateBackground = function(self, f, a, offset)
 
 	f.bg = CreateFrame("Frame", nil, f)
 	f.bg:SetFrameLevel(1)
-	f.bg:SetPoint("TOPLEFT", f, -(offset + 1), offset + 1)
-	f.bg:SetPoint("BOTTOMRIGHT", f, offset + 1, -(offset + 1))
+	f.bg:Point("TOPLEFT", f, -(offset + 1), offset + 1)
+	f.bg:Point("BOTTOMRIGHT", f, offset + 1, -(offset + 1))
 	f.bg:SetBackdrop({
 		bgFile = "Interface\\Buttons\\WHITE8x8",
 		edgeFile = "Interface\\AddOns\\draeUI\\media\\textures\\glowtex",
@@ -156,13 +156,13 @@ end
 -- also resize it as nameplates somehow manage to resize some frames when they reappear after being hidden
 local UpdateCastbar = function(frame)
 	frame:ClearAllPoints()
-	frame:SetSize(PL.db.hpWidth, PL.db.cbHeight)
-	frame:SetPoint("TOP", frame.parent.hp, "BOTTOM", 0, -4)
+	frame:Size(PL.db.hpWidth, PL.db.cbHeight)
+	frame:Point("TOP", frame.parent.hp, "BOTTOM", 0, -4)
 
 	if (frame.shield:IsShown()) then
 		frame.shield:ClearAllPoints()
-		frame.shield:SetPoint("RIGHT", frame, "LEFT", -2, 0)
-		frame.shield:SetSize(PL.db.cbHeight * 5, PL.db.cbHeight * 5)
+		frame.shield:Point("RIGHT", frame, "LEFT", -2, 0)
+		frame.shield:Size(PL.db.cbHeight * 5, PL.db.cbHeight * 5)
 
 		frame:SetStatusBarColor(0.78, 0.25, 0.25, 1)
 	end
@@ -299,8 +299,8 @@ local OnFrameShow = function(f)
 
 	--Have to reposition this here so it doesnt resize after being hidden
 	frame.hp:ClearAllPoints()
-	frame.hp:SetSize(PL.db.hpWidth, PL.db.hpHeight)
-	frame.hp:SetPoint("TOP", frame, "TOP", 0, -15)
+	frame.hp:Size(PL.db.hpWidth, PL.db.hpHeight)
+	frame.hp:Point("TOP", frame, "TOP", 0, -15)
 
 	--Set the name text
 --	frame.overlay.name:SetText(frame.oldName:GetText())
@@ -512,7 +512,7 @@ PL.StyleNameplate = function(self, frame)
 	stateIconRegion:SetTexture(nil)
 	castbarOverlay:SetTexture(nil)
 	glowRegion:SetTexture(nil)
-	spellIconRegion:SetSize(.001,.001)
+	spellIconRegion:Size(.001,.001)
 
 	nameText:Hide()
 
@@ -563,14 +563,14 @@ PL.StyleNameplate = function(self, frame)
 	--Health Bar
 	healthBar:SetParent(plate)
 	healthBar:SetFrameLevel(2)
-	healthBar:SetStatusBarTexture(T.db["media"].texture)
-	healthBar:SetSize(PL.db.hpWidth, PL.db.hpHeight)
-	healthBar:SetPoint("BOTTOM", plate, "BOTTOM", 0, 5)
+	healthBar:SetStatusBarTexture(T["media"].statusbar)
+	healthBar:Size(PL.db.hpWidth, PL.db.hpHeight)
+	healthBar:Point("BOTTOM", plate, "BOTTOM", 0, 5)
 	healthBar.percent = 100
 
 	healthBar.hpbg = healthBar:CreateTexture(nil, "BACKGROUND")
 	healthBar.hpbg:SetAllPoints(healthBar)
-	healthBar.hpbg:SetTexture(T.db["media"].texture)
+	healthBar.hpbg:SetTexture(T["media"].statusbar)
 	healthBar.hpbg.multiplier = 0.33
 
 	self:CreateBackground(healthBar)
@@ -585,24 +585,24 @@ PL.StyleNameplate = function(self, frame)
 
 	--Create Level
 	plate.level:SetParent(overlay)
-	plate.level = T.CreateFontObject(plate.level, C["nameplates"].fontsize - 2, T.db["media"].fontOther, "RIGHT")
+	plate.level = T.CreateFontObject(plate.level, C["nameplates"].fontsize - 2, T["media"].font, "RIGHT")
 	plate.level:ClearAllPoints()
-	plate.level:SetPoint("BOTTOMRIGHT", overlay, "TOPLEFT", 20, (-C["nameplates"].fontsize / 3) + 1)
+	plate.level:Point("BOTTOMRIGHT", overlay, "TOPLEFT", 20, (-C["nameplates"].fontsize / 3) + 1)
 
 	--Create Name Text
-	overlay.name = T.CreateFontObject(overlay, C["nameplates"].fontsize - 2, T.db["media"].fontOther, "LEFT")
-	overlay.name:SetPoint("BOTTOMRIGHT", overlay, "TOPRIGHT", -5, (-C["nameplates"].fontsize / 3) + 1)
-	overlay.name:SetPoint("BOTTOMLEFT", overlay, "TOPLEFT", 20, (-C["nameplates"].fontsize / 3) + 1)
+	overlay.name = T.CreateFontObject(overlay, C["nameplates"].fontsize - 2, T["media"].font, "LEFT")
+	overlay.name:Point("BOTTOMRIGHT", overlay, "TOPRIGHT", -5, (-C["nameplates"].fontsize / 3) + 1)
+	overlay.name:Point("BOTTOMLEFT", overlay, "TOPLEFT", 20, (-C["nameplates"].fontsize / 3) + 1)
 	overlay.name:SetTextColor(1, 1, 1)
 
 	--Create Health Text
-	overlay.value = T.CreateFontObject(overlay, C["nameplates"].fontsize / 2 + 3, T.db["media"].fontOther, "RIGHT")
-	overlay.value:SetPoint("TOPRIGHT", overlay, "TOPRIGHT", 0, (-PL.db.fontsize/3) - 1)
+	overlay.value = T.CreateFontObject(overlay, C["nameplates"].fontsize / 2 + 3, T["media"].font, "RIGHT")
+	overlay.value:Point("TOPRIGHT", overlay, "TOPRIGHT", 0, (-PL.db.fontsize/3) - 1)
 	overlay.value:SetTextColor(1, 1, 1)
 
 	-- Highlight
 	overlay.highlight = overlay:CreateTexture(nil, "ARTWORK")
-	overlay.highlight:SetTexture(T.db["media"].texture)
+	overlay.highlight:SetTexture(T["media"].statusbar)
 	overlay.highlight:SetAllPoints(healthBar)
 	overlay.highlight:SetVertexColor(1, 1, 1)
 	overlay.highlight:SetBlendMode("ADD")
@@ -614,15 +614,15 @@ PL.StyleNameplate = function(self, frame)
 	--Reposition and resize raid icon
 	plate.raidIcon:ClearAllPoints()
 	plate.raidIcon:SetDrawLayer("OVERLAY", 7)
-	plate.raidIcon:SetPoint("RIGHT", overlay, "LEFT", -5, 0)
-	plate.raidIcon:SetSize(PL.db.iconSize, PL.db.iconSize)
+	plate.raidIcon:Point("RIGHT", overlay, "LEFT", -5, 0)
+	plate.raidIcon:Size(PL.db.iconSize, PL.db.iconSize)
 
 	-- Glow for target/threat
 	local targetGlow = healthBar:CreateTexture(nil, "BACKGROUND")
 	targetGlow:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\target-glow")
 	targetGlow:SetTexCoord(0, .593, 0, .875)
-	targetGlow:SetPoint("TOP", healthBar, "BOTTOM", 0, 2)
-	targetGlow:SetWidth(PL.db.hpWidth)
+	targetGlow:Point("TOP", healthBar, "BOTTOM", 0, 2)
+	targetGlow:Width(PL.db.hpWidth)
 	targetGlow:SetVertexColor(1, 1, 1)
 
 	plate.targetGlow = targetGlow
@@ -631,25 +631,25 @@ PL.StyleNameplate = function(self, frame)
 			Castbar
 	--]]
 	castBar:SetFrameLevel(2)
-	castBar:SetStatusBarTexture(T.db["media"].texture)
+	castBar:SetStatusBarTexture(T["media"].statusbar)
 
 	self:CreateBackground(castBar, nil, 3)
 
 	-- Spell name shadow
 	castBar.spellNameShadow:SetParent(castBar)
 	castBar.spellNameShadow:SetDrawLayer("BACKGROUND")
-	castBar.spellNameShadow:SetPoint("TOP", castBar, "BOTTOM", 0, -1)
+	castBar.spellNameShadow:Point("TOP", castBar, "BOTTOM", 0, -1)
 
 	--Create castbar spell cast time text
-	castBar.time = T.CreateFontObject(castBar, C["nameplates"].fontsize2, T.db["media"].fontOther, "RIGHT")
-	castBar.time:SetPoint("RIGHT", castBar, "LEFT", -1, 0)
+	castBar.time = T.CreateFontObject(castBar, C["nameplates"].fontsize2, T["media"].font, "RIGHT")
+	castBar.time:Point("RIGHT", castBar, "LEFT", -1, 0)
 	castBar.time:SetTextColor(1, 1, 1)
 
 	-- Re-purpose castbar spell name text
 	castBar.spellName:SetParent(castBar)
 	castBar.spellName:ClearAllPoints()
-	castBar.spellName = T.CreateFontObject(castBar.spellName, C["nameplates"].fontsize2, T.db["media"].fontOther, "CENTER")
-	castBar.spellName:SetPoint("TOP", castBar, "BOTTOM", 0, -1)
+	castBar.spellName = T.CreateFontObject(castBar.spellName, C["nameplates"].fontsize2, T["media"].font, "CENTER")
+	castBar.spellName:Point("TOP", castBar, "BOTTOM", 0, -1)
 	castBar.spellName:SetTextColor(1, 1, 1)
 
 	-- Uninterruptable shield icon

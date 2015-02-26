@@ -22,32 +22,62 @@ local pingFrame
 local menuFrame = CreateFrame("Frame", "MinimapRightClickMenu", UIParent, "UIDropDownMenuTemplate")
 local menuList = {
 	{text = CHARACTER_BUTTON,
-		func = function() ToggleCharacter("PaperDollFrame") end},
+	func = function() ToggleCharacter("PaperDollFrame") end},
 	{text = SPELLBOOK_ABILITIES_BUTTON,
-		func = function() ToggleFrame(SpellBookFrame) end},
+	func = function() if not SpellBookFrame:IsShown() then ShowUIPanel(SpellBookFrame) else HideUIPanel(SpellBookFrame) end end},
 	{text = TALENTS_BUTTON,
-		func = function() if not PlayerTalentFrame then LoadAddOn("Blizzard_TalentUI") end PlayerTalentFrame_Toggle() end},
-	{text = ACHIEVEMENT_BUTTON,
-		func = function() ToggleAchievementFrame() end},
-	{text = QUESTLOG_BUTTON,
-		func = function() ToggleFrame(QuestLogFrame) end},
-	{text = SOCIAL_BUTTON,
-		func = function() ToggleFriendsFrame(1) end},
-	{text = PLAYER_V_PLAYER,
-		func = function() ToggleFrame(PVPFrame) end},
-	{text = ACHIEVEMENTS_GUILD_TAB,
-		func = function() if IsInGuild() then if not GuildFrame then LoadAddOn("Blizzard_GuildUI") end GuildFrame_Toggle() end end},
-	{text = LFG_TITLE,
-		func = function() ToggleFrame(LFDParentFrame) end},
-	{text = L_LFRAID,
-		func = function() ToggleFrame(LFRParentFrame) end},
-	{text = HELP_BUTTON,
-		func = function() ToggleHelpFrame() end},
-	{text = L_CALENDAR,
-		func = function()
-	if (not CalendarFrame) then LoadAddOn("Blizzard_Calendar") end
-		Calendar_Toggle()
+	func = function()
+		if not PlayerTalentFrame then
+			TalentFrame_LoadUI()
+		end
+
+		if not GlyphFrame then
+			GlyphFrame_LoadUI()
+		end
+
+		if not PlayerTalentFrame:IsShown() then
+			ShowUIPanel(PlayerTalentFrame)
+		else
+			HideUIPanel(PlayerTalentFrame)
+		end
 	end},
+	{text = MOUNTS,
+	func = function()
+		TogglePetJournal(1);
+	end},
+	{text = PETS,
+	func = function()
+		TogglePetJournal(2)
+	end},
+	{text = TOY_BOX,
+	func = function()
+		TogglePetJournal(3)
+	end},
+	{text = TIMEMANAGER_TITLE,
+	func = function() ToggleFrame(TimeManagerFrame) end},
+	{text = ACHIEVEMENT_BUTTON,
+	func = function() ToggleAchievementFrame() end},
+	{text = SOCIAL_BUTTON,
+	func = function() ToggleFriendsFrame() end},
+	{text = "Calendar",
+	func = function() GameTimeFrame:Click() end},
+	{text = GARRISON_LANDING_PAGE_TITLE,
+	func = function() GarrisonLandingPageMinimapButton_OnClick() end},
+	{text = ACHIEVEMENTS_GUILD_TAB,
+	func = function()
+		if IsInGuild() then
+			if not GuildFrame then GuildFrame_LoadUI() end
+			GuildFrame_Toggle()
+		else
+			if not LookingForGuildFrame then LookingForGuildFrame_LoadUI() end
+			if not LookingForGuildFrame then return end
+			LookingForGuildFrame_Toggle()
+		end
+	end},
+	{text = LFG_TITLE,
+	func = function() PVEFrame_ToggleFrame(); end},
+	{text = ENCOUNTER_JOURNAL,
+	func = function() if not IsAddOnLoaded('Blizzard_EncounterJournal') then EncounterJournal_LoadUI(); end ToggleFrame(EncounterJournal) end}
 }
 
 local minimapRotate	= {
@@ -89,8 +119,8 @@ local noop = function() end
 -- Animate the minimap frame
 local CreateRotateTextures = function(texture, width, height, scale, framelevel, texr, texg, texb, alpha, duration, side, blendmode)
 	local h = CreateFrame("Frame", nil, Minimap)
-	h:SetHeight(height)
-	h:SetWidth(width)
+	h:Height(height)
+	h:Width(width)
 	h:SetPoint("CENTER", 0, 0)
 	h:SetScale(scale)
 	h:SetFrameLevel(framelevel)
@@ -152,13 +182,14 @@ end
 MM.OnEnable = function(self)
 	MinimapBackdrop:ClearAllPoints()
 	MinimapBackdrop:SetParent(Minimap)
-	MinimapBackdrop:SetPoint("CENTER", Minimap, "CENTER", -8, -23)
+	MinimapBackdrop:Point("CENTER", Minimap, "CENTER", -8, -23)
 
+	Minimap:SetMaskTexture("Textures\\MinimapMask")
 	Minimap:SetScale(1.1)
-	Minimap:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -30, -30)
+	Minimap:Point("TOPRIGHT", UIParent, "TOPRIGHT", -20, -20)
 
 	-- Move the minibackdrop and border
-	MinimapBackdrop:SetPoint("CENTER", Minimap, "CENTER", -8, -24)
+	MinimapBackdrop:Point("CENTER", Minimap, "CENTER", -8, -24)
 
 	-- Change some basic textures
 	MinimapBorder:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\UI-Minimap-Border")
@@ -179,9 +210,9 @@ MM.OnEnable = function(self)
 	})
 	pingFrame:SetBackdropColor(0, 0, 0, 0.8)
 	pingFrame:SetBackdropBorderColor(0, 0, 0, 0.6)
-	pingFrame:SetHeight(20)
-	pingFrame:SetWidth(100)
-	pingFrame:SetPoint("TOP", Minimap, "TOP", 0, 15)
+	pingFrame:Height(20)
+	pingFrame:Width(100)
+	pingFrame:Point("BOTTOM", Minimap, "BOTTOM", 0, 10)
 	pingFrame:SetFrameStrata("HIGH")
 	pingFrame.name = pingFrame:CreateFontString(nil, nil, "GameFontNormalSmall")
 	pingFrame.name:SetAllPoints()
@@ -200,8 +231,8 @@ MM.OnEnable = function(self)
 		local color = class and RAID_CLASS_COLORS[class] or GRAY_FONT_COLOR
 
 		pingFrame.name:SetFormattedText("|cFF%02x%02x%02x%s|r", color.r * 255, color.g * 255, color.b * 255, UnitName(unit))
-		pingFrame:SetWidth(pingFrame.name:GetStringWidth() + 14)
-		pingFrame:SetHeight(pingFrame.name:GetStringHeight() + 10)
+		pingFrame:Width(pingFrame.name:GetStringWidth() + 14)
+		pingFrame:Height(pingFrame.name:GetStringHeight() + 10)
 		animGroup:Stop()
 		pingFrame:Show()
 		animGroup:Play()
@@ -222,7 +253,12 @@ MM.OnEnable = function(self)
 	MinimapZoneTextButton:Hide()
 	MinimapBorderTop:Hide()
 	MiniMapWorldMapButton:Hide()
-
+	MiniMapWorldMapButton:Hide()
+	
+	-- Hide garrison report button
+	GarrisonLandingPageMinimapButton.Show = GarrisonLandingPageMinimapButton.Hide
+	GarrisonLandingPageMinimapButton:Hide()
+	
 	Minimap:EnableMouseWheel()
 	Minimap:SetScript("OnMouseWheel", function(self, direction)
 		if (direction > 0) then

@@ -62,11 +62,11 @@ local StyleDrae_ArenaPlayers = function(frame, unit, isSingle)
 	frame.Health = UF.CreateHealthBar(frame, T.db["frames"].smallHeight - 3 - 1.5)
 	frame.Power = UF.CreatePowerBar(frame, 3)
 
-	frame.Health.value = T.CreateFontObject(frame.Health, T.db["media"].fontsize2, T.db["media"].font, "RIGHT", -4, 12)
+	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize2, T["media"].font, "RIGHT", -4, 12)
 
-	local info = T.CreateFontObject(frame.Health, T.db["media"].fontsize2, T.db["media"].font, "LEFT", 4, -13)
-	info:SetWidth(T.db["frames"].smallWidth - 4)
-	info:SetHeight(20)
+	local info = T.CreateFontObject(frame.Health, T.db["general"].fontsize2, T["media"].font, "LEFT", 4, -13)
+	info:Width(T.db["frames"].smallWidth - 4)
+	info:Height(20)
 	frame:Tag(info, "[level] [drae:unitcolour][name][drae:afk]")
 
 	UF.CommonPostInit(frame, 20)
@@ -79,8 +79,8 @@ local StyleDrae_ArenaPlayers = function(frame, unit, isSingle)
 	-- Trinket
 	do
 		local trinket = CreateFrame("Frame", nil, frame)
-		trinket:SetPoint("LEFT", frame, "RIGHT", 12, 0)
-		trinket:SetSize(T.db["frames"].auras.auraTny, T.db["frames"].auras.auraTny)
+		trinket:Point("LEFT", frame, "RIGHT", 12, 0)
+		trinket:Size(T.db["frames"].auras.auraTny, T.db["frames"].auras.auraTny)
 
 		local border = CreateFrame("Frame", nil, trinket)
 		border:SetPoint("TOPLEFT", trinket, -6, 6)
@@ -96,8 +96,8 @@ local StyleDrae_ArenaPlayers = function(frame, unit, isSingle)
 
 		local icon = trinket:CreateTexture(nil, "BACKGROUND")
 		icon:SetTexCoord(.07, .93, .07, .93)
-		icon:SetPoint("TOPLEFT", trinket, "TOPLEFT", -0.07, 0.93)
-		icon:SetPoint("BOTTOMRIGHT", trinket, "BOTTOMRIGHT", 0.07, -0.93)
+		icon:Point("TOPLEFT", trinket, "TOPLEFT", -0.07, 0.93)
+		icon:Point("BOTTOMRIGHT", trinket, "BOTTOMRIGHT", 0.07, -0.93)
 		trinket.icon = icon
 
 		local cd = CreateFrame("Cooldown", nil, trinket)
@@ -116,7 +116,7 @@ local StyleDrae_ArenaPlayers = function(frame, unit, isSingle)
 	UF.CreateCastBar(frame, T.db["frames"].smallWidth, cbf.height, frame, "TOPLEFT", "BOTTOMLEFT", cbf.xOffset, cbf.yOffset, false, false, false, true)
 
 	if (isSingle) then
-		frame:SetSize(T.db["frames"].smallWidth, T.db["frames"].smallHeight)
+		frame:Size(T.db["frames"].smallWidth, T.db["frames"].smallHeight)
 	end
 
 	-- Create fake prepFrame (taken from ElvUI and others)
@@ -128,11 +128,11 @@ local StyleDrae_ArenaPlayers = function(frame, unit, isSingle)
 		frame.prepFrame.unit = frame.unit
 
 		frame.prepFrame.Health = UF.CreateHealthBar(frame.prepFrame, T.db["frames"].smallHeight)
-		frame.prepFrame.Health.value = T.CreateFontObject(frame.prepFrame.Health, T.db["media"].fontsize2, T.db["media"].font, "RIGHT", -4, 12)
+		frame.prepFrame.Health.value = T.CreateFontObject(frame.prepFrame.Health, T.db["general"].fontsize2, T["media"].font, "RIGHT", -4, 12)
 
-		local info = T.CreateFontObject(frame.prepFrame.Health, T.db["media"].fontsize2, T.db["media"].font, "LEFT", 4, -13)
-		info:SetWidth(T.db["frames"].smallWidth - 4)
-		info:SetHeight(20)
+		local info = T.CreateFontObject(frame.prepFrame.Health, T.db["general"].fontsize2, T["media"].font, "LEFT", 4, -13)
+		info:Width(T.db["frames"].smallWidth - 4)
+		info:Height(20)
 		frame.prepFrame.Info = info
 
 		UF.CommonPostInit(frame.prepFrame, 20, true)

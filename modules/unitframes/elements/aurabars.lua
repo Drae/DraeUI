@@ -47,21 +47,21 @@ local function SetAnchors(self)
 	for index = 1, #bars do
 		local frame = bars[index]
 		local anchor = frame.anchor
-		frame:SetHeight(self.auraBarHeight or 20)
-		frame.statusBar.iconHolder:SetSize(frame:GetHeight())
-		frame:SetWidth((self.auraBarWidth or self:GetWidth()) - (frame:GetHeight() + (self.gap or 0)))
+		frame:Height(self.auraBarHeight or 20)
+		frame.statusBar.iconHolder:Size(frame:GetHeight())
+		frame:Width((self.auraBarWidth or self:GetWidth()) - (frame:GetHeight() + (self.gap or 0)))
 		frame:ClearAllPoints()
 		if self.down == true then
 			if self == anchor then -- Root frame so indent for icon
-				frame:SetPoint('TOPLEFT', anchor, 'TOPLEFT', (frame:GetHeight() + (self.gap or 0) ), -1)
+				frame:Point('TOPLEFT', anchor, 'TOPLEFT', (frame:GetHeight() + (self.gap or 0) ), -1)
 			else
-				frame:SetPoint('TOPLEFT', anchor, 'BOTTOMLEFT', 0, (-self.spacing or 0))
+				frame:Point('TOPLEFT', anchor, 'BOTTOMLEFT', 0, (-self.spacing or 0))
 			end
 		else
 			if self == anchor then -- Root frame so indent for icon
-				frame:SetPoint('BOTTOMLEFT', anchor, 'BOTTOMLEFT', (frame:GetHeight() + (self.gap or 0)), 1)
+				frame:Point('BOTTOMLEFT', anchor, 'BOTTOMLEFT', (frame:GetHeight() + (self.gap or 0)), 1)
 			else
-				frame:SetPoint('BOTTOMLEFT', anchor, 'TOPLEFT', 0, (self.spacing or 0))
+				frame:Point('BOTTOMLEFT', anchor, 'TOPLEFT', 0, (self.spacing or 0))
 			end
 		end
 	end
@@ -71,8 +71,8 @@ local function CreateAuraBar(oUF, anchor)
 	local auraBarParent = oUF.AuraBars
 
 	local frame = CreateFrame("Frame", nil, auraBarParent)
-	frame:SetHeight(auraBarParent.auraBarHeight or 20)
-	frame:SetWidth((auraBarParent.auraBarWidth or auraBarParent:GetWidth()) - (frame:GetHeight() + (auraBarParent.gap or 0)))
+	frame:Height(auraBarParent.auraBarHeight or 20)
+	frame:Width((auraBarParent.auraBarWidth or auraBarParent:GetWidth()) - (frame:GetHeight() + (auraBarParent.gap or 0)))
 	frame.anchor = anchor
 
 	-- the main bar
@@ -85,29 +85,29 @@ local function CreateAuraBar(oUF, anchor)
 
 	if auraBarParent.down == true then
 		if auraBarParent == anchor then -- Root frame so indent for icon
-			frame:SetPoint('TOPLEFT', anchor, 'TOPLEFT', (frame:GetHeight() + (auraBarParent.gap or 0) ), -1)
+			frame:Point('TOPLEFT', anchor, 'TOPLEFT', (frame:GetHeight() + (auraBarParent.gap or 0) ), -1)
 		else
-			frame:SetPoint('TOPLEFT', anchor, 'BOTTOMLEFT', 0, (-auraBarParent.spacing or 0))
+			frame:Point('TOPLEFT', anchor, 'BOTTOMLEFT', 0, (-auraBarParent.spacing or 0))
 		end
 	else
 		if auraBarParent == anchor then -- Root frame so indent for icon
-			frame:SetPoint('BOTTOMLEFT', anchor, 'BOTTOMLEFT', (frame:GetHeight() + (auraBarParent.gap or 0)), 1)
+			frame:Point('BOTTOMLEFT', anchor, 'BOTTOMLEFT', (frame:GetHeight() + (auraBarParent.gap or 0)), 1)
 		else
-			frame:SetPoint('BOTTOMLEFT', anchor, 'TOPLEFT', 0, (auraBarParent.spacing or 0))
+			frame:Point('BOTTOMLEFT', anchor, 'TOPLEFT', 0, (auraBarParent.spacing or 0))
 		end
 	end
 
 	local spark = statusBar:CreateTexture(nil, "OVERLAY", nil);
 	spark:SetTexture([[Interface\CastingBar\UI-CastingBar-Spark]]);
-	spark:SetWidth(12);
+	spark:Width(12);
 	spark:SetBlendMode("ADD");
 	spark:SetPoint('CENTER', statusBar:GetStatusBarTexture(), 'RIGHT')
 	statusBar.spark = spark
 
 	statusBar.iconHolder = CreateFrame('Button', nil, statusBar)
-	statusBar.iconHolder:SetHeight(frame:GetHeight())
-	statusBar.iconHolder:SetWidth(frame:GetHeight())
-	statusBar.iconHolder:SetPoint('BOTTOMRIGHT', frame, 'BOTTOMLEFT', -auraBarParent.gap, 0)
+	statusBar.iconHolder:Height(frame:GetHeight())
+	statusBar.iconHolder:Width(frame:GetHeight())
+	statusBar.iconHolder:Point('BOTTOMRIGHT', frame, 'BOTTOMLEFT', -auraBarParent.gap, 0)
 	statusBar.iconHolder.__unit = oUF.unit
 	statusBar.iconHolder:SetScript('OnEnter', OnEnter)
 	statusBar.iconHolder:SetScript('OnLeave', OnLeave)
@@ -232,7 +232,7 @@ local function Update(self, event, unit)
 	-- Show and configure bars for buffs/debuffs.
 	local bars = auraBars.bars
 	if lastAuraIndex == 0 then
-		self.AuraBars:SetHeight(1)
+		self.AuraBars:Height(1)
 	end
 
 	for index = 1 , lastAuraIndex do
@@ -247,11 +247,11 @@ local function Update(self, event, unit)
 
 		if index == lastAuraIndex then
 			if self.AuraBars.down then
-				self.AuraBars:SetHeight(self.AuraBars:GetTop() - frame:GetBottom())
+				self.AuraBars:Height(self.AuraBars:GetTop() - frame:GetBottom())
 			elseif frame:GetTop() and self.AuraBars:GetBottom() then
-				self.AuraBars:SetHeight(frame:GetTop() - self.AuraBars:GetBottom())
+				self.AuraBars:Height(frame:GetTop() - self.AuraBars:GetBottom())
 			else
-				self.AuraBars:SetHeight(20)
+				self.AuraBars:Height(20)
 			end
 		end
 
@@ -269,7 +269,7 @@ local function Update(self, event, unit)
 			if auraBars.scaleTime then
 				local maxvalue = min(auraBars.scaleTime, bar.aura.duration)
 				bar:SetMinMaxValues(0, maxvalue)
-				bar:SetWidth(
+				bar:Width(
 					( maxvalue / auraBars.scaleTime ) *
 					(	( auraBars.auraBarWidth or auraBars:GetWidth() ) -
 						( bar:GetHeight() + (auraBars.gap or 0) ) ) ) 				-- icon size + gap
@@ -319,7 +319,7 @@ end
 local function Enable(self)
 	if self.AuraBars then
 		self:RegisterEvent('UNIT_AURA', Update)
-		self.AuraBars:SetHeight(1)
+		self.AuraBars:Height(1)
 		self.AuraBars.bars = self.AuraBars.bars or {}
 		self.AuraBars.SetAnchors = SetAnchors
 		self.AuraBars:SetScript('OnUpdate', UpdateBars)

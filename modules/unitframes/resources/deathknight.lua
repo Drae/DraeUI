@@ -46,15 +46,15 @@ do
 
 		local rs = CreateFrame("Frame", nil, self)
 		rs:SetFrameLevel(12)
-		rs:SetSize((size * 6) + (spacing * 5), size)
-		rs:SetPoint(point, anchor, relpoint, xOffset, yOffset)
+		rs:Size((size * 6) + (spacing * 5), size)
+		rs:Point(point, anchor, relpoint, xOffset, yOffset)
 
 		for i = 1, 6 do
 			local rune = CreateFrame("Frame", nil, rs)
-			rune:SetSize(size, size)
+			rune:Size(size, size)
 
 			local bg = CreateFrame("Frame", nil, rune)
-			bg:SetSize(256, 256) -- Fudge to keep positioning with ringbars
+			bg:Size(256, 256) -- Fudge to keep positioning with ringbars
 			bg:SetPoint("CENTER", rune, "CENTER")
 			bg:SetScale(0.16)
 
@@ -67,9 +67,9 @@ do
 			rune.tex:SetAllPoints(rune)
 
 			if (i == 1) then
-				rune:SetPoint("LEFT", rs, "LEFT", 0, 0)
+				rune:Point("LEFT", rs, "LEFT", 0, 0)
 			else
-				rune:SetPoint("LEFT", rs[i - 1], "RIGHT", spacing, 0)
+				rune:Point("LEFT", rs[i - 1], "RIGHT", spacing, 0)
 			end
 
 			rune:SetScript("OnEnter", Rune_OnEnter)

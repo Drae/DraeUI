@@ -16,8 +16,8 @@ local StyleDrae_Target = function(frame, unit, isSingle)
 
 	local fbg = CreateFrame("Frame", nil, frame)
 	fbg:SetFrameStrata("BACKGROUND")
-	fbg:SetSize(277, 106)
-	fbg:SetPoint("LEFT", frame, "LEFT", -34, -6)
+	fbg:Size(277, 106)
+	fbg:Point("LEFT", frame, "LEFT", -34, -6)
 
 	local tex = fbg:CreateTexture(nil, "BORDER", nil, 0)
 	tex:SetTexCoord(0.0, 0.540, 0, 0.411)
@@ -25,9 +25,9 @@ local StyleDrae_Target = function(frame, unit, isSingle)
 	tex:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\Sword")
 
 	tex.overlay = fbg:CreateTexture(nil, "BORDER", nil, 7)
-	tex.overlay:SetSize(199, 103)
+	tex.overlay:Size(199, 103)
 	tex.overlay:SetTexCoord(0.541, 0.933, 0, 0.411)
-	tex.overlay:SetPoint("LEFT", fbg, "LEFT", 0, 0)
+	tex.overlay:Point("LEFT", fbg, "LEFT", 0, 0)
 	tex.overlay:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\Sword")
 	tex.overlay:Hide()
 
@@ -44,8 +44,8 @@ local StyleDrae_Target = function(frame, unit, isSingle)
 	frame.Classification = {}
 
 	local cl = CreateFrame("Frame", nil, frame)
-	cl:SetSize(70, 70)
-	cl:SetPoint("TOPLEFT", frame.Health, "TOPRIGHT", -36, 24)
+	cl:Size(70, 70)
+	cl:Point("TOPLEFT", frame.Health, "TOPRIGHT", -36, 24)
 
 	local dragonElite = cl:CreateTexture(nil, "OVERLAY")
 	dragonElite:SetAllPoints(cl)
@@ -59,13 +59,13 @@ local StyleDrae_Target = function(frame, unit, isSingle)
 	dragonRare:Hide()
 	frame.Classification.rare = dragonRare
 
-	frame.Health.value = T.CreateFontObject(frame.Health, T.db["media"].fontsize1, T.db["media"].font, "RIGHT", -4, 10)
+	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "RIGHT", -4, 10)
 
-	local info = T.CreateFontObject(frame.Health, T.db["media"].fontsize1, T.db["media"].font, "LEFT", 4, -15)
-	info:SetSize(T.db["frames"].largeWidth - 4, 20)
+	local info = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "LEFT", 4, -15)
+	info:Size(T.db["frames"].largeWidth - 4, 20)
 	frame:Tag(info, "[level][shortclassification] [drae:unitcolour][name][drae:afk]")
 
-	local powervalue = T.CreateFontObject(frame.Health, T.db["media"].fontsize1, T.db["media"].font, "LEFT", 4, 10)
+	local powervalue = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "LEFT", 4, 10)
 	frame:Tag(powervalue, "[drae:power]")
 
 	-- Flags for PvP, leader, etc.
@@ -80,7 +80,7 @@ local StyleDrae_Target = function(frame, unit, isSingle)
 	UF.CreateCastBar(frame, cbt.width, cbt.height, cbt.anchor, cbt.anchorat, cbt.anchorto, cbt.xOffset, cbt.yOffset, false, false, false)
 
 	if (isSingle) then
-		frame:SetSize(T.db["frames"].largeWidth, T.db["frames"].largeHeight)
+		frame:Size(T.db["frames"].largeWidth, T.db["frames"].largeHeight)
 	end
 end
 
