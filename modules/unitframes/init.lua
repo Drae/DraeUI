@@ -82,7 +82,7 @@ do
 				UF.dispellClasses["MONK"]["Disease"] = nil
 			end
 
-			UF.Print("Indicators disabled for healer spec dispells")
+			T.Print("Indicators disabled for healer spec dispells")
 		end
 
 		UF.playerSpec = spec

@@ -247,7 +247,7 @@ local CreateIndicator = function(frame, indicator)
 
 	if (indicators[indicator].type == "icon") then
 		local count = ind.cd:CreateFontString(nil, "OVERLAY")
-		count:SetFont(T["media"].font, T.db["media"].fontsize2, "OUTLINE")
+		count:SetFont(T["media"].font, T.db["general"].fontsize2, "OUTLINE")
 		count:SetPoint("BOTTOMRIGHT", ind, "BOTTOMRIGHT", 5, -4)
 		count:SetTextColor(1, 1, 1)
 		count:SetShadowOffset(1, -1)
@@ -291,7 +291,7 @@ local UpdateIndicator = function(self, status)
 	local topPriority = 0
 	local topStatus
 
-	for indicator, map_for_indicator in pairs(UF.dbClass["statusmap"]) do
+	for indicator, map_for_indicator in pairs(T.dbClass["statusmap"]) do
 		if (map_for_indicator[status]) then
 			for statusName, enabled in pairs(map_for_indicator) do
 				local st = enabled and self.statuscache[statusName]
