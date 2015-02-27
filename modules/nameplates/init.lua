@@ -16,5 +16,6 @@ PL.OnInitialize = function(self)
 
 	self.numFrames = 0
 	self.frameList = {}
+	self.ownedPlated = {}
 
 end
