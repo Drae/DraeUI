@@ -434,6 +434,7 @@ do
 				profit, loss = 0, 0
 			else
 				T.dbGlobal["gold"] = {}
+				GoldChanged()
 			end
 			GameTooltip:Hide()
 		else
@@ -807,7 +808,7 @@ IB.OnEnable = function(self)
 	local tooltipRenew
 
 	-- Memory tooltip handling
-	infoBarMem:RegisterForClicks("AnyUp", "AnyDown")
+	infoBarMem:RegisterForClicks("AnyDown")
 	infoBarMem:SetScript("OnEnter", function()
 		TooltipMemory()
 		tooltipRenew = IB:ScheduleRepeatingTimer(TooltipMemory, 1.0)
@@ -838,6 +839,7 @@ IB.OnEnable = function(self)
 	infoBarDur:SetScript("OnClick", function(self) ToggleCharacter("PaperDollFrame") end)
 
 	-- Gold tooltip handling
+	infoBarGold:RegisterForClicks("AnyDown")
 	infoBarGold:SetScript("OnEnter", function() TooltipGold() end)
 	infoBarGold:SetScript("OnLeave", function() GameTooltip:Hide() end)
 	infoBarGold:SetScript("OnClick", GoldClicked)
