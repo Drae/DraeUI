@@ -161,10 +161,16 @@ local UpdateCastbar = function(frame)
 
 	if (frame.shield:IsShown()) then
 		frame.shield:ClearAllPoints()
-		frame.shield:Point("RIGHT", frame, "LEFT", -2, 0)
+		frame.shield:Point("RIGHT", frame, "LEFT", -3, 0)
 		frame.shield:Size(PL.db.cbHeight * 5, PL.db.cbHeight * 5)
 
 		frame:SetStatusBarColor(0.78, 0.25, 0.25, 1)
+	end
+	
+	if (frame.spellIcon:IsShown()) then
+		frame.spellIcon:ClearAllPoints()
+		frame.spellIcon:Point("LEFT", frame, "RIGHT", 3, 0)
+		frame.spellIcon:Size(PL.db.cbHeight * 5, PL.db.cbHeight * 5)
 	end
 end
 
@@ -512,7 +518,7 @@ PL.StyleNameplate = function(self, frame)
 	stateIconRegion:SetTexture(nil)
 	castbarOverlay:SetTexture(nil)
 	glowRegion:SetTexture(nil)
-	spellIconRegion:Size(.001,.001)
+	spellIconRegion:SetSize(0.01, 0.01)
 
 	nameText:Hide()
 
@@ -641,14 +647,14 @@ PL.StyleNameplate = function(self, frame)
 	castBar.spellNameShadow:Point("TOP", castBar, "BOTTOM", 0, -1)
 
 	--Create castbar spell cast time text
-	castBar.time = T.CreateFontObject(castBar, C["nameplates"].fontsize2, T["media"].font, "RIGHT")
+	castBar.time = T.CreateFontObject(castBar, T.db["nameplates"].fontsize2, T["media"].font, "RIGHT")
 	castBar.time:Point("RIGHT", castBar, "LEFT", -1, 0)
 	castBar.time:SetTextColor(1, 1, 1)
 
 	-- Re-purpose castbar spell name text
 	castBar.spellName:SetParent(castBar)
 	castBar.spellName:ClearAllPoints()
-	castBar.spellName = T.CreateFontObject(castBar.spellName, C["nameplates"].fontsize2, T["media"].font, "CENTER")
+	castBar.spellName = T.CreateFontObject(castBar.spellName, T.db["nameplates"].fontsize2, T["media"].font, "CENTER")
 	castBar.spellName:Point("TOP", castBar, "BOTTOM", 0, -1)
 	castBar.spellName:SetTextColor(1, 1, 1)
 
@@ -658,6 +664,13 @@ PL.StyleNameplate = function(self, frame)
 	castBar.shield:SetTexCoord(0, 0.53125, 0, 0.625)
 	castBar.shield:SetDrawLayer("ARTWORK")
 
+	if self.db["display"].castBarIcon then
+		castBar.spellIcon:SetParent(castBar)
+		castBar.spellIcon:SetTexCoord(.07, .93, .07, .93)
+		castBar.spellIcon:ClearAllPoints()
+		castBar.spellIcon:SetDrawLayer("OVERLAY")
+	end
+	
 	castBar.parent = plate
 	plate.castBar = castBar
 
@@ -674,7 +687,8 @@ PL.StyleNameplate = function(self, frame)
 	healthBar:HookScript("OnValueChanged", OnHealthValueChanged)
 
 	self:SendMessage('DraeUI_Nameplates_PostCreate', plate)
-
+	
+	self.ownedPlated[frame] = plate
 
 	if (frame:IsShown()) then
 		OnFrameShow(frame)
@@ -733,7 +747,7 @@ do
 			loadedNames[f.overlay.text] = nil
 		end
 	end
-
+	
 	function PL:StoreName(f)
 		if not f.overlay.text or f.guid then return end
 
@@ -808,7 +822,7 @@ do
 
 				if (IsNameplate(f) and not f.draePlate) then
 					self:StyleNameplate(f)
-					tinsert(self.frameList, f)
+--					tinsert(self.frameList, f)
 				end
 			end
 
