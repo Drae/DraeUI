@@ -1,4 +1,4 @@
-## Interface: 60000
+## Interface: 61000
 ## Author: Drae
 ## Title: draeUI
 ## Version: 3.0
@@ -86,7 +86,6 @@ modules\minimap\buttons.lua
 # Nameplates
 modules\nameplates\init.lua
 modules\nameplates\nameplates.lua
-#modules\nameplates\auras.lua
 
 # Buffbar
 modules\buffbar\templates.xml
