@@ -1,4 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="blackrockfoundry.lua" />
 	<Script file="highmaul.lua" />
+	<Script file="hellfirecitadel.lua" />
 </Ui>

@@ -215,10 +215,25 @@ UF.OnEnable = function(self)
 			if (i == 1) then
 				frame:Point("LEFT", "DraeTargetTarget", "RIGHT", T.db["frames"].bossXoffset, T.db["frames"].bossYoffset)
 			else
-				frame:Point("BOTTOM", boss[i - 1], "TOP", 0, 35)
+				frame:Point("TOP", boss[i - 1], "BOTTOM", 0, -35)
 			end
 
 			boss[i] = frame
+		end
+		
+		oUF:SetActiveStyle("DraeBossTarget")
+
+		local bossTarget = {}
+		for i = 1, MAX_BOSS_FRAMES do
+			local frame = oUF:Spawn("bosstarget" .. i, "DraeBossTarget" .. i)
+
+			if (i == 1) then
+				frame:Point("BOTTOMLEFT", "DraeBoss1", "BOTTOMRIGHT", T.db["frames"].totXoffset, T.db["frames"].totYoffset)
+			else
+				frame:Point("TOP", bossTarget[i - 1], "BOTTOM", 0, -35)
+			end
+
+			bossTarget[i] = frame
 		end
 	end
 

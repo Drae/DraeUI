@@ -163,7 +163,7 @@ local UnitGainedDebuffType = function(self, unit, name, rank, icon, count, debuf
 
 	if (not settings) then return end
 
-	if (not settings.disable and (UF.dispellClasses[T.playerClass][debuffType] or not T.db["raidframes"].showOnlyDispellable)) then
+	if (not settings.disable and ((UF.dispellClasses[T.playerClass] and UF.dispellClasses[T.playerClass][debuffType]) or not T.db["raidframes"].showOnlyDispellable)) then
 		local start = expirationTime and (expirationTime - duration)
 
 		self:GainedStatus(unit, status, settings.pr, settings.color, icon, nil, nil, nil, start, duration, count)

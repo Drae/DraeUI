@@ -16,14 +16,14 @@ local T, C, G, P, U, _ = select(2, ...):UnPack()
 
 C["general"] = {
 -- Textures
-	statusbar = "Striped", 
+	statusbar = "Striped",
 
 	-- Fonts
 	font = "Liberation Sans",
 	fontFancy = "Morpheus",
 	fontTimers = "Bignoodle",
 	fontCombat = "Bignoodle",
-	
+
 	fontsize1 = 13,
 	fontsize2 = 12,
 	fontsize3 = 10,
@@ -34,7 +34,7 @@ C["general"] = {
 	color_gb = 0.40,	-- default 0.40
 	color_bb = 0.40,	-- default 0.40
 	color_ab = 1.00,	-- default 1.00
-	
+
 	pixelPerfect = true,
 }
 
@@ -61,7 +61,7 @@ C["frames"] = {
 	petTargetXoffset	= 0,  	-- Relative to right of player
 	petTargetYoffset	= -40,
 	bossXoffset			= -140,	-- Relative to target of target
-	bossYoffset			= 120,
+	bossYoffset			= -140,
 	arenaXoffset		= 0, -- Relative to player
 	arenaYoffset		= 140,
 
@@ -233,6 +233,11 @@ C["castbar"] = {
 		anchorat = "CENTER",
 		anchorto = "CENTER",
 	},
+	boss = {
+		height	 = 8,
+		xOffset  = 0,
+		yOffset  = -15,
+	},
 	arena = {
 		height	 = 8,
 		xOffset  = 0,
@@ -355,11 +360,11 @@ G["general"] = {
 G["chat"] = {
 	sticky = true,
 	shortChannels = true,
-	
+
 	timeStampFormat = "%H:%M ",
 	scrollDownInterval = 15,
 	throttleInterval = 45,
-	
+
 	keywords = "%MYNAME%",
 }
 

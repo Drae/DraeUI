@@ -5,4 +5,5 @@
 	<Script file="healing.lua" />
 	<Script file="illuminatedhealing.lua" />
 	<Script file="raiddebuff.lua" />
+	<Script file="res.lua" />
 </Ui>

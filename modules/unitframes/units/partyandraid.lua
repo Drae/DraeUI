@@ -168,6 +168,8 @@ end
 --]]
 local CreateIndicator = function(frame, indicator)
 	local ind = CreateFrame("Frame", nil, frame)
+	
+	if (not indicators[indicator]) then return end
 
 	if (indicators[indicator].type == "color") then
 		ind:Size(indicators[indicator].width, indicators[indicator].height)

@@ -14,30 +14,22 @@ UF["raiddebuffs"]["instances"]["Blackrock Foundry"] = function()
 	UF:AddRaidDebuff(true, 156888, 5) 		-- OVERHEATED
 	UF:AddRaidDebuff(true, 157000, 4) 		-- ATTACHSLAGBOMBS
 	UF:AddRaidDebuff(true, 156999, 4) 		-- THROWSLAGBOMBS
-	UF:AddRaidDebuff(true, 156772, 4)		-- Incendiary Rounds
+	UF:AddRaidDebuff(true, 156772, 4, true)		-- Incendiary Rounds
 
 	--Beastlord Darmac
 	UF:AddRaidDebuff(true, 155365, 4, true) -- PINNEDDOWN
-	UF:AddRaidDebuff(true, 155061, 5) 		-- RENDANDTEAR
+	UF:AddRaidDebuff(true, 162283, 5) 		-- RENDANDTEAR
 	UF:AddRaidDebuff(true, 155030, 6) 		-- SEAREDFLESH
 	UF:AddRaidDebuff(true, 155236, 6) 		-- CRUSHARMOR
-	UF:AddRaidDebuff(true, 159044, 6) 		-- EPICENTRE
-	UF:AddRaidDebuff(true, 162276, 6) 		-- UNSTEADY Mythic
 	UF:AddRaidDebuff(true, 155657, 6) 		-- FLAMEINFUSION
-	UF:AddRaidDebuff(true, 155222, 6) 		-- TANTRUM
 	UF:AddRaidDebuff(true, 155399, 6) 		-- CONFLAGRATION
-	UF:AddRaidDebuff(true, 154989, 6) 		-- INFERNOBREATH
 	UF:AddRaidDebuff(true, 155499, 6) 		-- SUPERHEATEDSHRAPNEL
 
 	--Flamebender Ka'graz
-	UF:AddRaidDebuff(true, 155318, 5) 		-- LAVASLASH
 	UF:AddRaidDebuff(true, 155277, 4) 		-- BLAZINGRADIANCE
 	UF:AddRaidDebuff(true, 154952, 4, true)	-- FIXATE
-	UF:AddRaidDebuff(true, 155074, 6) 		-- CHARRINGBREATH
-	UF:AddRaidDebuff(true, 163284, 5) 		-- RISINGFLAME
-	UF:AddRaidDebuff(true, 162293, 5) 		-- EMPOWEREDARMAMENT
-	UF:AddRaidDebuff(true, 155493, 5) 		-- FIRESTORM
-	UF:AddRaidDebuff(true, 163633, 5) 		-- MAGMAMONSOON
+	UF:AddRaidDebuff(true, 155074, 4) 		-- CHARRINGBREATH (Tank)
+	UF:AddRaidDebuff(true, 154932, 6)		-- Molten Torrent
 
 	--Operator Thogar
 	UF:AddRaidDebuff(true, 155921, 5, true) -- ENKINDLE
@@ -48,13 +40,13 @@ UF["raiddebuffs"]["instances"]["Blackrock Foundry"] = function()
 
 	--The Blast Furnace
 	UF:AddRaidDebuff(true, 155240, 6) -- TEMPERED
-	UF:AddRaidDebuff(true, 155242, 5) -- HEAT
-	UF:AddRaidDebuff(true, 176133, 7) -- BOMB
+	UF:AddRaidDebuff(true, 155192, 7, true) -- BOMB
 	UF:AddRaidDebuff(true, 156934, 5) -- RUPTURE
 	UF:AddRaidDebuff(true, 175104, 6) -- MELTARMOR
 	UF:AddRaidDebuff(true, 176121, 4) -- VOLATILEFIRE
-	UF:AddRaidDebuff(true, 158702, 4) -- FIXATE
+	UF:AddRaidDebuff(true, 155196, 6, true) -- FIXATE
 	UF:AddRaidDebuff(true, 155225, 5) -- MELT
+    UF:AddRaidDebuff(true, 158247, 6, true) -- Hot blooded
 	
 	--Hans'gar and Franzok
 	UF:AddRaidDebuff(true, 157139, 6) -- SHATTEREDVERTEBRAE
@@ -81,11 +73,12 @@ UF["raiddebuffs"]["instances"]["Blackrock Foundry"] = function()
 	--The Iron Maidens
 	UF:AddRaidDebuff(true, 164271, 6, true) -- PENETRATINGSHOT
 	UF:AddRaidDebuff(true, 158315, 6) -- DARKHUNT
-	UF:AddRaidDebuff(true, 156601, 6, true) -- SANGUINESTRIKES
-	UF:AddRaidDebuff(true, 170395, 6) -- SORKASPREY
+--	UF:AddRaidDebuff(true, 156601, 6, true) -- SANGUINESTRIKES
+--	UF:AddRaidDebuff(true, 170395, 6) -- SORKASPREY
 	UF:AddRaidDebuff(true, 170405, 6, true) -- MARAKSBLOODCALLING
-	UF:AddRaidDebuff(true, 158692, 6) -- DEADLYTHROW
-	UF:AddRaidDebuff(true, 158702, 4) -- FIXATE
-	UF:AddRaidDebuff(true, 158686, 6) -- EXPOSEARMOR
+--	UF:AddRaidDebuff(true, 158692, 6) -- DEADLYTHROW
+--	UF:AddRaidDebuff(true, 158702, 4, true) -- FIXATE
+--	UF:AddRaidDebuff(true, 158686, 6) -- EXPOSEARMOR
 	UF:AddRaidDebuff(true, 158683, 5, true) -- CORRUPTEDBLOOD
+    UF:AddRaidDebuff(true, 156112, 8) -- Convulsive Shadows
 end
