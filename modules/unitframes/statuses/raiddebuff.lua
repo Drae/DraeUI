@@ -91,7 +91,7 @@ do
 			local index = 1
 
 			while (true) do
-				name, _, icon, count, dtype, duration, expires, caster, _, _, spellid = UnitAura(unit, index, "HARMFUL")
+				name, _, icon, count, dtype, duration, expires, caster, _, _, spellid, _, isBossDebuff = UnitAura(unit, index, "HARMFUL")
 
 				if (not name) then
 					break
@@ -123,7 +123,17 @@ do
 							d_pulse2 = data.pulse
 						end
 					end
-				end
+				elseif (not loadedDebuffZone and isBossDebuff) then
+                    if (d_priority < 5) then
+                        d_priority = 5
+                        d_name = name
+                        d_icon = icon
+                        d_start = expires - duration
+                        d_duration = duration
+                        d_count = count
+                        d_color = dtype and debuffTypeColor[dtype] or nil
+                    end
+                end
 
 				index = index + 1
 			end

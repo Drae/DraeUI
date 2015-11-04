@@ -8,8 +8,6 @@ local UF = T:GetModule("UnitFrames")
 P["SHAMAN"] = {
 	auras = {
 		-- Common
-		["buff_resurrecting"] = { buff = "Resurrecting", pr = 50, mine = false, color = { r = 0, g = 1.0, b = 0.0 } },
-		["buff_soulstone"]  = { buff = "Soulstone", pr = 55, mine = false, color = { r = 1.0, g = 0,   b = 0.4 } },
 		["dispel_magic"] 	= { debuff = "Magic",	pr = 80, mine = false, color = { r = 0.2, g = 0.6, b = 1.0} },
 		["dispel_disease"] 	= { debuff = "Disease",	pr = 70, mine = false, color = { r = 0.6, g = 0.4, b = 0} },
 		["dispel_poison"] 	= { debuff = "Poison",	pr = 60, mine = false, color = { r = 0, g = 0.6, b = 1.0} },
@@ -80,8 +78,7 @@ P["SHAMAN"] = {
 		},
 
 		["BOTTOM"] = {
-            ["buff_resurrecting"] = true,
-            ["buff_soulstone"] = true,
+            ["status_res"] = true,
 		},
 
 		["Text2"] = {

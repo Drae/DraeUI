@@ -36,6 +36,9 @@ local StyleDrae_Boss = function(frame, unit, isSingle)
 
 	UF.CommonPostInit(frame, 20)
 
+	local cbf = T.db["castbar"].boss
+	UF.CreateCastBar(frame, T.db["frames"].smallWidth, cbf.height, frame, "TOPLEFT", "BOTTOMLEFT", cbf.xOffset, cbf.yOffset, false, false, false, true)
+	
 	-- Auras
 	if (T.db["frames"].auras.showBuffsOnBoss and T.db["frames"].auras.showBuffsOnEnemies) then
 		UF.AddBuffs(frame, "TOPRIGHT", frame, "TOPLEFT", -12, 1, T.db["frames"].auras.maxBossBuff or 1, T.db["frames"].auras.auraSml, 10, "LEFT", "DOWN")

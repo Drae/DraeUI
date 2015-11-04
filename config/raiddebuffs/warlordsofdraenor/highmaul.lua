@@ -56,7 +56,9 @@ UF["raiddebuffs"]["instances"]["Highmaul"] = function()
 	UF:AddRaidDebuff(true, 156238, 4) 		-- BRANDED  156238 163990 163989 163988
 	UF:AddRaidDebuff(true, 156467, 5) 		-- DESTRUCTIVERESONANCE  156467 164075 164076 164077
 	UF:AddRaidDebuff(true, 157349, 5) 		-- FORCENOVA  157349 164232 164235 164240
-	UF:AddRaidDebuff(true, 158605, 4) 		-- MARKOFCHAOS  158605 164176 164178 164191
+	UF:AddRaidDebuff(true, 158609, 4) 		-- MARKOFCHAOS  158605 164176 164178 164191
+	UF:AddRaidDebuff(true, 156238, 5, true) -- Arcane Wrath
+    
 	UF:AddRaidDebuff(true, 157763, 4) 		-- FIXATE
 	UF:AddRaidDebuff(true, 158553, 6, true) -- CRUSHARMOR
 end

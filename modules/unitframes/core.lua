@@ -9,6 +9,8 @@ local oUF = ns.oUF or oUF
 local T, C, G, P, U, _ = select(2, ...):UnPack()
 local UF = T:GetModule("UnitFrames")
 
+local Smooth = LibStub("LibSmoothStatusBar-1.0")
+
 -- Local copies
 local _G = _G
 local UIParent, CreateFrame, UnitName, UnitClass = UIParent, CreateFrame, UnitName, UnitClass
@@ -100,10 +102,10 @@ UF.CreateHealthBar = function(self, height)
 	hp.colorDisconnected = true
 	hp.colorTapping = true
 	hp.colorReaction = true
-	hp.Smooth = true
 	hp.frequentUpdates = true
 
 	hp.PostUpdate = UF.PostUpdateHealth
+	Smooth:SmoothBar(hp)
 
 	return hp
 end
@@ -127,8 +129,9 @@ UF.CreatePowerBar = function(self, height)
 		pp.colorTapping = true
 		pp.colorDisconnected = true
 		pp.colorPower = true
-		pp.Smooth = true
 		pp.frequentUpdates = true
+
+		Smooth:SmoothBar(pp)
 
 		return pp
 	end
@@ -172,7 +175,7 @@ UF.CreateExtraPowerBar = function(self, point, anchor, relpoint, offsetX, offset
 		pp:Hide()
 	end)
 
-	pp.Smooth = true -- Smooth power bar changes
+	Smooth:SmoothBar(pp)
 
 	return pp
 end
@@ -222,8 +225,9 @@ do
 			pp.colorTapping = true
 			pp.colorDisconnected = true
 			pp.colorPower = true
-			pp.Smooth = true
 			pp.frequentUpdates = true
+
+			Smooth:SmoothBar(pp)
 
 			self:RegisterEvent("UNIT_DISPLAYPOWER", UpdateDruidMana, true)
 
