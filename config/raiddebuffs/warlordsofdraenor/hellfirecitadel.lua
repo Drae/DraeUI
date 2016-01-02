@@ -92,11 +92,11 @@ UF["raiddebuffs"]["instances"]["Hellfire Citadel"] = function()
 	UF:AddRaidDebuff(true, 181508, 6)       --Seed of Destruction
 
 -- Xhul'horac
-	UF:AddRaidDebuff(true, 188208, 5) -- Ablaze
+	UF:AddRaidDebuff(true, 188208, 7) -- Ablaze
 	UF:AddRaidDebuff(true, 186073, 5) -- Felsinged
 	UF:AddRaidDebuff(true, 186407, 5) -- Fel Surge
-	UF:AddRaidDebuff(true, 186490, 6) -- Chains of Fel
-	UF:AddRaidDebuff(true, 186500, 5) -- Chains of Fel
+	UF:AddRaidDebuff(true, 186490, 6, true) -- Chains of Fel
+	UF:AddRaidDebuff(true, 186500, 5, true) -- Chains of Fel
 	UF:AddRaidDebuff(true, 186063, 5) -- Wasting Void
 	UF:AddRaidDebuff(true, 186333, 5) -- Void Surge
 	UF:AddRaidDebuff(true, 186546, 6) -- Black Hole
@@ -104,15 +104,19 @@ UF["raiddebuffs"]["instances"]["Hellfire Citadel"] = function()
 -- Mannoroth
 	UF:AddRaidDebuff(true, 181275, 5) -- Curse of the Legion
 	UF:AddRaidDebuff(true, 181099, 5) -- Mark of Doom
-	UF:AddRaidDebuff(true, 181597, 5, true) -- Mannoroth's Gaze
-	UF:AddRaidDebuff(true, 182006, 5) -- Empowered Mannoroth's Gaze
+	UF:AddRaidDebuff(true, 181597, 6) -- Mannoroth's Gaze
+	UF:AddRaidDebuff(true, 182006, 6) -- Empowered Mannoroth's Gaze
 	UF:AddRaidDebuff(true, 181841, 5) -- Shadowforce
 	UF:AddRaidDebuff(true, 182088, 5) -- Empowered Shadowforce
+	UF:AddRaidDebuff(true, 186362, 5, true) -- Wrath of Guldan
+	UF:AddRaidDebuff(true, 186348, 5, true) -- Wrath of Guldan
+	UF:AddRaidDebuff(true, 186374, 5, true) -- Wrath of Guldan
+    UF:AddRaidDebuff(true, 186350, 4) -- Gripping Shadows
 
 -- Archimonde
 	UF:AddRaidDebuff(true, 184964, 5) -- Shackled Torment
-	UF:AddRaidDebuff(true, 186123, 5) -- Wrought Chaos
-	UF:AddRaidDebuff(true, 185014, 5) -- Focused Chaos
+--	UF:AddRaidDebuff(true, 186123, 5) -- Wrought Chaos
+--	UF:AddRaidDebuff(true, 185014, 5) -- Focused Chaos
 	UF:AddRaidDebuff(true, 182879, 5, true) -- Doomfire Fixate
 	UF:AddRaidDebuff(true, 183586, 5) -- Doomfire
 	UF:AddRaidDebuff(true, 186952, 5) -- Nether Banish
@@ -120,4 +124,5 @@ UF["raiddebuffs"]["instances"]["Hellfire Citadel"] = function()
 	UF:AddRaidDebuff(true, 183634, 5) -- Shadowfel Burst
 	UF:AddRaidDebuff(true, 189895, 5, true) -- Void Star Fixate
 	UF:AddRaidDebuff(true, 190049, 5) -- Nether Corruption
+	UF:AddRaidDebuff(true, 183963, 4, true) -- Light of the Naaru
 end
