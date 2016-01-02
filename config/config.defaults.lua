@@ -47,9 +47,9 @@ C["frames"] = {
 	-- Player and Target are positioned relative to center of screen,
 	-- all other frames are positioned relative to those
 	playerXoffset		= -420,
-	playerYoffset		= -140,
+	playerYoffset		= -80,
 	targetXoffset		= 420,
-	targetYoffset		= -140,
+	targetYoffset		= -80,
 	totXoffset			= 20, 	-- Relative to right side of target
 	totYoffset			= 0,
 	focusXoffset		= 0,  	-- Relative to left of target
@@ -61,7 +61,7 @@ C["frames"] = {
 	petTargetXoffset	= 0,  	-- Relative to right of player
 	petTargetYoffset	= -40,
 	bossXoffset			= -140,	-- Relative to target of target
-	bossYoffset			= -140,
+	bossYoffset			= -80,
 	arenaXoffset		= 0, -- Relative to player
 	arenaYoffset		= 140,
 
