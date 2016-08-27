@@ -24,12 +24,10 @@ do
 	local knowns = {}
 
 	-- things we have to care. please let me know if any lack or surplus here.
-	local weapon, armor, container, consumable, glyph, trade_goods, recipe, gem, miscallaneous, quest = GetAuctionItemClasses()
 	local knowables = {
-		[consumable] = true,
-		[glyph] = true,
-		[recipe] = true,
-		[miscallaneous] = true,
+		['CONSUMABLE'] = true,
+		['RECIPE'] = true,
+		['MISCELLANEOUS'] = true,
 	}
 
 	local lines = {}

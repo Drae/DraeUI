@@ -1,0 +1,108 @@
+--[[
+
+
+--]]
+local T, C, G, P, U, _ = select(2, ...):UnPack()
+
+local IB = T:GetModule("Infobar")
+local DUR = IB:NewModule("Durability", "AceEvent-3.0", "AceTimer-3.0")
+
+--[[
+
+]]
+local pairs, ipairs, format, gupper, gsub, floor, ceil, abs, mmin, type, unpack = pairs, ipairs, string.format, string.upper, string.gsub, math.floor, math.ceil, math.abs, math.min, type, unpack
+local tinsert = table.insert
+
+--[[
+
+]]
+local slotDurability = {}
+
+local slots = {"HeadSlot", "ShoulderSlot", "ChestSlot", "WristSlot", "HandsSlot", "WaistSlot", "LegsSlot", "FeetSlot", "MainHandSlot", "SecondaryHandSlot"}
+
+local slotName = {
+	["SecondaryHandSlot"] 	= "Offhand",
+	["MainHandSlot"] 		= "Main Hand",
+	["FeetSlot"] 			= "Boots",
+	["LegsSlot"] 			= "Legs",
+	["HandsSlot"] 			= "Gloves",
+	["WristSlot"] 			= "Wrist",
+	["WaistSlot"] 			= "Belt",
+	["ChestSlot"] 			= "Chest",
+	["ShoulderSlot"] 		= "Shoulders",
+	["HeadSlot"] 			= "Helm",
+}
+
+local SLOTS = {}
+for _, slot in pairs(slots) do
+	SLOTS[slot] = GetInventorySlotInfo(slot)
+end
+
+--[[
+
+]]
+DUR.UpdateDurability = function(self)
+	local minDurability = 100
+
+	for slot, invId in pairs(SLOTS) do
+		local curDurability, maxDurablity = GetInventoryItemDurability(invId)
+
+		if (curDurability) then
+			local pctDurability = curDurability / maxDurablity * 100
+
+			slotDurability[slot] = pctDurability
+
+			if (maxDurablity and maxDurablity ~= 0) then
+				minDurability = mmin(pctDurability, minDurability)
+			end
+		end
+	end
+
+	local r1, g1, b1 = T.ColorGradient(minDurability / 100 - 0.001, 1, 0, 0, 1, 1, 0, 0, 1, 0)
+
+	self.button["Text"]:SetFormattedText("|cff%02x%02x%02x%d|r|cff%02x%02x%02x%%dur|r", r1 * 255, g1 * 255, b1 * 255, minDurability, 255, 255, 255)
+
+	self.button:SetPluginSize()
+end
+
+local TooltipDurability = function(self)
+	GameTooltip:SetOwner(self, "ANCHOR_NONE")
+	GameTooltip:Point("TOPLEFT", self, "BOTTOMLEFT", 0, -(IB.infoBar:GetHeight()))
+
+	GameTooltip:ClearLines()
+
+	GameTooltip:AddLine("Durability", 1, 1, 1)
+	GameTooltip:AddLine(" ")
+
+	for _, slot in ipairs(slots) do
+		local pctDurability = slotDurability[slot]
+		local name = slotName[slot]
+
+		if (pctDurability) then
+			GameTooltip:AddDoubleLine(name, format("%d%%", pctDurability), 1, 1, 1, T.ColorGradient(pctDurability / 100 - 0.001, 1, 0, 0, 1, 1, 0, 0, 1, 0))
+		end
+	end
+
+	GameTooltip:Show()
+end
+
+DUR.EnablePlugin = function(self, button)
+	self.button = button
+
+	self:RegisterEvent("MERCHANT_SHOW", "UpdateDurability")
+	self:RegisterEvent("UPDATE_INVENTORY_DURABILITY", "UpdateDurability")
+
+	self.button:SetScript("OnEnter", function() TooltipDurability(self.button) end)
+	self.button:SetScript("OnLeave", function() GameTooltip:Hide() end)
+	self.button:SetScript("OnClick", function(self) ToggleCharacter("PaperDollFrame") end)
+
+	self:UpdateDurability()
+end
+
+local PluginDurability = function(button)
+	DUR:EnablePlugin(button)
+end
+
+DUR.OnInitialize = function(self)
+	IB.RegisterPlugin("Durability", PluginDurability)
+end

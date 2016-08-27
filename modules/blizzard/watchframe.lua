@@ -16,7 +16,7 @@ ObjectiveFrameHolder:Point("TOPRIGHT", MinimapCluster, "BOTTOMRIGHT", -10, -30)
 
 B.MoveWatchFrame = function(self)
 	ObjectiveFrameHolder:SetScale(0.95)
-	
+
 	ObjectiveTrackerFrame:ClearAllPoints()
 	ObjectiveTrackerFrame:SetPoint("TOP", ObjectiveFrameHolder, "TOP")
 	ObjectiveTrackerFrame:Height(ObjectiveTrackerFrame:GetTop() - CONTAINER_OFFSET_Y)

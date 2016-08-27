@@ -9,7 +9,7 @@ local oUF = ns.oUF or oUF
 local T, C, G, P, U, _ = select(2, ...):UnPack()
 local UF = T:GetModule("UnitFrames")
 
-local Smooth = LibStub("LibSmoothStatusBar-1.0")
+local Smoothing = LibStub("LibCutawaySmooth-1.0", true)
 
 -- Local copies
 local _G = _G
@@ -47,20 +47,6 @@ UF.CommonInit = function(self, noBg)
 end
 
 UF.CommonPostInit = function(self, size, noRaidIcons)
-	-- Framebackdrop - edging is what is coloured for debuff type/threat situation
-	local fbg = CreateFrame("Frame", nil, self)
-	fbg:SetFrameStrata("BACKGROUND")
-	fbg:SetPoint("TOPLEFT", self.Health, -2, 2)
-	fbg:Point("BOTTOMRIGHT", self.Power or self.Health, "BOTTOMRIGHT", 2, -2)
-	fbg:SetBackdrop({
-		bgFile = "Interface\\ChatFrame\\ChatFrameBackground",
-		insets = { left = 0, right = 0, top = 0, bottom = 0 }
-	})
-	fbg:SetBackdropColor(0, 0, 0, 1)
-	self.FrameBackdrop = fbg
-
-	T.CreateBorder(self)
-
 	-- raid target icons for all frames
 	if (not noRaidIcons) then
 		local raidIcon = self.Health:CreateTexture(nil, "OVERLAY")
@@ -74,64 +60,105 @@ UF.CommonPostInit = function(self, size, noRaidIcons)
 		insideAlpha = 1.00,
 		outsideAlpha = 0.5
 	}
-
-	-- Magnification of buff/debuffs on mouseover
-	local ha = CreateFrame("Frame", nil, self)
-	ha:SetFrameLevel(5) -- Above auras (level 3) and their cooldown overlay (4)
-	ha.icon = ha:CreateTexture(nil, "ARTWORK")
-	ha.icon:SetPoint("CENTER")
-	ha.border = ha:CreateTexture(nil, "OVERLAY")
-	ha.border:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\textureNormal")
-	ha.border:SetPoint("CENTER")
-	self.HighlightAura = ha
 end
 
-UF.CreateHealthBar = function(self, height)
-	local hp = CreateFrame("StatusBar", nil, self)
-	hp:SetStatusBarTexture(T["media"].statusbar, "BORDER")
-	hp:Height(height)
-	hp:SetPoint("TOPLEFT")
-	hp:SetPoint("TOPRIGHT")
+UF.CreateHealthBar = function(self, width, height, x, y, point, reverse)
+	local hpborder = self:CreateTexture(nil, "BORDER", nil, 0)
+	hpborder:Size(width, height)
+	hpborder:Point(point and "TOPRIGHT" or "TOPLEFT", self, point and "TOPRIGHT" or "TOPLEFT", x, y)
+	hpborder:SetTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\gwstatusbar-bg")
 
-	hp.bg = hp:CreateTexture(nil, "BACKGROUND")
-	hp.bg:SetAllPoints(hp)
-	hp.bg:SetTexture(T["media"].statusbar)
-	hp.bg.multiplier = 0.33
+	local hpbg = self:CreateTexture(nil, "BORDER", nil, 0)
+	hpbg:Size(width - 4, height - 4)
+	hpbg:Point("TOPLEFT", hpborder, "TOPLEFT", 2, -2)
+	hpbg:SetTexture("Interface\\BUTTONS\\WHITE8X8")
+	hpbg:SetVertexColor(0, 0, 0)
+
+	local hp = CreateFrame("StatusBar", nil, self)
+	hp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\statusbarsfill")
+	hp:SetReverseFill(reverse and true or false)
+	hp:SetAllPoints(hpbg)
+
+	hp.hpbg = hpborder
 
 	hp.colorClass = true
+	hp.colorClassPet = false
+	hp.colorHealth = true
 	hp.colorDisconnected = true
 	hp.colorTapping = true
 	hp.colorReaction = true
 	hp.frequentUpdates = true
 
 	hp.PostUpdate = UF.PostUpdateHealth
-	Smooth:SmoothBar(hp)
+
+	Smoothing:EnableBarAnimation(hp)
 
 	return hp
 end
 
-UF.CreatePowerBar = function(self, height)
-	if (height) then
+UF.CreatePowerBar = function(self, width, height, point, reverse)
+	local ppborder = self:CreateTexture(nil, "BORDER", nil, 0)
+	ppborder:Size(width, height)
+	ppborder:Point(point and "TOPRIGHT" or "TOPLEFT", self.Health.hpbg, point and "BOTTOMRIGHT" or "BOTTOMLEFT", 0, 3)
+	ppborder:SetTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\gwstatusbar-bg")
+
+	local ppbg = self:CreateTexture(nil, "BORDER", nil, 0)
+	ppbg:Size(width - 4, height - 4)
+	ppbg:Point("TOPLEFT", ppborder, "TOPLEFT", 2, -2)
+	ppbg:SetTexture("Interface\\BUTTONS\\WHITE8X8")
+	ppbg:SetVertexColor(0, 0, 0)
+
+	local pp = CreateFrame("StatusBar", nil, self)
+	pp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\statusbarsfill")
+	pp:SetReverseFill(reverse and true or false)
+	pp:SetAllPoints(ppbg)
+
+	pp.ppbg = ppbg
+
+	pp.Override = UF.OverridePower
+	pp.colorTapping = true
+	pp.colorDisconnected = true
+	pp.colorPower = true
+
+	pp.__statusbartex = "Interface\\AddOns\\draeUI\\media\\statusbars\\statusbarsfill"
+
+	pp.frequentUpdates = true
+
+	Smoothing:EnableBarAnimation(pp)
+
+	return pp
+end
+
+do
+	local PostUpdateVisibility = function(self, show, is_shown)
+		if (show) then
+			self.appbg:Show()
+		else
+			self.appbg:Hide()
+		end
+	end
+
+	UF.CreateAdditionalPower = function(self, width, height, point, reverse)
+		local ppbg = self:CreateTexture(nil, "BORDER", nil, 0)
+		ppbg:Size(width, height)
+		ppbg:Point(point and "TOPRIGHT" or "TOPLEFT", self.Power.ppbg, point and "BOTTOMRIGHT" or "BOTTOMLEFT", 0, 3)
+		ppbg:SetTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\gwstatusbar-bg")
+
 		local pp = CreateFrame("StatusBar", nil, self)
-		pp:Height(3)
-		pp:Width(T.db["frames"].largeWidth)
-		pp:SetStatusBarTexture(T["media"].statusbar, "BORDER")
-		pp:SetPoint("LEFT")
-		pp:SetPoint("RIGHT")
-		pp:Point("TOP", self.Health, "BOTTOM", 0, -1.25) -- Little offset to make it pretty
+		pp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\statusbarsfill")
+		pp:SetReverseFill(reverse and true or false)
+		pp:Size(width - 4, height - 4)
+		pp:Point("TOPLEFT", ppbg, "TOPLEFT", 2, -2)
 
-		-- powerbar background
-		pp.bg = pp:CreateTexture(nil, "BACKGROUND")
-		pp.bg:SetAllPoints(pp)
-		pp.bg:SetTexture(T["media"].statusbar)
-		pp.bg.multiplier = 0.33
+		pp.appbg = ppbg
 
-		pp.colorTapping = true
+		pp.PostUpdateVisibility = PostUpdateVisibility
+
 		pp.colorDisconnected = true
 		pp.colorPower = true
 		pp.frequentUpdates = true
 
-		Smooth:SmoothBar(pp)
+		Smoothing:EnableBarAnimation(pp)
 
 		return pp
 	end
@@ -140,187 +167,77 @@ end
 --[[
 		Extra powerbar display
 --]]
-UF.CreateExtraPowerBar = function(self, point, anchor, relpoint, offsetX, offsetY)
+UF.CreateExtraPowerBar = function(self, width, height, point, anchor, relpoint, offsetX, offsetY)
 	local pp = CreateFrame("StatusBar", nil, self)
-	pp:Height(12)
-	pp:Width(T.db["frames"].largeWidth)
-	pp:SetStatusBarTexture(T["media"].statusbar, "BORDER")
-	pp:Point(point, anchor, relpoint, offsetX or 0, offsetY or 42) -- Little offset to make it pretty
-	pp:Hide()
+	pp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\statusbarsfill")
+	pp:Point(point, anchor, relpoint, offsetX, offsetY)
+	pp:Size(width, height)
 
-	-- powerbar background
-	local ppbg = CreateFrame("Frame", nil, pp)
-	ppbg:SetPoint("TOPLEFT", -6, 6)
-	ppbg:SetPoint("BOTTOMRIGHT", 6, -6)
-	ppbg:SetFrameStrata("BACKGROUND")
-	ppbg:SetBackdrop {
-		edgeFile = "Interface\\AddOns\\draeUI\\media\\textures\\glowtex", edgeSize = 6,
-		insets = { left = 0, right = 0, top = 0, bottom = 0 }
+	local bg = CreateFrame("Frame", nil, pp)
+	bg:Point("TOPLEFT", pp, -2, 2)
+	bg:Point("BOTTOMRIGHT", pp, 2, -2)
+	bg:SetFrameStrata("BACKGROUND")
+	bg:SetBackdrop {
+		bgFile = "Interface\\Buttons\\White8x8",
+		edgeFile = "Interface\\Buttons\\White8x8",
+		tile = false,
+		edgeSize = 2
 	}
-	ppbg:SetBackdropColor(0, 0, 0, 1)
-	ppbg:SetBackdropBorderColor(0, 0, 0, 1.0)
-
-	-- powerbar background
-	pp.bg = pp:CreateTexture(nil, "BACKGROUND")
-	pp.bg:SetAllPoints(pp)
-	pp.bg:SetTexture(T["media"].statusbar)
-	pp.bg.multiplier = 0.33
+	bg:SetBackdropColor(0, 0, 0, 1)
+	bg:SetBackdropBorderColor(0, 0, 0, 1)
 
 	pp.animHideSelf = pp:CreateAnimationGroup()
 	local hideBar = pp.animHideSelf:CreateAnimation("Alpha")
-	hideBar:SetChange(-0.5)
-	hideBar:SetDuration(0.3)
-	hideBar:SetOrder(1)
+	hideBar:SetFromAlpha(1)
+	hideBar:SetToAlpha(0)
 	pp.animHideSelf:SetScript("OnFinished", function()
 		pp:Hide()
 	end)
 
-	Smooth:SmoothBar(pp)
+	pp.animShowSelf = pp:CreateAnimationGroup()
+	local showBar = pp.animShowSelf:CreateAnimation("Alpha")
+	showBar:SetFromAlpha(0)
+	showBar:SetToAlpha(1)
+	pp.animShowSelf:SetScript("OnPlay", function()
+		pp:Show()
+	end)
+
+	Smoothing:EnableBarAnimation(pp)
 
 	return pp
 end
 
-do
-	local UpdateDruidMana = function(self, event, unit)
-		local form = GetShapeshiftFormID()
+-- Leader, PvP, Role, etc.
+UF.FlagIcons = function(frame, reverse)
+	-- Leader icon
+	local leader = frame:CreateTexture(nil, "OVERLAY", 6)
+	leader:Point("CENTER", frame.Portrait and frame.Portrait or frame, reverse and "TOPLEFT" or "TOPRIGHT", 0, -5)
+	leader:Size(16, 16)
+	frame.Leader = leader
 
-		if (form and (form == CAT_FORM or form == BEAR_FORM)) then
-			self.DruidMana:Show()
-		else
-			self.DruidMana:Hide()
-		end
-	end
+	-- Assistant icon
+	local assistant = frame:CreateTexture(nil, "OVERLAY", 6)
+	assistant:Point("CENTER", frame.Portrait and frame.Portrait or frame, reverse and "TOPLEFT" or "TOPRIGHT", 0, -5)
+	assistant:Size(16, 16)
+	frame.Assistant = assistant
 
-	UF.CreateDruidManaBar = function(self, height)
-		if (T.playerClass ~= "DRUID") then return end
+	-- pvp icon
+	local pvp = frame:CreateTexture(nil, "OVERLAY", nil, 6)
+	pvp:Size(28, 28)
+	pvp:Point("CENTER", frame.Portrait and frame.Portrait or frame, reverse and "TOPRIGHT" or "TOPLEFT", 0, -8)
+	frame.PvP = pvp
 
-		if (height) then
-			local pp = CreateFrame("StatusBar", nil, self)
-			pp:Height(height)
-			pp:SetStatusBarTexture(T["media"].statusbar, "BORDER")
-			pp:SetStatusBarColor(0, 0, 1)
-			pp:SetPoint("LEFT")
-			pp:SetPoint("RIGHT")
-			pp:Point("TOP", self.Power, "BOTTOM", 0, -8) -- Place the bar below the main unit frame
-
-			local ppbg = CreateFrame("Frame", nil, pp)
-			ppbg:SetPoint("TOPLEFT", -6, 6)
-			ppbg:SetPoint("BOTTOMRIGHT", 6, -6)
-			ppbg:SetFrameStrata("BACKGROUND")
-			ppbg:SetBackdrop {
-				bgFile = "Interface\\ChatFrame\\ChatFrameBackground",
-				edgeFile = "Interface\\AddOns\\draeUI\\media\\textures\\glowtex",
-				edgeSize = 4,
-				insets = { left = 4, right = 4, top = 4, bottom = 4 }
-			}
-			ppbg:SetBackdropColor(0, 0, 0, 1)
-			ppbg:SetBackdropBorderColor(0, 0, 0, 0.5)
-
-			-- powerbar background
-			pp.bg = pp:CreateTexture(nil, "BACKGROUND")
-			pp.bg:SetAllPoints(pp)
-			pp.bg:SetTexture(T["media"].statusbar)
-			pp.bg.multiplier = 0.33
-
-			pp.colorTapping = true
-			pp.colorDisconnected = true
-			pp.colorPower = true
-			pp.frequentUpdates = true
-
-			Smooth:SmoothBar(pp)
-
-			self:RegisterEvent("UNIT_DISPLAYPOWER", UpdateDruidMana, true)
-
-			return pp
-		end
-	end
-end
-
-do
-	local timer, pvptimer, pvpTimerIsRunning
-
-	local UpdateTimer = function()
-		local pvpTime = GetPVPTimer()
-
-		if (pvpTime > 0 and pvpTime < 301000) then
-			pvptimer:SetFormattedText(("|cffB62220%d:%02d|r"):format((pvpTime / 1000) / 60, (pvpTime / 1000) % 60))
-		else
-			pvptimer:SetText("")
-			timer:Cancel()
---			UF:CancelTimer(pvpTimerIsRunning, true)
-
-			pvpTimerIsRunning = nil
-		end
-	end
-
-	local CheckPvPTimer = function(self, status)
-		if (IsPVPTimerRunning() and not pvpTimerIsRunning) then
-			pvpTimerIsRunning = UF:ScheduleRepeatingTimer(UpdateTimer, 1.0)
-		elseif (not status and pvpTimerIsRunning) then
-			pvptimer:SetText("")
-			UF:CancelTimer(pvpTimerIsRunning, true)
-
-			pvpTimerIsRunning = nil
-		end
-	end
-
-	-- Adds a realtime pvp timer
-	UF.AddPvPTimer = function(self)
-		pvptimer = T.CreateFontObject(self.Health, T.db["general"].fontsize2, T["media"].font, "TOPRIGHT", 5, -6, nil, self.PvP, "TOPLEFT")
-
-		self:RegisterEvent("PLAYER_FLAGS_CHANGED", CheckPvPTimer)
-	end
-
-	-- Leader, PvP, Role, etc.
-	UF.FlagIcons = function(self)
-		local hp = self.Health
-
-		-- Leader icon
-		local leader = hp:CreateTexture(nil, "OVERLAY")
-		leader:Point("CENTER", hp, "TOPLEFT", -1, 2)
-		leader:Size(16, 16)
-		self.Leader = leader
-
-		-- Assistant icon
-		local assistant = hp:CreateTexture(nil, "OVERLAY")
-		assistant:Point("CENTER", hp, "TOPLEFT", -1, 2)
-		assistant:Size(16, 16)
-		self.Assistant = assistant
-
-		-- pvp icon
-		local pvp = hp:CreateTexture(nil, "OVERLAY")
-		pvp:Point("CENTER", hp, "BOTTOMRIGHT", 8, -14)
-		pvp:Size(36, 36)
-		pvp.PostUpdate = CheckPvPTimer
-		self.PvP = pvp
-
-		-- Dungeon role
-		local lfdRole = hp:CreateTexture(nil, "OVERLAY")
-		lfdRole:Point("CENTER", hp, "BOTTOMLEFT", -1, -7)
-		lfdRole:Size(16, 16)
-		lfdRole:SetTexture("Interface\\LFGFrame\\UI-LFG-ICON-PORTRAITROLES")
-		self.LFDRole = lfdRole
-	end
+	-- Dungeon role
+	local lfdRole = frame:CreateTexture(nil, "OVERLAY", 6)
+	lfdRole:Point("CENTER", frame.Portrait and frame.Portrait or frame, reverse and "BOTTOMRIGHT" or "BOTTOMLEFT", 0, 0)
+	lfdRole:Size(16, 16)
+	frame.LFDRole = lfdRole
 end
 
 -- Aura handling
 do
 	local AuraOnEnter = function(self)
 		if (not self:IsVisible()) then return end
-
-		-- Aura magnification
-		local hilight 	= self.parent:GetParent().HighlightAura
-		local auraSize 	= self:GetParent().size
-
-		hilight:Point("TOPLEFT", self, "TOPLEFT", -(auraSize * T.db["frames"].auras.auraMag - auraSize) / 2, (auraSize * T.db["frames"].auras.auraMag - auraSize) / 2)
-		hilight:Size(auraSize * T.db["frames"].auras.auraMag, auraSize * T.db["frames"].auras.auraMag)
-
-		hilight.border:Size(auraSize * T.db["frames"].auras.auraMag * 1.1, auraSize * T.db["frames"].auras.auraMag * 1.1)
-
-		hilight.icon:Size(auraSize * T.db["frames"].auras.auraMag, auraSize * T.db["frames"].auras.auraMag)
-		hilight.icon:SetTexture(self.icon:GetTexture())
-
-		hilight:Show()
 
 		-- Add aura owner to tooltip if available - colour by class/reaction because it looks nice!
 		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
@@ -344,7 +261,6 @@ do
 	end
 
 	local AuraOnLeave = function(self)
-		self.parent:GetParent().HighlightAura:Hide()
 		GameTooltip:Hide()
 	end
 
@@ -360,21 +276,20 @@ do
 		button:Height(icons.size or 16)
 
 		local border = CreateFrame("Frame", nil, button)
-		border:SetPoint("TOPLEFT", button, -6, 6)
-		border:SetPoint("BOTTOMRIGHT", button, 6, -6)
+		border:SetPoint("TOPLEFT", button, -2, 2)
+		border:SetPoint("BOTTOMRIGHT", button, 2, -2)
 		border:SetFrameStrata("BACKGROUND")
 		border:SetBackdrop {
-			edgeFile = "Interface\\AddOns\\draeUI\\media\\textures\\glowtex",
+			edgeFile = "Interface\\Buttons\\White8x8",
 			tile = false,
-			edgeSize = 6
+			edgeSize = 2
 		}
-		border:SetBackdropBorderColor(0, 0, 0, 0.5)
+		border:SetBackdropBorderColor(0, 0, 0)
 		button.border = border
 
 		local icon = button:CreateTexture(nil, "BACKGROUND")
-		icon:SetTexCoord(.07, .93, .07, .93)
-		icon:Point("TOPLEFT", button, "TOPLEFT", -0.7, 0.93)
-		icon:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 0.7, -0.93)
+		icon:SetTexCoord(.1, .9, .1, .9)
+		icon:SetAllPoints(button)
 		button.icon = icon
 
 		local overlay = button:CreateTexture(nil, "OVERLAY")
@@ -385,15 +300,12 @@ do
 		cd:SetAllPoints(button)
 		button.cd = cd
 
-		local borderFrame = T.CreateBorder(button, "small")
-		button.borderFrame = borderFrame
-
-		local count = borderFrame:CreateFontString(nil)
-		count:SetFont(T["media"].font, T.db["general"].fontsize3, "OUTLINE")
+		local count = button:CreateFontString(nil)
+		count:SetFont(T["media"].font, T.db["general"].fontsize3, "THINOUTLINE")
 		count:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 7, -6)
 		button.count = count
 
-		local stealable = borderFrame:CreateTexture(nil, "OVERLAY")
+		local stealable = button:CreateTexture(nil, "OVERLAY")
 		stealable:SetTexture("Interface\\TargetingFrame\\UI-TargetingFrame-Stealable")
 		stealable:SetPoint("TOPLEFT", icon, "TOPLEFT")
 		stealable:SetPoint("BOTTOMRIGHT", icon, "BOTTOMRIGHT")
@@ -424,13 +336,9 @@ do
 		local color = DebuffTypeColor[icon.dtype]
 
 		if (color) then
-			T.SetBorderColor(icon, "border", color.r, color.g, color.b, 1.0)
-			T.SetBorderColor(icon, "shadow", color.r, color.g, color.b, 1.0)
-			icon.border:SetBackdropBorderColor(color.r, color.g, color.b, 1.0)
+			icon.border:SetBackdropBorderColor(color.r, color.g, color.b)
 		else
-			T.SetBorderColor(icon, "border", 1.0, 1.0, 1.0, 1.0)
-			T.SetBorderColor(icon, "shadow", 1.0, 1.0, 1.0, 0)
-			icon.border:SetBackdropBorderColor(0, 0, 0, 0.5)
+			icon.border:SetBackdropBorderColor(0, 0, 0)
 		end
 
 		if (icon.debuff and icon.isEnemy and not icon.isPlayer) then
@@ -462,12 +370,12 @@ do
 		--]]
 		if (button.filter == "HELPFUL") then
 			if (unit ~= "player" and unit ~= "pet" and unit ~= "vehicle") then
-				if (T.db["frames"].auras.showBuffsOnFriends and button.isFriendly and duration > 0) then
+				if (T.db["frames"].auras.showBuffsOnFriends and button.isFriendly) then
 					return true
-				elseif (T.db["frames"].auras.showBuffsOnEnemies and button.isEnemy and (duration > 0 or isBossDebuff)) then
+				elseif (T.db["frames"].auras.showBuffsOnEnemies and button.isEnemy) then
 					return true
 				end
-			elseif (T.db["frames"].auras.showBuffsOnMe and duration > 0 and duration <= 600) then
+			elseif (T.db["frames"].auras.showBuffsOnMe) then
 				return true
 			end
 		end
@@ -507,19 +415,11 @@ do
 		return false
 	end
 
-	local BuffPreUpdate = function(self, unit)
-		self.filter = GetCVar("showCastableBuffs") == "1" and UnitCanAssist("player", unit) and "HELPFUL|RAID" or nil
-	end
-
-	local DebuffPreUpdate = function(self, unit)
-		self.filter = GetCVar("showDispelDebuffs") == "1" and UnitCanAssist("player", unit) and "HARMFUL|RAID" or nil
-	end
-
-	UF.AddDebuffs = function(self, point, relativeFrame, relativePoint, ofsx, ofsy, num, size, spacing, growthx, growthy, playerOnly)
+	UF.AddDebuffs = function(self, point, relativeFrame, relativePoint, ofsx, ofsy, num, size, spacing, growthx, growthy)
 		local debuffsPerRow = T.db["frames"].auras.debuffs_per_row[self.unit] or T.db["frames"].auras.debuffs_per_row["other"]
 
 		local width = (spacing * debuffsPerRow) + (size * debuffsPerRow)
-		local height= (spacing * (num / debuffsPerRow)) + (size * (num / debuffsPerRow))
+		local height = (spacing * (num / debuffsPerRow)) + (size * (num / debuffsPerRow))
 
 		local debuffs = CreateFrame("Frame", nil, self)
 		debuffs:Point(point, relativeFrame, relativePoint, ofsx, ofsy)
@@ -534,7 +434,6 @@ do
 		debuffs.filter = "HARMFUL" -- Explicitly set the filter or the first customFilter call won"t work
 		debuffs.showDebuffType = true
 
---		debuffs.PreUpdate = DebuffPreUpdate
 		debuffs.CustomFilter = CustomFilter
 		debuffs.CreateIcon = CreateAuraIcon
 		debuffs.PostUpdateIcon = PostUpdateIcon
@@ -542,8 +441,8 @@ do
 		self.Debuffs = debuffs
 	end
 
-	UF.AddBuffs = function(self, point, relativeFrame, relativePoint, ofsx, ofsy, num, size, spacing, growthx, growthy, filter, perrow)
-		local buffsPerRow = perrow or T.db["frames"].auras.buffs_per_row[self.unit] or T.db["frames"].auras.buffs_per_row["other"]
+	UF.AddBuffs = function(self, point, relativeFrame, relativePoint, ofsx, ofsy, num, size, spacing, growthx, growthy)
+		local buffsPerRow = T.db["frames"].auras.buffs_per_row[self.unit] or T.db["frames"].auras.buffs_per_row["other"]
 
 		local width	= (spacing * buffsPerRow) + (size * buffsPerRow)
 		local height = (spacing * (num / buffsPerRow)) + (size * (num / buffsPerRow))
@@ -553,8 +452,6 @@ do
 		buffs:Size(width, height)
 
 		buffs.num = num
-		buffs.numBuffs = num
-		buffs.numDebuffs = 0
 		buffs.size = size
 		buffs.spacing = spacing
 		buffs.initialAnchor = point
@@ -564,10 +461,9 @@ do
 		buffs.showBuffType = true
 		buffs.showStealableBuffs = T.playerClass == "MAGE" and T.db["frames"].showStealableBuffs or false
 
---		buffs.PreUpdate = BuffPreUpdate
+		buffs.CustomFilter = filter or CustomFilter
 		buffs.CreateIcon = CreateAuraIcon
 		buffs.PostUpdateIcon = PostUpdateIcon
-		buffs.CustomFilter = filter or CustomFilter
 
 		self.Buffs = buffs
 	end

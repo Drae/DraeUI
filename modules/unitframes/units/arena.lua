@@ -10,140 +10,39 @@ local oUF = ns.oUF or oUF
 local T, C, G, P, U, _ = select(2, ...):UnPack()
 local UF = T:GetModule("UnitFrames")
 
---[[
-		Fake prep frames - get hidden when data on the real frames becomes available
---]]
-UF.UpdateArenaPrep = function(self, event, unit, status)
-	if ((event == "ARENA_OPPONENT_UPDATE" or event == "UNIT_NAME_UPDATE") and unit ~= self.unit) then return end
-
-	local _, instanceType = IsInInstance()
-
-	if (instanceType ~= "arena" or (UnitExists(self.unit) and status ~= "unseen")) then
-		self:Hide()
-		return
-	end
-
-	local id = self.unit and self.unit:sub(6)
-
-	if (id) then
-		local s = GetArenaOpponentSpec(id)
-
-		local spec, texture, role, class
-		if (s and s > 0) then
-			_, spec, _, texture, _, role, class = GetSpecializationInfoByID(s)
-		end
-
-		if (class and spec) then
-			local color = RAID_CLASS_COLORS[class]
-			self.Health:SetStatusBarColor(color.r, color.g, color.b)
-
-			self.Info:SetText(spec)
-
-			if (role == "TANK" or role == "HEALER" or role == "DAMAGER") then
-				self.LFDRole:SetTexCoord(GetTexCoordsForRoleSmallCircle(role))
-				self.LFDRole:Show()
-			else
-				self.LFDRole:Hide()
-			end
-
-			self:Show()
-		else
-			self:Hide()
-		end
-	else
-		self:Hide()
-	end
-end
-
 -- Arena player frames - basically focus frames with castbars
 local StyleDrae_ArenaPlayers = function(frame, unit, isSingle)
+	frame:Size(150, 47)
+	frame:SetHitRectInsets(0, 0, 0, 10)
+	frame:SetFrameStrata("LOW")
+
 	UF.CommonInit(frame)
 
-	frame.Health = UF.CreateHealthBar(frame, T.db["frames"].smallHeight - 3 - 1.5)
-	frame.Power = UF.CreatePowerBar(frame, 3)
+	frame.Health = UF.CreateHealthBar(frame, 150, 21, 0, 1)
+	frame.Power = UF.CreatePowerBar(frame, 150, 10)
 
-	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize2, T["media"].font, "RIGHT", -4, 12)
+	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "RIGHT", -2, 0)
 
-	local info = T.CreateFontObject(frame.Health, T.db["general"].fontsize2, T["media"].font, "LEFT", 4, -13)
-	info:Width(T.db["frames"].smallWidth - 4)
-	info:Height(20)
-	frame:Tag(info, "[level] [drae:unitcolour][name][drae:afk]")
+	local info = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "LEFT", -2, 22)
+	info:Size(110, 20)
+	frame:Tag(info, "[drae:shortclassification][drae:unitcolour][name]")
 
-	UF.CommonPostInit(frame, 20)
+	local level = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "RIGHT", 2, 22)
+	level:Size(40, 20)
+	frame:Tag(level, "[level]")
 
 	UF.FlagIcons(frame)
 
-	-- Auras
-	UF.AddBuffs(frame, "RIGHT", frame, "LEFT", -12, 0, T.db["frames"].auras.maxArenaBuff or 4, T.db["frames"].auras.auraTny, 10, "LEFT", "DOWN", false, 4)
-
-	-- Trinket
-	do
-		local trinket = CreateFrame("Frame", nil, frame)
-		trinket:Point("LEFT", frame, "RIGHT", 12, 0)
-		trinket:Size(T.db["frames"].auras.auraTny, T.db["frames"].auras.auraTny)
-
-		local border = CreateFrame("Frame", nil, trinket)
-		border:SetPoint("TOPLEFT", trinket, -6, 6)
-		border:SetPoint("BOTTOMRIGHT", trinket, 6, -6)
-		border:SetFrameStrata("BACKGROUND")
-		border:SetBackdrop {
-			edgeFile = "Interface\\AddOns\\draeUI\\media\\textures\\glowtex",
-			tile = false,
-			edgeSize = 6
-		}
-		border:SetBackdropBorderColor(0, 0, 0, 0.5)
-		trinket.border = border
-
-		local icon = trinket:CreateTexture(nil, "BACKGROUND")
-		icon:SetTexCoord(.07, .93, .07, .93)
-		icon:Point("TOPLEFT", trinket, "TOPLEFT", -0.07, 0.93)
-		icon:Point("BOTTOMRIGHT", trinket, "BOTTOMRIGHT", 0.07, -0.93)
-		trinket.icon = icon
-
-		local cd = CreateFrame("Cooldown", nil, trinket)
-		cd:SetReverse(true)
-		cd:SetAllPoints(trinket)
-		trinket.cd = cd
-
-		local borderFrame = T.CreateBorder(trinket, "small")
-		trinket.borderFrame = borderFrame
-
-		frame.Trinket = trinket
-	end
-
 	-- Castbar
-	local cbf = T.db["castbar"].arena
-	UF.CreateCastBar(frame, T.db["frames"].smallWidth, cbf.height, frame, "TOPLEFT", "BOTTOMLEFT", cbf.xOffset, cbf.yOffset, false, false, false, true)
+	local cbt = T.db["castbar"].focus
+	UF.CreateCastBar(frame, 146, 15, frame.Power, "TOPLEFT", "BOTTOMLEFT", 0, -12, false, false, false, nil, true)
 
-	if (isSingle) then
-		frame:Size(T.db["frames"].smallWidth, T.db["frames"].smallHeight)
-	end
+	-- Auras - just debuffs for target of target
+	UF.AddDebuffs(frame, "TOPRIGHT", frame.Power, "BOTTOMRIGHT", 0, -12, T.db["frames"].auras.maxFocusDebuff or 15, T.db["frames"].auras.auraSml, 8, "LEFT", "DOWN")
+	UF.AddBuffs(frame, "TOPLEFT", frame.Power, "BOTTOMLEFT", 0, -12, T.db["frames"].auras.maxFocusBuff or 15, T.db["frames"].auras.auraSml, 8, "RIGHT", "DOWN")
 
-	-- Create fake prepFrame (taken from ElvUI and others)
-	if (not frame.prepFrame) then
-		frame.prepFrame = CreateFrame("Frame", frame:GetName() .. "PrepFrame", UIParent)
-		frame.prepFrame:SetScript("OnEvent", UF.UpdateArenaPrep)
-		frame.prepFrame:SetAllPoints(frame)
-		frame.prepFrame:SetID(frame:GetID())
-		frame.prepFrame.unit = frame.unit
-
-		frame.prepFrame.Health = UF.CreateHealthBar(frame.prepFrame, T.db["frames"].smallHeight)
-		frame.prepFrame.Health.value = T.CreateFontObject(frame.prepFrame.Health, T.db["general"].fontsize2, T["media"].font, "RIGHT", -4, 12)
-
-		local info = T.CreateFontObject(frame.prepFrame.Health, T.db["general"].fontsize2, T["media"].font, "LEFT", 4, -13)
-		info:Width(T.db["frames"].smallWidth - 4)
-		info:Height(20)
-		frame.prepFrame.Info = info
-
-		UF.CommonPostInit(frame.prepFrame, 20, true)
-
-		UF.FlagIcons(frame.prepFrame)
-
-		frame.prepFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
-		frame.prepFrame:RegisterEvent("ARENA_OPPONENT_UPDATE")
-		frame.prepFrame:RegisterEvent("UNIT_NAME_UPDATE")
-		frame.prepFrame:RegisterEvent("ARENA_PREP_OPPONENT_SPECIALIZATIONS")
-	end
+	-- The number here is the size of the raid icon
+	UF.CommonPostInit(frame, 15)
 end
 
 oUF:RegisterStyle("DraeArenaPlayer", StyleDrae_ArenaPlayers)

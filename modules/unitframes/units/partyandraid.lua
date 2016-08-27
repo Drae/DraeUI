@@ -10,6 +10,8 @@ local oUF = ns.oUF or draeUF
 local T, C, G, P, U, _ = unpack(select(2, ...))
 local UF = T:GetModule("UnitFrames")
 
+local Smoothing = LibStub("LibCutawaySmooth-1.0", true)
+
 -- Default indicator positions
 local indicators = {
 	-- Icons
@@ -123,7 +125,6 @@ local SetStatus_Icon = function(ind, data)
 	end
 
 	if (data.pulse) then
-		print("HERE!")
 		if (not ind.pulse:IsPlaying()) then
 			ind.pulse:Play()
 		end
@@ -146,11 +147,7 @@ local SetStatus_BorderColor = function(ind, data)
 end
 
 local ClearStatus_BorderColor = function(ind)
-	ind:SetBackdropBorderColor(0, 0, 0, 0.5)
-end
-
-local ClearStatus_BorderColor = function(ind)
-	ind:SetBackdropBorderColor(0, 0, 0, 0.5)
+	ind:SetBackdropBorderColor(0, 0, 0, 1)
 end
 
 local SetStatus_Text2 = function(ind, data)
@@ -168,7 +165,7 @@ end
 --]]
 local CreateIndicator = function(frame, indicator)
 	local ind = CreateFrame("Frame", nil, frame)
-	
+
 	if (not indicators[indicator]) then return end
 
 	if (indicators[indicator].type == "color") then
@@ -223,7 +220,7 @@ local CreateIndicator = function(frame, indicator)
 
 	ind:ClearAllPoints()
 	ind:SetFrameLevel(frame:GetFrameLevel() + 7)
-	ind:SetPoint(indicators[indicator].at, frame.Health, indicators[indicator].to, indicators[indicator].offsetX, indicators[indicator].offsetY)
+	ind:Point(indicators[indicator].at, frame.Health, indicators[indicator].to, indicators[indicator].offsetX, indicators[indicator].offsetY)
 	ind:SetBackdropBorderColor(0, 0, 0, 1)
 	ind:SetBackdropColor(1, 1, 1, 1)
 	ind:Hide()
@@ -231,9 +228,9 @@ local CreateIndicator = function(frame, indicator)
 	-- A little black "dot" which says "this indicator didn't originate from me"
 	if (indicators[indicator].type ~= "icon") then
 		local notMine = ind:CreateTexture(nil, "ARTWORK")
-		notMine:SetPoint("BOTTOMLEFT", ind, "BOTTOMLEFT", 0, 0)
+		notMine:Point("BOTTOMLEFT", ind, "BOTTOMLEFT", 0, 0)
 		notMine:SetWidth(indicators[indicator].width / 3)
-		notMine:SetHeight(indicators[indicator].height / 3)
+		notMine:Height(indicators[indicator].height / 3)
 		notMine:SetTexture("Interface\\BUTTONS\\WHITE8X8")
 		notMine:SetVertexColor(0, 0, 0, 1)
 		notMine:Hide()
@@ -250,7 +247,7 @@ local CreateIndicator = function(frame, indicator)
 	if (indicators[indicator].type == "icon") then
 		local count = ind.cd:CreateFontString(nil, "OVERLAY")
 		count:SetFont(T["media"].font, T.db["general"].fontsize2, "OUTLINE")
-		count:SetPoint("BOTTOMRIGHT", ind, "BOTTOMRIGHT", 5, -4)
+		count:Point("BOTTOMRIGHT", ind, "BOTTOMRIGHT", 5, -4)
 		count:SetTextColor(1, 1, 1)
 		count:SetShadowOffset(1, -1)
 
@@ -417,37 +414,32 @@ local StyleDrae_Raid = function(frame, unit)
 
 	frame.Range	= {
 		insideAlpha	= 1.0,
-		outsideAlpha = 0.33,
+		outsideAlpha = 0.25,
 	}
 
 	local baseLevel = frame:GetFrameLevel()
 
 	-- Frame edge glow
 	local border = CreateFrame("Frame", nil, frame)
-	border:SetPoint("TOPLEFT", frame, -7, 7)
-	border:SetPoint("BOTTOMRIGHT", frame, 7, -7)
+	border:Point("TOPLEFT", frame, -2, 2)
+	border:Point("BOTTOMRIGHT", frame, 2, -2)
 	border:SetFrameStrata("BACKGROUND")
 	border:SetBackdrop {
-		edgeFile = "Interface\\AddOns\\draeUI\\media\\textures\\glowtex", tile = false, edgeSize = 6
+		bgFile = "Interface\\Buttons\\White8x8",
+		edgeFile = "Interface\\Buttons\\White8x8",
+		tile = false,
+		edgeSize = 2
 	}
-	border:SetBackdropBorderColor(0, 0, 0, 0.5)
+	border:SetBackdropColor(0, 0, 0, 1)
+	border:SetBackdropBorderColor(0, 0, 0, 1)
 	border.SetJob = SetStatus_BorderColor
 	border.ClearJob = ClearStatus_BorderColor
 	frame.Border = border
 
-	local fbg = CreateFrame("Frame", nil, frame)
-	fbg:SetPoint("TOPLEFT", frame, 0, 0)
-	fbg:SetPoint("BOTTOMRIGHT", frame, 0, 0)
-	fbg:SetBackdrop {
-		bgFile = T["media"].statusbar
-	}
-	fbg:SetBackdropColor(0, 0, 0, 1)
-	frame.Backdrop = fbg
-
 	-- Frame highlight
-	local highlight = border:CreateTexture(nil, "OVERLAY")
-	highlight:SetPoint("TOPLEFT", frame, -3, 4)
-	highlight:SetPoint("BOTTOMRIGHT", frame, 3, -4)
+	local highlight = border:CreateTexture(nil, "BACKGROUND", -7)
+	highlight:Point("TOPLEFT", frame, -4, 4)
+	highlight:Point("BOTTOMRIGHT", frame, 4, -4)
 	highlight:SetTexture("Interface\\QuestFrame\\UI-QuestTitleHighlight")
 	highlight:SetTexCoord(0, 1, 0.23, 0.77)
 	highlight:SetBlendMode("ADD")
@@ -455,21 +447,18 @@ local StyleDrae_Raid = function(frame, unit)
 	frame.Highlight = highlight
 
 	-- Get height of powerbar so we can size the healthbar correctly
-	local powerBarSize = 4 	-- height of the powerbars + 1
+	local powerBarSize = 4
 
 	-- Health
 	local hp = CreateFrame("StatusBar", nil, frame)
 	hp:SetFrameLevel(baseLevel + 2)
-	hp:SetStatusBarTexture(T["media"].statusbar)
+	hp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\statusbarsfill")
 	hp:SetOrientation("VERTICAL")
-	hp:SetHeight(40 - powerBarSize)
-	hp:SetPoint("TOPLEFT", frame, "TOPLEFT", 1, -1)
-	hp:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -1, frame.isPet and 1 or 1 + powerBarSize)
+	hp:Height(40 - powerBarSize)
+	hp:Point("TOPLEFT", frame, "TOPLEFT", 1, -1)
+	hp:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -1, frame.isPet and 1 or 1 + powerBarSize)
 
-	hp.bg = hp:CreateTexture(nil, "BORDER")
-	hp.bg:SetAllPoints(hp)
-	hp.bg:SetTexture(T["media"].statusbar)
-	hp.bg.multiplier = 0.33
+	Smoothing:EnableBarAnimation(hp)
 
 	hp.Smooth = T.db["raidframes"].colorSmooth
 	hp.colorClassPet = T.db["raidframes"].colorPet
@@ -480,47 +469,43 @@ local StyleDrae_Raid = function(frame, unit)
 
 	-- Total absorb/shields on target
 	local absorb = CreateFrame("StatusBar", nil, frame.Health)
-	absorb:SetStatusBarTexture(T["media"].statusbar)
+	absorb:SetStatusBarTexture("Interface\\Buttons\\White8x8")
 	absorb:SetOrientation("VERTICAL")
-	absorb:SetHeight(40 - powerBarSize)
+	absorb:Height(hp:GetHeight() - powerBarSize)
 	absorb:SetStatusBarColor(1.0, 1.0, 1.0, 0.5)
 	absorb:SetPoint("LEFT")
 	absorb:SetPoint("RIGHT")
 	absorb:SetPoint("BOTTOM", frame.Health:GetStatusBarTexture(), "TOP")
---	absorb:Hide()
 
 	-- Total healing required to increase units health due to a heal absorb debuff/effect
 	local absorbHeal = CreateFrame("StatusBar", nil, frame.Health)
-	absorbHeal:SetStatusBarTexture(T["media"].statusbar)
+	absorbHeal:SetStatusBarTexture("Interface\\Buttons\\White8x8")
 	absorbHeal:SetOrientation("VERTICAL")
-	absorbHeal:SetHeight(40 - powerBarSize)
-	absorbHeal:SetStatusBarColor(1.0, 0, 0, 0.85)
+	absorbHeal:Height(hp:GetHeight() - powerBarSize)
+	absorbHeal:SetStatusBarColor(1.0, 0, 0, 0.8)
 	absorbHeal:SetPoint("LEFT")
 	absorbHeal:SetPoint("RIGHT")
 	absorbHeal:SetPoint("BOTTOM", frame.Health:GetStatusBarTexture(), "TOP")
---	absorbHeal:Hide()
 
 	-- My incoming heals
 	local heal = CreateFrame("StatusBar", nil, frame.Health)
-	heal:SetStatusBarTexture(T["media"].statusbar)
+	heal:SetStatusBarTexture("Interface\\Buttons\\White8x8")
 	heal:SetOrientation("VERTICAL")
-	heal:SetHeight(40 - powerBarSize)
-	heal:SetStatusBarColor(0, 1, 0, 0.85)
+	heal:Height(hp:GetHeight() - powerBarSize)
+	heal:SetStatusBarColor(0, 1, 0, 0.8)
 	heal:SetPoint("LEFT")
 	heal:SetPoint("RIGHT")
 	heal:SetPoint("BOTTOM", frame.Health:GetStatusBarTexture(), "TOP")
---	heal:Hide()
 
 	-- Other incoming heals
 	local othersHeal = CreateFrame("StatusBar", nil, frame.Health)
-	othersHeal:SetStatusBarTexture(T["media"].statusbar)
+	othersHeal:SetStatusBarTexture("Interface\\Buttons\\White8x8")
 	othersHeal:SetOrientation("VERTICAL")
-	othersHeal:SetHeight(40 - powerBarSize)
-	othersHeal:SetStatusBarColor(0.5, 0, 1, 0.85)
+	othersHeal:Height(hp:GetHeight() - powerBarSize)
+	othersHeal:SetStatusBarColor(0.5, 0, 1, 0.8)
 	othersHeal:SetPoint("LEFT")
 	othersHeal:SetPoint("RIGHT")
 	othersHeal:SetPoint("BOTTOM", heal:GetStatusBarTexture(), "TOP")
---	othersHeal:Hide()
 
 	-- Over-absorb - show a brighter "line"
 	local overAbsorb = hp:CreateTexture(nil, "OVERLAY")
@@ -529,7 +514,7 @@ local StyleDrae_Raid = function(frame, unit)
 	overAbsorb:SetPoint("LEFT")
 	overAbsorb:SetPoint("RIGHT")
 	overAbsorb:SetPoint("TOP")
-	overAbsorb:SetHeight(2)
+	overAbsorb:Height(2)
 	overAbsorb:Hide()
 
 	frame.HealPrediction = {
@@ -549,28 +534,23 @@ local StyleDrae_Raid = function(frame, unit)
 
 		local pp = CreateFrame("StatusBar", nil, frame)
 		pp:SetFrameLevel(baseLevel + 2)
-		pp:SetHeight(4)
-		pp:SetPoint("BOTTOMLEFT", 1, 1)
-		pp:SetPoint("BOTTOMRIGHT", -1, 1)
-		pp:SetPoint("TOP", hp, "BOTTOM", 0, -1) -- Little offset to make it pretty
-		pp:SetStatusBarTexture(T["media"].statusbar)
+		pp:Height(powerBarSize)
+		pp:Point("BOTTOMLEFT", 1, 1)
+		pp:Point("BOTTOMRIGHT", -1, 1)
+		pp:Point("TOP", hp, "BOTTOM", 0, -1) -- Little offset to make it pretty
+		pp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\statusbarsfill")
 		pp:SetStatusBarColor(pr, pg, pb)
 
-		pp.bg = pp:CreateTexture(nil, "BACKGROUND")
-		pp.bg:SetAllPoints(pp)
-		pp.bg:SetTexture(T["media"].statusbar)
-		pp.bg.multiplier = 0.33
-		pp.bg:SetVertexColor(pr * pp.bg.multiplier, pg * pp.bg.multiplier, pb * pp.bg.multiplier)
-
-		pp.Smooth = T.db["raidframes"].colorSmooth
 		pp.Override = UF.UpdateRaidPower -- override oUF
 		frame.Power = pp
+
+		Smoothing:EnableBarAnimation(pp)
 	end
 
 	-- Text1 (used for name)
 	local text1 = hp:CreateFontString(nil, "OVERLAY")
 	text1:SetFont(T["media"].font, T.db["general"].fontsize3, "NONE")
-	text1:SetPoint("CENTER", hp, "CENTER", 0, frame.isPet and 0 or 6)
+	text1:Point("CENTER", hp, "CENTER", 0, frame.isPet and 0 or 6)
 	text1:SetShadowOffset(1, -1)
 	frame:Tag(text1, "[draeraid:name]")
 	frame.Text1 = text1
@@ -579,7 +559,7 @@ local StyleDrae_Raid = function(frame, unit)
 		-- Text2 (used for general indication)
 		local text2 = frame.Health:CreateFontString(nil, "OVERLAY")
 		text2:SetFont(T["media"].font, T.db["general"].fontsize3, "NONE")
-		text2:SetPoint("CENTER", frame.Health, "CENTER", 0, -7)
+		text2:Point("CENTER", frame.Health, "CENTER", 0, -7)
 		text2:SetShadowOffset(1, -1)
 		text2.__locked = nil
 		text2.SetJob = SetStatus_Text2
@@ -587,14 +567,10 @@ local StyleDrae_Raid = function(frame, unit)
 		frame.Text2 = text2
 	end
 
-	local borderFrame = T.CreateBorder(frame, "smaller")
-	borderFrame:SetFrameLevel(baseLevel + 3)
-	frame.BorderFrame = borderFrame
-
 	-- Leader Icon
 	local leaderFrame = CreateFrame("Frame", nil, hp)
 	leaderFrame:SetSize(15, 15)
-	leaderFrame:SetPoint("TOPLEFT", frame, -7, 9)
+	leaderFrame:Point("TOPLEFT", frame, -7, 9)
 	leaderFrame:SetFrameLevel(baseLevel + 4)
 	local leader = leaderFrame:CreateTexture(nil, "OVERLAY")
 	leader:SetAllPoints(leaderFrame)
@@ -605,7 +581,7 @@ local StyleDrae_Raid = function(frame, unit)
 	-- Role Icon
 	local lfdroleFrame = CreateFrame("Frame", nil, hp)
 	lfdroleFrame:SetSize(12, 12)
-	lfdroleFrame:SetPoint("BOTTOMRIGHT", frame, 7, -7)
+	lfdroleFrame:Point("BOTTOMRIGHT", frame, 7, -7)
 	lfdroleFrame:SetFrameLevel(baseLevel + 4)
 	local lfdrole = lfdroleFrame:CreateTexture(nil, "OVERLAY")
 	lfdrole:SetAllPoints(lfdroleFrame)
@@ -616,7 +592,7 @@ local StyleDrae_Raid = function(frame, unit)
 	-- Raid Icon - unit and target of unit
 	local raidIconFrame = CreateFrame("Frame", nil, hp)
 	raidIconFrame:SetSize(16, 16)
-	raidIconFrame:SetPoint("CENTER", frame, "BOTTOM", 0, 0)
+	raidIconFrame:Point("CENTER", frame, "BOTTOM", 0, 0)
 	raidIconFrame:SetFrameLevel(baseLevel + 4)
 	local raidIcon = raidIconFrame:CreateTexture(nil, "OVERLAY")
 	raidIcon:SetAllPoints(raidIconFrame)
@@ -627,9 +603,9 @@ local StyleDrae_Raid = function(frame, unit)
 
 	-- Readycheck
 	local readyCheck = hp:CreateTexture(nil, "OVERLAY")
-	readyCheck:SetHeight(22)
+	readyCheck:Height(22)
 	readyCheck:SetWidth(22)
-	readyCheck:SetPoint("CENTER", frame, "CENTER", 0, 0)
+	readyCheck:Point("CENTER", frame, "CENTER", 0, 0)
 	frame.ReadyCheck = readyCheck
 
 	-- Show/hide mana bar

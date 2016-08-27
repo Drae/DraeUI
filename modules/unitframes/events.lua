@@ -11,16 +11,116 @@ local UF = T:GetModule("UnitFrames")
 
 -- Localise a bunch of functions
 local _G = _G
+local min, max, abs, pairs = math.min, math.max, math.abs, pairs
 local UnitHealth, UnitHealthMax, UnitPower, UnitPowerMax, UnitPowerType = UnitHealth, UnitHealthMax, UnitPower, UnitPowerMax, UnitPowerType
 local UnitIsPlayer, UnitIsConnected, UnitIsAFK, UnitIsDead, UnitIsDeadOrGhost, UnitIsGhost = UnitIsPlayer, UnitIsConnected, UnitIsAFK, UnitIsDead, UnitIsDeadOrGhost, UnitIsGhost
 local UnitHasVehicleUI, UnitIsCharmed, UnitClass, UnitName, UnitClass, UnitPlayerControlled = UnitHasVehicleUI, UnitIsCharmed, UnitClass, UnitName, UnitClass, UnitPlayerControlled
 local select, format, gsub, gupper = select, string.format, string.gsub, string.upper
 local UNKNOWN = UNKNOWN
+local GetFramerate = GetFramerate
 
 --[[
 
 --]]
--- This is the unitframe health
+UF.OverridePower = function(self, event, unit)
+	local arenaPrep = event == 'ArenaPreparation'
+
+	if(self.unit ~= unit and not arenaPrep) then return end
+
+	local power = self.Power
+
+	if(power.PreUpdate) then power:PreUpdate(unit) end
+
+	local powerType, powerToken, altR, altG, altB = UnitPowerType(unit)
+	local info = PowerBarColor[powerToken]
+
+	local displayType, min
+	if power.displayAltPower then
+		displayType, min = GetDisplayPower(unit)
+	end
+
+	local cur, max
+	if(arenaPrep) then
+		cur, max = 1, 1
+	else
+		cur, max = UnitPower(unit, displayType), UnitPowerMax(unit, displayType)
+	end
+
+	local disconnected = not UnitIsConnected(unit)
+	power:SetMinMaxValues(min or 0, max)
+
+	if(disconnected) then
+		power:SetValue(max)
+	else
+		power:SetValue(cur)
+	end
+
+	power.disconnected = disconnected
+
+	local r, g, b, t
+
+	if (info and info.atlas) then
+		power:SetStatusBarAtlas(info.atlas)
+		power:GetStatusBarTexture():SetDesaturated(disconnected)
+		power:SetStatusBarColor(1, 1, 1)
+	else
+		power:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\statusbarsfill")
+
+		if(power.colorClass and arenaPrep) then
+			local _, _, _, _, _, _, class = GetSpecializationInfoByID(GetArenaOpponentSpec(self.id))
+			t = self.colors.class[class]
+		elseif(power.colorDisconnected and disconnected) then
+			t = self.colors.disconnected
+		elseif(displayType == ALTERNATE_POWER_INDEX and power.altPowerColor) then
+			t = power.altPowerColor
+		elseif(power.colorPower) then
+			local ptype, ptoken, altR, altG, altB = UnitPowerType(unit)
+
+			t = self.colors.power[ptoken]
+			if(not t) then
+				if(power.GetAlternativeColor) then
+					r, g, b = power:GetAlternativeColor(unit, ptype, ptoken, altR, altG, altB)
+				elseif(altR) then
+					r, g, b = altR, altG, altB
+				else
+					t = self.colors.power[ptype]
+				end
+			end
+		elseif(power.colorClass and UnitIsPlayer(unit)) or
+			(power.colorClassNPC and not UnitIsPlayer(unit)) or
+			(power.colorClassPet and UnitPlayerControlled(unit) and not UnitIsPlayer(unit)) then
+			local _, class = UnitClass(unit)
+			t = self.colors.class[class]
+		elseif(power.colorReaction and UnitReaction(unit, 'player') and (not UnitPlayerControlled(unit) and not UnitIsTapDenied(unit))) then
+			t = self.colors.reaction[UnitReaction(unit, "player")]
+		elseif(power.colorTapping and not UnitPlayerControlled(unit) and
+			UnitIsTapDenied(unit)) then
+			t = self.colors.tapped
+		elseif(power.colorSmooth) then
+			local adjust = 0 - (min or 0)
+			r, g, b = self.ColorGradient(cur + adjust, max + adjust, unpack(power.smoothGradient or self.colors.smooth))
+		end
+	end
+
+	if(t) then
+		r, g, b = t[1], t[2], t[3]
+	end
+
+	if(b) then
+		power:SetStatusBarColor(r, g, b)
+
+		local bg = power.bg
+		if(bg) then
+			local mu = bg.multiplier or 1
+			bg:SetVertexColor(r * mu, g * mu, b * mu)
+		end
+	end
+
+	if(power.PostUpdate) then
+		return power:PostUpdate(unit, cur, max, min)
+	end
+end
+
 UF.PostUpdateHealth = function(health, u, min, max)
 	local self = health:GetParent()
 
@@ -30,6 +130,11 @@ UF.PostUpdateHealth = function(health, u, min, max)
 		health.value:SetText("|cffaaaaaaGhost|r")
 	elseif (UnitIsDead(u)) then
 		health.value:SetText("|cffaaaaaaDead|r")
+	elseif (T.db["frames"].numFormatLong) then
+		local left, num, right = string.match(min ~= max and (min - max) or min,'^([^%d]*%d)(%d*)(.-)$')
+
+		local hpvalue = ("|cffffffff%s"):format(left..(num:reverse():gsub('(%d%d%d)','%1,'):reverse())..right)
+		health.value:SetText(hpvalue)
 	else
 		local hpvalue = min ~= max and ("|cffB62220%s|r.%d|cff0090ff%%|r"):format(T.ShortVal(min - max), min / max * 100) or ("|cffffffff%s"):format(T.ShortVal(min))
 		health.value:SetText(hpvalue)
@@ -157,20 +262,17 @@ do
 
 			if (newState == "DISCONNECTED") then
 				health:SetValue(0)
-				health.bg:Hide()
 
-				self.Backdrop:SetBackdropColor(0, 0, 0, 0.33)
+				self.Border:SetBackdropColor(0, 0, 0, 0.33)
 			else
 				health:SetStatusBarColor(r, g, b)
 
 				if (oldState == "DISCONNECTED") then
-					self.Backdrop:SetBackdropColor(0, 0, 0, 1)
-					health.bg:Show()
+					self.Border:SetBackdropColor(0, 0, 0, 1)
 				end
 
 				if (health.bg) then
 					local mu = health.bg.multiplier or 1
-					health.bg:SetVertexColor(r * mu, g * mu, b * mu)
 				end
 			end
 

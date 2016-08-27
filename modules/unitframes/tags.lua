@@ -11,9 +11,9 @@ local UF = T:GetModule("UnitFrames")
 
 -- Localise a bunch of functions
 local UnitName, UnitIsAFK, UnitIsDND, UnitPowerType = UnitName, UnitIsAFK, UnitIsDND, UnitPowerType
-local UnitPlayerControlled, UnitIsTapped, UnitIsTappedByPlayer = UnitPlayerControlled, UnitIsTapped, UnitIsTappedByPlayer
+local UnitPlayerControlled, UnitIsTapDenied = UnitPlayerControlled, UnitIsTapDenied
 local UnitIsPlayer, UnitPlayerControlled, UnitReaction = UnitIsPlayer, UnitPlayerControlled, UnitReaction
-local UnitIsConnected, UnitClass, UnitIsTappedByAllThreatList = UnitIsConnected, UnitClass, UnitIsTappedByAllThreatList
+local UnitIsConnected, UnitClass = UnitIsConnected, UnitClass
 local format = string.format
 
 --[[
@@ -22,7 +22,7 @@ local format = string.format
 oUF.Tags.Methods["drae:unitcolour"] = function(u, r)
 	local reaction = UnitReaction(u, "player")
 
-	if (not UnitPlayerControlled(u) and UnitIsTapped(u) and not (UnitIsTappedByPlayer(u) or UnitIsTappedByAllThreatList(u))) then
+	if (not UnitPlayerControlled(u) and UnitIsTapDenied(u)) then
 		return T.Hex(oUF.colors.tapped)
 	elseif (not UnitIsConnected(u)) then
 		return T.Hex(oUF.colors.disconnected)
@@ -48,7 +48,8 @@ oUF.Tags.Events["drae:afk"] = "PLAYER_FLAGS_CHANGED"
 
 oUF.Tags.Methods["drae:power"] = function(u, t)
 	local _, str = UnitPowerType(u)
-	return ("%s%s|r"):format(T.Hex(oUF.colors.power[str] or {1, 1, 1}), T.ShortVal(oUF.Tags.Methods["curpp"](u)))
+--	return ("%s%s|r"):format(T.Hex(oUF.colors.power[str] or {1, 1, 1}), T.ShortVal(oUF.Tags.Methods["curpp"](u)))
+	return ("|cffffffff%s|r"):format(T.ShortVal(oUF.Tags.Methods["curpp"](u)))
 end
 oUF.Tags.Events["drae:power"] = "UNIT_POWER UNIT_MAXPOWER"
 
@@ -58,3 +59,14 @@ oUF.Tags.Methods["draeraid:name"] =  function(u, r)
 	return T.UTF8(name, T.db["raidframes"].raidnamelength or 4, false) .. "|r"
 end
 oUF.Tags.Events["draeraid:name"] =  "UNIT_NAME_UPDATE UNIT_ENTERED_VEHICLE UNIT_EXITED_VEHICLE UNIT_PET"
+
+oUF.Tags.Methods["drae:shortclassification"] = function(u)
+	local c = UnitClassification(u)
+	if(c == 'rare') then
+		return '[R] '
+	elseif(c == 'minus') then
+		return '[-] '
+	end
+end
+oUF.Tags.Events["drae:shortclassification"] =  "UNIT_CLASSIFICATION_CHANGED"
+

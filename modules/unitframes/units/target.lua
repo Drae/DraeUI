@@ -12,76 +12,87 @@ local UF = T:GetModule("UnitFrames")
 
 -- Target frame
 local StyleDrae_Target = function(frame, unit, isSingle)
+
+	frame:Size(320, 70)
+	frame:SetHitRectInsets(0, 0, 23, 23)
+	frame:SetFrameStrata("LOW")
+
 	UF.CommonInit(frame)
 
-	local fbg = CreateFrame("Frame", nil, frame)
-	fbg:SetFrameStrata("BACKGROUND")
-	fbg:Size(277, 106)
-	fbg:Point("LEFT", frame, "LEFT", -34, -6)
+	local framebg = frame:CreateTexture(nil, "BACKGROUND", nil, 0)
+	framebg:Size(512, 128)
+	framebg:SetPoint("CENTER", frame, "CENTER")
+	framebg:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\largeframe-bg")
+	framebg:SetTexCoord(1, 0, 0, 0.5)
 
-	local tex = fbg:CreateTexture(nil, "BORDER", nil, 0)
-	tex:SetTexCoord(0.0, 0.540, 0, 0.411)
-	tex:SetAllPoints(fbg)
-	tex:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\Sword")
+	framebg.overlay = frame:CreateTexture(nil, "BACKGROUND", nil, 1)
+	framebg.overlay:Size(512, 128)
+	framebg.overlay:SetPoint("CENTER", frame, "CENTER")
+	framebg.overlay:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\largeframe-bg")
+	framebg.overlay:SetTexCoord(1, 0, 0.5, 1)
+	framebg.overlay:Hide()
 
-	tex.overlay = fbg:CreateTexture(nil, "BORDER", nil, 7)
-	tex.overlay:Size(199, 103)
-	tex.overlay:SetTexCoord(0.541, 0.933, 0, 0.411)
-	tex.overlay:Point("LEFT", fbg, "LEFT", 0, 0)
-	tex.overlay:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\Sword")
-	tex.overlay:Hide()
+	frame.Sword = framebg
 
-	frame.Sword = tex
+	frame.Health = UF.CreateHealthBar(frame, 254, 21, -62, -22, true, true)
+	frame.Power = UF.CreatePowerBar(frame, 254, 10, true, true)
 
-	frame.healthHeight = T.db["frames"].largeHeight - 4.25
-	frame.Health = UF.CreateHealthBar(frame, frame.healthHeight)
-	frame.Power = UF.CreatePowerBar(frame, 3)
+	local portrait = frame:CreateTexture(nil, "BACKGROUND", nil, 1)
+	portrait:Size(56, 56)
+	portrait:Point("TOPRIGHT", -3, -5)
 
-	-- The number here is the size of the raid icon
-	UF.CommonPostInit(frame, 30)
+	frame.Portrait = portrait
+
+	local portraitOverlay = frame:CreateTexture(nil, "BACKGROUND", nil, 2)
+	portraitOverlay:Size(68, 68)
+	portraitOverlay:Point("CENTER", portrait, "CENTER")
+	portraitOverlay:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\targetPortraitinner")
 
 	-- Dragon texture on rare/elite
 	frame.Classification = {}
 
-	local cl = CreateFrame("Frame", nil, frame)
-	cl:Size(70, 70)
-	cl:Point("TOPLEFT", frame.Health, "TOPRIGHT", -36, 24)
-
-	local dragonElite = cl:CreateTexture(nil, "OVERLAY")
-	dragonElite:SetAllPoints(cl)
-	dragonElite:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\EliteLeft")
+	local dragonElite = frame:CreateTexture(nil, "BACKGROUND", nil, 3)
+	dragonElite:Size(128, 128)
+	dragonElite:SetPoint("CENTER", portrait, "CENTER")
+	dragonElite:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\target-elite")
+	dragonElite:SetTexCoord(1, 0, 0, 1)
 	dragonElite:Hide()
 	frame.Classification.elite = dragonElite
 
-	local dragonRare = cl:CreateTexture(nil, "OVERLAY")
-	dragonRare:SetAllPoints(cl)
-	dragonRare:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\RareLeft")
+	local dragonRare = frame:CreateTexture(nil, "BACKGROUND", nil, 3)
+	dragonRare:Size(128, 128)
+	dragonRare:SetPoint("CENTER", portrait, "CENTER")
+	dragonRare:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\target-rare")
+	dragonRare:SetTexCoord(1, 0, 0, 1)
 	dragonRare:Hide()
 	frame.Classification.rare = dragonRare
 
-	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "RIGHT", -4, 10)
+	--[[
 
-	local info = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "LEFT", 4, -15)
-	info:Size(T.db["frames"].largeWidth - 4, 20)
-	frame:Tag(info, "[level][shortclassification] [drae:unitcolour][name][drae:afk]")
+	]]
+	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize2, T["media"].font, "LEFT", 2, 0)
 
-	local powervalue = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "LEFT", 4, 10)
-	frame:Tag(powervalue, "[drae:power]")
+	local info = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "LEFT", 2, 22)
+	info:Size(210, 20)
+	frame:Tag(info, "[drae:shortclassification][drae:unitcolour][name][drae:afk]")
+
+	local level = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "RIGHT", -2, 22)
+	level:Size(40, 20)
+	frame:Tag(level, "[level]")
 
 	-- Flags for PvP, leader, etc.
-	UF.FlagIcons(frame)
+	UF.FlagIcons(frame, true)
 
 	-- Auras
-	UF.AddBuffs(frame, "BOTTOMLEFT", frame, "TOPLEFT", -1, 20, T.db["frames"].auras.maxTargetBuff or 4, T.db["frames"].auras.auraLrg, 10, "RIGHT", "UP")
-	UF.AddDebuffs(frame, "BOTTOMRIGHT", frame, "TOPRIGHT", 1, 20, T.db["frames"].auras.maxTargetDebuff or 15, T.db["frames"].auras.auraSml, 10, "LEFT", "UP")
+	UF.AddBuffs(frame, "TOPLEFT", frame.Power, "BOTTOMLEFT", 0, -12, T.db["frames"].auras.maxTargetBuff or 4, T.db["frames"].auras.auraLrg, 8, "RIGHT", "DOWN")
+	UF.AddDebuffs(frame, "TOPRIGHT", frame.Power, "BOTTOMRIGHT", 0, -12, T.db["frames"].auras.maxTargetDebuff or 15, T.db["frames"].auras.auraSml, 8, "LEFT", "DOWN")
 
 	-- Castbar
-	local cbt = T.db["castbar"].target
-	UF.CreateCastBar(frame, cbt.width, cbt.height, cbt.anchor, cbt.anchorat, cbt.anchorto, cbt.xOffset, cbt.yOffset, false, false, false)
+	local cb = T.db["castbar"].target
+	UF.CreateCastBar(frame, cb.width, cb.height, cb.anchor, cb.anchorat, cb.anchorto, cb.xOffset, cb.yOffset)
 
-	if (isSingle) then
-		frame:Size(T.db["frames"].largeWidth, T.db["frames"].largeHeight)
-	end
+	-- The number here is the size of the raid icon
+	UF.CommonPostInit(frame, 30)
 end
 
 oUF:RegisterStyle("DraeTarget", StyleDrae_Target)

@@ -2,14 +2,14 @@
 ..\FrameXML\UI.xsd">
 	<Script file="LibStub.lua" />
 	<Script file="CallbackHandler-1.0\CallbackHandler-1.0.lua" />
-	<Script file="LibSmoothStatusBar-1.0\LibSmoothStatusBar-1.0.lua" />
 	<Script file="AceAddon-3.0\AceAddon-3.0.lua" />
 	<Script file="AceDB-3.0\AceDB-3.0.lua" />
 	<Script file="AceEvent-3.0\AceEvent-3.0.lua" />
 	<Script file="AceTimer-3.0\AceTimer-3.0.lua" />
 	<Script file="AceHook-3.0\AceHook-3.0.lua" />
 	<Script file="AceConsole-3.0\AceConsole-3.0.lua" />
-	<Script file="LibRingBar-1.0.lua" />
 	<Script file="LibSharedMedia-3.0\LibSharedMedia-3.0.lua" />
 	<Script file="LibResInfo-1.0\LibResInfo-1.0.lua" />
+	<Script file="LibCutawaySmooth-1.0.lua" />
+	<Script file="LiDataBroker-1.1.lua" />
 </Ui>

@@ -1,5 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="deathknight.lua" />
+	<Script file="demonhunter.lua" />
 	<Script file="druid.lua" />
 	<Script file="hunter.lua" />
 	<Script file="mage.lua" />

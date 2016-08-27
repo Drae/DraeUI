@@ -1,7 +1,7 @@
-## Interface: 61000
+## Interface: 70300
 ## Author: Drae
 ## Title: draeUI
-## Version: 3.0
+## Version: 3.1
 ## SavedVariables: draeUIDB
 ## SavedVariablesPerCharacter: draeUICharDB
 ## OptionalDeps: SharedMedia
@@ -11,15 +11,6 @@
 libs\libs.xml
 media\media.xml
 oUF\oUF.xml
-
-modules\unitframes\elements\aurabars.lua
-modules\unitframes\elements\classification.lua
-modules\unitframes\elements\extrapower.lua
-modules\unitframes\elements\pvptrinket.lua
-modules\unitframes\elements\runes.lua
-modules\unitframes\elements\smooth.lua
-modules\unitframes\elements\spellrange.lua
-modules\unitframes\elements\sword.lua
 
 init.lua
 
@@ -43,6 +34,11 @@ modules\unitframes\castbar.lua
 modules\unitframes\events.lua
 modules\unitframes\tags.lua
 
+modules\unitframes\elements\classification.lua
+modules\unitframes\elements\extrapower.lua
+modules\unitframes\elements\spellrange.lua
+modules\unitframes\elements\sword.lua
+
 modules\unitframes\resources\combo.lua
 modules\unitframes\resources\deathknight.lua
 modules\unitframes\resources\druid.lua
@@ -54,26 +50,20 @@ modules\unitframes\resources\totems.lua
 modules\unitframes\resources\warlock.lua
 
 modules\unitframes\units\player.lua
-modules\unitframes\units\target.lua
 modules\unitframes\units\pet.lua
-modules\unitframes\units\focus.lua
+modules\unitframes\units\target.lua
 modules\unitframes\units\targettarget.lua
+modules\unitframes\units\focus.lua
+modules\unitframes\units\focustarget.lua
+modules\unitframes\units\partyandraid.lua
 modules\unitframes\units\boss.lua
 modules\unitframes\units\arena.lua
-modules\unitframes\units\partyandraid.lua
 
 modules\unitframes\statuses\embed.xml
 
 config\indicators\embed.xml
 config\raiddebuffs\embed.xml
 config\instancedebuffs\embed.xml
-
-# Bags
-modules\bags\frame.xml
-modules\bags\components.xml
-modules\bags\bags.lua
-#modules\bags\bagbar.lua
-modules\bags\sort.lua
 
 # Chat
 modules\chat\init.lua
@@ -83,24 +73,22 @@ modules\minimap\init.lua
 modules\minimap\minimap.lua
 modules\minimap\buttons.lua
 
-# Nameplates
-modules\nameplates\init.lua
-modules\nameplates\nameplates.lua
-
-# Buffbar
-modules\buffbar\templates.xml
-modules\buffbar\init.lua
-modules\buffbar\buffbar.lua
-
 # Infobar
 modules\infobar\init.lua
+modules\infobar\ldb\fps.lua
+modules\infobar\ldb\mem.lua
+modules\infobar\ldb\latency.lua
+modules\infobar\ldb\gold.lua
+modules\infobar\ldb\durability.lua
+modules\infobar\ldb\res.lua
+modules\infobar\ldb\xp.lua
+modules\infobar\ldb\artifact.lua
 
 # Misc
 modules\misc\init.lua
 modules\misc\alreadyknown.lua
 modules\misc\autoinvite.lua
 modules\misc\enhanceraidbrowser.lua
-modules\misc\helmsaver.lua
 modules\misc\openall.lua
 modules\misc\switchset.lua
 
@@ -109,7 +97,6 @@ modules\blizzard\init.lua
 modules\blizzard\alertframe.lua
 modules\blizzard\altpower.lua
 modules\blizzard\colorpicker.lua
-modules\blizzard\draenorspell.lua
 modules\blizzard\durability.lua
 modules\blizzard\gm.lua
 modules\blizzard\vehicle.lua
@@ -119,3 +106,4 @@ modules\blizzard\watchframe.lua
 modules\worldmap\init.lua
 modules\worldmap\worldmap.lua
 modules\worldmap\foglight.lua
+

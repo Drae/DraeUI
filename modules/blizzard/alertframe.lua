@@ -18,201 +18,92 @@ AlertFrameHolder:Width(180)
 AlertFrameHolder:Height(20)
 AlertFrameHolder:Point("TOP", UIParent, "TOP", 0, -25)
 
+local POSITION, ANCHOR_POINT, YOFFSET = "TOP", "BOTTOM", -10
+local FORCE_POSITION = false
+
 --[[
 
 --]]
-B.PostAlertMove = function(self, screenQuadrant)
-	AlertFrame:ClearAllPoints()
-	AlertFrame:SetAllPoints(AlertFrameHolder)
+B.PostAlertMove = function()
+    AlertFrame:ClearAllPoints()
+    AlertFrame:SetAllPoints(AlertFrameHolder)
+    GroupLootContainer:ClearAllPoints()
+    GroupLootContainer:SetPoint(POSITION, AlertFrameHolder, ANCHOR_POINT, 0, YOFFSET)
 
-	if (screenQuadrant) then
-		FORCE_POSITION = true
-		AlertFrame_FixAnchors()
-		FORCE_POSITION = false
-	end
+    if GroupLootContainer:IsShown() then
+        B.GroupLootContainer_Update(GroupLootContainer)
+    end
 end
 
-B.AlertFrame_SetLootAnchors = function(self, alertAnchor)
-	--This is a bit of reverse logic to get it to work properly because blizzard was a bit lazy..
-	if (MissingLootFrame:IsShown()) then
-		MissingLootFrame:ClearAllPoints()
-		MissingLootFrame:SetPoint(POSITION, alertAnchor, ANCHOR_POINT)
+B.GroupLootContainer_Update = function(self)
+	local lastIdx = nil
 
-		if (GroupLootContainer:IsShown()) then
-			GroupLootContainer:ClearAllPoints()
-			GroupLootContainer:Point(POSITION, MissingLootFrame, ANCHOR_POINT, 0, YOFFSET)
-		end
-	elseif (GroupLootContainer:IsShown() or FORCE_POSITION) then
-		GroupLootContainer:ClearAllPoints()
-		GroupLootContainer:SetPoint(POSITION, alertAnchor, ANCHOR_POINT)
-	end
-end
-
-B.AlertFrame_SetStorePurchaseAnchors = function(self, alertAnchor)
-	local frame = StorePurchaseAlertFrame
-
-	if (frame:IsShown()) then
-		frame:ClearAllPoints()
-		frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
-	end
-end
-
-B.AlertFrame_SetLootWonAnchors = function(self, alertAnchor)
-	for i=1, #LOOT_WON_ALERT_FRAMES do
-		local frame = LOOT_WON_ALERT_FRAMES[i]
-
-		if (frame:IsShown()) then
+	for i=1, self.maxIndex do
+		local frame = self.rollFrames[i]
+		local prevFrame = self.rollFrames[i-1]
+		if ( frame ) then
 			frame:ClearAllPoints()
-			frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
-
-			alertAnchor = frame
-		end
-	end
-end
-
-B.AlertFrame_SetLootUpgradeFrameAnchors = function(self, alertAnchor)
-	for i=1, #LOOT_UPGRADE_ALERT_FRAMES do
-		local frame = LOOT_UPGRADE_ALERT_FRAMES[i]
-
-		if (frame:IsShown()) then
-			frame:ClearAllPoints()
-			frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
-
-			alertAnchor = frame
-		end
-	end
-end
-
-B.AlertFrame_SetMoneyWonAnchors = function(self, alertAnchor)
-	for i=1, #MONEY_WON_ALERT_FRAMES do
-		local frame = MONEY_WON_ALERT_FRAMES[i]
-
-		if (frame:IsShown()) then
-			frame:ClearAllPoints()
-			frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
-
-			alertAnchor = frame
-		end
-	end
-end
-
-function B:AlertFrame_SetAchievementAnchors(alertAnchor)
-	if (AchievementAlertFrame1) then
-		for i = 1, MAX_ACHIEVEMENT_ALERTS do
-			local frame = _G["AchievementAlertFrame"..i]
-			if ( frame and frame:IsShown() ) then
-				frame:ClearAllPoints()
-				frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
-				alertAnchor = frame
+			if prevFrame then
+				frame:Point(POSITION, prevFrame or self, ANCHOR_POINT, 0, YOFFSET)
+			else
+				frame:Point("CENTER", self, "BOTTOM", 0, self.reservedSize * (i-1 + 0.5))
 			end
+			lastIdx = i
 		end
 	end
-end
 
-B.AlertFrame_SetCriteriaAnchors = function(self, alertAnchor)
-	if (CriteriaAlertFrame1) then
-		for i = 1, MAX_ACHIEVEMENT_ALERTS do
-			local frame = _G["CriteriaAlertFrame"..i]
-
-			if (frame and frame:IsShown()) then
-				frame:ClearAllPoints()
-				frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
-
-				alertAnchor = frame
-			end
-		end
+	if ( lastIdx ) then
+		self:Height(self.reservedSize * lastIdx)
+		self:Show()
+	else
+		self:Hide()
 	end
 end
 
-B.AlertFrame_SetChallengeModeAnchors = function(self, alertAnchor)
-	local frame = ChallengeModeAlertFrame1
-
-	if (frame:IsShown()) then
-		frame:ClearAllPoints()
-		frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+B.AdjustAnchors = function(self, relativeAlert)
+	if self.alertFrame:IsShown() then
+		self.alertFrame:ClearAllPoints()
+		self.alertFrame:SetPoint(POSITION, relativeAlert, ANCHOR_POINT, 0, YOFFSET)
 	end
 end
 
-B.AlertFrame_SetDungeonCompletionAnchors = function(self, alertAnchor)
-	local frame = DungeonCompletionAlertFrame1
-
-	if (frame:IsShown()) then
-		frame:ClearAllPoints()
-		frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
-	end
-end
-
-B.AlertFrame_SetScenarioAnchors = function(self, alertAnchor)
-	local frame = ScenarioAlertFrame1
-
-	if (frame:IsShown()) then
-		frame:ClearAllPoints()
-		frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
-	end
-end
-
-B.AlertFrame_SetGuildChallengeAnchors = function(self, alertAnchor)
-	local frame = GuildChallengeAlertFrame
-
-	if (frame:IsShown()) then
-		frame:ClearAllPoints()
-		frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
-	end
-end
-
-B.AlertFrame_SetDigsiteCompleteToastFrameAnchors = function(self, alertAnchor)
-	local frame = DigsiteCompleteToastFrame
-
-	if (frame and frame:IsShown()) then
-		frame:ClearAllPoints()
-		frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
-	end
-end
-
-B.AlertFrame_SetGarrisonBuildingAlertFrameAnchors = function(self, alertAnchor)
-	local frame = GarrisonBuildingAlertFrame
-
-	if (frame:IsShown()) then
-		frame:ClearAllPoints()
-		frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
-	end
-end
-
-B.AlertFrame_SetGarrisonMissionAlertFrameAnchors = function(self, alertAnchor)
-	local frame = GarrisonMissionAlertFrame
-
-	if (frame:IsShown()) then
-		frame:ClearAllPoints()
-		frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
-	end
-end
-
-B.AlertFrame_SetGarrisonFollowerAlertFrameAnchors = function(self, alertAnchor)
-	local frame = GarrisonFollowerAlertFrame
-
-	if (frame:IsShown()) then
-		frame:ClearAllPoints()
-		frame:Point(POSITION, alertAnchor, ANCHOR_POINT, 0, YOFFSET)
+B.AdjustQueuedAnchors = function(self, relativeAlert)
+	for alertFrame in self.alertFramePool:EnumerateActive() do
+		alertFrame:ClearAllPoints()
+		alertFrame:SetPoint(POSITION, relativeAlert, ANCHOR_POINT, 0, YOFFSET)
+		relativeAlert = alertFrame
 	end
 end
 
 B.AlertMovers = function(self)
-	self:SecureHook("AlertFrame_FixAnchors", "PostAlertMove")
-	self:SecureHook("AlertFrame_SetLootAnchors")
-	self:SecureHook("AlertFrame_SetStorePurchaseAnchors")
-	self:SecureHook("AlertFrame_SetLootWonAnchors")
-	self:SecureHook("AlertFrame_SetLootUpgradeFrameAnchors")
-	self:SecureHook("AlertFrame_SetMoneyWonAnchors")
-	self:SecureHook("AlertFrame_SetAchievementAnchors")
-	self:SecureHook("AlertFrame_SetCriteriaAnchors")
-	self:SecureHook("AlertFrame_SetChallengeModeAnchors")
-	self:SecureHook("AlertFrame_SetDungeonCompletionAnchors")
-	self:SecureHook("AlertFrame_SetScenarioAnchors")
-	self:SecureHook("AlertFrame_SetGuildChallengeAnchors")
-	self:SecureHook("AlertFrame_SetDigsiteCompleteToastFrameAnchors") --
-	self:SecureHook("AlertFrame_SetGarrisonBuildingAlertFrameAnchors")
-	self:SecureHook("AlertFrame_SetGarrisonMissionAlertFrameAnchors")
-	self:SecureHook("AlertFrame_SetGarrisonFollowerAlertFrameAnchors")
+	self:SecureHook(AlertFrame, "UpdateAnchors",B.PostAlertMove)
+	hooksecurefunc("GroupLootContainer_Update", B.GroupLootContainer_Update)
 
-	UIPARENT_MANAGED_FRAME_POSITIONS["GroupLootContainer"] = nil
+	--From Leatrix Plus
+	-- Achievements
+	hooksecurefunc(AchievementAlertSystem, "AdjustAnchors", B.AdjustQueuedAnchors) 		-- /run AchievementAlertSystem:AddAlert(5192)
+	hooksecurefunc(CriteriaAlertSystem, "AdjustAnchors", B.AdjustQueuedAnchors) 		-- /run CriteriaAlertSystem:AddAlert(9023, "Doing great!")
+	-- Encounters
+	hooksecurefunc(DungeonCompletionAlertSystem, "AdjustAnchors", B.AdjustAnchors) 		-- /run DungeonCompletionAlertSystem
+	hooksecurefunc(GuildChallengeAlertSystem, "AdjustAnchors", B.AdjustAnchors) 		-- /run GuildChallengeAlertSystem:AddAlert(3, 2, 5)
+	hooksecurefunc(InvasionAlertSystem, "AdjustAnchors", B.AdjustAnchors) 				-- /run InvasionAlertSystem:AddAlert(1)
+	hooksecurefunc(ScenarioAlertSystem, "AdjustAnchors",  B.AdjustAnchors) 				-- ScenarioAlertSystem
+	hooksecurefunc(WorldQuestCompleteAlertSystem, "AdjustAnchors", B.AdjustAnchors) 	-- /run WorldQuestCompleteAlertSystem:AddAlert(112)
+	-- Garrisons
+	hooksecurefunc(GarrisonBuildingAlertSystem, "AdjustAnchors",  B.AdjustAnchors) 		-- /run GarrisonBuildingAlertSystem:AddAlert("Barracks")
+	hooksecurefunc(GarrisonFollowerAlertSystem, "AdjustAnchors",  B.AdjustAnchors) 		-- /run GarrisonFollowerAlertSystem:AddAlert(204, "Ben Stone", 90, 3, false)
+	hooksecurefunc(GarrisonMissionAlertSystem, "AdjustAnchors", B.AdjustAnchors) 		-- /run GarrisonMissionAlertSystem:AddAlert(681)
+	hooksecurefunc(GarrisonShipMissionAlertSystem, "AdjustAnchors", B.AdjustAnchors)	-- No test for this, it was missing from Leatrix Plus
+	hooksecurefunc(GarrisonRandomMissionAlertSystem, "AdjustAnchors", B.AdjustAnchors)	-- GarrisonRandomMissionAlertSystem
+	hooksecurefunc(GarrisonShipFollowerAlertSystem, "AdjustAnchors", B.AdjustAnchors)	-- /run GarrisonShipFollowerAlertSystem:AddAlert(592, "Test", "Transport", "GarrBuilding_Barracks_1_H", 3, 2, 1)
+	hooksecurefunc(GarrisonTalentAlertSystem, "AdjustAnchors",  B.AdjustAnchors) 		-- GarrisonTalentAlertSystem
+	-- Loot
+	hooksecurefunc(LegendaryItemAlertSystem, "AdjustAnchors",  B.AdjustAnchors) 		-- /run LegendaryItemAlertSystem:AddAlert("\\124cffa335ee\\124Hitem:18832::::::::::\\124h[Brutality Blade]\\124h\\124r")
+	hooksecurefunc(LootAlertSystem, "AdjustAnchors", B.AdjustQueuedAnchors) 			-- /run LootAlertSystem:AddAlert("\\124cffa335ee\\124Hitem:18832::::::::::\\124h[Brutality Blade]\\124h\\124r", 1, 1, 1, 1, false, false, 0, false, false)
+	hooksecurefunc(LootUpgradeAlertSystem, "AdjustAnchors", B.AdjustQueuedAnchors) 		-- /run LootUpgradeAlertSystem:AddAlert("\\124cffa335ee\\124Hitem:18832::::::::::\\124h[Brutality Blade]\\124h\\124r", 1, 1, 1, nil, nil, false)
+	hooksecurefunc(MoneyWonAlertSystem, "AdjustAnchors", B.AdjustQueuedAnchors) 		-- /run MoneyWonAlertSystem:AddAlert(815)
+	hooksecurefunc(StorePurchaseAlertSystem, "AdjustAnchors", B.AdjustAnchors) 			-- /run StorePurchaseAlertSystem:AddAlert("\\124cffa335ee\\124Hitem:180545::::::::::\\124h[Mystic Runesaber]\\124h\\124r", "", "", 214)
+	-- Professions
+	hooksecurefunc(DigsiteCompleteAlertSystem, "AdjustAnchors", B.AdjustAnchors) 		-- /run DigsiteCompleteAlertSystem:AddAlert(1)
+	hooksecurefunc(NewRecipeLearnedAlertSystem, "AdjustAnchors", B.AdjustQueuedAnchors)	-- /run NewRecipeLearnedAlertSystem:AddAlert(204)
 end

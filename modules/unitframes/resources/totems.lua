@@ -89,30 +89,26 @@ do
 			end
 
 			local border = CreateFrame("Frame", nil, t)
-			border:SetPoint("TOPLEFT", t, -6, 6)
-			border:SetPoint("BOTTOMRIGHT", t, 6, -6)
+			border:SetPoint("TOPLEFT", t, -2, 2)
+			border:SetPoint("BOTTOMRIGHT", t, 2, -2)
 			border:SetFrameStrata("BACKGROUND")
 			border:SetBackdrop {
-				edgeFile = "Interface\\AddOns\\draeUI\\media\\textures\\glowtex", tile = false, edgeSize = 6
+				edgeFile = "Interface\\Buttons\\White8x8",
+				tile = false,
+				edgeSize = 2
 			}
-			border:SetBackdropBorderColor(0, 0, 0, 0.5)
+			border:SetBackdropBorderColor(0, 0, 0)
 			t.border = border
 
 			local icon = t:CreateTexture(nil, "BACKGROUND")
-			icon:Point("TOPLEFT", t, "TOPLEFT", -0.7, 0.93)
-			icon:Point("BOTTOMRIGHT", t, "BOTTOMRIGHT", 0.7, -0.93)
-			icon:Width(width)
-			icon:Height(height)
-			icon:SetTexCoord(0.07, 0.93, 0.07, 0.93)
+			icon:SetAllPoints(t)
+			icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
 			t.Icon = icon
 
 			local cd = CreateFrame("Cooldown", nil, t)
-			cd:SetReverse(true)
 			cd:SetAllPoints(t)
+			cd:SetReverse(true)
 			t.Cooldown = cd
-
-			local borderFrame = T.CreateBorder(t, "small")
-			t.borderFrame = borderFrame
 
 			local text = t:CreateFontString(nil, "OVERLAY")
 			text:SetFont(T["media"].font, T.db["general"].fontsize3, "OUTLINE")

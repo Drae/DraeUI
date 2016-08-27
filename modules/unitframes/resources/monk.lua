@@ -26,15 +26,13 @@ do
 		if (powerType ~= "CHI" or InCombatLockdown()) then return end
 
 		local rs = self.resourceBar
-		local pp = self.ExtraPower
+
 		local chi = UnitPower("player", SPELL_POWER_CHI)
 
 		if (chi == 0) then
 			rs:SetAlpha(0)
-			pp:Hide()
 		elseif (curChi == 0 and chi > 0) then
 			rs:SetAlpha(1.0)
-			pp:Show()
 		end
 
 		curChi = chi
@@ -42,13 +40,11 @@ do
 
 	local OnEvent = function(self, event, arg1, arg2)
 		local rs = self.resourceBar
-		local pp = self.ExtraPower
 
 		if (InCombatLockdown() or event == "PLAYER_REGEN_DISABLED") then
 			self:UnregisterEvent("UNIT_POWER", OnPower)
 
 			rs:SetAlpha(1.0)
-			pp:Show()
 		else
 			self:RegisterEvent("UNIT_POWER", OnPower)
 
@@ -72,59 +68,6 @@ do
 				else
 					chiBar[i].animShow:Play()
 				end
-			end
-		end
-	end
-
-	local UpdateMonkRegen, UpdateMonkManaRegen, UpdateMonkManaTea
-	do
-		local manaRegenBase, manaRegenCombat, manaTeaStacks
-
-		UpdateMonkRegen = function(self, event, unit)
-			manaRegenBase, manaRegenCombat = GetManaRegen()
-		end
-
-		UpdateMonkManaTea = function(self, event, unit)
-			local name, _, _, stacks = UnitAura("player", "Mana Tea")
-
-			if (stacks ~= manaTeaStacks) then
-				local pp = self.ExtraPower
-				local maxMana, curMana = UnitPowerMax("player"), UnitPower("player")
-
-				manaTeaStacks = stacks
-				UpdateMonkManaRegen(pp, unit, curMana, maxMana)
-			end
-		end
-
-		UpdateMonkManaRegen = function(pp, unit, curMana, maxMana)
-			if (manaTeaStacks) then
-				local manaReturn = 0.04 * maxMana * manaTeaStacks
-
-				if (InCombatLockdown()) then
-					manaReturn = manaReturn + (manaRegenCombat * manaTeaStacks * 0.5)
-				else
-					manaReturn = manaReturn + (manaRegenBase * manaTeaStacks * 0.5)
-				end
-
-				if (curMana + manaReturn >= maxMana) then
-					manaReturn = maxMana - curMana
-					pp.manaExcess:Show()
-				else
-					pp.manaExcess:Hide()
-				end
-
-				pp.mana:SetMinMaxValues(0, maxMana)
-				pp.mana:SetValue(manaReturn)
-
-				if (pp._manaRegen ~= true) then
-					pp.mana:Show()
-					pp._manaRegen = true
-				end
-			elseif (pp._manaRegen) then
-				pp.mana:Hide()
-				pp.manaExcess:Hide()
-
-				pp._manaRegen = nil
 			end
 		end
 	end
@@ -153,7 +96,6 @@ do
 	end
 
 	local PlayerSpecChanged = function(self)
-		local pp = self.ExtraPower
 		local spec = GetSpecialization()
 
 		-- Mistweaver? Enable mana feedback
@@ -169,99 +111,12 @@ do
 	end
 
 	UF.CreateMonkBar = function(self, point, anchor, relpoint, xOffset, yOffset)
-		if (T.playerClass ~= "MONK") then return end
+		local spec = GetSpecialization()
 
-		MonkHarmonyBar.Show = MonkHarmonyBar.Hide
-		MonkHarmonyBar:UnregisterAllEvents()
-		MonkHarmonyBar:Hide()
-
-		local rs = CreateFrame("Frame", nil, self)
-		rs:SetFrameLevel(12)
-		rs:Point(point, anchor, relpoint, xOffset, yOffset)
-		rs:Size(256 * 0.8, 128 * 0.8)
-		rs:SetAlpha(0)
-
-		local t = rs:CreateTexture(nil, "ARTWORK", self, -5)
-		t:SetTexture("Interface\\AddOns\\draeUI\\media\\resourcebars\\MonkDragonBar")
-		t:SetAllPoints()
-
-		rs.maxLight 	= 0
-		rs.animShow 	= {}
-		rs.animHide 	= {}
-
-		for i = 1, 6 do
-			rs[i] = CreateFrame("Frame", nil, rs)
-			rs[i]:Size(30, 30)
-			rs[i]:SetAlpha(0)
-
-			local r = rs[i]:CreateTexture(nil, "ARTWORK")
-			r:SetTexture("Interface\\PlayerFrame\\MonkUI")
-			r:SetTexCoord(0.09375000, 0.17578125, 0.71093750, 0.87500000)
-			r:SetAllPoints(rs[i])
-
-			local r2 = rs[i]:CreateTexture(nil, "OVERLAY")
-			r2:SetTexture("Interface\\PlayerFrame\\MonkUI")
-			r2:SetTexCoord(0.00390625, 0.08593750, 0.71093750, 0.87500000)
-			r2:SetAllPoints(rs[i])
-			r2:SetAlpha(0)
-			rs[i].lit = r2
-
-			rs[i].animShow = rs[i].lit:CreateAnimationGroup()
-			local showPoint = rs[i].animShow:CreateAnimation("Alpha")
-			showPoint:SetChange(1)
-			showPoint:SetDuration(0.2)
-			showPoint:SetOrder(1)
-			rs[i].animShow:SetScript("OnFinished", function()
-				rs[i].lit:SetAlpha(1.0)
-			end)
-
-			rs[i].animHide = rs[i].lit:CreateAnimationGroup()
-			local hidePoint = rs[i].animHide:CreateAnimation("Alpha")
-			hidePoint:SetChange(-1.0)
-			hidePoint:SetDuration(0.2)
-			hidePoint:SetOrder(1)
-			rs[i].animHide:SetScript("OnFinished", function()
-				rs[i].lit:SetAlpha(0)
-			end)
-		end
-
-		local pp = UF.CreateExtraPowerBar(self, point, anchor, relpoint)
-
-		-- Mana feedback
-		local ppmana = CreateFrame("StatusBar", nil, pp)
-		ppmana:Height(12)
-		ppmana:Width(T.db["frames"].largeWidth)
-		ppmana:SetStatusBarTexture(T["media"].statusbar, "BORDER")
-		ppmana:Point("TOPLEFT", pp:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
-		ppmana:Point("BOTTOMLEFT", pp:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
-		ppmana:SetStatusBarColor(0.8, 0.8, 0.8, 0.75)
-		ppmana:Hide()
-		pp.mana = ppmana
-
-		local excessMana = pp:CreateTexture(nil, "OVERLAY")
-		excessMana:SetTexture(1.0, 1.0, 1.0, 0.75) -- Always white
-		excessMana:SetBlendMode("ADD")
-		excessMana:SetPoint("TOP")
-		excessMana:SetPoint("BOTTOM")
-		excessMana:SetPoint("RIGHT")
-		excessMana:Width(2)
-		excessMana:Hide()
-		pp.manaExcess = excessMana
-
-		self.resourceBar 				= rs
-		self.ClassIcons					= rs
-		self.ClassIcons.Override 		= UpdateChi
-		self.ClassIcons.UpdateTexture 	= function() end
-		self.ExtraPower 				= pp
+		if (T.playerClass ~= "MONK" or (T.playerClass == "MONK" and spec ~= SPEC_MONK_WINDWALKER)) then return end
 
 		self:RegisterEvent("PLAYER_TALENT_UPDATE", UpdateChiPositions, true)
-
 		self:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", PlayerSpecChanged, true)
-
-		self:RegisterEvent("FORGE_MASTER_ITEM_CHANGED", UpdateMonkRegen, true)
-		self:RegisterEvent("ITEM_UPGRADE_MASTER_UPDATE", UpdateMonkRegen, true)
-		self:RegisterEvent("PLAYER_EQUIPMENT_CHANGED", UpdateMonkRegen, true)
-
 		self:RegisterEvent("PLAYER_REGEN_DISABLED", OnEvent, true)
 		self:RegisterEvent("PLAYER_REGEN_ENABLED", OnEvent, true)
 
@@ -270,7 +125,6 @@ do
 		local enterWorld = CreateFrame("Frame")
 		enterWorld:RegisterEvent("PLAYER_ENTERING_WORLD")
 		enterWorld:SetScript("OnEvent", function()
-			UpdateMonkRegen(self)
 			UpdateChiPositions(self)
 			PlayerSpecChanged(self)
 			OnEvent(self)

@@ -12,31 +12,35 @@ local UF = T:GetModule("UnitFrames")
 
 -- Focus is a common frame type used for most other frames inc. pet, pettarget, etc.
 local StyleDrae_Focus = function(frame, unit, isSingle)
+	frame:Size(150, 47)
+	frame:SetHitRectInsets(0, 0, 0, 10)
+	frame:SetFrameStrata("LOW")
+
 	UF.CommonInit(frame)
 
-	frame.Health = UF.CreateHealthBar(frame, T.db["frames"].smallHeight)
-	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize2, T["media"].font, "RIGHT", -4, 12)
+	frame.Health = UF.CreateHealthBar(frame, 150, 21, 0, 1)
+	frame.Power = UF.CreatePowerBar(frame, 150, 10)
 
-	local info = T.CreateFontObject(frame.Health, T.db["general"].fontsize2, T["media"].font, "LEFT", 4, -13)
-	info:Width(T.db["frames"].smallWidth - 4)
-	info:Height(20)
-	frame:Tag(info, "[level] [drae:unitcolour][name][drae:afk]")
+	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "RIGHT", -2, 0)
 
-	UF.CommonPostInit(frame, 20)
+	local info = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "LEFT", -2, 22)
+	info:Size(110, 20)
+	frame:Tag(info, "[drae:shortclassification][drae:unitcolour][name]")
 
-	-- Auras
-	UF.AddBuffs(frame, "TOPLEFT", frame, "BOTTOMLEFT", -1, -17, T.db["frames"].auras.maxOtherBuff or 2, T.db["frames"].auras.auraTny, 10, "RIGHT", "DOWN")
-	UF.AddDebuffs(frame, "TOPRIGHT", frame, "BOTTOMRIGHT", 1, -17, T.db["frames"].auras.maxOtherDebuff or 2, T.db["frames"].auras.auraTny, 10, "LEFT", "DOWN")
+	local level = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "RIGHT", 2, 22)
+	level:Size(40, 20)
+	frame:Tag(level, "[level]")
 
 	-- Castbar
-	if (unit == "focus") then
-		local cbf = T.db["castbar"].focus
-		UF.CreateCastBar(frame, cbf.width, cbf.height, cbf.anchor, cbf.anchorat, cbf.anchorto, cbf.xOffset, cbf.yOffset, false, false, false)
-	end
+	local cb = T.db["castbar"].focus
+	UF.CreateCastBar(frame, cb.width, cb.height, cb.anchor, cb.anchorat, cb.anchorto, cb.xOffset, cb.yOffset)
 
-	if (isSingle) then
-		frame:Size(T.db["frames"].smallWidth, T.db["frames"].smallHeight)
-	end
+	-- Auras - just debuffs for target of target
+	UF.AddDebuffs(frame, "TOPRIGHT", frame.Power, "BOTTOMRIGHT", 0, -12, T.db["frames"].auras.maxFocusDebuff or 15, T.db["frames"].auras.auraSml, 8, "LEFT", "DOWN")
+	UF.AddBuffs(frame, "TOPLEFT", frame.Power, "BOTTOMLEFT", 0, -12, T.db["frames"].auras.maxFocusBuff or 15, T.db["frames"].auras.auraSml, 8, "RIGHT", "DOWN")
+
+	-- The number here is the size of the raid icon
+	UF.CommonPostInit(frame, 30)
 end
 
 oUF:RegisterStyle("DraeFocus", StyleDrae_Focus)

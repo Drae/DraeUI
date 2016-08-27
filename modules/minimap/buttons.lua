@@ -93,7 +93,8 @@ do
 			if not delayed then
 				f:SetAlpha(0)
 				f.smAlphaAnim:SetStartDelay(0)
-				f.smAlphaAnim:SetChange(1)
+                f.smAlphaAnim:SetFromAlpha(0)
+                f.smAlphaAnim:SetToAlpha(1)
 				f.smAnimGroup:Play()
 			end
 		end
@@ -115,7 +116,8 @@ do
 			f.smAnimGroup:Stop()
 			f:SetAlpha(1)
 			f.smAlphaAnim:SetStartDelay(0.5)
-			f.smAlphaAnim:SetChange(-1)
+			f.smAlphaAnim:SetFromAlpha(1)
+			f.smAlphaAnim:SetToAlpha(0)
 			f.smAnimGroup:Play()
 		end
 	end
