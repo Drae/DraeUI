@@ -148,15 +148,15 @@ function CH:StyleChat(frame)
 	frame:SetClampedToScreen(false)
 	frame:StripTextures(true)
 	_G[name.."ButtonFrame"]:Kill()
-	
+
 	editbox:SetAltArrowKeyMode(false)
 
 	editbox:ClearAllPoints()
 	editbox:Point("BOTTOMLEFT",  ChatFrame1, "TOPLEFT",  -5, tabHeight - 5)
 	editbox:Point("BOTTOMRIGHT", ChatFrame1, "TOPRIGHT", 10, tabHeight - 5)
-	
+
 	self:SecureHook(editbox, "AddHistoryLine", "ChatEdit_AddHistory")
-		
+
 	editbox:SetAlpha(0)
 	hooksecurefunc("ChatEdit_DeactivateChat", function(self)
 		editbox:SetAlpha(0)
@@ -164,7 +164,7 @@ function CH:StyleChat(frame)
 	hooksecurefunc("ChatEdit_OnHide", function(self)
 		editbox:SetAlpha(0)
 	end)
-	
+
 	editbox:HookScript("OnTextChanged", function(self)
 		local text = self:GetText()
 
@@ -225,7 +225,7 @@ function CH:StyleChat(frame)
 			editbox:SetBackdropBorderColor(ChatTypeInfo[type].r,ChatTypeInfo[type].g,ChatTypeInfo[type].b)
 		end
 	end)
-	
+
 	hooksecurefunc("FCF_Tab_OnClick", function(self)
 		local info = UIDropDownMenu_CreateInfo()
 		info.text = "Copy Chat Contents"
@@ -483,13 +483,13 @@ end
 
 
 function CH:GetBNFriendColor(name, id)
-	local _, _, _, _, _, _, _, class = BNGetToonInfo(id)
+	local _, _, _, _, _, _, _, class = BNGetGameAccountInfo(id)
 	if(not class or class == "") then
 		local toonName, toonID
 		for i=1, BNGetNumFriends() do
 			_, presenceName, _, _, _, toonID = BNGetFriendInfo(i)
 			if(toonID and presenceName == name) then
-				_, _, _, _, _, _, _, class = BNGetToonInfo(toonID)
+				_, _, _, _, _, _, _, class = BNGetGameAccountInfo(toonID)
 				if(class) then
 					break;
 				end
@@ -709,7 +709,7 @@ function CH:ChatFrame_MessageEventHandler(event, ...)
 			elseif ( arg1 == "FRIEND_REMOVED" or arg1 == "BATTLETAG_FRIEND_REMOVED" ) then
 				message = format(globalstring, arg2);
 			elseif ( arg1 == "FRIEND_ONLINE" or arg1 == "FRIEND_OFFLINE") then
-				local hasFocus, toonName, client, realmName, realmID, faction, race, class, guild, zoneName, level, gameText = BNGetToonInfo(arg13);
+				local hasFocus, toonName, client, realmName, realmID, faction, race, class, guild, zoneName, level, gameText = BNGetGameAccountInfo(arg13);
 				if (toonName and toonName ~= "" and client and client ~= "") then
 					local toonNameText = BNet_GetClientEmbeddedTexture(client, 14)..toonName;
 					local playerLink = format("|HBNplayer:%s:%s:%s:%s:%s|h[%s] (%s)|h", arg2, arg13, arg11, Chat_GetChatCategory(type), 0, arg2, toonNameText);
@@ -951,21 +951,17 @@ function CH:SetupChat(event, ...)
 	for _, frameName in pairs(CHAT_FRAMES) do
 		local frame = _G[frameName]
 		local id = frame:GetID();
-		local _, fontSize = FCF_GetChatWindowInfo(id);
-		
+
 		self:StyleChat(frame)
-		
+
 		FCFTab_UpdateAlpha(frame)
-		frame:SetFont(T["media"].font, 13, "THINOUTLINE") --fontSize
-		
---		if self.db.fontOutline ~= "NONE" then
-			frame:SetShadowColor(0, 0, 0, 0.2)
---		else
---			frame:SetShadowColor(0, 0, 0, 1)
---		end
-		
+
+		local _, fontSize = FCF_GetChatWindowInfo(id);
+		frame:SetFont(T["media"].font, fontSize, "THINOUTLINE")--select(3, frame:GetFont()))--) --fontSize
+		frame:SetShadowOffset(-0.75, 0.75)
+		frame:SetShadowColor(0, 0, 0, 0.2)
+
 		frame:SetTimeVisible(100)
-		frame:SetShadowOffset((T.mult or 1), -(T.mult or 1))
 		frame:SetFading(false) --self.db.fade)
 
 		if not frame.scriptsSet then
@@ -1099,20 +1095,18 @@ function CH:ChatEdit_OnEnterPressed(editBox)
 	end
 end
 
-function CH:SetChatFont(dropDown, chatFrame, fontSize)
-	if ( not chatFrame ) then
-		chatFrame = FCF_GetCurrentChatFrame();
+function CH:SetChatFont(dropDown, frame, fontSize)
+	if ( not frame ) then
+		frame = FCF_GetCurrentChatFrame();
 	end
 	if ( not fontSize ) then
 		fontSize = dropDown.value;
 	end
-	chatFrame:SetFont(T["media"].font, 13, "THINOUTLINE")
---	if self.db.fontOutline ~= "NONE" then
-		chatFrame:SetShadowColor(0, 0, 0, 0.2)
---	else
---		chatFrame:SetShadowColor(0, 0, 0, 1)
---	end
-	chatFrame:SetShadowOffset((T.mult or 1), -(T.mult or 1))
+
+--	local _, fontSize = FCF_GetChatWindowInfo(id);
+	frame:SetFont(T["media"].font, fontSize, "THINOUTLINE")--select(3, frame:GetFont())) --fontSize
+	frame:SetShadowOffset(-0.75, 0.75)
+	frame:SetShadowColor(0, 0, 0, 0.2)
 end
 
 function CH:ChatEdit_AddHistory(editBox, line)
@@ -1251,30 +1245,30 @@ end
 
 do
 	local stopScript = false
-	
+
 	hooksecurefunc(DEFAULT_CHAT_FRAME, "RegisterEvent", function(self, event)
 		if event == "GUILD_MOTD" and not stopScript then
 			self:UnregisterEvent("GUILD_MOTD")
 		end
 	end)
-	
+
 	local cachedMsg = GetGuildRosterMOTD()
-	
-	if cachedMsg == "" then 
-		cachedMsg = nil 
+
+	if cachedMsg == "" then
+		cachedMsg = nil
 	end
-	
+
 	function CH:DelayGMOTD()
 		stopScript = true
 		DEFAULT_CHAT_FRAME:RegisterEvent("GUILD_MOTD")
-		
+
 		local msg = cachedMsg or GetGuildRosterMOTD()
 		if msg == "" then msg = nil end
 
 		if msg then
 			ChatFrame_SystemEventHandler(DEFAULT_CHAT_FRAME, "GUILD_MOTD", msg)
 		end
-		
+
 		self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	end
 end
@@ -1332,16 +1326,16 @@ CH.PositionChat = function(self, override)
 
 		if (id ~= 2 and not (id > NUM_CHAT_WINDOWS)) then
 			chat:ClearAllPoints()
-			chat:Point("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 5, 10)
+			chat:Point("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 5, 5)
 			chat:Size(450, 175)
 			FCF_SavePositionAndDimensions(chat)
 		end
-		
+
 		tab:SetParent(UIParent)
 		chat:SetParent(UIParent)
 
 		CH:SetupChatTabs(tab, true)
-		
+
 	end
 
 	self.initialMove = true
@@ -1369,9 +1363,9 @@ CH.OnEnable = function(self)
 	end]]
 
 	self:UpdateFading()
-	
+
 	self:SecureHook("ChatEdit_OnEnterPressed")
-	
+
 	FriendsMicroButton:Kill()
 	ChatFrameMenuButton:Kill()
 
@@ -1474,8 +1468,8 @@ CH.OnEnable = function(self)
 	frame:Width(500)
 	frame:Hide()
 
-	tinsert(UISpecialFrames, "DraeUICopyChatFrame")	
-	
+	tinsert(UISpecialFrames, "DraeUICopyChatFrame")
+
 	local scrollArea = CreateFrame("ScrollFrame", "CopyChatScrollFrame", frame, "UIPanelScrollFrameTemplate")
 	scrollArea:Point("TOPLEFT", 13, -30)
 	scrollArea:Point("BOTTOMRIGHT", -30, 13)
@@ -1524,8 +1518,8 @@ CH.OnEnable = function(self)
 		EditBoxOnEscapePressed = function(self)
 			self:GetParent():Hide()
 		end,
-	}	
-	
+	}
+
 	--Disable Blizzard
 	InterfaceOptionsSocialPanelTimestampsButton:SetAlpha(0)
 	InterfaceOptionsSocialPanelTimestampsButton:SetScale(0.000001)

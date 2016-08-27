@@ -33,8 +33,8 @@ local Point = function(obj, arg1, arg2, arg3, arg4, arg5)
 end
 
 local SetOutside = function(obj, anchor, xOffset, yOffset)
-	xOffset = xOffset or T.Border
-	yOffset = yOffset or T.Border
+	xOffset = xOffset or 1
+	yOffset = yOffset or 1
 	anchor = anchor or obj:GetParent()
 
 	if (obj:GetPoint()) then
@@ -46,8 +46,8 @@ local SetOutside = function(obj, anchor, xOffset, yOffset)
 end
 
 local SetInside = function(obj, anchor, xOffset, yOffset)
-	xOffset = xOffset or T.Border
-	yOffset = yOffset or T.Border
+	xOffset = xOffset or 1
+	yOffset = yOffset or 1
 	anchor = anchor or obj:GetParent()
 
 	if (obj:GetPoint()) then
@@ -72,7 +72,7 @@ end
 local StripTextures = function(object, kill)
 	for i = 1, object:GetNumRegions() do
 		local region = select(i, object:GetRegions())
-		
+
 	if region and region:GetObjectType() == "Texture" then
 			if (kill and type(kill) == "boolean") then
 				region:Kill()
@@ -89,7 +89,7 @@ end
 
 local addapi = function(object)
 	local mt = getmetatable(object).__index
-	
+
 	if not object.Size then mt.Size = Size end
 	if not object.Point then mt.Point = Point end
 	if not object.SetOutside then mt.SetOutside = SetOutside end

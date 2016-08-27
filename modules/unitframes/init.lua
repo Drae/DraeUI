@@ -174,15 +174,17 @@ end
 		Spawn the frames
 --]]
 UF.OnEnable = function(self)
+	BuffFrame:Kill()
+
 	CheckSpec()
-	
+
 	-- Player
 	oUF:SetActiveStyle("DraePlayer")
-	oUF:Spawn("player", "DraePlayer"):SetPoint("CENTER", UIParent, T.db["frames"].playerXoffset, T.db["frames"].playerYoffset)
+	oUF:Spawn("player", "DraePlayer"):Point("CENTER", T.UIParent, T.db["frames"].playerXoffset, T.db["frames"].playerYoffset)
 
 	-- Target
 	oUF:SetActiveStyle("DraeTarget")
-	oUF:Spawn("target", "DraeTarget"):SetPoint("CENTER", UIParent, T.db["frames"].targetXoffset, T.db["frames"].targetYoffset)
+	oUF:Spawn("target", "DraeTarget"):Point("CENTER", T.UIParent, T.db["frames"].targetXoffset, T.db["frames"].targetYoffset)
 
 	-- Target of target
 	oUF:SetActiveStyle("DraeTargetTarget")
@@ -190,18 +192,18 @@ UF.OnEnable = function(self)
 
 	-- Focus
 	oUF:SetActiveStyle("DraeFocus")
-	oUF:Spawn("focus", "DraeFocus"):Point("TOPLEFT", "DraeTarget", "BOTTOMLEFT", T.db["frames"].focusXoffset, T.db["frames"].focusYoffset)
+	oUF:Spawn("focus", "DraeFocus"):Point("TOPRIGHT", "DraeTarget", "BOTTOMRIGHT", T.db["frames"].focusXoffset, T.db["frames"].focusYoffset)
 
 	-- Focus target
-	oUF:SetActiveStyle("DraeFocus")
-	oUF:Spawn("focustarget", "DraeFocusTarget"):Point("TOPRIGHT", "DraeTarget", "BOTTOMRIGHT", T.db["frames"].focusTargetXoffset, T.db["frames"].focusTargetYoffset)
+	oUF:SetActiveStyle("DraeFocusTarget")
+	oUF:Spawn("focustarget", "DraeFocusTarget"):Point("TOPRIGHT", "DraeTargetTarget", "BOTTOMRIGHT", T.db["frames"].focusTargetXoffset, T.db["frames"].focusTargetYoffset)
 
 	-- Pet
 	oUF:SetActiveStyle("DraePet")
 	oUF:Spawn("pet", "DraePet"):Point("TOPLEFT", "DraePlayer", "BOTTOMLEFT", T.db["frames"].petXoffset, T.db["frames"].petYoffset)
 
 	-- Pet target
-	oUF:SetActiveStyle("DraeFocus")
+	oUF:SetActiveStyle("DraeFocusTarget")
 	oUF:Spawn("pettarget", "DraePetTarget"):Point("TOPRIGHT", "DraePlayer", "BOTTOMRIGHT", T.db["frames"].petTargetXoffset, T.db["frames"].petTargetYoffset)
 
 	-- Boss frames
@@ -213,27 +215,12 @@ UF.OnEnable = function(self)
 			local frame = oUF:Spawn("boss" .. i, "DraeBoss" .. i)
 
 			if (i == 1) then
-				frame:Point("LEFT", "DraeTargetTarget", "RIGHT", T.db["frames"].bossXoffset, T.db["frames"].bossYoffset)
+				frame:Point("LEFT", "DraeTarget", "LEFT", T.db["frames"].bossXoffset, T.db["frames"].bossYoffset)
 			else
 				frame:Point("TOP", boss[i - 1], "BOTTOM", 0, -35)
 			end
 
 			boss[i] = frame
-		end
-		
-		oUF:SetActiveStyle("DraeBossTarget")
-
-		local bossTarget = {}
-		for i = 1, MAX_BOSS_FRAMES do
-			local frame = oUF:Spawn("bosstarget" .. i, "DraeBossTarget" .. i)
-
-			if (i == 1) then
-				frame:Point("BOTTOMLEFT", "DraeBoss1", "BOTTOMRIGHT", T.db["frames"].totXoffset, T.db["frames"].totYoffset)
-			else
-				frame:Point("TOP", bossTarget[i - 1], "BOTTOM", 0, -35)
-			end
-
-			bossTarget[i] = frame
 		end
 	end
 
@@ -263,7 +250,7 @@ UF.OnEnable = function(self)
 			ArenaEnemyFrames:Hide()
 		end
 	end
-	
+
 	--[[
 		Raid and party frames
 	--]]
@@ -388,7 +375,7 @@ UF.OnEnable = function(self)
 
 	CompactRaidFrameContainer.Show = CompactRaidFrameContainer.Hide
 	CompactRaidFrameContainer:UnregisterAllEvents()
-	CompactRaidFrameContainer:Hide()	
+	CompactRaidFrameContainer:Hide()
 end
 
 

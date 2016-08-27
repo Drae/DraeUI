@@ -20,12 +20,12 @@ local UnitExists, GetComboPoints = UnitExists, GetComboPoints
 --]]
 do
 	local OnEvent = function(self, event)
-		local rs = self.resourceBar
+		local cb = self.classBar
 
 		if (event == "PLAYER_REGEN_DISABLED") then
-			rs:SetAlpha(1.0)
+			cb:SetAlpha(1.0)
 		else
-			rs:SetAlpha(0)
+			cb:SetAlpha(0)
 		end
 	end
 
@@ -34,19 +34,19 @@ do
 
 		local scale = 1.2
 
-		local rs = CreateFrame("Frame", nil, self)
-		rs:SetFrameLevel(12)
-		rs:EnableMouse(false)
-		rs.unit = "player"
+		local cb = CreateFrame("Frame", nil, self)
+		cb:SetFrameLevel(12)
+		cb:EnableMouse(false)
+		cb.unit = "player"
 
-		_G["WarlockPowerFrame"]:SetParent(rs)
+		_G["WarlockPowerFrame"]:SetParent(cb)
 		_G["WarlockPowerFrame"]:ClearAllPoints()
 		_G["WarlockPowerFrame"]:Point(point, anchor, relpoint, xOffset / scale, yOffset / scale)
 		_G["WarlockPowerFrame"]:SetScale(scale)
 
-		rs:SetAlpha(0)
+		cb:SetAlpha(0)
 
-		self.resourceBar = rs
+		self.classBar = cb
 
 		self:RegisterEvent("PLAYER_REGEN_DISABLED", OnEvent, true)
 		self:RegisterEvent("PLAYER_REGEN_ENABLED", OnEvent, true)

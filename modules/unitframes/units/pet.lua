@@ -12,26 +12,34 @@ local UF = T:GetModule("UnitFrames")
 
 -- Pet frame - this is the same as focus but we do this seperately so we can colour by happiness
 local StyleDrae_Pet = function(frame, unit, isSingle)
+	frame:Size(150, 47)
+	frame:SetHitRectInsets(0, 0, 0, 23)
+	frame:SetFrameStrata("LOW")
+
 	UF.CommonInit(frame)
 
-	frame.Health = UF.CreateHealthBar(frame, T.db["frames"].smallHeight)
-	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize2, T["media"].font, "RIGHT", -4, 12)
+	frame.Health = UF.CreateHealthBar(frame, 150, 21, 0, 1)
 	frame.Health.colorClassPet = true -- else colour by creature type
 	frame.Health.colorReaction = false -- but don"t colour by reaction
 
-	local info = T.CreateFontObject(frame.Health, T.db["general"].fontsize2, T["media"].font, "LEFT", 4, -13)
-	info:Size(T.db["frames"].smallWidth - 4, 20)
-	frame:Tag(info, "[level] [drae:unitcolour][name][drae:afk]")
+	frame.Power = UF.CreatePowerBar(frame, 150, 7)
 
-	UF.CommonPostInit(frame, 20)
+	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "RIGHT", -2, 0)
 
-	-- Auras
-	UF.AddBuffs(frame, "TOPLEFT", frame, "BOTTOMLEFT", -1, -17, T.db["frames"].auras.maxOtherBuff or 2, T.db["frames"].auras.auraTny, 10, "RIGHT", "DOWN")
-	UF.AddDebuffs(frame, "TOPRIGHT", frame, "BOTTOMRIGHT", 1, -17, T.db["frames"].auras.maxOtherDebuff or 2, T.db["frames"].auras.auraTny, 10, "LEFT", "DOWN")
+	local info = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "LEFT", -2, 22)
+	info:Size(110, 20)
+	frame:Tag(info, "[drae:shortclassification][drae:unitcolour][name]")
 
-	if (isSingle) then
-		frame:Size(T.db["frames"].smallWidth, T.db["frames"].smallHeight)
-	end
+	local level = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "RIGHT", 2, 22)
+	level:Size(40, 20)
+	frame:Tag(level, "[level]")
+
+	-- Auras - just debuffs for target of target
+	UF.AddBuffs(frame, "TOPLEFT", frame, "BOTTOMLEFT", -1, -17, T.db["frames"].auras.maxPetBuff or 2, T.db["frames"].auras.auraTny, 10, "RIGHT", "DOWN")
+	UF.AddDebuffs(frame, "TOPRIGHT", frame.Power, "BOTTOMRIGHT", 0, -12, T.db["frames"].auras.maPetDebuff or 15, T.db["frames"].auras.auraSml, 8, "LEFT", "DOWN")
+
+	-- The number here is the size of the raid icon
+	UF.CommonPostInit(frame, 30)
 end
 
 oUF:RegisterStyle("DraePet", StyleDrae_Pet)

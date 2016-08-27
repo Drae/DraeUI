@@ -31,6 +31,7 @@ _G.draeUI = ns
 
 --]]
 local  T, C, G, P, U, _ = select(2, ...):UnPack()
+
 local LSM = LibStub("LibSharedMedia-3.0")
 
 T.UIParent = CreateFrame("Frame", "DraeUIParent", UIParent)
@@ -41,7 +42,7 @@ T.UIParent:SetSize(UIParent:GetSize())
 T.HiddenFrame = CreateFrame("Frame")
 T.HiddenFrame:Hide()
 
--- 
+--
 T.TexCoords = {.08, .92, .08, .92}
 
 --
@@ -62,32 +63,94 @@ T.OnInitialize = function(self)
 	self.dbGlobal = db.global
 
 	self.dbChar = LibStub("AceDB-3.0"):New("draeUICharDB")["profile"]	-- Pull the profile specifically
-	
-	if (self.db.general.pixelPerfect) then
-		self.Border = 1
-		self.Spacing = 0
-		self.PixelMode = true
-	end
-	
+
 	self:UpdateMedia()
 end
 
-T.OnEnable = function(self)
-	self:UIScale("PLAYER_LOGIN")
-	
-	self:UpdateBlizzardFonts()
-	self:InitializeConsoleCommands()
 
-	self:RegisterEvent("UI_SCALE_CHANGED", "UIScale")
+local HideCommandBar = function()
+	OrderHallCommandBar:Hide()
+	OrderHallCommandBar:UnregisterAllEvents()
+	OrderHallCommandBar.Show = OrderHallCommandBar.Hide
+end
+
+T.HookAddons = function(self, event)
+	if (IsAddOnLoaded("Blizzard_OrderHallUI") and OrderHallCommandBar ~= nil) then
+		self:UnregisterEvent("ADDON_LOADED", "HookAddons")
+		HideCommandBar()
+	end
+end
+
+do
+	local CreateHUDBg = function(frame, width, height, texture, sub, tex)
+		local t = frame:CreateTexture(nil, "BACKGROUND", T.UIParent, sub)
+		t:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\" .. texture)
+		t:Size(width, height)
+
+		if (type(tex) == "table") then
+			t:SetTexCoord(tex[1], tex[2], tex[3], tex[4])
+		end
+
+		return t
+	end
+
+	T.OnEnable = function(self)
+		self:UIScale("PLAYER_LOGIN")
+
+		self:UpdateBlizzardFonts()
+		self:InitializeConsoleCommands()
+
+		self:RegisterEvent("UI_SCALE_CHANGED", "UIScale")
+
+		-- Hide the guild hall command bar
+		if (not IsAddOnLoaded("Blizzard_OrderHallUI")) then
+			self:RegisterEvent("ADDON_LOADED", "HookAddons")
+		else
+			HideCommandBar()
+		end
+--[[
+		local borderFrame = CreateFrame("frame", nil, T.UIParent)
+		borderFrame:SetFrameStrata("BACKGROUND")
+		borderFrame:SetAllPoints(T.UIParent)
+
+--		CreateHUDBg(borderFrame, 512, 256, "windowcorner", 0):SetPoint("TOPLEFT", 0, 0)
+--		CreateHUDBg(borderFrame, 512, 256, "windowcorner", 0, {1, 0, 0, 1}):SetPoint("TOPRIGHT", 0, 0)
+--		CreateHUDBg(borderFrame, 512, 256, "windowcorner", 0, {1, 0, 1, 0}):SetPoint("BOTTOMRIGHT", 0, 0)
+--		CreateHUDBg(borderFrame, 512, 256, "windowcorner", 0, {0, 1, 1, 0}):SetPoint("BOTTOMLEFT", 0, 0)
+		local temp
+		temp = CreateHUDBg(borderFrame, 512, 256, "windowborder", 0)
+		temp:SetPoint("TOPLEFT", 512, 0)
+		temp:SetPoint("TOPRIGHT", -512, 0)
+
+		temp = CreateHUDBg(borderFrame, 512, 256, "windowborder", 0, {1, 0, 1, 0})
+		temp:SetPoint("BOTTOMLEFT", 512, 0)
+		temp:SetPoint("BOTTOMRIGHT", -512, 0)
+
+		temp = CreateHUDBg(borderFrame, 256, 512, "windowborder-side", 0, {0, 1, 1, 0})
+		temp:SetPoint("TOPRIGHT", 0, -256)
+		temp:SetPoint("BOTTOMRIGHT", 0, 256)
+
+		temp = CreateHUDBg(borderFrame, 512, 256, "windowborder-side", 0, {1, 0, 1, 0})
+		temp:SetPoint("TOPLEFT", 0, -256)
+		temp:SetPoint("BOTTOMLEFT", 0, 256)
+]]
+		local actionBarBg = CreateFrame("frame", nil, T.UIParent)
+		actionBarBg:SetFrameStrata("BACKGROUND")
+		actionBarBg:Size(1024, 256)
+		actionBarBg:Point("BOTTOM", 0, 14)
+
+--		CreateHUDBg(actionBarBg, 512, 256, "leftshadow", 0):Point("LEFT", 0, 0)
+--		CreateHUDBg(actionBarBg, 512, 256, "rightshadow", 0):Point("RIGHT", 0, 0)
+	end
 end
 
 T.UpdateMedia = function(self)
 	if (not self.db["general"]) then return end
-	
+
 	self["media"].font = LSM:Fetch("font", self.db["general"].font)
 	self["media"].fontFancy = LSM:Fetch("font", self.db["general"].fontFancy)
 	self["media"].fontTimers = LSM:Fetch("font", self.db["general"].fontTimers)
 	self["media"].fontCombat = LSM:Fetch("font", self.db["general"].fontCombat)
-		
+
 	self["media"].statusbar = LSM:Fetch("statusbar", self.db["general"].statusbar)
 end

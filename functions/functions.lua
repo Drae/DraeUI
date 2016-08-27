@@ -173,103 +173,11 @@ T.ColorGradient = function(perc, ...)
 	return r1 + (r2 - r1) * relperc, g1 + (g2 - g1) * relperc, b1 + (b2 - b1) * relperc
 end
 
--- Border setup
-T.SetBorderColor = function(self, which, r, g, b, a)
-	if (not self or type(self)) ~= "table" then return end
-
-	if (self.borderTextureShadow and which == "shadow") then
-		for _, tex in ipairs(self.borderTextureShadow) do
-			tex:SetVertexColor(r or 0, g or 0, b or 0, a or 0)
-		end
-	elseif (self.borderTexture and which == "border") then
-		for _, tex in ipairs(self.borderTexture) do
-			tex:SetVertexColor(r or 0, g or 0, b or 0, a or 0)
-		end
-	end
-end
-
-T.CreateBorder = function(self, sizing)
-	if (not self or type(self) ~= "table" or self.borderTexture) then return end
-
-	if (not size) then
-		size = 12
-	end
-
-	self.borderTexture = {}
-	self.borderTextureShadow = {}
-
-	local border = CreateFrame("Frame", nil, self)
-	border:SetAllPoints(self)
-
-	size = sizing == "smaller" and 8 or sizing == "small" and 12 or 16
-
-	for k, tex in pairs({["normal"] = self.borderTexture, ["shadow"] = self.borderTextureShadow}) do
-		-- creating the textures
-		local i
-		for i = 1, 8 do
-			tex[i] = border:CreateTexture(nil, "BORDER", nil, k == "shadow" and 7 or 5)
-			tex[i]:SetTexture(k == "normal" and "Interface\\AddOns\\draeUI\\media\\textures\\textureNormal" or "Interface\\AddOns\\draeUI\\media\\textures\\textureShadow")
-
-			if (k == "shadow") then
-				tex[i]:SetVertexColor(0, 0, 0, 0)
-			end
-
-			local width = (i == 3 or i == 6) and size * 2 or size
-			local height = (i == 7 or i == 8) and size * 2 or size
-			tex[i]:Size(k == "shadow" and width * 1.25 or width, k == "shadow" and height * 1.25 or height)
-		end
-
-		local x = size / 2 - 5
-		local space = (k == "shadow") and size / 3 or 0
-
-		tex[1].id = "TOPLEFT"
-		tex[1]:SetTexCoord(0, 1/4, 0, 1/4)-- 0, 1/4, 0, 1/4
-		tex[1]:Point("TOPLEFT", border, -4 - x - space, 4 + x + space)
-
-		tex[2].id = "TOPRIGHT"
-		tex[2]:SetTexCoord(3/4, 1, 0, 1/4) -- 3/4, 1, 0, 1/4
-		tex[2]:Point("TOPRIGHT", border, 4 + x + space, 4 + x + space)
-
-		tex[4].id = "BOTTOMLEFT"
-		tex[4]:SetTexCoord(0, 1/4, 3/4, 1) -- 0, 1/4, 3/4, 1
-		tex[4]:Point("BOTTOMLEFT", border, -4 - x - space, -4 - x - space)
-
-		tex[5].id = "BOTTOMRIGHT"
-		tex[5]:SetTexCoord(3/4, 1, 3/4, 1) -- 3/4, 1, 3/4, 1
-		tex[5]:Point("BOTTOMRIGHT", border, 4 + x + space, -4 - x - space)
-
-		-- width = 2 * nornal width
-		tex[3].id = "TOP"
-		tex[3]:SetTexCoord(1/4, 3/4, 0, 1/4) -- 1/4, 3/4, 0, 1/4
-		tex[3]:SetPoint("TOPLEFT", tex[1], "TOPRIGHT")
-		tex[3]:SetPoint("TOPRIGHT", tex[2], "TOPLEFT")
-
-		-- width = 2 * nornal width
-		tex[6].id = "BOTTOM"
-		tex[6]:SetTexCoord(1/4, 3/4, 3/4, 1) -- 1/4, 3/4, 3/4, 1
-		tex[6]:SetPoint("BOTTOMLEFT", tex[4], "BOTTOMRIGHT")
-		tex[6]:SetPoint("BOTTOMRIGHT", tex[5], "BOTTOMLEFT")
-
-		tex[7].id = "LEFT"
-		tex[7]:SetTexCoord(0, 1/4, 1/4, 3/4) -- 0, 1/4, 1/4, 3/4
-		tex[7]:Point("TOPLEFT", tex[1], "BOTTOMLEFT")
-		tex[7]:Point("BOTTOMLEFT", tex[4], "TOPLEFT")
-
-		-- width = 2 * nornal height
-		tex[8].id = "RIGHT"
-		tex[8]:SetTexCoord(3/4, 1, 1/4, 3/4) -- 3/4, 1, 1/4, 3/4
-		tex[8]:Point("TOPRIGHT", tex[2], "BOTTOMRIGHT")
-		tex[8]:Point("BOTTOMRIGHT", tex[5], "TOPRIGHT")
-	end
-
-	return border
-end
-
 -- Create and set font
 T.CreateFontObject = function(parent, size, font, anchorAt, oX, oY, type, anchor, anchorTo)
 	local fo = parent:IsObjectType("EditBox") and parent or parent:IsObjectType("FontString") and parent or parent:CreateFontString(nil, "OVERLAY")
 
-	fo:SetFont(font, size, type or "OUTLINE")
+	fo:SetFont(font, size, type or "THINOUTLINE")
 
 	if (anchor) then
 		fo:Point(anchorAt, anchor, anchorTo, oX, oY)
@@ -277,11 +185,9 @@ T.CreateFontObject = function(parent, size, font, anchorAt, oX, oY, type, anchor
 		fo:SetJustifyH(anchorAt or "LEFT")
 
 		if (oX or oY) then
-			fo:SetPoint(anchorAt or "LEFT", oX or 0, oY or 0)
+			fo:Point(anchorAt or "LEFT", oX or 0, oY or 0)
 		end
 	end
-
-	fo:SetShadowOffset(1, -1)
 
 	return fo
 end
@@ -303,4 +209,65 @@ T.IntToGold = function(coins, showIcons)
 	else
 		return ("%d%s"):format(c or 0, cText)
 	end
+end
+
+do
+	local CreateHiddenFrame = function(...)
+		local frame = CreateFrame(...)
+
+		frame:Hide()
+
+		return frame
+	end
+
+	T.CreateClass = function(self, frameType, prototype)
+		local class = CreateHiddenFrame(frameType)
+		local class_mt = { __index = class }
+
+		class.Bind = function(self, obj)
+			return setmetatable(obj, class_mt)
+		end
+
+		if prototype then
+			class.proto = prototype
+
+			return setmetatable(class, {__index = prototype})
+		end
+
+		return class
+	end
+end
+
+function print_r ( t )
+    local print_r_cache={}
+    local function sub_print_r(t,indent)
+        if (print_r_cache[tostring(t)]) then
+            print(indent.."*"..tostring(t))
+        else
+            print_r_cache[tostring(t)]=true
+            if (type(t)=="table") then
+                for pos,val in pairs(t) do
+                    if (type(val)=="table") then
+                        print(indent.."["..pos.."] => "..tostring(t).." {")
+                        sub_print_r(val,indent..string.rep(" ",string.len(pos)+8))
+                        print(indent..string.rep(" ",string.len(pos)+6).."}")
+                    elseif (type(val)=="string") then
+                        print(indent.."["..pos..'] => "'..val..'"')
+                    else
+                        print(indent.."["..pos.."] => "..tostring(val))
+                    end
+                end
+            else
+                print(indent..tostring(t))
+            end
+        end
+    end
+    if (type(t)=="table") then
+        print(tostring(t).." {")
+        sub_print_r(t,"  ")
+        print("}")
+    else
+        sub_print_r(t,"  ")
+    end
+    print()
 end

@@ -12,7 +12,6 @@ T.playerClass = select(2, UnitClass("player"))
 T.playerName = UnitName("player")
 T.playerRealm = GetRealmName()
 
-T.screenRes = GetCVar("gxResolution")
-T.screenHeight = tonumber(match(T.screenRes, "%d+x(%d+)"))
-T.screenWidth = tonumber(match(T.screenRes, "(%d+)x+%d"))
+T.screenHeight = floor(GetScreenHeight()*100+.5)/100
+T.screenWidth = floor(GetScreenWidth()*100+.5)/100
 T.uiScale = tonumber(GetCVar("uiScale"))

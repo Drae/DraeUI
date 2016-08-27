@@ -221,7 +221,8 @@ MM.OnEnable = function(self)
 	local animGroup = pingFrame:CreateAnimationGroup()
 	local anim = animGroup:CreateAnimation("Alpha")
 	animGroup:SetScript("OnFinished", function() pingFrame:Hide() end)
-	anim:SetChange(-1)
+    anim:SetFromAlpha(1)
+    anim:SetToAlpha(0)
 	anim:SetOrder(1)
 	anim:SetDuration(3)
 	anim:SetStartDelay(3)
@@ -254,11 +255,11 @@ MM.OnEnable = function(self)
 	MinimapBorderTop:Hide()
 	MiniMapWorldMapButton:Hide()
 	MiniMapWorldMapButton:Hide()
-	
+
 	-- Hide garrison report button
 	GarrisonLandingPageMinimapButton.Show = GarrisonLandingPageMinimapButton.Hide
 	GarrisonLandingPageMinimapButton:Hide()
-	
+
 	Minimap:EnableMouseWheel()
 	Minimap:SetScript("OnMouseWheel", function(self, direction)
 		if (direction > 0) then

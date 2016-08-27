@@ -14,31 +14,28 @@ P["PALADIN"] = {
         ["dispel_curse"] 	= { debuff = "Curse",	pr = 50, mine = false, color = { r = 0.6, g = 0, b = 1.0 } },
         ["buff_feigndeath"]	= { buff = "Feign Death", pr = 50, mine = false, text = "FEIGN" },
 
-        -- Stats
-        ["buff_blessingofkings"]         	= { buff = "Blessing of Kings",   			pr = 50, mine = false, color = { r = 0.8, g = 0.8, b = 0.8} },
-        ["buff_markofthewild"]          	= { buff = "Mark of the Wild",   			pr = 50, mine = false, color = { r = 0.8, g = 0.8, b = 0.8} }, -- Druid
-        ["buff_legacyoftheemperor"]     	= { buff = "Legacy of the Emperor",   		pr = 50, mine = false, color = { r = 0.8, g = 0.8, b = 0.8} }, -- Monk
-        ["buff_embraceoftheshalespider"]	= { buff = "Embrace of the Shale Spider",   pr = 50, mine = false, color = { r = 0.8, g = 0.8, b = 0.8} }, -- Hunter - Shale Spider
-
-        -- Mastery
-        ["buff_blessingofmight"]         	= { buff = "Blessing of Might",   			pr = 50, mine = false, color = { r = 0, g = 0.4, b = 1.0 } },
-        ["buff_graceofair"]              	= { buff = "Grace of Air",   				pr = 50, mine = false, color = { r = 0, g = 0.4, b = 1.0 } }, -- Shaman
-        ["buff_spiritbeastblessing"]    	= { buff = "Spirit Beast Blessing",   		pr = 50, mine = false, color = { r = 0, g = 0.4, b = 1.0 } }, -- Hunter - Spirit Beast
-        ["buff_roarofcourage"]           	= { buff = "Roar of Courage",   			pr = 50, mine = false, color = { r = 0, g = 0.4, b = 1.0 } }, -- Hunter - Cat
-
         -- Specific
-        ["buff_handofprotection"]        	= { buff = "Hand of Protection",   			pr = 90, mine = false, color = { r = 0, g = 0.25, b = 0.9 } },
-        ["buff_handoffreedom"]          	= { buff = "Hand of Freedom",   			pr = 80, mine = false, color = { r = 0.7, g = 0.7, b = 0.7} },
-        ["buff_handofsacrifice"]         	= { buff = "Hand of Sacrifice",   			pr = 70, mine = false, color = { r = 1.0, g = 0, b = 1.0 } },
-        ["buff_handofsalvation"]         	= { buff = "Hand of Salvation",   			pr = 60, mine = false, color = { r = 0, g = 0.8, b = 0 } },
-        ["buff_handofpurity"] 		    	= { buff = "Hand of Purity",   				pr = 70, mine = false, color = { r = 0, g = 0.8, b = 0.5 } },
+        ["buff_auraofmercy"]     			= { buff = "Aura of Mercy",     			pr = 50, mine = true, color = { r = 1.0, g = 0, b = 0.7 } },
+        ["buff_auraofsacrifice"]     		= { buff = "Aura of Sacrifice",     		pr = 50, mine = true, color = { r = 1.0, g = 0, b = 0.7 } },
+        ["buff_devotionaura"]     			= { buff = "Devotion Aura",     			pr = 50, mine = true, color = { r = 1.0, g = 0, b = 0.7 } },
+
+        ["buff_greaterblessingofmight"]     = { buff = "Greater Blessing of Might",     pr = 50, mine = true, color = { r = 0, g = 0.4, b = 1.0 } },
+        ["buff_greaterblessingofkings"]     = { buff = "Greater Blessing of Kings",     pr = 50, mine = true, color = { r = 0.8, g = 0.8, b = 0.8} },
+        ["buff_greaterblessingofwisdom"]    = { buff = "Greater Blessing of Wisdom",    pr = 50, mine = true, color = { r = 0.8, g = 0.0, b = 0.4} },
+
+        ["buff_blessingrotection"]        	= { buff = "Blessing of Protection",   	    pr = 90, mine = false, color = { r = 0, g = 0.25, b = 0.9 } },
+        ["buff_blessingoffreedom"]          = { buff = "Blessing of Freedom",   	    pr = 80, mine = false, color = { r = 0.7, g = 0.7, b = 0.7} },
+        ["buff_blessingofsacrifice"]        = { buff = "Blessing of Sacrifice",   	    pr = 70, mine = false, color = { r = 1.0, g = 0, b = 1.0 } },
+        ["buff_blessingofsalvation"]        = { buff = "Blessing of Salvation",   	    pr = 60, mine = false, color = { r = 0, g = 0.8, b = 0 } },
+        ["buff_blessingofspellwarding"]     = { buff = "Blessing of Spellwarding",      pr = 85, mine = false, color = { r = 0, g = 0.8, b = 0.5 } },
+
+        ["buff_bestowfaith"]                = { buff = "Bestow Faith", 				    pr = 60, mine = true, color = { r = 1.0, g = 0.8, b = 0 } },
+        ["buff_tyrsdeliverance"]           	= { buff = "Tyr's Deliverance",			    pr = 80, mine = false, color = { r = 1.0, g = 0.7, b = 0 } },
         ["buff_beaconoflight"]           	= { buff = "Beacon of Light",   			pr = 40, mine = true, color = { r = 1.0, g = 0.8, b = 0 } },
         ["buff_beaconoffaith"]           	= { buff = "Beacon of Faith",   			pr = 40, mine = true, color = { r = 1.0, g = 0.6, b = 0 } },
-        ["buff_eternalflame"]             	= { buff = "Eternal Flame",   				pr = 80, mine = true,  color = { r = 1.0, g = 0.7, b = 0 } },
-        ["buff_sacredshield"]             	= { buff = "Sacred Shield",   				pr = 80, mine = false, color = { r = 1.0, g = 0.7, b = 0 } },
+        ["buff_beaconofvirtue"]          	= { buff = "Beacon of Virtue",   			pr = 40, mine = true, color = { r = 1.0, g = 0.8, b = 0.2 } },
 
         ["debuff_forbearance"]            	= { debuff = "Forbearance", 				pr = 60, mine = false, color = { r = 1.0, g = 0, b = 0 } },
-        ["debuff_savedbythelight"]			= { debuff = "Recently Saved by the Light",	pr = 70, mine = false, color = { r = 1.0, g = 0.7, b = 0 } },
     },
 
     statusmap = {
@@ -78,23 +75,34 @@ P["PALADIN"] = {
             ["buff_feigndeath"] = true,
         },
 
+        ["TOP"] = {
+            ["buff_bestowfaith"] = true,
+        },
+
+        ["TOPL"] = {
+            ["buff_tyrsdeliverance"] = true,
+        },
+
+        ["TOPR"] = {
+            ["buff_auraofmercy"] = true,
+            ["buff_auraofsacrifice"] = true,
+            ["buff_devotionaura"] = true,
+        },
+
         ["BOTTOMRIGHT"] = {
-            ["buff_blessingofkings"] = true,
-            ["buff_markofthewild"] = true,
-            ["buff_legacyoftheemperor"] = true,
-            ["buff_embraceoftheshalespider"] = true,
+            ["buff_greaterblessingofkings"] = true,
         },
 
         ["BOTTOMRIGHTL"] = {
-            ["buff_blessingofmight"] = true,
-            ["buff_graceofair"] = true,
-            ["buff_spiritbeastblessing"] = true,
-            ["buff_roarofcourage"] = true,
+            ["buff_greaterblessingofmight"] = true,
+        },
+
+        ["BOTTOMRIGHTT"] = {
+            ["buff_greaterblessingofwisdom"] = true,
         },
 
         ["BOTTOMLEFT"] = {
             ["debuff_forbearance"] = true,
-            ["debuff_savedbythelight"] = true,
         },
 
         ["LEFT"] = {
@@ -102,28 +110,17 @@ P["PALADIN"] = {
         },
 
         ["LEFTB"] = {
-            ["buff_handoffreedom"] = true,
-            ["buff_handofprotection"] = true,
-            ["buff_handofsacrifice"] = true,
-            ["buff_handofsalvation"] = true,
-            ["buff_handofpurity"] = true,
-        },
-
-        ["TOP"] = {
-            ["buff_eternalflame"] = true,
-        },
-
-        ["TOPR"] = {
-            ["status_ih"] = true,
-        },
-
-        ["TOPL"] = {
-            ["buff_sacredshield"] = true,
+            ["buff_blessingoffreedom"] = true,
+            ["buff_blessingofprotection"] = true,
+            ["buff_blessingofsacrifice"] = true,
+            ["buff_blessingofsalvation"] = true,
+            ["buff_blessingofspellwarding"] = true,
         },
 
         ["RIGHT"] = {
             ["buff_beaconoflight"] = true,
             ["buff_beaconoffaith"] = true,
+            ["buff_beaconofvirtue"] = true,
         },
     }
 }

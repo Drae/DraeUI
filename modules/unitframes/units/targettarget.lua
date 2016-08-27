@@ -12,23 +12,36 @@ local UF = T:GetModule("UnitFrames")
 
 -- Target of target frame
 local StyleDrae_TargetTarget = function(frame, unit, isSingle)
+	frame:Size(150, 47)
+	frame:SetHitRectInsets(0, 0, 0, 20)
+	frame:SetFrameStrata("LOW")
+
 	UF.CommonInit(frame)
 
-	frame.Health = UF.CreateHealthBar(frame, T.db["frames"].smallHeight)
-	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize2, T["media"].font, "RIGHT", -4, 12)
+	local arrow = frame:CreateTexture(nil, "BACKGROUND", nil, 0)
+	arrow:Size(16, 32)
+	arrow:Point("RIGHT", frame, "LEFT", -12, 10)
+	arrow:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\targetArrow")
 
-	local info = T.CreateFontObject(frame.Health, T.db["general"].fontsize2, T["media"].font, "LEFT", 4, -13)
-	info:Size(T.db["frames"].smallWidth - 4, 20)
-	frame:Tag(info, "[level] [drae:unitcolour][name][drae:afk]")
+	frame.Health = UF.CreateHealthBar(frame, 150, 21, 0, 1)
 
-	UF.CommonPostInit(frame, 20)
+	frame.Power = UF.CreatePowerBar(frame, 150, 10)
+
+	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "RIGHT", -2, 0)
+
+	local info = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "LEFT", -2, 22)
+	info:Size(110, 20)
+	frame:Tag(info, "[drae:shortclassification][drae:unitcolour][name]")
+
+	local level = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "RIGHT", 2, 22)
+	level:Size(40, 20)
+	frame:Tag(level, "[level]")
 
 	-- Auras - just debuffs for target of target
-	UF.AddDebuffs(frame, "BOTTOMRIGHT", frame, "TOPRIGHT", 1, 20, T.db["frames"].auras.maxOtherDebuff or 2, T.db["frames"].auras.auraSml, 10, "LEFT", "UP")
+	UF.AddDebuffs(frame, "TOPRIGHT", frame.Power, "BOTTOMRIGHT", 0, -12, T.db["frames"].auras.maxTargetDebuff or 15, T.db["frames"].auras.auraSml, 8, "LEFT", "DOWN")
 
-	if (isSingle) then
-		frame:Size(T.db["frames"].smallWidth, T.db["frames"].smallHeight)
-	end
+	-- The number here is the size of the raid icon
+	UF.CommonPostInit(frame, 30)
 end
 
 oUF:RegisterStyle("DraeTargetTarget", StyleDrae_TargetTarget)

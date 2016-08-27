@@ -15,7 +15,6 @@ UF["raiddebuffs"]["pvp"] = function()
 	UF:AddRaidDebuff(true, 2094,   8) --Blind
 	UF:AddRaidDebuff(true, 51514,  8) --Hex
 	UF:AddRaidDebuff(true, 853,    8) --Hammer of Justice
-	UF:AddRaidDebuff(true, 44572,  7) --Deep Freeze
 	UF:AddRaidDebuff(true, 30108,  10) --Unstable Affliction
 	UF:AddRaidDebuff(true, 339,    8) --Entangling Roots
 	UF:AddRaidDebuff(true, 122,    8) --Frost Nova

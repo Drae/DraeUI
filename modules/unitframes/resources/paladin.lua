@@ -26,36 +26,25 @@ do
 	local OnPower = function(self, event, unit, powerType)
 		if (powerType ~= "HOLY_POWER" or InCombatLockdown()) then return end
 
-		local rs = self.resourceBar
-		local pp = self.ExtraPower
+		local cb = self.classBar
 		local curHopo = UnitPower("player", SPELL_POWER_HOLY_POWER)
 
 		if (curHopo == 0) then
-			rs:SetAlpha(0)
-			if (not pp._hide) then
-				pp:Hide()
-			end
+			cb:SetAlpha(0)
 		elseif (hopo == 0 and curHopo > 0) then
-			rs:SetAlpha(1.0)
-			if (not pp._hide) then
-				pp:Show()
-			end
+			cb:SetAlpha(1.0)
 		end
 
 		hopo = curHopo
 	end
 
 	local OnEvent = function(self, event)
-		local rs = self.resourceBar
-		local pp = self.ExtraPower
+		local cb = self.classBar
 
 		if (InCombatLockdown() or event == "PLAYER_REGEN_DISABLED") then
 			self:UnregisterEvent("UNIT_POWER", OnPower)
 
-			rs:SetAlpha(1.0)
-			if (not pp._hide) then
-				pp:Show()
-			end
+			cb:SetAlpha(1.0)
 		else
 			self:RegisterEvent("UNIT_POWER", OnPower)
 
@@ -63,66 +52,63 @@ do
 		end
 	end
 
-		-- Store the current spec in ExtraPower._spec so we can avoid
-	-- showing the extrapower bar, etc. for non-holy specs
-	local PlayerSpecChanged = function(self, event, unit)
-		local pp = self.ExtraPower
+	local CheckPaladinPowerBar = function(self)
 		local spec = GetSpecialization()
 
-		-- Holy? Enable mana regen and shizzle
-		pp._hide = (spec == 1) and false or true
-	end
+		if (spec == SPEC_PALADIN_RETRIBUTION and not self.__holyPowerEnabled) then
+			if (UnitLevel("player") >= PALADINPOWERBAR_SHOW_LEVEL) then
+				self.__holyPowerEnabled = true
 
-	local EnablePaladinPowerBar = function(self)
-		if (UnitLevel("player") >= PALADINPOWERBAR_SHOW_LEVEL) then
-			self:RegisterEvent("PLAYER_REGEN_DISABLED", OnEvent, true)
-			self:RegisterEvent("PLAYER_REGEN_ENABLED", OnEvent, true)
+				self:RegisterEvent("PLAYER_REGEN_DISABLED", OnEvent, true)
+				self:RegisterEvent("PLAYER_REGEN_ENABLED", OnEvent, true)
 
-			PlayerSpecChanged(self)
+                self.classBar:Show()
+                OnEvent(self, "")
+			end
+		elseif (self.__holyPowerEnabled) then
+			self.__holyPowerEnabled = nil
+
+			self:UnregisterEvent("PLAYER_REGEN_DISABLED", OnEvent, true)
+			self:UnregisterEvent("PLAYER_REGEN_ENABLED", OnEvent, true)
+
+            self.classBar:Hide()
 		end
 	end
 
-	UF.CreateHolyPowerBar = function(self, point, anchor, relpoint, xOffset, yOffset)
-		if (T.playerClass ~= "PALADIN") then return end
+	UF.CreatePaladinClassBar = function(self, point, anchor, relpoint, xOffset, yOffset)
+		local spec = GetSpecialization()
 
-		local scale = 1.35
+		if (T.playerClass ~= "PALADIN" or (T.playerClass == "PALADIN" and spec ~= SPEC_PALADIN_RETRIBUTION)) then return end
 
-		local rs = CreateFrame("Frame", nil, self)
-		rs:SetFrameLevel(12)
-		rs.unit = "player"
+		local scale = 1.25
 
-		_G["PaladinPowerBar"]:SetParent(rs)
-		_G["PaladinPowerBar"]:EnableMouse(false)
-		_G["PaladinPowerBar"]:ClearAllPoints()
-		_G["PaladinPowerBar"]:Point(point, anchor, relpoint, xOffset / scale, yOffset / scale)
-		_G["PaladinPowerBar"]:SetScale(scale)
-		rs:SetAlpha(0)
+		local cb = CreateFrame("Frame", nil, self)
+        cb:Point(point, anchor, relpoint, xOffset / scale, yOffset / scale)
+		cb:SetFrameLevel(12)
+		cb.unit = "player"
 
-		_G["PaladinPowerBarBG"]:SetTexture("Interface\\AddOns\\draeUI\\media\\resourcebars\\PaladinHolyPower")
-		_G["PaladinPowerBarGlowBGTexture"]:SetTexture("Interface\\AddOns\\draeUI\\media\\resourcebars\\PaladinHolyPower")
-		_G["PaladinPowerBarRune1Texture"]:SetTexture("Interface\\AddOns\\draeUI\\media\\resourcebars\\PaladinHolyPower")
-		_G["PaladinPowerBarRune2Texture"]:SetTexture("Interface\\AddOns\\draeUI\\media\\resourcebars\\PaladinHolyPower")
-		_G["PaladinPowerBarRune3Texture"]:SetTexture("Interface\\AddOns\\draeUI\\media\\resourcebars\\PaladinHolyPower")
-		_G["PaladinPowerBarRune4Texture"]:SetTexture("Interface\\AddOns\\draeUI\\media\\resourcebars\\PaladinHolyPower")
-		_G["PaladinPowerBarRune5Texture"]:SetTexture("Interface\\AddOns\\draeUI\\media\\resourcebars\\PaladinHolyPower")
+		_G["PaladinPowerBarFrame"]:SetParent(cb)
+		_G["PaladinPowerBarFrame"]:EnableMouse(false)
+		_G["PaladinPowerBarFrame"]:ClearAllPoints()
+		_G["PaladinPowerBarFrame"]:Point(point, anchor, relpoint, xOffset / scale, yOffset / scale)
+		_G["PaladinPowerBarFrame"]:SetScale(scale)
 
-		-- Create power bar - only displayed for Holy
-		local pp = UF.CreateExtraPowerBar(self, point, anchor, relpoint, 0, 32)
+		_G["PaladinPowerBarFrameBG"]:SetTexture("Interface\\AddOns\\draeUI\\media\\resourcebars\\PaladinHolyPower")
+		_G["PaladinPowerBarFrameGlowBGTexture"]:SetTexture("Interface\\AddOns\\draeUI\\media\\resourcebars\\PaladinHolyPower")
+		_G["PaladinPowerBarFrameRune1Texture"]:SetTexture("Interface\\AddOns\\draeUI\\media\\resourcebars\\PaladinHolyPower")
+		_G["PaladinPowerBarFrameRune2Texture"]:SetTexture("Interface\\AddOns\\draeUI\\media\\resourcebars\\PaladinHolyPower")
+		_G["PaladinPowerBarFrameRune3Texture"]:SetTexture("Interface\\AddOns\\draeUI\\media\\resourcebars\\PaladinHolyPower")
+		_G["PaladinPowerBarFrameRune4Texture"]:SetTexture("Interface\\AddOns\\draeUI\\media\\resourcebars\\PaladinHolyPower")
+		_G["PaladinPowerBarFrameRune5Texture"]:SetTexture("Interface\\AddOns\\draeUI\\media\\resourcebars\\PaladinHolyPower")
+		cb:SetAlpha(0)
+		cb:Hide()
 
-		self.ExtraPower = pp
-		self.resourceBar = rs
+		self.classBar = cb
 
-		self:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", PlayerSpecChanged, true)
-		self:RegisterEvent("PLAYER_LEVEL_UP", EnablePaladinPowerBar, true)
+		self:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", CheckPaladinPowerBar, true)
+		self:RegisterEvent("PLAYER_LEVEL_UP", CheckPaladinPowerBar, true)
+		self:RegisterEvent("PLAYER_ENTERING_WORLD", CheckPaladinPowerBar, true)
 
-		-- Run stuff that requires us to be in-game before it returns any
-		-- meaningful results
-		local enterWorld = CreateFrame("Frame")
-		enterWorld:RegisterEvent("PLAYER_ENTERING_WORLD")
-		enterWorld:SetScript("OnEvent", function()
-			PlayerSpecChanged(self)
-			EnablePaladinPowerBar(self)
-			OnEvent(self)
-		end)
+        CheckPaladinPowerBar(self)
 	end
 end

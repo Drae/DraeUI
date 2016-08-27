@@ -17,7 +17,6 @@ B.OnEnable = function(self)
 	self:PositionVehicleFrame()
 	self:MoveWatchFrame()
 	self:PositionAltPowerBar()
-	self:PositionDraenorSpellBtn()
 
 	CreateFrame("Frame"):SetScript("OnUpdate", function(self, elapsed)
 		if (LFRBrowseFrame.timeToClear) then
