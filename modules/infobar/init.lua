@@ -6,41 +6,45 @@ local T, C, G, P, U, _ = select(2, ...):UnPack()
 
 local IB = T:NewModule("Infobar", "AceEvent-3.0", "AceTimer-3.0")
 
+local LDB = LibStub('LibDataBroker-1.1')
+
 -- Localise a bunch of functions
 local _G = _G
 local IsEncounterInProgress = IsEncounterInProgress
 local pairs, ipairs, format, gupper, gsub, floor, ceil, abs, mmin, type, unpack = pairs, ipairs, string.format, string.upper, string.gsub, math.floor, math.ceil, math.abs, math.min, type, unpack
 local tinsert = table.insert
 
+--[[
+
+]]
+IB.LDB = LDB
+
+local infoBarPlugins = {}
+
 -- Containing frames for the infobar text
 local infoBar = CreateFrame("Frame", nil, T.UIParent)
 infoBar:SetFrameStrata("LOW")
-
 IB.infoBar = infoBar
-
-local infoBarPlugins = {}
 
 --[[
 		Calculation and display functions
 --]]
-IB.RegisterPlugin = function(name, callback)
+local SetPluginSize = function(self)
+	self:Width(self["Text"]:GetStringWidth())
+	self:Height(select(2, self["Text"]:GetFont()))
+end
+
+IB.RegisterPlugin = function(name, Callback)
 	local plugin
 
 	plugin = CreateFrame("Button", nil, infoBar)
 	plugin["Text"] = T.CreateFontObject(plugin, T.db["general"].fontsize1, T["media"].font, "LEFT", 0, 0)
 	plugin["Text"]:SetJustifyV("TOP")
-	plugin:Size(1, 1)
-
-	if (callback) then
-		plugin.Callback = callback
-	end
-
-	plugin.SetPluginSize = function(self)
-		self:Width(self["Text"]:GetStringWidth())
-		self:Height(select(2, self["Text"]:GetFont()))
-	end
 
 	plugin.name = name
+
+	plugin.Callback = Callback or nil
+	plugin.SetPluginSize = SetPluginSize
 
 	infoBarPlugins[name] = plugin
 end
@@ -115,7 +119,7 @@ IB.OnInitialize = function(self)
 end
 
 IB.OnEnable = function(self)
-	infoBar:Point("BOTTOMLEFT", draeUI_MicroBarContainer, "BOTTOMRIGHT", 10, 6)
+	infoBar:SetPoint("TOPLEFT", 20, -20)
 	infoBar:Size(T.screenWidth, 20)
 
 	-- Do things when we enter the world
