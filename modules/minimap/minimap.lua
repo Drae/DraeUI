@@ -186,7 +186,7 @@ MM.OnEnable = function(self)
 
 	Minimap:SetMaskTexture("Textures\\MinimapMask")
 	Minimap:SetScale(1.1)
-	Minimap:Point("TOPRIGHT", UIParent, "TOPRIGHT", -20, -20)
+	Minimap:Point("TOPRIGHT", UIParent, "TOPRIGHT", -30, -30)
 
 	-- Move the minibackdrop and border
 	MinimapBackdrop:Point("CENTER", Minimap, "CENTER", -8, -24)

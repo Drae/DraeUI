@@ -175,7 +175,11 @@ end
 
 -- Create and set font
 T.CreateFontObject = function(parent, size, font, anchorAt, oX, oY, type, anchor, anchorTo)
-	local fo = parent:IsObjectType("EditBox") and parent or parent:IsObjectType("FontString") and parent or parent:CreateFontString(nil, "OVERLAY")
+	if (parent:IsObjectType("EditBox") or parent:IsObjectType("FontString")) then
+		fo = parent
+	else
+		fo = parent:CreateFontString(nil, "OVERLAY")
+	end
 
 	fo:SetFont(font, size, type or "THINOUTLINE")
 

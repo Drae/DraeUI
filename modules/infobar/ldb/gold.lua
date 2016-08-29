@@ -7,6 +7,12 @@ local T, C, G, P, U, _ = select(2, ...):UnPack()
 local IB = T:GetModule("Infobar")
 local COIN = IB:NewModule("Coin", "AceEvent-3.0", "AceTimer-3.0")
 
+local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeCoin", {
+	type = "draeUI",
+	icon = nil,
+	label = "DraeCoin",
+})
+
 --[[
 
 ]]
@@ -32,28 +38,12 @@ COIN.UpdateCoin = function(self)
 
 	db[T.playerRealm][T.playerName] = curMoney
 
-	self.button["Text"]:SetText(T.IntToGold(curMoney, false))
-
-	self.button:SetPluginSize()
+	LDB.text = T.IntToGold(curMoney, false)
 end
 
-local GoldClicked = function(self, btn)
-	if (IsShiftKeyDown()) then
-		if (btn == "LeftButton") then
-			profit, loss = 0, 0
-		else
-			T.dbGlobal["gold"] = {}
-		end
-
-		GameTooltip:Hide()
-	else
-		ToggleAllBags()
-	end
-end
-
-local TooltipCoin = function(self)
+LDB.OnEnter = function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_NONE")
-	GameTooltip:Point("TOPLEFT", self, "BOTTOMLEFT", 0, -(IB.infoBar:GetHeight()))
+	GameTooltip:Point("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
 
 	GameTooltip:ClearLines()
 
@@ -104,27 +94,35 @@ local TooltipCoin = function(self)
 	GameTooltip:Show()
 end
 
-COIN.EnablePlugin = function(self, button)
-	self.button = button
+LDB.OnLeave = function(self)
+	GameTooltip:Hide()
+end
 
+LDB.OnClick = function(self, btn)
+	if (IsShiftKeyDown()) then
+		if (btn == "LeftButton") then
+			profit, loss = 0, 0
+		else
+			T.dbGlobal["gold"] = {}
+		end
+
+		GameTooltip:Hide()
+	else
+		ToggleAllBags()
+	end
+end
+
+COIN.PlayerEnteringWorld = function(self)
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD", "PlayerEnteringWorld")
+
+	self:UpdateCoin()
+end
+
+COIN.OnInitialize = function(self)
 	self:RegisterEvent("PLAYER_MONEY", "UpdateCoin")
 	self:RegisterEvent("SEND_MAIL_MONEY_CHANGED", "UpdateCoin")
 	self:RegisterEvent("SEND_MAIL_COD_CHANGED", "UpdateCoin")
 	self:RegisterEvent("PLAYER_TRADE_MONEY", "UpdateCoin")
 	self:RegisterEvent("TRADE_MONEY_CHANGED", "UpdateCoin")
-
-	self.button:RegisterForClicks("AnyDown")
-	self.button:SetScript("OnEnter", function() TooltipCoin(self.button) end)
-	self.button:SetScript("OnLeave", function() GameTooltip:Hide() end)
-	self.button:SetScript("OnClick", GoldClicked)
-
-	self:UpdateCoin()
-end
-
-local PluginCoin = function(button)
-	COIN:EnablePlugin(button)
-end
-
-COIN.OnInitialize = function(self)
-	IB.RegisterPlugin("Coin", PluginCoin)
+	self:RegisterEvent("PLAYER_ENTERING_WORLD", "PlayerEnteringWorld")
 end

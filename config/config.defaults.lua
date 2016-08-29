@@ -219,7 +219,7 @@ C["infobar"] = {
 	showReputation = true,
 	xp = {
 		enable = true,
-		altxp = "honor",	-- honor -or- reputation
+		altxp = "reputation",	-- honor -or- reputation
 	},
 	artifact = {
 		enable = true,

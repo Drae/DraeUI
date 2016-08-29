@@ -77,11 +77,11 @@ modules\minimap\buttons.lua
 modules\infobar\init.lua
 modules\infobar\ldb\fps.lua
 modules\infobar\ldb\mem.lua
+modules\infobar\ldb\xp.lua
 modules\infobar\ldb\latency.lua
 modules\infobar\ldb\gold.lua
 modules\infobar\ldb\durability.lua
 modules\infobar\ldb\res.lua
-modules\infobar\ldb\xp.lua
 modules\infobar\ldb\artifact.lua
 
 # Misc

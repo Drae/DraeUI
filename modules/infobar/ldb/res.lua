@@ -7,6 +7,12 @@ local T, C, G, P, U, _ = select(2, ...):UnPack()
 local IB = T:GetModule("Infobar")
 local RES = IB:NewModule("Res", "AceEvent-3.0", "AceTimer-3.0")
 
+local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeRes", {
+	type = "draeUI",
+	icon = nil,
+	label = "DraeRes",
+})
+
 local GetSpellInfo, GetSpellCharges = GetSpellInfo, GetSpellCharges
 --[[
 
@@ -35,9 +41,7 @@ RES.UpdateTimer = function(self)
 		end
 	end
 
-	self.button["Text"]:SetFormattedText(charges == 0 and "|cffff0000%d|rres (%d:%02d)" or "|cff00ff00%d|rres (%d:%02d)", charges, min, sec)
-
-	self.button:SetPluginSize()
+	LDB.text = format(charges == 0 and "|cffff0000%d|rres (%d:%02d)" or "|cff00ff00%d|rres (%d:%02d)", charges, min, sec)
 end
 
 RES.UpdateRes = function(self)
@@ -63,9 +67,7 @@ RES.UpdateRes = function(self)
 		RES:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 		RES:CancelTimer(addResTimer)
 
-		self.button["Text"]:SetFormattedText("|cff00ff000|rres (0:00)")
-
-		self.button:SetPluginSize()
+		LDB.text = format("|cff00ff000|rres (0:00)")
 	end
 end
 
@@ -80,13 +82,10 @@ RES.ZONE_CHANGED_NEW_AREA = function(self)
 
 		updateResTimer = self:ScheduleRepeatingTimer("UpdateRes", 1.0)
 
-		self.button:Show()
+		LDB.ShowPlugin = true
 	else
-		self.button:Hide()
+		LDB.ShowPlugin = false
 	end
-
---	self.button:SetPluginSize()
-	IB:RepositionPlugins()
 end
 
 local getPetOwner = function(pet, guid)
@@ -137,9 +136,9 @@ RES.COMBAT_LOG_EVENT_UNFILTERED = function(self, ...)
 	end
 end
 
-local TooltipRes = function(self)
+LDB.OnEnter = function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_NONE")
-	GameTooltip:Point("TOPLEFT", self, "BOTTOMLEFT", 0, -(IB.infoBar:GetHeight()))
+	GameTooltip:Point("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
 
 	GameTooltip:ClearLines()
 
@@ -168,21 +167,12 @@ local TooltipRes = function(self)
 	GameTooltip:Show()
 end
 
-RES.EnablePlugin = function(self, button)
-	self.button = button
-
-	self.button:SetScript("OnEnter", function() TooltipRes() end)
-	self.button:SetScript("OnLeave", function() GameTooltip:Hide() end)
-
-	self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-
-	self:ZONE_CHANGED_NEW_AREA()
-end
-
-local PluginRes = function(button)
-	RES:EnablePlugin(button)
+LDB.OnLeave = function(self)
+	GameTooltip:Hide()
 end
 
 RES.OnInitialize = function(self)
-	IB.RegisterPlugin("Res", PluginRes)
+	self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+
+	self:ZONE_CHANGED_NEW_AREA()
 end
