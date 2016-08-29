@@ -4,10 +4,20 @@
 --]]
 local T, C, G, P, U, _ = select(2, ...):UnPack()
 
-local IB = T:GetModule("Infobar")
-local FPS = IB:NewModule("FPS", "AceEvent-3.0", "AceTimer-3.0")
+local InfoBar = T:GetModule("Infobar")
+local FPS = InfoBar:NewModule("DraeFPS", "AceEvent-3.0", "AceTimer-3.0")
 
+local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeFPS", {
+	type = "draeUI",
+	icon = nil,
+	label = "DraeFPS",
+})
 
+local format = string.format
+
+--[[
+
+]]
 local timeFPS = 0
 local minFPS, maxFPS, avgFPS
 
@@ -31,14 +41,12 @@ FPS.UpdateFPS = function(self)
 	end
 
 	local r2, g2, b2 = T.ColorGradient(framerate / 60 - 0.001, 1, 0, 0, 1, 1, 0, 0, 1, 0)
-	self.button["Text"]:SetFormattedText("|cff%02x%02x%02x%d|r|cff%02x%02x%02xfps|r", r2 * 255, g2 * 255, b2 * 255, framerate, 255, 255, 255)
-
-	self.button:SetPluginSize()
+	LDB.text = format("|cff%02x%02x%02x%d|r|cff%02x%02x%02xfps|r", r2 * 255, g2 * 255, b2 * 255, framerate, 255, 255, 255)
 end
 
 local TooltipFPS = function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_NONE")
-	GameTooltip:Point("TOPLEFT", self, "BOTTOMLEFT", 0, -(IB.infoBar:GetHeight()))
+	GameTooltip:Point("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
 
 	GameTooltip:ClearLines()
 
@@ -55,34 +63,24 @@ end
 do
 	local tooltipRenew
 
-	FPS.EnablePlugin = function(self, button)
-		self.button = button
+	LDB.OnEnter = function(self)
+		TooltipFPS(self)
+		tooltipRenew = FPS:ScheduleRepeatingTimer(TooltipFPS, 0.5, self)
+	end
 
-		self.button:SetScript("OnEnter", function()
-			TooltipFPS(self.button)
-			tooltipRenew = IB:ScheduleRepeatingTimer(TooltipFPS, 1.0, self.button)
-		end)
+	LDB.OnLeave = function(self)
+		FPS:CancelTimer(tooltipRenew)
+		GameTooltip:Hide()
+	end
 
-		self.button:SetScript("OnLeave", function()
-			IB:CancelTimer(tooltipRenew)
-			GameTooltip:Hide()
-		end)
-
-		self.button:SetScript("OnClick", function(self)
-			timeFPS = 0
-		end)
-
-		-- FPS handling
-		self.timerFPS = self:ScheduleRepeatingTimer("UpdateFPS", 1.0)
-
-		self:UpdateFPS()
+	LDB.OnClick = function(self)
+		timeFPS = 0
 	end
 end
 
-local PluginFPS = function(button)
-	FPS:EnablePlugin(button)
-end
-
 FPS.OnInitialize = function(self)
-	IB.RegisterPlugin("FPS", PluginFPS)
+	-- FPS handling
+	self.timerFPS = self:ScheduleRepeatingTimer("UpdateFPS", 0.5)
+
+	self:UpdateFPS()
 end

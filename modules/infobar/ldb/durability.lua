@@ -7,6 +7,12 @@ local T, C, G, P, U, _ = select(2, ...):UnPack()
 local IB = T:GetModule("Infobar")
 local DUR = IB:NewModule("Durability", "AceEvent-3.0", "AceTimer-3.0")
 
+local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeDurability", {
+	type = "draeUI",
+	icon = nil,
+	label = "DraeDurability",
+})
+
 --[[
 
 ]]
@@ -60,14 +66,12 @@ DUR.UpdateDurability = function(self)
 
 	local r1, g1, b1 = T.ColorGradient(minDurability / 100 - 0.001, 1, 0, 0, 1, 1, 0, 0, 1, 0)
 
-	self.button["Text"]:SetFormattedText("|cff%02x%02x%02x%d|r|cff%02x%02x%02x%%dur|r", r1 * 255, g1 * 255, b1 * 255, minDurability, 255, 255, 255)
-
-	self.button:SetPluginSize()
+	LDB.text = format("|cff%02x%02x%02x%d|r|cff%02x%02x%02x%%dur|r", r1 * 255, g1 * 255, b1 * 255, minDurability, 255, 255, 255)
 end
 
-local TooltipDurability = function(self)
+LDB.OnEnter = function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_NONE")
-	GameTooltip:Point("TOPLEFT", self, "BOTTOMLEFT", 0, -(IB.infoBar:GetHeight()))
+	GameTooltip:Point("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
 
 	GameTooltip:ClearLines()
 
@@ -86,23 +90,15 @@ local TooltipDurability = function(self)
 	GameTooltip:Show()
 end
 
-DUR.EnablePlugin = function(self, button)
-	self.button = button
-
-	self:RegisterEvent("MERCHANT_SHOW", "UpdateDurability")
-	self:RegisterEvent("UPDATE_INVENTORY_DURABILITY", "UpdateDurability")
-
-	self.button:SetScript("OnEnter", function() TooltipDurability(self.button) end)
-	self.button:SetScript("OnLeave", function() GameTooltip:Hide() end)
-	self.button:SetScript("OnClick", function(self) ToggleCharacter("PaperDollFrame") end)
-
-	self:UpdateDurability()
+LDB.OnLeave = function(self)
+	GameTooltip:Hide()
 end
 
-local PluginDurability = function(button)
-	DUR:EnablePlugin(button)
+LDB.OnClick = function(self, btn)
+	ToggleCharacter("PaperDollFrame")
 end
 
 DUR.OnInitialize = function(self)
-	IB.RegisterPlugin("Durability", PluginDurability)
+	self:RegisterEvent("MERCHANT_SHOW", "UpdateDurability")
+	self:RegisterEvent("UPDATE_INVENTORY_DURABILITY", "UpdateDurability")
 end

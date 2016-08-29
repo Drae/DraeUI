@@ -7,6 +7,12 @@ local T, C, G, P, U, _ = select(2, ...):UnPack()
 local IB = T:GetModule("Infobar")
 local MEM = IB:NewModule("Mem", "AceEvent-3.0", "AceTimer-3.0")
 
+local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeMem", {
+	type = "draeUI",
+	icon = nil,
+	label = "DraeMem"
+})
+
 local pairs, ipairs, format, gupper, gsub, floor, ceil, abs, mmin, type, unpack = pairs, ipairs, string.format, string.upper, string.gsub, math.floor, math.ceil, math.abs, math.min, type, unpack
 local tinsert = table.insert
 
@@ -80,9 +86,7 @@ MEM.UpdateMem = function(self)
 	local total = floor((UpdateAddonMemCPUUse() / 1024) + 0.5)
 
 	local r2, g2, b2 = T.ColorGradient(total / 50 - 0.001, 0, 1, 0, 1, 1, 0, 0, 1, 0)
-	self.button["Text"]:SetFormattedText("|cff%02x%02x%02x%d|r|cff%02x%02x%02xMB|r", r2 * 255, g2 * 255, b2 * 255, total, 255, 255, 255)
-
-	self.button:SetPluginSize()
+	LDB.text = format("|cff%02x%02x%02x%d|r|cff%02x%02x%02xMB|r", r2 * 255, g2 * 255, b2 * 255, total, 255, 255, 255)
 end
 
 local TooltipMem = function(self)
@@ -98,7 +102,7 @@ local TooltipMem = function(self)
 
 	if (total > 0) then
 		GameTooltip:SetOwner(self, "ANCHOR_NONE")
-		GameTooltip:Point("TOPLEFT", self, "BOTTOMLEFT", 0, -(IB.infoBar:GetHeight()))
+		GameTooltip:Point("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
 
 		GameTooltip:ClearLines()
 
@@ -138,36 +142,27 @@ end
 do
 	local tooltipRenew
 
-	MEM.EnablePlugin = function(self, button)
-		self.button = button
+	LDB.OnEnter = function(self)
+		TooltipMem(self)
+		tooltipRenew = MEM:ScheduleRepeatingTimer(TooltipMem, 1.0, self)
+	end
 
-		self.button:SetScript("OnEnter", function()
-			TooltipMem(self.button)
-			tooltipRenew = IB:ScheduleRepeatingTimer(TooltipMem, 1.0, self.button)
-		end)
+	LDB.OnLeave = function(self)
+		MEM:CancelTimer(tooltipRenew)
+		GameTooltip:Hide()
+	end
 
-		self.button:SetScript("OnLeave", function()
-			IB:CancelTimer(tooltipRenew)
-			GameTooltip:Hide()
-		end)
+	LDB.OnClick = function(self)
+		collectgarbage("collect")
+		ResetCPUUsage()
 
-		self.button:SetScript("OnClick", function()
-			collectgarbage("collect")
-			ResetCPUUsage()
-			self:UpdateMem()
-		end)
-
-		-- FPS handling
-		self.timerMEM = self:ScheduleRepeatingTimer("UpdateMem", 10.0)
-
-		self:UpdateMem()
+		MEM:UpdateMem()
 	end
 end
 
-local PluginMem = function(button)
-	MEM:EnablePlugin(button)
-end
-
 MEM.OnInitialize = function(self)
-	IB.RegisterPlugin("Mem", PluginMem)
+	-- FPS handling
+	self.timerMEM = self:ScheduleRepeatingTimer("UpdateMem", 10.0)
+
+	self:UpdateMem()
 end
