@@ -11,12 +11,11 @@ local UF = T:GetModule("UnitFrames")
 -- Localise a bunch of functions
 local _G = _G
 local format, unpack = string.format, unpack
-local CreateFrame, UnitLevel, UnitPower, UnitPowerMax, InCombatLockdown = CreateFrame, UnitLevel, UnitPower, UnitPowerMax, InCombatLockdown
-local UnitExists, GetComboPoints = UnitExists, GetComboPoints
+local CreateFrame, GetSpecialization = CreateFrame, GetSpecialization
 
 --[[
 		Mage
-		Custom arcane charge and power bar
+		Hijack Blizzards bar
 --]]
 do
 	local mageStatusColour = {
@@ -26,10 +25,6 @@ do
 		[4] = { 1.00, 0.32, 0.00 },
 		[5] = { 1.00, 0.00, 0.00 },
 	}
-
-	local OnEvent = function(self, event, unit)
-		self.classBar:SetAlpha(event == "PLAYER_REGEN_DISABLED" and 1.0 or 0)
-	end
 
 	local UpdateMageManaColor = function(pp, unit, curMana, maxMana)
 		local pct = curMana / maxMana
@@ -57,16 +52,30 @@ do
 		local spec = GetSpecialization()
 
 		if (spec == SPEC_MAGE_ARCANE) then
-			self:RegisterEvent("PLAYER_REGEN_DISABLED", OnEvent, true)
-			self:RegisterEvent("PLAYER_REGEN_ENABLED", OnEvent, true)
+			self.resourceBar:Show()
+			self.Power.PostUpdate = UpdateMageManaColor
 
-			self.classBar:Show()
-			self.classBar:SetAlpha(0)
+			if (not self.Power.evoPos) then
+				local maxMana = UnitPowerMax("player")
+				local width = self.Health:GetWidth()
+
+				local evoPos = width - (width * ((maxMana * 0.4) / maxMana))
+
+				self.Power.evoUse = self.Power:CreateTexture(nil, "OVERLAY")
+				self.Power.evoUse:SetTexture("Interface\\ChatFrame\\ChatFrameBackground")
+				self.Power.evoUse:SetVertexColor(1.0, 1.0, 1.0)
+				self.Power.evoUse:Width(1)
+				self.Power.evoUse:Height(self.Power:GetHeight())
+				self.Power.evoUse:ClearAllPoints()
+				self.Power.evoUse:Point("BOTTOMRIGHT", self.Power, "BOTTOMRIGHT", -evoPos, 0)
+				self.Power.evoUse:Show()
+			end
 		else
-			self.classBar:Hide()
-
-			self:UnregisterEvent("PLAYER_REGEN_ENABLED", OnEvent)
-			self:UnregisterEvent("PLAYER_REGEN_DISABLED", OnEvent)
+			self.Power.PostUpdate = nil
+			self.resourceBar:Hide()
+			if (self.Power.evoPos) then
+				self.Power.evoUse:Hide()
+			end
 		end
 	end
 
@@ -75,32 +84,24 @@ do
 
 		if (T.playerClass ~= "MAGE" or (T.playerClass == "MAGE" and spec ~= SPEC_MAGE_ARCANE)) then return end
 
-		local scale = 1
+		local rs = CreateFrame("Frame", nil, self)
+		rs:SetFrameLevel(12)
+		rs:Point(point, anchor, relpoint, xOffset + 5, yOffset + 8)
+		rs:Size(210, 20)
+		rs:SetFrameLevel(12)
+		rs.unit = "player"
 
-		local cb = CreateFrame("Frame", nil, self)
-        cb:Point(point, anchor, relpoint, xOffset / scale, yOffset / scale)
-		cb:SetFrameLevel(12)
-		cb.unit = "player"
-
-		_G["MageArcaneChargesFrame"]:SetParent(cb)
+		_G["MageArcaneChargesFrame"]:SetParent(rs)
 		_G["MageArcaneChargesFrame"]:EnableMouse(false)
 		_G["MageArcaneChargesFrame"]:ClearAllPoints()
-		_G["MageArcaneChargesFrame"]:Point(point, anchor, relpoint, xOffset / scale, yOffset / scale)
-		_G["MageArcaneChargesFrame"]:SetScale(scale)
+		_G["MageArcaneChargesFrame"]:Point(point, anchor, relpoint, xOffset + 5, yOffset + 8)
+		_G["MageArcaneChargesFrame"]:SetScale(0.8)
 
-		_G["MageArcaneChargesFrame"].Background:SetTexture(nil)
-
-		self.classBar = cb
+		_G["MageArcaneChargesFrame"].Background:Hide()
 
 		self:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", PlayerSpecChanged, true)
+		self:RegisterEvent("PLAYER_ENTERING_WORLD", PlayerSpecChanged, true)
 
-		-- Run stuff that requires us to be in-game before it returns any
-		-- meaningful results
-		local enterWorld = CreateFrame("Frame")
-		enterWorld:RegisterEvent("PLAYER_ENTERING_WORLD")
-		enterWorld:SetScript("OnEvent", function()
-			PlayerSpecChanged(self)
-			enterWorld:UnregisterEvent("PLAYER_ENTERING_WORLD")
-		end)
+		self.resourceBar = rs
 	end
 end

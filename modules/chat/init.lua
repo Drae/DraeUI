@@ -1531,6 +1531,6 @@ CH.OnEnable = function(self)
 	InterfaceOptionsSocialPanelChatStyle:SetAlpha(0)
 
 	if (self.db.ChatLog) then
---		self:DisplayChatHistory()
+		self:DisplayChatHistory()
 	end
 end

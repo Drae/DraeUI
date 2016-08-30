@@ -81,7 +81,7 @@ local OnLeave = function()
 end
 
 local createAuraIcon = function(icons, index)
-	local button = CreateFrame("Button",  icons:GetDebugName().."Button"..index, icons)
+	local button = CreateFrame("Button", icons:GetDebugName().."Button"..index, icons)
 	button:RegisterForClicks'RightButtonUp'
 
 	local cd = CreateFrame("Cooldown", "$parentCooldown", button, "CooldownFrameTemplate")
@@ -154,7 +154,7 @@ local updateIcon = function(unit, icons, index, offset, filter, isDebuff, visibl
 			 A button used to represent aura icons.
 			]]
 			local prev = icons.createdIcons
-			icon = (icons.CreateIcon or createAuraIcon) (icons, n)
+			icon = (icons.CreateIcon or createAuraIcon) (icons, n, isDebuff and 'Debuff' or 'Buff')
 
 			-- XXX: Update the counters if the layout doesn't.
 			if(prev == icons.createdIcons) then
@@ -336,7 +336,7 @@ local UpdateAuras = function(self, event, unit)
 			local icon = auras[visibleBuffs]
 			if(not icon) then
 				local prev = auras.createdIcons
-				icon = (auras.CreateIcon or createAuraIcon) (auras, visibleBuffs)
+				icon = (auras.CreateIcon or createAuraIcon) (auras, visibleBuffs, 'Aura')
 				-- XXX: Update the counters if the layout doesn't.
 				if(prev == auras.createdIcons) then
 					table.insert(auras, icon)

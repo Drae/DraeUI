@@ -21,19 +21,5 @@ local UnitExists, GetComboPoints = UnitExists, GetComboPoints
 		TODO: Mana bar for resto?
 --]]
 UF.CreateEclipseBar = function(self, point, anchor, relpoint, xOffset, yOffset)
-	if (T.playerClass ~= "DRUID") then return end
 
-	local scale = 1.3
-
-	local rs = CreateFrame("Frame", nil, self)
-	rs:SetFrameLevel(12)
-	rs:EnableMouse(false)
-	rs.unit = "player"
-
-	_G["EclipseBarFrame"]:SetParent(rs)
-	_G["EclipseBarFrame"]:ClearAllPoints()
-	_G["EclipseBarFrame"]:Point(point, anchor, relpoint, xOffset / scale, yOffset / scale)
-	_G["EclipseBarFrame"]:SetScale(scale)
-
-	self.resourceBar = rs
 end

@@ -26,7 +26,7 @@ oUF.Tags.Methods["drae:unitcolour"] = function(u, r)
 		return T.Hex(oUF.colors.tapped)
 	elseif (not UnitIsConnected(u)) then
 		return T.Hex(oUF.colors.disconnected)
-	elseif (UnitIsPlayer(u) or (u == "pet" and UnitPlayerControlled(u))) then
+	elseif (UnitIsPlayer(u)) then
 		local _, class = UnitClass(u)
 		return T.Hex(oUF.colors.class[class])
 	elseif reaction then

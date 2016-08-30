@@ -63,23 +63,25 @@ UF.CommonPostInit = function(self, size, noRaidIcons)
 end
 
 UF.CreateHealthBar = function(self, width, height, x, y, point, reverse)
-	local hpborder = self:CreateTexture(nil, "BORDER", nil, 0)
-	hpborder:Size(width, height)
+	local hpborder = self:CreateTexture(nil, "BORDER", nil, 1)
+	hpborder:Size(width + 4, height + 4)
 	hpborder:Point(point and "TOPRIGHT" or "TOPLEFT", self, point and "TOPRIGHT" or "TOPLEFT", x, y)
 	hpborder:SetTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\gwstatusbar-bg")
 
 	local hpbg = self:CreateTexture(nil, "BORDER", nil, 0)
-	hpbg:Size(width - 4, height - 4)
-	hpbg:Point("TOPLEFT", hpborder, "TOPLEFT", 2, -2)
+	hpbg:Size(width + 2, height + 2)
+	hpbg:Point("TOPLEFT", hpborder, "TOPLEFT", 1, -1)
 	hpbg:SetTexture("Interface\\BUTTONS\\WHITE8X8")
 	hpbg:SetVertexColor(0, 0, 0)
 
 	local hp = CreateFrame("StatusBar", nil, self)
 	hp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\statusbarsfill")
 	hp:SetReverseFill(reverse and true or false)
-	hp:SetAllPoints(hpbg)
+	hp:Size(width, height)
+	hp:Point("TOPLEFT", hpborder, "TOPLEFT", 2, -2)
 
-	hp.hpbg = hpborder
+	hp.hpborder = hpborder
+	hp.hpbg = hpbg
 
 	hp.colorClass = true
 	hp.colorClassPet = false
@@ -97,22 +99,24 @@ UF.CreateHealthBar = function(self, width, height, x, y, point, reverse)
 end
 
 UF.CreatePowerBar = function(self, width, height, point, reverse)
-	local ppborder = self:CreateTexture(nil, "BORDER", nil, 0)
-	ppborder:Size(width, height)
-	ppborder:Point(point and "TOPRIGHT" or "TOPLEFT", self.Health.hpbg, point and "BOTTOMRIGHT" or "BOTTOMLEFT", 0, 3)
+	local ppborder = self:CreateTexture(nil, "BORDER", nil, 1)
+	ppborder:Size(width + 4, height + 4)
+	ppborder:Point(point and "TOPRIGHT" or "TOPLEFT", self.Health.hpborder, point and "BOTTOMRIGHT" or "BOTTOMLEFT", 0, 3)
 	ppborder:SetTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\gwstatusbar-bg")
 
 	local ppbg = self:CreateTexture(nil, "BORDER", nil, 0)
-	ppbg:Size(width - 4, height - 4)
-	ppbg:Point("TOPLEFT", ppborder, "TOPLEFT", 2, -2)
+	ppbg:Size(width + 2, height + 2)
+	ppbg:Point("TOPLEFT", ppborder, "TOPLEFT", 1, -1)
 	ppbg:SetTexture("Interface\\BUTTONS\\WHITE8X8")
 	ppbg:SetVertexColor(0, 0, 0)
 
 	local pp = CreateFrame("StatusBar", nil, self)
 	pp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\statusbarsfill")
 	pp:SetReverseFill(reverse and true or false)
-	pp:SetAllPoints(ppbg)
+	pp:Size(width, height)
+	pp:Point("TOPLEFT", ppborder, "TOPLEFT", 2, -2)
 
+	pp.ppborder = ppborder
 	pp.ppbg = ppbg
 
 	pp.Override = UF.OverridePower
@@ -132,24 +136,33 @@ end
 do
 	local PostUpdateVisibility = function(self, show, is_shown)
 		if (show) then
+			self.appborder:Show()
 			self.appbg:Show()
 		else
+			self.appborder:Hide()
 			self.appbg:Hide()
 		end
 	end
 
 	UF.CreateAdditionalPower = function(self, width, height, point, reverse)
+		local ppborder = self:CreateTexture(nil, "BORDER", nil, 1)
+		ppborder:Size(width + 4, height + 4)
+		ppborder:Point(point and "TOPRIGHT" or "TOPLEFT", self.Power.ppborder, point and "BOTTOMRIGHT" or "BOTTOMLEFT", 0, 3)
+		ppborder:SetTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\gwstatusbar-bg")
+
 		local ppbg = self:CreateTexture(nil, "BORDER", nil, 0)
-		ppbg:Size(width, height)
-		ppbg:Point(point and "TOPRIGHT" or "TOPLEFT", self.Power.ppbg, point and "BOTTOMRIGHT" or "BOTTOMLEFT", 0, 3)
-		ppbg:SetTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\gwstatusbar-bg")
+		ppbg:Size(width + 2, height + 2)
+		ppbg:Point("TOPLEFT", ppborder, "TOPLEFT", 1, -1)
+		ppbg:SetTexture("Interface\\BUTTONS\\WHITE8X8")
+		ppbg:SetVertexColor(0, 0, 0)
 
 		local pp = CreateFrame("StatusBar", nil, self)
 		pp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\statusbarsfill")
 		pp:SetReverseFill(reverse and true or false)
-		pp:Size(width - 4, height - 4)
-		pp:Point("TOPLEFT", ppbg, "TOPLEFT", 2, -2)
+		pp:Size(width, height)
+		pp:Point("TOPLEFT", ppborder, "TOPLEFT", 2, -2)
 
+		pp.appborder = ppborder
 		pp.appbg = ppbg
 
 		pp.PostUpdateVisibility = PostUpdateVisibility
@@ -162,49 +175,6 @@ do
 
 		return pp
 	end
-end
-
---[[
-		Extra powerbar display
---]]
-UF.CreateExtraPowerBar = function(self, width, height, point, anchor, relpoint, offsetX, offsetY)
-	local pp = CreateFrame("StatusBar", nil, self)
-	pp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\statusbarsfill")
-	pp:Point(point, anchor, relpoint, offsetX, offsetY)
-	pp:Size(width, height)
-
-	local bg = CreateFrame("Frame", nil, pp)
-	bg:Point("TOPLEFT", pp, -2, 2)
-	bg:Point("BOTTOMRIGHT", pp, 2, -2)
-	bg:SetFrameStrata("BACKGROUND")
-	bg:SetBackdrop {
-		bgFile = "Interface\\Buttons\\White8x8",
-		edgeFile = "Interface\\Buttons\\White8x8",
-		tile = false,
-		edgeSize = 2
-	}
-	bg:SetBackdropColor(0, 0, 0, 1)
-	bg:SetBackdropBorderColor(0, 0, 0, 1)
-
-	pp.animHideSelf = pp:CreateAnimationGroup()
-	local hideBar = pp.animHideSelf:CreateAnimation("Alpha")
-	hideBar:SetFromAlpha(1)
-	hideBar:SetToAlpha(0)
-	pp.animHideSelf:SetScript("OnFinished", function()
-		pp:Hide()
-	end)
-
-	pp.animShowSelf = pp:CreateAnimationGroup()
-	local showBar = pp.animShowSelf:CreateAnimation("Alpha")
-	showBar:SetFromAlpha(0)
-	showBar:SetToAlpha(1)
-	pp.animShowSelf:SetScript("OnPlay", function()
-		pp:Show()
-	end)
-
-	Smoothing:EnableBarAnimation(pp)
-
-	return pp
 end
 
 -- Leader, PvP, Role, etc.
@@ -276,8 +246,8 @@ do
 		button:Height(icons.size or 16)
 
 		local border = CreateFrame("Frame", nil, button)
-		border:SetPoint("TOPLEFT", button, -2, 2)
-		border:SetPoint("BOTTOMRIGHT", button, 2, -2)
+		border:Point("TOPLEFT", button, -2, 2)
+		border:Point("BOTTOMRIGHT", button, 2, -2)
 		border:SetFrameStrata("BACKGROUND")
 		border:SetBackdrop {
 			edgeFile = "Interface\\Buttons\\White8x8",
@@ -369,13 +339,13 @@ do
 				* Short term buffs on player/pet
 		--]]
 		if (button.filter == "HELPFUL") then
-			if (unit ~= "player" and unit ~= "pet" and unit ~= "vehicle") then
+			if (unit ~= "player" and unit ~= "pet" and unit ~= "vehicle" and duration > 0) then
 				if (T.db["frames"].auras.showBuffsOnFriends and button.isFriendly) then
 					return true
 				elseif (T.db["frames"].auras.showBuffsOnEnemies and button.isEnemy) then
 					return true
 				end
-			elseif (T.db["frames"].auras.showBuffsOnMe) then
+			elseif (T.db["frames"].auras.showBuffsOnMe and duration > 0 and duration <= 600) then
 				return true
 			end
 		end
@@ -410,6 +380,28 @@ do
 			end
 
 			return true
+		end
+
+		return false
+	end
+
+	local CustomFilterLongBuffs = function(element, unit, button, name, _, _, _, dtype, duration, _, caster, _, _, spellid, _, isBossDebuff)
+		button.isPlayer = (caster == "player" or caster == "vehicle" or caster == "pet")
+		button.isFriendly = UnitCanAssist("player", unit)
+		button.isEnemy = UnitCanAttack("player", unit)
+
+		button.duration = (duration == 0) and huge or duration
+		button.caster = caster
+		button.dtype = dtype
+
+		if (T.db["frames"].auras.blacklistAuraFilter[name]) then
+			return false
+		end
+
+		if (button.filter == "HELPFUL") then
+			if ((unit == "player" or unit == "vehicle") and (duration == 0 or duration > 600)) then
+				return true
+			end
 		end
 
 		return false
@@ -466,5 +458,33 @@ do
 		buffs.PostUpdateIcon = PostUpdateIcon
 
 		self.Buffs = buffs
+	end
+
+	UF.AddLongBuffs = function(self, point, relativeFrame, relativePoint, ofsx, ofsy)
+		local buffsPerRow = 16
+
+		local width	= (2 * 16) + (22 * 16)
+		local height = (2 * (32 / 16)) + (22 * (32 / 16))
+
+		local buffs = CreateFrame("Frame", nil, self)
+		buffs:Point(point, relativeFrame, relativePoint, ofsx, ofsy)
+		buffs:Size(width, height)
+
+		buffs.numDebuffs = 0
+
+		buffs.numBuffs = 32
+		buffs.size = 22
+		buffs.spacing = 6
+		buffs.initialAnchor = point
+		buffs["growth-x"] = "LEFT"
+		buffs["growth-y"] = "UP"
+		buffs.filter = "HELPFUL" -- Explicitly set the filter or the first customFilter call won"t work
+		buffs.showBuffType = true
+
+		buffs.CustomFilter = CustomFilterLongBuffs
+		buffs.CreateIcon = CreateAuraIcon
+		buffs.PostUpdateIcon = PostUpdateIcon
+
+		self.Auras = buffs
 	end
 end

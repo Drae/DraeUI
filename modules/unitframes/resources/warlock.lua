@@ -18,37 +18,18 @@ local UnitExists, GetComboPoints = UnitExists, GetComboPoints
 		Warlock
 		Hijacks all three Blizzard bars
 --]]
-do
-	local OnEvent = function(self, event)
-		local cb = self.classBar
+UF.CreateWarlockBar = function(self, point, anchor, relpoint, xOffset, yOffset)
+	if (T.playerClass ~= "WARLOCK") then return end
 
-		if (event == "PLAYER_REGEN_DISABLED") then
-			cb:SetAlpha(1.0)
-		else
-			cb:SetAlpha(0)
-		end
-	end
+	local cb = CreateFrame("Frame", nil, self)
+	cb:SetFrameLevel(12)
+	cb:EnableMouse(false)
+	cb.unit = "player"
 
-	UF.CreateWarlockBar = function(self, point, anchor, relpoint, xOffset, yOffset)
-		if (T.playerClass ~= "WARLOCK") then return end
+	_G["WarlockPowerFrame"]:SetParent(cb)
+	_G["WarlockPowerFrame"]:ClearAllPoints()
+	_G["WarlockPowerFrame"]:Point(point, anchor, relpoint, xOffset, yOffset)
+	_G["WarlockPowerFrame"]:SetScale(scale)
 
-		local scale = 1.2
-
-		local cb = CreateFrame("Frame", nil, self)
-		cb:SetFrameLevel(12)
-		cb:EnableMouse(false)
-		cb.unit = "player"
-
-		_G["WarlockPowerFrame"]:SetParent(cb)
-		_G["WarlockPowerFrame"]:ClearAllPoints()
-		_G["WarlockPowerFrame"]:Point(point, anchor, relpoint, xOffset / scale, yOffset / scale)
-		_G["WarlockPowerFrame"]:SetScale(scale)
-
-		cb:SetAlpha(0)
-
-		self.classBar = cb
-
-		self:RegisterEvent("PLAYER_REGEN_DISABLED", OnEvent, true)
-		self:RegisterEvent("PLAYER_REGEN_ENABLED", OnEvent, true)
-	end
+	self.resourceBar = cb
 end

@@ -43,19 +43,19 @@ C["frames"] = {
 	playerYoffset		= -100,
 	targetXoffset		= 420,
 	targetYoffset		= -100,
-	totXoffset			= 40, 	-- Relative to right end of target
+	totXoffset			= 40, 	-- Relative to right of target
 	totYoffset			= 0,
-	focusXoffset		= 0,  	-- Relative to right end of target
-	focusYoffset		= -100,
-	focusTargetXoffset	= 0, 	-- Relative to left of target target
-	focusTargetYoffset	= -100,
-	petXoffset			= 0, 	-- Relative to left of player
-	petYoffset			= -40,
-	petTargetXoffset	= 0,  	-- Relative to  of player
-	petTargetYoffset	= -40,
-	bossXoffset			= 0,	-- Relative to target
+	focusXoffset		= 6,  	-- Relative to left of target
+	focusYoffset		= 75,
+	focusTargetXoffset	= 10, 	-- Relative to right of focus target
+	focusTargetYoffset	= 0,
+	petXoffset			= 62, 	-- Relative to left of player
+	petYoffset			= -100,
+	petTargetXoffset	= 10,  	-- Relative to right of pet
+	petTargetYoffset	= 0,
+	bossXoffset			= 0,	-- Relative to left of target
 	bossYoffset			= -100,
-	arenaXoffset		= 0, -- Relative to player
+	arenaXoffset		= 0, 	-- Relative to left of player
 	arenaYoffset		= 140,
 
 	largeScale 			= 1.0,
@@ -147,12 +147,18 @@ C["frames"] = {
 
 C["raidframes"] = {
 	-- General frame parameters
+	width = 50,
+	height = 45,
 	gridLayout = "HORIZONTAL", -- groups are arranged horizontally - one above (or below) the other,
 							   -- VERTICAL would have groups appear to the right (or left) of each other
 	gridGroupsAnchor = "BOTTOMLEFT", -- This is the anchor point for each group - groups will grow from this point
-	scale = 1.0,
 	padding = 8, -- Distance between frames - the highlight border is 3px, so keep it >3
 	showPets = true, -- Pets will be shown as seperate units, vehicles will appear as pets if enabled
+
+	colorSmooth = true,
+	colorPet = false,
+	colorCharmed = true,
+
 
 	-- X, Y position of frames - the 1, 2, 3, etc. tables
 	-- Equates to the total number of groups in the raid (not each group!). If you do not
@@ -175,7 +181,7 @@ C["raidframes"] = {
 -- Player, target and focus castbar
 C["castbar"] = {
 	player = {
-		width	 = 180,
+		width	 = 150,
 		height	 = 6,
 		xOffset  = 12,
 		yOffset  = 0,
@@ -184,7 +190,7 @@ C["castbar"] = {
 		anchorto = "RIGHT",
 	},
 	target = {
-		width	 = 180,
+		width	 = 150,
 		height	 = 6,
 		xOffset  = -12,
 		yOffset  = 0,
@@ -202,14 +208,20 @@ C["castbar"] = {
 		anchorto = "LEFT",
 	},
 	boss = {
+		width	 = 150,
 		height	 = 6,
 		xOffset  = -12,
 		yOffset  = 0,
+		anchorat = "RIGHT",
+		anchorto = "LEFT",
 	},
 	arena = {
+		width	 = 150,
 		height	 = 6,
 		xOffset  = 0,
 		yOffset  = 12,
+		anchorat = "LEFT",
+		anchorto = "RIGHT",
 	},
 }
 
