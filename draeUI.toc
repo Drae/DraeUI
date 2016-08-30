@@ -75,6 +75,7 @@ modules\minimap\buttons.lua
 
 # Infobar
 modules\infobar\init.lua
+modules\infobar\plugin.lua
 modules\infobar\ldb\fps.lua
 modules\infobar\ldb\mem.lua
 modules\infobar\ldb\xp.lua

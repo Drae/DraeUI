@@ -192,11 +192,11 @@ UF.OnEnable = function(self)
 
 	-- Focus
 	oUF:SetActiveStyle("DraeFocus")
-	oUF:Spawn("focus", "DraeFocus"):Point("TOPRIGHT", "DraeTarget", "BOTTOMRIGHT", T.db["frames"].focusXoffset, T.db["frames"].focusYoffset)
+	oUF:Spawn("focus", "DraeFocus"):Point("BOTTOMLEFT", "DraeTarget", "TOPLEFT", T.db["frames"].focusXoffset, T.db["frames"].focusYoffset)
 
 	-- Focus target
 	oUF:SetActiveStyle("DraeFocusTarget")
-	oUF:Spawn("focustarget", "DraeFocusTarget"):Point("TOPRIGHT", "DraeTargetTarget", "BOTTOMRIGHT", T.db["frames"].focusTargetXoffset, T.db["frames"].focusTargetYoffset)
+	oUF:Spawn("focustarget", "DraeFocusTarget"):Point("LEFT", "DraeFocus", "RIGHT", T.db["frames"].focusTargetXoffset, T.db["frames"].focusTargetYoffset)
 
 	-- Pet
 	oUF:SetActiveStyle("DraePet")
@@ -204,7 +204,7 @@ UF.OnEnable = function(self)
 
 	-- Pet target
 	oUF:SetActiveStyle("DraeFocusTarget")
-	oUF:Spawn("pettarget", "DraePetTarget"):Point("TOPRIGHT", "DraePlayer", "BOTTOMRIGHT", T.db["frames"].petTargetXoffset, T.db["frames"].petTargetYoffset)
+	oUF:Spawn("pettarget", "DraePetTarget"):Point("LEFT", "DraePet", "RIGHT", T.db["frames"].petTargetXoffset, T.db["frames"].petTargetYoffset)
 
 	-- Boss frames
 	if (T.db["frames"].showBoss) then
@@ -301,14 +301,14 @@ UF.OnEnable = function(self)
 			"showPlayer", true,
 			"showRaid", true,
 
-			"oUF-initialConfigFunction", initialConfigFunction:format(48, 40),
+			"oUF-initialConfigFunction", initialConfigFunction:format(50, 45),
 
 			"groupBy", "GROUP",
 			"groupFilter", tostring(i),
 			"groupingOrder", "1,2,3,4,5,6,7,8",
 
-			"initial-width", 48,
-			"initial-height", 40,
+			"initial-width", 50,
+			"initial-height", 45,
 			"xOffset", xOffset,
 			"yOffset", yOffset,
 			"point", point,  -- RIGHT for growing right to left, LEFT for growing left to right
@@ -330,10 +330,8 @@ UF.OnEnable = function(self)
 				yMult = 0
 			end
 
-			header:SetPoint(T.db["raidframes"].gridGroupsAnchor, self.raidHeaders[i - 1], relPoint, 10 * xMult, 10 * yMult)
+			header:Point(T.db["raidframes"].gridGroupsAnchor, self.raidHeaders[i - 1], relPoint, 10 * xMult, 10 * yMult)
 		end
-
-		header:SetScale(T.db["raidframes"].scale)
 
 		self.raidHeaders[i] = header
 	end
@@ -344,12 +342,12 @@ UF.OnEnable = function(self)
 			"showParty", true,
 			"showRaid", true,
 
-			"oUF-initialConfigFunction", initialConfigFunction:format(48, 25),
+			"oUF-initialConfigFunction", initialConfigFunction:format(50, 25),
 
 			"filterOnPet", true,
 
-			"initial-width", 48,
-			"initial-height", 30,
+			"initial-width", 50,
+			"initial-height", 25,
 			"xOffset", xOffset, -- +ve for right, -ve for left
 			"yOffset", yOffset,
 			"point", point,  -- RIGHT for growing right to left, LEFT for growing left to right
@@ -358,7 +356,6 @@ UF.OnEnable = function(self)
 			"columnSpacing", 8,
 			"columnAnchorPoint", colAnchor
 		)
-		headerPet:SetScale(T.db["raidframes"].scale)
 
 		self.raidHeaders["pet"] = headerPet
 	end

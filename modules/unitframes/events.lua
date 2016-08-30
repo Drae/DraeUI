@@ -240,6 +240,7 @@ do
 			elseif (newState == "INVEHICLE") then
 				t = oUF.colors.health
 			elseif (UnitIsPlayer(unit) or (health.colorClassPet and UnitPlayerControlled(unit) and not UnitIsPlayer(unit))) then
+			print (" >> ", unit, UnitIsPlayer(unit))
 				t = oUF.colors.class[class]
 			else
 				t = oUF.colors.health

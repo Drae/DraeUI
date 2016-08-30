@@ -34,8 +34,8 @@ local StyleDrae_Target = function(frame, unit, isSingle)
 
 	frame.Sword = framebg
 
-	frame.Health = UF.CreateHealthBar(frame, 254, 21, -62, -22, true, true)
-	frame.Power = UF.CreatePowerBar(frame, 254, 10, true, true)
+	frame.Health = UF.CreateHealthBar(frame, 250, 16, -62, -23, true, true)
+	frame.Power = UF.CreatePowerBar(frame, 250, 5, true, true)
 
 	local portrait = frame:CreateTexture(nil, "BACKGROUND", nil, 1)
 	portrait:Size(56, 56)
@@ -89,7 +89,7 @@ local StyleDrae_Target = function(frame, unit, isSingle)
 
 	-- Castbar
 	local cb = T.db["castbar"].target
-	UF.CreateCastBar(frame, cb.width, cb.height, cb.anchor, cb.anchorat, cb.anchorto, cb.xOffset, cb.yOffset)
+	UF.CreateCastBar(frame, cb.width, cb.height, cb.anchor, cb.anchorat, cb.anchorto, cb.xOffset, cb.yOffset, true)
 
 	-- The number here is the size of the raid icon
 	UF.CommonPostInit(frame, 30)

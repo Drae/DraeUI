@@ -12,7 +12,7 @@ local UF = T:GetModule("UnitFrames")
 
 -- Target of target frame
 local StyleDrae_TargetTarget = function(frame, unit, isSingle)
-	frame:Size(150, 47)
+	frame:Size(120, 47)
 	frame:SetHitRectInsets(0, 0, 0, 20)
 	frame:SetFrameStrata("LOW")
 
@@ -23,14 +23,13 @@ local StyleDrae_TargetTarget = function(frame, unit, isSingle)
 	arrow:Point("RIGHT", frame, "LEFT", -12, 10)
 	arrow:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\targetArrow")
 
-	frame.Health = UF.CreateHealthBar(frame, 150, 21, 0, 1)
-
-	frame.Power = UF.CreatePowerBar(frame, 150, 10)
+	frame.Health = UF.CreateHealthBar(frame, 120, 16, 0, 0)
+	frame.Power = UF.CreatePowerBar(frame, 120, 5)
 
 	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "RIGHT", -2, 0)
 
 	local info = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "LEFT", -2, 22)
-	info:Size(110, 20)
+	info:Size(95, 20)
 	frame:Tag(info, "[drae:shortclassification][drae:unitcolour][name]")
 
 	local level = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "RIGHT", 2, 22)

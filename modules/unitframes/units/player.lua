@@ -33,9 +33,9 @@ local StyleDrae_Player = function(frame, unit, isSingle)
 
 	frame.Sword = framebg
 
-	frame.Health = UF.CreateHealthBar(frame, 254, 21, 62, -22)
-	frame.Power = UF.CreatePowerBar(frame, 254, 10)
-	frame.AdditionalPower = UF.CreateAdditionalPower(frame, 254, 6)
+	frame.Health = UF.CreateHealthBar(frame, 250, 16, 62, -23)
+	frame.Power = UF.CreatePowerBar(frame, 250, 5)
+	frame.AdditionalPower = UF.CreateAdditionalPower(frame, 250, 3)
 
 	local portrait = frame:CreateTexture(nil, "BACKGROUND", nil, 1)
 	portrait:Size(56, 56)
@@ -71,6 +71,7 @@ local StyleDrae_Player = function(frame, unit, isSingle)
 	frame.Combat = combat
 
 	-- Auras
+	UF.AddLongBuffs(frame, "BOTTOMRIGHT", T.UIParent, "BOTTOMRIGHT", -20, 20)
 	UF.AddBuffs(frame, "TOPLEFT", frame.Power, "BOTTOMLEFT", 0, -12, T.db["frames"].auras.maxPlayerBuff or 4, T.db["frames"].auras.auraLrg, 8, "RIGHT", "DOWN")
 	UF.AddDebuffs(frame, "TOPRIGHT", frame.Power, "BOTTOMRIGHT", 0, -12, T.db["frames"].auras.maxPlayerDebuff or 15, T.db["frames"].auras.auraSml, 8, "LEFT", "DOWN")
 
@@ -86,13 +87,14 @@ local StyleDrae_Player = function(frame, unit, isSingle)
 	UF.CreateTotemBar(frame, "TOP", portrait, "BOTTOM", 0, -12)
 
 	-- Class specific resource bars
-	UF.CreateMageClassBar(frame, "CENTER", frame.Castbar, "CENTER", 0, -14)
-	UF.CreatePaladinClassBar(frame, "CENTER", frame.Castbar, "CENTER", 0, -10)
+	UF.CreateMageClassBar(frame, "TOPRIGHT", frame.Health, "TOPRIGHT", 0, 24)
+	UF.CreatePaladinClassBar(frame, "TOPRIGHT", frame.Health, "TOPRIGHT", 0, 24)
+	UF.CreateMonkClassBar(frame, "TOPRIGHT", frame.Health, "TOPRIGHT", 0, 24)
+	UF.CreateDeathknightClassBar(frame, "TOPRIGHT", frame.Health, "TOPRIGHT", 0, 24)
 --[[
 	UF.CreateDeathknightBar(frame, "CENTER", frame.Castbar, "CENTER", rbp.xOffset, rbp.yOffset)
 	UF.CreateDemonhunterBar(frame, "CENTER", frame.Castbar, "CENTER", rbp.xOffset, rbp.yOffset)
 	UF.CreateDruidBar(frame, "CENTER", frame.Castbar, "CENTER", rbp.xOffset, rbp.yOffset)
-	UF.CreateMonkBar(frame, "CENTER", frame.Castbar, "CENTER", rbp.xOffset, rbp.yOffset)
 	UF.CreateRogueBar(frame, "CENTER", frame.Castbar, "CENTER", rbp.xOffset, rbp.yOffset)
 	UF.CreateWarlockBar(frame, "CENTER", frame.Castbar, "CENTER", rbp.xOffset, rbp.yOffset)
 ]]

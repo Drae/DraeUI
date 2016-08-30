@@ -20,29 +20,29 @@ local indicators = {
 	["TOPICON"]			= { type = "icon",  width = 19, height = 19, at = "CENTER",      to = "TOP",      	 offsetX = 0,  offsetY = 2},
 
 	-- Colour only indicators
-	["TOP"]				= { type = "color", width = 7,  height = 7,  at = "TOP",         to = "TOP",         offsetX = 0,  offsetY = 0},
-	["TOPR"]			= { type = "color", width = 7,  height = 7,  at = "TOP",         to = "TOP",         offsetX = -7, offsetY = 0},
-	["TOPL"]			= { type = "color", width = 7,  height = 7,  at = "TOP",         to = "TOP",         offsetX = 6,  offsetY = 0},
+	["TOP"]				= { type = "color", width = 8,  height = 8,  at = "TOP",         to = "TOP",         offsetX = 0,  offsetY = 0},
+	["TOPR"]			= { type = "color", width = 8,  height = 8,  at = "TOP",         to = "TOP",         offsetX = -8, offsetY = 0},
+	["TOPL"]			= { type = "color", width = 8,  height = 8,  at = "TOP",         to = "TOP",         offsetX = 8,  offsetY = 0},
 
-	["TOPLEFT"] 		= { type = "color", width = 7,  height = 7,  at = "TOPLEFT",     to = "TOPLEFT",     offsetX = 0,  offsetY = 0},
+	["TOPLEFT"] 		= { type = "color", width = 8,  height = 8,  at = "TOPLEFT",     to = "TOPLEFT",     offsetX = 0,  offsetY = 0},
 
-	["TOPRIGHT"]		= { type = "color", width = 7,  height = 7,  at = "TOPRIGHT",    to = "TOPRIGHT",    offsetX = 0,  offsetY = 0},
+	["TOPRIGHT"]		= { type = "color", width = 8,  height = 8,  at = "TOPRIGHT",    to = "TOPRIGHT",    offsetX = 0,  offsetY = 0},
 
-	["BOTTOM"] 			= { type = "color", width = 7,  height = 7,  at = "BOTTOM",      to = "BOTTOM",      offsetX = 0,  offsetY = 0},
-	["BOTTOML"] 		= { type = "color", width = 7,  height = 7,  at = "BOTTOM",      to = "BOTTOM",      offsetX = -7, offsetY = 0},
-	["BOTTOMR"] 		= { type = "color", width = 7,  height = 7,  at = "BOTTOM",      to = "BOTTOM",      offsetX = 7,  offsetY = 0},
+	["BOTTOM"] 			= { type = "color", width = 8,  height = 8,  at = "BOTTOM",      to = "BOTTOM",      offsetX = 0,  offsetY = 0},
+	["BOTTOML"] 		= { type = "color", width = 8,  height = 8,  at = "BOTTOM",      to = "BOTTOM",      offsetX = -8, offsetY = 0},
+	["BOTTOMR"] 		= { type = "color", width = 8,  height = 8,  at = "BOTTOM",      to = "BOTTOM",      offsetX = 8,  offsetY = 0},
 
-	["BOTTOMLEFT"]		= { type = "color", width = 7,  height = 7,  at = "BOTTOMLEFT",  to = "BOTTOMLEFT",  offsetX = 0,  offsetY = 0},
+	["BOTTOMLEFT"]		= { type = "color", width = 8,  height = 8,  at = "BOTTOMLEFT",  to = "BOTTOMLEFT",  offsetX = 0,  offsetY = 0},
 
 	["BOTTOMRIGHT"] 	= { type = "color", width = 4,  height = 4,  at = "BOTTOMRIGHT", to = "BOTTOMRIGHT", offsetX = 0,  offsetY = 0},
 	["BOTTOMRIGHTL"] 	= { type = "color", width = 4,  height = 4,  at = "BOTTOMRIGHT", to = "BOTTOMRIGHT", offsetX = -4, offsetY = 0},
 	["BOTTOMRIGHTT"] 	= { type = "color", width = 4,  height = 4,  at = "BOTTOMRIGHT", to = "BOTTOMRIGHT", offsetX = 0,  offsetY = 4},
 
-	["LEFT"] 			= { type = "color", width = 7,  height = 7,  at = "LEFT",        to = "LEFT",        offsetX = 0,  offsetY = 0},
-	["LEFTT"]	 		= { type = "color", width = 7,  height = 7,  at = "LEFT",        to = "LEFT",        offsetX = 0,  offsetY = -7},
-	["LEFTB"]	 		= { type = "color", width = 7,  height = 7,  at = "LEFT",        to = "LEFT",        offsetX = 0,  offsetY = 7},
+	["LEFT"] 			= { type = "color", width = 8,  height = 8,  at = "LEFT",        to = "LEFT",        offsetX = 0,  offsetY = 0},
+	["LEFTT"]	 		= { type = "color", width = 8,  height = 8,  at = "LEFT",        to = "LEFT",        offsetX = 0,  offsetY = -8},
+	["LEFTB"]	 		= { type = "color", width = 8,  height = 8,  at = "LEFT",        to = "LEFT",        offsetX = 0,  offsetY = 8},
 
-	["RIGHT"] 			= { type = "color", width = 7,  height = 7,  at = "RIGHT",       to = "RIGHT",       offsetX = 0, offsetY = 0},
+	["RIGHT"] 			= { type = "color", width = 8,  height = 8,  at = "RIGHT",       to = "RIGHT",       offsetX = 0, offsetY = 0},
 
 	-- Additional indicators are:
 	-- Border
@@ -458,13 +458,16 @@ local StyleDrae_Raid = function(frame, unit)
 	hp:Point("TOPLEFT", frame, "TOPLEFT", 1, -1)
 	hp:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -1, frame.isPet and 1 or 1 + powerBarSize)
 
-	Smoothing:EnableBarAnimation(hp)
+	if (T.db["raidframes"].colorSmooth) then
+		Smoothing:EnableBarAnimation(hp)
+	end
 
-	hp.Smooth = T.db["raidframes"].colorSmooth
 	hp.colorClassPet = T.db["raidframes"].colorPet
 	hp.colorCharmed	= T.db["raidframes"].colorCharmed
-	hp.height = hp:GetHeight()
 	hp.Override	= UF.UpdateRaidHealth -- override the oUF update
+
+	hp.height = hp:GetHeight()
+
 	frame.Health = hp
 
 	-- Total absorb/shields on target
@@ -544,7 +547,9 @@ local StyleDrae_Raid = function(frame, unit)
 		pp.Override = UF.UpdateRaidPower -- override oUF
 		frame.Power = pp
 
-		Smoothing:EnableBarAnimation(pp)
+		if (T.db["raidframes"].colorSmooth) then
+			Smoothing:EnableBarAnimation(pp)
+		end
 	end
 
 	-- Text1 (used for name)

@@ -87,7 +87,7 @@ local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeExp", {
 --[[
 
 ]]
-local restingIcon = "|TInterface\\AddOns\\draeUI\\media\\textures\\resting-icon:13:13:0:0|t"
+local restingIcon = "|TInterface\\AddOns\\draeUI\\media\\textures\\resting-icon:14:14:0:0|t"
 
 --[[
 
@@ -259,8 +259,6 @@ XP.UpdateExperience = function(self, event, unit)
 	local pct = 0
 	if (max and max ~= 0) then
 		pct = (cur / max) * 100
-
-		affix = "xp                      " .. (rested and format("/|cff%02x%02x%02x%d|r|cff%02x%02x%02x%%rested|r", 0, 255, 0, rested / max * 100, 255, 255, 255) or "")
 	end
 
 	LDB.statusbar__xp_min_max = "0," .. max
@@ -276,7 +274,7 @@ XP.UpdateExperience = function(self, event, unit)
 
 	local r1, g1, b1 = T.ColorGradient(pct / 100 - 0.001, 1, 0, 0, 1, 1, 0, 0, 1, 0)
 
-	LDB.text = format((IsResting() and (restingIcon .. " ") or "") .. "|cff%02x%02x%02x%d|r|cffffffff%%|r%s [|cff00ff00%s|r]", r1 * 255, g1 * 255, b1 * 255, pct, affix, level)
+	LDB.text = format((IsResting() and (restingIcon .. " ") or "") .. "[|cff00ff00%s|r] |cff%02x%02x%02x%d|r|cffffffff%%|rxp (%d/%d)%s", level, r1 * 255, g1 * 255, b1 * 255, pct, cur, max, (rested and format(" |cff%02x%02x%02x%d|r|cff%02x%02x%02x%%rested|r", 0, 255, 0, rested / max * 100, 255, 255, 255) or ""))
 end
 
 do

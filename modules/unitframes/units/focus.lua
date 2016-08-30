@@ -12,19 +12,19 @@ local UF = T:GetModule("UnitFrames")
 
 -- Focus is a common frame type used for most other frames inc. pet, pettarget, etc.
 local StyleDrae_Focus = function(frame, unit, isSingle)
-	frame:Size(150, 47)
+	frame:Size(120, 47)
 	frame:SetHitRectInsets(0, 0, 0, 10)
 	frame:SetFrameStrata("LOW")
 
 	UF.CommonInit(frame)
 
-	frame.Health = UF.CreateHealthBar(frame, 150, 21, 0, 1)
-	frame.Power = UF.CreatePowerBar(frame, 150, 10)
+	frame.Health = UF.CreateHealthBar(frame, 120, 16, 0, 0)
+	frame.Power = UF.CreatePowerBar(frame, 120, 5)
 
 	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "RIGHT", -2, 0)
 
 	local info = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "LEFT", -2, 22)
-	info:Size(110, 20)
+	info:Size(95, 20)
 	frame:Tag(info, "[drae:shortclassification][drae:unitcolour][name]")
 
 	local level = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "RIGHT", 2, 22)
@@ -33,7 +33,7 @@ local StyleDrae_Focus = function(frame, unit, isSingle)
 
 	-- Castbar
 	local cb = T.db["castbar"].focus
-	UF.CreateCastBar(frame, cb.width, cb.height, cb.anchor, cb.anchorat, cb.anchorto, cb.xOffset, cb.yOffset)
+	UF.CreateCastBar(frame, cb.width, cb.height, cb.anchor, cb.anchorat, cb.anchorto, cb.xOffset, cb.yOffset, true)
 
 	-- Auras - just debuffs for target of target
 	UF.AddDebuffs(frame, "TOPRIGHT", frame.Power, "BOTTOMRIGHT", 0, -12, T.db["frames"].auras.maxFocusDebuff or 15, T.db["frames"].auras.auraSml, 8, "LEFT", "DOWN")

@@ -22,36 +22,6 @@ do
 	local SPELL_POWER_CHI = SPELL_POWER_CHI
 	local curChi = 0
 
-	local OnPower = function(self, event, unit, powerType)
-		if (powerType ~= "CHI" or InCombatLockdown()) then return end
-
-		local rs = self.resourceBar
-
-		local chi = UnitPower("player", SPELL_POWER_CHI)
-
-		if (chi == 0) then
-			rs:SetAlpha(0)
-		elseif (curChi == 0 and chi > 0) then
-			rs:SetAlpha(1.0)
-		end
-
-		curChi = chi
-	end
-
-	local OnEvent = function(self, event, arg1, arg2)
-		local rs = self.resourceBar
-
-		if (InCombatLockdown() or event == "PLAYER_REGEN_DISABLED") then
-			self:UnregisterEvent("UNIT_POWER", OnPower)
-
-			rs:SetAlpha(1.0)
-		else
-			self:RegisterEvent("UNIT_POWER", OnPower)
-
-			OnPower(self, nil, unit, "CHI")
-		end
-	end
-
 	local UpdateChi = function(self, event, unit, powerType)
 		if (unit ~= "player" ) then return end
 
@@ -64,8 +34,14 @@ do
 
 			if (isShown ~= shouldShow) then
 				if (isShown) then
+					if (chiBar[i].animShow:IsPlaying()) then
+						chiBar[i].animShow:Stop()
+					end
 					chiBar[i].animHide:Play()
 				else
+					if (chiBar[i].animHide:IsPlaying()) then
+						chiBar[i].animHide:Stop()
+					end
 					chiBar[i].animShow:Play()
 				end
 			end
@@ -78,17 +54,16 @@ do
 		local maxChi = UnitPowerMax("player", SPELL_POWER_CHI)
 
 		if (rs.maxChi ~= maxChi) then
-			for i = 1, maxChi do
-				if (i == 1) then
-					rs[i]:Point("LEFT", maxChi == 5 and 8 or maxChi == 6 and 12 or 28, -2)
-				else
-					rs[i]:Point("LEFT", rs[i - 1], "RIGHT", maxChi == 6 and 0 or 10, 0)
-				end
-				rs[i]:SetAlpha(1.0)
-			end
+			local _prev
 
-			if (rs.maxChi == 5) then
-				rs[5]:SetAlpha(0)
+			for i = maxChi, 1, -1 do
+				if (_prev) then
+					rs[i]:Point("RIGHT", _prev, "LEFT", 0, 0)
+				else
+					rs[i]:Point("RIGHT", rs, "RIGHT", 0, 0)
+				end
+
+				_prev = rs[i]
 			end
 
 			rs.maxChi = maxChi
@@ -98,27 +73,70 @@ do
 	local PlayerSpecChanged = function(self)
 		local spec = GetSpecialization()
 
-		-- Mistweaver? Enable mana feedback
-		if (spec == 2) then
-			pp.PostUpdate = UpdateMonkManaRegen
-			self:RegisterEvent("UNIT_AURA", UpdateMonkManaTea)
-
-			UpdateMonkManaTea(self)
+		if (spec == SPEC_MONK_WINDWALKER) then
+			self.resourceBar:Show()
 		else
-			self:UnregisterEvent("UNIT_AURA", UpdateMonkManaTea)
-			pp.PostUpdate = nil
+			self.resourceBar:Hide()
 		end
 	end
 
-	UF.CreateMonkBar = function(self, point, anchor, relpoint, xOffset, yOffset)
+	UF.CreateMonkClassBar = function(self, point, anchor, relpoint, xOffset, yOffset)
 		local spec = GetSpecialization()
 
 		if (T.playerClass ~= "MONK" or (T.playerClass == "MONK" and spec ~= SPEC_MONK_WINDWALKER)) then return end
 
+		local rs = CreateFrame("Frame", nil, self)
+		rs:SetFrameLevel(12)
+		rs:Point(point, anchor, relpoint, xOffset, yOffset)
+		rs:Size(210, 20)
+
+		rs.maxLight 	= 0
+		rs.animShow 	= {}
+		rs.animHide 	= {}
+
+		for i = 1, 6 do
+			rs[i] = CreateFrame("Frame", nil, rs)
+			rs[i]:Size(22, 22)
+
+			local r = rs[i]:CreateTexture(nil, "ARTWORK")
+			r:SetAtlas("MonkUI-OrbOff", true)
+			r:SetAllPoints(rs[i])
+
+			local r2 = rs[i]:CreateTexture(nil, "ARTWORK")
+			r2:SetAtlas("MonkUI-LightOrb", true)
+			r2:SetAllPoints(rs[i])
+			r2:SetAlpha(0)
+
+			rs[i].lit = r2
+
+			rs[i].animShow = rs[i].lit:CreateAnimationGroup()
+			local showPoint = rs[i].animShow:CreateAnimation("Alpha")
+			showPoint:SetFromAlpha(0)
+			showPoint:SetToAlpha(1)
+			showPoint:SetDuration(0.2)
+			showPoint:SetOrder(1)
+			rs[i].animShow:SetScript("OnFinished", function()
+				rs[i].lit:SetAlpha(1.0)
+			end)
+
+			rs[i].animHide = rs[i].lit:CreateAnimationGroup()
+			local hidePoint = rs[i].animHide:CreateAnimation("Alpha")
+			hidePoint:SetFromAlpha(1)
+			hidePoint:SetToAlpha(0)
+			hidePoint:SetDuration(0.3)
+			hidePoint:SetOrder(1)
+			rs[i].animHide:SetScript("OnFinished", function()
+				rs[i].lit:SetAlpha(0)
+			end)
+		end
+
+		self.resourceBar 				= rs
+		self.ClassIcons					= rs
+		self.ClassIcons.Override 		= UpdateChi
+		self.ClassIcons.UpdateTexture 	= function() end
+
 		self:RegisterEvent("PLAYER_TALENT_UPDATE", UpdateChiPositions, true)
 		self:RegisterEvent("PLAYER_SPECIALIZATION_CHANGED", PlayerSpecChanged, true)
-		self:RegisterEvent("PLAYER_REGEN_DISABLED", OnEvent, true)
-		self:RegisterEvent("PLAYER_REGEN_ENABLED", OnEvent, true)
 
 		-- Run stuff that requires us to be in-game before it returns any
 		-- meaningful results
@@ -127,7 +145,6 @@ do
 		enterWorld:SetScript("OnEvent", function()
 			UpdateChiPositions(self)
 			PlayerSpecChanged(self)
-			OnEvent(self)
 		end)
 	end
 end

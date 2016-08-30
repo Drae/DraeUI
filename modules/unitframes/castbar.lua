@@ -46,7 +46,7 @@ local OnCastbarUpdate = function(self, elapsed)
 		self:SetValue(duration)
 
 		if(self.Spark) then
-			self.Spark:SetPoint("CENTER", self, "LEFT", (duration / self.max) * self:GetWidth(), 0)
+			self.Spark:Point("CENTER", self, "LEFT", (duration / self.max) * self:GetWidth(), 0)
 		end
 	else
 		self.unitName = nil
@@ -135,11 +135,12 @@ end
 --[[
 		Create a castbar
 --]]
-UF.CreateCastBar = function(self, width, height, anchor, anchorAt, anchorTo, xOffset, yOffset)
+UF.CreateCastBar = function(self, width, height, anchor, anchorAt, anchorTo, xOffset, yOffset, reverse)
 	local castbar = CreateFrame("StatusBar", nil, self)
 	castbar:Size(width, height)
 	castbar:Point(anchorAt, anchor, anchorTo, xOffset, yOffset)
 	castbar:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\statusbarsfill")
+--	castbar:SetReverseFill(reverse and true or false)
 	castbar:SetStatusBarColor(0.5, 0.5, 1, 1)
 
 	--color
@@ -158,8 +159,8 @@ UF.CreateCastBar = function(self, width, height, anchor, anchorAt, anchorTo, xOf
 
 	-- Border
 	local border = CreateFrame("Frame", nil, castbar)
-	border:SetPoint("TOPLEFT", -2, 2)
-	border:SetPoint("BOTTOMRIGHT", 2, -2)
+	border:Point("TOPLEFT", -2, 2)
+	border:Point("BOTTOMRIGHT", 2, -2)
 	border:SetFrameStrata("BACKGROUND")
 	border:SetBackdrop {
 		bgFile = "Interface\\BUTTONS\\WHITE8X8",
@@ -184,10 +185,10 @@ UF.CreateCastBar = function(self, width, height, anchor, anchorAt, anchorTo, xOf
 	-- Spell name
 	castbar.Text = T.CreateFontObject(castbar, T.db["general"].fontsize3, T["media"].font, "LEFT", 0, height + 6)
 
-	local shield = castbar:CreateTexture(nil, "BACKGROUND", nil, -1)
+	local shield = castbar:CreateTexture(nil, "BACKGROUND", nil, 7)
 	shield:SetTexture("Interface\\TARGETINGFRAME\\PortraitQuestBadge")
-	shield:SetPoint("LEFT", -8, 0)
-	shield:Size(16, 16)
+	shield:Point(reverse and "RIGHT" or "LEFT", castbar, reverse and "RIGHT" or "LEFT", reverse and 15 or -15, 0)
+	shield:Size(30, 30)
 	castbar.Shield = shield
 
 	self.Castbar = castbar
@@ -219,8 +220,8 @@ do
 			--glowing borders
 			local border = CreateFrame("Frame", nil, _G[bar])
 			border:SetFrameStrata("BACKGROUND")
-			border:SetPoint("TOPLEFT", -2, 2)
-			border:SetPoint("BOTTOMRIGHT", 2, -2)
+			border:Point("TOPLEFT", -2, 2)
+			border:Point("BOTTOMRIGHT", 2, -2)
 			border:SetBackdrop {
 				edgeFile = "Interface\\Buttons\\White8x8",
 				tile = false,
@@ -249,7 +250,7 @@ do
 
 			_G[bar.."Text"]:ClearAllPoints()
 			_G[bar.."Text"]:SetFont(T["media"].font, 10)
-			_G[bar.."Text"]:SetPoint("LEFT", _G[bar.."StatusBar"], 5, 1)
+			_G[bar.."Text"]:Point("LEFT", _G[bar.."StatusBar"], 5, 1)
 
 			_G[bar.."TextTime"] = T.CreateFontObject(_G[bar.."StatusBar"], 10, T["media"].font, "RIGHT", -5, 1, "NONE") -- Our timer
 
