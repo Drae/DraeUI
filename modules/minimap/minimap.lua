@@ -45,14 +45,6 @@ local menuList = {
 	func = function()
 		TogglePetJournal(1);
 	end},
-	{text = PETS,
-	func = function()
-		TogglePetJournal(2)
-	end},
-	{text = TOY_BOX,
-	func = function()
-		TogglePetJournal(3)
-	end},
 	{text = TIMEMANAGER_TITLE,
 	func = function() ToggleFrame(TimeManagerFrame) end},
 	{text = ACHIEVEMENT_BUTTON,
@@ -255,10 +247,6 @@ MM.OnEnable = function(self)
 	MinimapBorderTop:Hide()
 	MiniMapWorldMapButton:Hide()
 	MiniMapWorldMapButton:Hide()
-
-	-- Hide garrison report button
-	GarrisonLandingPageMinimapButton.Show = GarrisonLandingPageMinimapButton.Hide
-	GarrisonLandingPageMinimapButton:Hide()
 
 	Minimap:EnableMouseWheel()
 	Minimap:SetScript("OnMouseWheel", function(self, direction)

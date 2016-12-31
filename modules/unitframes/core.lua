@@ -19,7 +19,7 @@ local UUnitReaction, UnitExists = UnitReaction, UnitExists
 local UnitIsPlayer, GameTooltip, InCombatLockdown = UnitIsPlayer, GameTooltip, InCombatLockdown
 local CancelUnitBuff, UnitIsFriend, GetShapeshiftFormID, DebuffTypeColor = CancelUnitBuff, UnitIsFriend, GetShapeshiftFormID, DebuffTypeColor
 local UnitFrame_OnEnter, UnitFrame_OnLeave = UnitFrame_OnEnter, UnitFrame_OnLeave
-local RAID_CLASS_COLORS, FACTION_BAR_COLORS, CAT_FORM, BEAR_FORM = RAID_CLASS_COLORS, FACTION_BAR_COLORS, CAT_FORM, BEAR_FORM
+local RAID_CLASS_COLORS, FACTION_BAR_COLORS = RAID_CLASS_COLORS, FACTION_BAR_COLORS
 local select, upper, format, gsub, unpack, pairs, huge, insert = select, string.upper, string.format, string.gsub, unpack, pairs, math.huge, table.insert
 
 --[[
@@ -75,7 +75,7 @@ UF.CreateHealthBar = function(self, width, height, x, y, point, reverse)
 	hpbg:SetVertexColor(0, 0, 0)
 
 	local hp = CreateFrame("StatusBar", nil, self)
-	hp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\statusbarsfill")
+	hp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
 	hp:SetReverseFill(reverse and true or false)
 	hp:Size(width, height)
 	hp:Point("TOPLEFT", hpborder, "TOPLEFT", 2, -2)
@@ -111,7 +111,7 @@ UF.CreatePowerBar = function(self, width, height, point, reverse)
 	ppbg:SetVertexColor(0, 0, 0)
 
 	local pp = CreateFrame("StatusBar", nil, self)
-	pp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\statusbarsfill")
+	pp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
 	pp:SetReverseFill(reverse and true or false)
 	pp:Size(width, height)
 	pp:Point("TOPLEFT", ppborder, "TOPLEFT", 2, -2)
@@ -124,7 +124,7 @@ UF.CreatePowerBar = function(self, width, height, point, reverse)
 	pp.colorDisconnected = true
 	pp.colorPower = true
 
-	pp.__statusbartex = "Interface\\AddOns\\draeUI\\media\\statusbars\\statusbarsfill"
+	pp.__statusbartex = "Interface\\AddOns\\draeUI\\media\\statusbars\\striped"
 
 	pp.frequentUpdates = true
 
@@ -157,7 +157,7 @@ do
 		ppbg:SetVertexColor(0, 0, 0)
 
 		local pp = CreateFrame("StatusBar", nil, self)
-		pp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\statusbarsfill")
+		pp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
 		pp:SetReverseFill(reverse and true or false)
 		pp:Size(width, height)
 		pp:Point("TOPLEFT", ppborder, "TOPLEFT", 2, -2)
@@ -461,10 +461,9 @@ do
 	end
 
 	UF.AddLongBuffs = function(self, point, relativeFrame, relativePoint, ofsx, ofsy)
-		local buffsPerRow = 16
-
-		local width	= (2 * 16) + (22 * 16)
-		local height = (2 * (32 / 16)) + (22 * (32 / 16))
+		-- 16 per row, 2 rows, 24px size, 6px spacing
+		local width	= 480
+		local height = 60
 
 		local buffs = CreateFrame("Frame", nil, self)
 		buffs:Point(point, relativeFrame, relativePoint, ofsx, ofsy)
@@ -473,7 +472,7 @@ do
 		buffs.numDebuffs = 0
 
 		buffs.numBuffs = 32
-		buffs.size = 22
+		buffs.size = 24
 		buffs.spacing = 6
 		buffs.initialAnchor = point
 		buffs["growth-x"] = "LEFT"

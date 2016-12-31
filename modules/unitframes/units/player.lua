@@ -88,7 +88,7 @@ local StyleDrae_Player = function(frame, unit, isSingle)
 
 	-- Class specific resource bars
 	UF.CreateMageClassBar(frame, "TOPRIGHT", frame.Health, "TOPRIGHT", 0, 24)
-	UF.CreatePaladinClassBar(frame, "TOPRIGHT", frame.Health, "TOPRIGHT", 0, 24)
+--	UF.CreatePaladinClassBar(frame, "TOPRIGHT", frame.Health, "TOPRIGHT", 0, 24)
 	UF.CreateMonkClassBar(frame, "TOPRIGHT", frame.Health, "TOPRIGHT", 0, 24)
 	UF.CreateDeathknightClassBar(frame, "TOPRIGHT", frame.Health, "TOPRIGHT", 0, 24)
 --[[

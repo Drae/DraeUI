@@ -40,10 +40,6 @@ P["HUNTER"] = {
 			["status_raiddebuff"] = true,
 		},
 
-		["BOTTOMICON"] = {
-			["status_raiddebuff2"] = true,
-		},
-
 		["TOPLEFT"] = {
 			["status_aggro"] = true,
 		},

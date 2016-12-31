@@ -107,7 +107,7 @@ local handleWhisper = function(event, msg, author)
 		local party = GetNumGroupMembers()
 		local raid = IsInRaid()
 
-		if (isIn and instanceType == "party" and party == 4) then
+		if (isIn and instanceType == "party" and party == 5) then
 			SendChatMessage("Sorry, the group is full.", "WHISPER", nil, author)
 		elseif (party == 4 and not raid) then
 			peopleToInvite[#peopleToInvite + 1] = author

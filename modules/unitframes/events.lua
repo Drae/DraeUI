@@ -162,24 +162,13 @@ UF.UpdateText2 = function(self, state)
 	elseif (self.realUnit and UnitHasVehicleUI(self.realUnit)) then
 		text2.__locked = true
 		local realName = UnitName(SecureButton_GetUnit(self) or self.unit) or "Unknown"
-		text = T.UTF8(realName, 6, false)
-	elseif (health.__min ~= health.__max) then
-		if (T.db["raidframes"].showRaidHealthPct) then
-			local pct = max == 0 and 0 or ((max - min) / max) * 100
-			text = ("%.1f"):format(pct)
-		else
-			text = T.ShortVal(health.__min - health.__max)
-		end
-
-		text2.__locked = nil
+		text = T.UTF8(realName, 7, false)
 	else
 		text2.__locked = nil
 		text = ""
 	end
 
 	text2:SetText(text)
-
-	return status
 end
 
 do
@@ -240,7 +229,6 @@ do
 			elseif (newState == "INVEHICLE") then
 				t = oUF.colors.health
 			elseif (UnitIsPlayer(unit) or (health.colorClassPet and UnitPlayerControlled(unit) and not UnitIsPlayer(unit))) then
-			print (" >> ", unit, UnitIsPlayer(unit))
 				t = oUF.colors.class[class]
 			else
 				t = oUF.colors.health
@@ -287,13 +275,8 @@ do
 
 			if (text2 and not text2.__locked) then
 				if (hcurrent ~= hmax) then
-					if (T.db["raidframes"].showHealthPct) then
-						local pct = hmax == 0 and 0 or ((hmax - hcurrent) / hmax) * 100
-
-						text2:SetText(("%.1f%%"):format(pct))
-					else
-						text2:SetText(T.ShortVal(hcurrent - hmax))
-					end
+					local pct = hcurrent == 0 and 0 or ((hcurrent / hmax) * 100)
+					text2:SetText(("%.1f%%"):format(pct))
 				else
 					text2:SetText("")
 				end

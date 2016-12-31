@@ -2,6 +2,7 @@
 	<Script file="pvp.lua" />
 
 	<!-- Expacs -->
-	<Include file="warlordsofdraenor\embed.xml" />
 	<Include file="mistsofpandaria\embed.xml" />
+	<Include file="warlordsofdraenor\embed.xml" />
+	<Include file="legion\embed.xml" />
 </Ui>

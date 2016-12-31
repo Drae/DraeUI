@@ -268,22 +268,22 @@ UF.OnEnable = function(self)
 
 	if (T.db["raidframes"].gridLayout == "HORIZONTAL") then
 		if (T.db["raidframes"].gridGroupsAnchor == "TOPLEFT" or T.db["raidframes"].gridGroupsAnchor == "BOTTOMLEFT") then
-			xOffset = 8
+			xOffset = 6
 			yOffset = 0
 			point = "LEFT"
 		else
-			xOffset = -8
+			xOffset = -6
 			yOffset = 0
 			point = "RIGHT"
 		end
 	else
 		if (T.db["raidframes"].gridGroupsAnchor == "TOPLEFT" or T.db["raidframes"].gridGroupsAnchor == "TOPRIGHT") then
 			xOffset = 0
-			yOffset = -8
+			yOffset = -6
 			point = "TOP"
 		else
 			xOffset = 0
-			yOffset = 8
+			yOffset = 6
 			point = "BOTTOM"
 		end
 	end
@@ -294,21 +294,21 @@ UF.OnEnable = function(self)
 	self.relPoint = relPoint
 
 	oUF:SetActiveStyle("DraeRaid")
-
+--[[
 	-- Create raid headers
 	for i = 1, NUM_RAID_GROUPS do
 		local header = oUF:SpawnHeader("DraeRaid"..i, nil, visibility,
 			"showPlayer", true,
 			"showRaid", true,
 
-			"oUF-initialConfigFunction", initialConfigFunction:format(50, 45),
+			"oUF-initialConfigFunction", initialConfigFunction:format(T.db["raidframes"].width, T.db["raidframes"].height),
 
 			"groupBy", "GROUP",
 			"groupFilter", tostring(i),
 			"groupingOrder", "1,2,3,4,5,6,7,8",
 
-			"initial-width", 50,
-			"initial-height", 45,
+			"initial-width", T.db["raidframes"].width,
+			"initial-height", T.db["raidframes"].height,
 			"xOffset", xOffset,
 			"yOffset", yOffset,
 			"point", point,  -- RIGHT for growing right to left, LEFT for growing left to right
@@ -342,11 +342,11 @@ UF.OnEnable = function(self)
 			"showParty", true,
 			"showRaid", true,
 
-			"oUF-initialConfigFunction", initialConfigFunction:format(50, 25),
+			"oUF-initialConfigFunction", initialConfigFunction:format(T.db["raidframes"].width, 25),
 
 			"filterOnPet", true,
 
-			"initial-width", 50,
+			"initial-width", T.db["raidframes"].width,
 			"initial-height", 25,
 			"xOffset", xOffset, -- +ve for right, -ve for left
 			"yOffset", yOffset,
@@ -372,7 +372,7 @@ UF.OnEnable = function(self)
 
 	CompactRaidFrameContainer.Show = CompactRaidFrameContainer.Hide
 	CompactRaidFrameContainer:UnregisterAllEvents()
-	CompactRaidFrameContainer:Hide()
+	CompactRaidFrameContainer:Hide()]]
 end
 
 
@@ -405,10 +405,11 @@ UF.UpdateRaidLayout = function(self)
 		self.raidHeaders["pet"]:SetPoint(T.db["raidframes"].gridGroupsAnchor, self.raidHeaders[lastGroup], self.relPoint, 0, 15) -- Offset from the raid group
 	end
 end
-
+--[[
 UF.PLAYER_ENTERING_WORLD = function(self)
 	self:UpdateRaidLayout()
 end
 UF.PLAYER_REGEN_ENABLED	= UF.PLAYER_ENTERING_WORLD
 UF.GROUP_ROSTER_UPDATE = UF.PLAYER_ENTERING_WORLD
 UF.UNIT_PET = UF.PLAYER_ENTERING_WORLD
+]]

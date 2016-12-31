@@ -15,11 +15,6 @@ M.OnInitialize = function(self)
 end
 
 M.OnEnable = function(self)
-	setfenv(WorldMapFrame_OnShow, setmetatable({ UpdateMicroButtons = function() end }, { __index = _G })) --blizzard taint fix
-
-	self:HookScript(WorldMapFrame, 'OnShow', 'WorldMapFrame_OnShow')
-	self:HookScript(WorldMapFrame, 'OnHide', 'WorldMapFrame_OnHide')
-
 	local CoordsHolder = CreateFrame('Frame', 'CoordsHolder', WorldMapFrame)
 	CoordsHolder:SetFrameLevel(WorldMapDetailFrame:GetFrameLevel() + 1)
 	CoordsHolder:SetFrameStrata(WorldMapDetailFrame:GetFrameStrata())
@@ -35,4 +30,8 @@ M.OnEnable = function(self)
 	CoordsHolder.mouseCoords:SetTextColor(1, 1 ,0)
 	CoordsHolder.mouseCoords:Point("BOTTOMLEFT", CoordsHolder.playerCoords, "BOTTOMRIGHT", 20, 0)
 	CoordsHolder.mouseCoords:SetText(MOUSE_LABEL..":   0, 0")
+
+	M:RegisterEvent("ZONE_CHANGED_NEW_AREA", "EnableCoords")
+
+	M:EnableCoords()
 end

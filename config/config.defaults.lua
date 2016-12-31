@@ -39,11 +39,11 @@ C["frames"] = {
 
 	-- Player and Target are positioned relative to center of screen,
 	-- all other frames are positioned relative to those
-	playerXoffset		= -420,
+	playerXoffset		= -410,
 	playerYoffset		= -100,
-	targetXoffset		= 420,
+	targetXoffset		= 410,
 	targetYoffset		= -100,
-	totXoffset			= 40, 	-- Relative to right of target
+	totXoffset			= 20, 	-- Relative to right of target
 	totYoffset			= 0,
 	focusXoffset		= 6,  	-- Relative to left of target
 	focusYoffset		= 75,
@@ -147,33 +147,32 @@ C["frames"] = {
 
 C["raidframes"] = {
 	-- General frame parameters
-	width = 50,
-	height = 45,
+	width = 60,
+	height = 40,
 	gridLayout = "HORIZONTAL", -- groups are arranged horizontally - one above (or below) the other,
 							   -- VERTICAL would have groups appear to the right (or left) of each other
 	gridGroupsAnchor = "BOTTOMLEFT", -- This is the anchor point for each group - groups will grow from this point
-	padding = 8, -- Distance between frames - the highlight border is 3px, so keep it >3
+	padding = 2, -- Distance between frames - the highlight border is 3px, so keep it >3
 	showPets = true, -- Pets will be shown as seperate units, vehicles will appear as pets if enabled
 
 	colorSmooth = true,
 	colorPet = false,
 	colorCharmed = true,
 
-
 	-- X, Y position of frames - the 1, 2, 3, etc. tables
 	-- Equates to the total number of groups in the raid (not each group!). If you do not
 	-- specify a position for a total number of groups the position of the last highest
 	-- will be used
 	position = {
-		[1] = { "BOTTOMLEFT", UIParent, "CENTER", -136, -320 },
-		[2] = { "BOTTOMLEFT", UIParent, "CENTER", -136, -340 },
-		[3] = { "BOTTOMLEFT", UIParent, "CENTER", -136, -440 },
-		[5] = { "BOTTOMLEFT", UIParent, "CENTER", -880, -150 },
+		[1] = { "BOTTOMLEFT", UIParent, "CENTER", -166, -320 },
+		[2] = { "BOTTOMLEFT", UIParent, "CENTER", -166, -390 },
+		[3] = { "BOTTOMLEFT", UIParent, "CENTER", -166, -430 },
+		[5] = { "BOTTOMLEFT", UIParent, "CENTER", -940, -150 },
 	},
 
 	-- Button parameters
-	raidnamelength = 6,
-	showRaidHealthPct = false, -- Show health as a "remaining percentage" rather than an "absolute deficit"
+	raidnamelength = 7,
+	showRaidHealthPct = true, -- Show health as a "remaining percentage" rather than an "absolute deficit"
 
 	showOnlyDispellable = false, -- true to only show dispellable unknown debuffs
 }

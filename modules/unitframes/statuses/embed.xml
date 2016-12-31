@@ -1,9 +1,9 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file="aggro.lua" />
 	<Script file="auras.lua" />
+	<Script file="debuff.lua" />
 	<Script file="dmgreduction.lua" />
 	<Script file="healing.lua" />
-	<Script file="illuminatedhealing.lua" />
 	<Script file="raiddebuff.lua" />
 	<Script file="res.lua" />
 </Ui>
