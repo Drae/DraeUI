@@ -18,7 +18,6 @@ local UnitChannelInfo = UnitChannelInfo
 --[[
 		Castbar functions
 --]]
-
 local OnCastbarUpdate = function(self, elapsed)
 	if (self.casting or self.channeling) then
 		local parent = self:GetParent()
@@ -231,11 +230,11 @@ do
 
 			_G[bar]:SetParent(UIParent)
 			_G[bar]:SetScale(1)
-			_G[bar]:Height(T.db["castbar"].player.height / 1.25)
+			_G[bar]:Height(T.db["castbar"].player.height)
 			_G[bar]:Width(T.db["castbar"].player.width / 2)
 			if (bar == "MirrorTimer1") then
 				_G[bar]:ClearAllPoints()
-				_G[bar]:Point("RIGHT", self.Castbar, "RIGHT", 0, 100)
+				_G[bar]:Point("RIGHT", self.Castbar, "RIGHT", 0, 30)
 			else
 				_G[bar]:ClearAllPoints()
 				_G[bar]:Point("BOTTOM", _G["MirrorTimer"..(barId - 1)], "TOP", 0, 5)

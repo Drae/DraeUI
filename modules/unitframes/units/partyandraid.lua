@@ -16,33 +16,29 @@ local Smoothing = LibStub("LibCutawaySmooth-1.0", true)
 local indicators = {
 	-- Icons
 	["CENTERICON"]		= { type = "icon",  width = 22, height = 22, at = "CENTER",      to = "CENTER",      offsetX = 0,  offsetY = 0},
-	["BOTTOMICON"]		= { type = "icon",  width = 19, height = 19, at = "CENTER",      to = "BOTTOM",      offsetX = 0,  offsetY = -2},
-	["TOPICON"]			= { type = "icon",  width = 19, height = 19, at = "CENTER",      to = "TOP",      	 offsetX = 0,  offsetY = 2},
+	["BOTTOMICON"]		= { type = "icon",  width = 18, height = 18, at = "CENTER",      to = "BOTTOM",      offsetX = 0,  offsetY = -2},
+	["TOPICON"]			= { type = "icon",  width = 18, height = 18, at = "CENTER",      to = "TOP",      	 offsetX = 0,  offsetY = 2},
 
 	-- Colour only indicators
-	["TOP"]				= { type = "color", width = 8,  height = 8,  at = "TOP",         to = "TOP",         offsetX = 0,  offsetY = 0},
-	["TOPR"]			= { type = "color", width = 8,  height = 8,  at = "TOP",         to = "TOP",         offsetX = -8, offsetY = 0},
-	["TOPL"]			= { type = "color", width = 8,  height = 8,  at = "TOP",         to = "TOP",         offsetX = 8,  offsetY = 0},
+	["TOP"]				= { type = "color", width = 9,  height = 9,  at = "TOP",         to = "TOP",         offsetX = 0,  offsetY = 1},
+	["TOPR"]			= { type = "color", width = 9,  height = 9,  at = "TOP",         to = "TOP",         offsetX = -9, offsetY = 1},
+	["TOPL"]			= { type = "color", width = 9,  height = 9,  at = "TOP",         to = "TOP",         offsetX = 9,  offsetY = 1},
 
-	["TOPLEFT"] 		= { type = "color", width = 8,  height = 8,  at = "TOPLEFT",     to = "TOPLEFT",     offsetX = 0,  offsetY = 0},
+	["TOPLEFT"] 		= { type = "color", width = 9,  height = 9,  at = "TOPLEFT",     to = "TOPLEFT",     offsetX = 0,  offsetY = 1},
 
-	["TOPRIGHT"]		= { type = "color", width = 8,  height = 8,  at = "TOPRIGHT",    to = "TOPRIGHT",    offsetX = 0,  offsetY = 0},
+	["TOPRIGHT"]		= { type = "color", width = 9,  height = 9,  at = "TOPRIGHT",    to = "TOPRIGHT",    offsetX = 1,  offsetY = 1},
 
-	["BOTTOM"] 			= { type = "color", width = 8,  height = 8,  at = "BOTTOM",      to = "BOTTOM",      offsetX = 0,  offsetY = 0},
-	["BOTTOML"] 		= { type = "color", width = 8,  height = 8,  at = "BOTTOM",      to = "BOTTOM",      offsetX = -8, offsetY = 0},
-	["BOTTOMR"] 		= { type = "color", width = 8,  height = 8,  at = "BOTTOM",      to = "BOTTOM",      offsetX = 8,  offsetY = 0},
+	["BOTTOM"] 			= { type = "color", width = 9,  height = 9,  at = "BOTTOM",      to = "BOTTOM",      offsetX = 0,  offsetY = -1},
+	["BOTTOML"] 		= { type = "color", width = 9,  height = 9,  at = "BOTTOM",      to = "BOTTOM",      offsetX = -9, offsetY = -1},
+	["BOTTOMR"] 		= { type = "color", width = 9,  height = 9,  at = "BOTTOM",      to = "BOTTOM",      offsetX = 9,  offsetY = -1},
 
-	["BOTTOMLEFT"]		= { type = "color", width = 8,  height = 8,  at = "BOTTOMLEFT",  to = "BOTTOMLEFT",  offsetX = 0,  offsetY = 0},
+	["BOTTOMLEFT"]		= { type = "color", width = 9,  height = 9,  at = "BOTTOMLEFT",  to = "BOTTOMLEFT",  offsetX = 0,  offsetY = -1},
 
-	["BOTTOMRIGHT"] 	= { type = "color", width = 4,  height = 4,  at = "BOTTOMRIGHT", to = "BOTTOMRIGHT", offsetX = 0,  offsetY = 0},
-	["BOTTOMRIGHTL"] 	= { type = "color", width = 4,  height = 4,  at = "BOTTOMRIGHT", to = "BOTTOMRIGHT", offsetX = -4, offsetY = 0},
-	["BOTTOMRIGHTT"] 	= { type = "color", width = 4,  height = 4,  at = "BOTTOMRIGHT", to = "BOTTOMRIGHT", offsetX = 0,  offsetY = 4},
+	["LEFT"] 			= { type = "color", width = 9,  height = 9,  at = "LEFT",        to = "LEFT",        offsetX = 0,  offsetY = 0},
+	["LEFTT"]	 		= { type = "color", width = 9,  height = 9,  at = "LEFT",        to = "LEFT",        offsetX = 0,  offsetY = -9},
+	["LEFTB"]	 		= { type = "color", width = 9,  height = 9,  at = "LEFT",        to = "LEFT",        offsetX = 0,  offsetY = 9},
 
-	["LEFT"] 			= { type = "color", width = 8,  height = 8,  at = "LEFT",        to = "LEFT",        offsetX = 0,  offsetY = 0},
-	["LEFTT"]	 		= { type = "color", width = 8,  height = 8,  at = "LEFT",        to = "LEFT",        offsetX = 0,  offsetY = -8},
-	["LEFTB"]	 		= { type = "color", width = 8,  height = 8,  at = "LEFT",        to = "LEFT",        offsetX = 0,  offsetY = 8},
-
-	["RIGHT"] 			= { type = "color", width = 8,  height = 8,  at = "RIGHT",       to = "RIGHT",       offsetX = 0, offsetY = 0},
+	["RIGHT"] 			= { type = "color", width = 9,  height = 9,  at = "RIGHT",       to = "RIGHT",       offsetX = 1, offsetY = 0},
 
 	-- Additional indicators are:
 	-- Border
@@ -191,7 +187,7 @@ local CreateIndicator = function(frame, indicator)
 		})
 
 		local t = ind:CreateTexture(nil, "OVERLAY")
-		t:SetTexCoord(.08, .92, .08, .92)
+		t:SetTexCoord(.1, .9, .1, .9)
 		t:Point("CENTER", ind, "CENTER")
 		t:Size(indicators[indicator].width - 2, indicators[indicator].height - 2)
 		t:SetTexture(0, 0, 0, 1)
@@ -203,19 +199,18 @@ local CreateIndicator = function(frame, indicator)
 		g:SetLooping("BOUNCE")
 
 		local grow = g:CreateAnimation("Scale")
-		grow:SetScale(1.5, 1.5)
+		grow:SetScale(1.25, 1.25)
 		grow:SetOrigin("CENTER", 0, 0)
 		grow:SetDuration(0.25)
 		grow:SetOrder(0)
 
 		ind.pulse = g
 
-		function ind:OnHide()
-			if (self.pulse:IsPlaying()) then
-				self.pulse:Stop()
+		ind:SetScript("OnHide", function()
+			if (ind.pulse:IsPlaying()) then
+				ind.pulse:Stop()
 			end
-		end
-		ind:SetScript("OnHide", ind.OnHide)
+		end)
 	end
 
 	ind:ClearAllPoints()
@@ -245,7 +240,7 @@ local CreateIndicator = function(frame, indicator)
 	ind.cd = cd
 
 	if (indicators[indicator].type == "icon") then
-		local count = ind.cd:CreateFontString(nil, "OVERLAY")
+		local count = ind:CreateFontString(nil, "OVERLAY")
 		count:SetFont(T["media"].font, T.db["general"].fontsize2, "OUTLINE")
 		count:Point("BOTTOMRIGHT", ind, "BOTTOMRIGHT", 5, -4)
 		count:SetTextColor(1, 1, 1)
@@ -452,7 +447,7 @@ local StyleDrae_Raid = function(frame, unit)
 	-- Health
 	local hp = CreateFrame("StatusBar", nil, frame)
 	hp:SetFrameLevel(baseLevel + 2)
-	hp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\statusbarsfill")
+	hp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
 	hp:SetOrientation("VERTICAL")
 	hp:Height(40 - powerBarSize)
 	hp:Point("TOPLEFT", frame, "TOPLEFT", 1, -1)
@@ -555,7 +550,7 @@ local StyleDrae_Raid = function(frame, unit)
 	-- Text1 (used for name)
 	local text1 = hp:CreateFontString(nil, "OVERLAY")
 	text1:SetFont(T["media"].font, T.db["general"].fontsize3, "NONE")
-	text1:Point("CENTER", hp, "CENTER", 0, frame.isPet and 0 or 6)
+	text1:Point("CENTER", hp, "CENTER", 0, frame.isPet and 0 or 5)
 	text1:SetShadowOffset(1, -1)
 	frame:Tag(text1, "[draeraid:name]")
 	frame.Text1 = text1
@@ -564,7 +559,7 @@ local StyleDrae_Raid = function(frame, unit)
 		-- Text2 (used for general indication)
 		local text2 = frame.Health:CreateFontString(nil, "OVERLAY")
 		text2:SetFont(T["media"].font, T.db["general"].fontsize3, "NONE")
-		text2:Point("CENTER", frame.Health, "CENTER", 0, -7)
+		text2:Point("CENTER", frame.Health, "CENTER", 0, -6)
 		text2:SetShadowOffset(1, -1)
 		text2.__locked = nil
 		text2.SetJob = SetStatus_Text2
@@ -597,7 +592,7 @@ local StyleDrae_Raid = function(frame, unit)
 	-- Raid Icon - unit and target of unit
 	local raidIconFrame = CreateFrame("Frame", nil, hp)
 	raidIconFrame:SetSize(16, 16)
-	raidIconFrame:Point("CENTER", frame, "BOTTOM", 0, 0)
+	raidIconFrame:Point("CENTER", frame, "TOP", 0, 0)
 	raidIconFrame:SetFrameLevel(baseLevel + 4)
 	local raidIcon = raidIconFrame:CreateTexture(nil, "OVERLAY")
 	raidIcon:SetAllPoints(raidIconFrame)
@@ -612,7 +607,22 @@ local StyleDrae_Raid = function(frame, unit)
 	readyCheck:SetWidth(22)
 	readyCheck:Point("CENTER", frame, "CENTER", 0, 0)
 	frame.ReadyCheck = readyCheck
+--[[
+	-- Debuffs
+	local debuffs = CreateFrame("Frame", nil, hp)
+	debuffs:SetFrameLevel(baseLevel + 4)
+	debuffs:Point("CENTER", frame, "BOTTOM", 0, -3)
+	debuffs.num = 2
+	debuffs.size = 21
+	debuffs.spacing = 0
+	debuffs:Size(debuffs.num * (debuffs.size + debuffs.spacing), debuffs.size + debuffs.spacing)
+	debuffs.initialAnchor = "BOTTOMLEFT"
+	debuffs.growthX = "RIGHT"
+	debuffs.growthY = "UP"
+	debuffs.showDebuffType = true
 
+	frame.PartyDebuffs = debuffs
+]]
 	-- Show/hide mana bar
 	frame:RegisterEvent("UNIT_DISPLAYPOWER", UF.UpdateRaidPower)
 

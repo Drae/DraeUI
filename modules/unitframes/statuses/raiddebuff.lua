@@ -29,33 +29,33 @@ local debuffTypeColor = {
 --[[
 
 --]]
-UF.AddRaidDebuff = function(self, enable, spellid, pr, icon2, pulse)
-	local name = GetSpellInfo(spellid)
+UF.AddRaidDebuff = function(self, enable, spellID, pr, icon2, pulse)
+	local name = GetSpellInfo(spellID)
 
 	if (not name) then
-		T.Print("[ DEBUG ] Cannot find spell for raid debuff with id: ", spellid)
+		T.Print("[ DEBUG ] Cannot find spell for raid debuff with id: ", spellID)
 		return
 	end
 
-	if (not debuff_list[spellid]) then
-		debuff_list[spellid] = {
-			enable = enable,
-			name = name,
-			priority = pr,
-			icon2 = icon2,
-			pulse = pulse,
-			detected = false
+	if (not debuff_list[spellID]) then
+		debuff_list[spellID] = {
+			enable = enable and true,
+			name = name or "",
+			priority = pr or 1,
+			icon2 = icon2 and true,
+			pulse = pulse or nil
 		}
 	end
 end
 
 local LoadZoneDebuffs = function()
 	local zoneName, _ = GetInstanceInfo()
-	
+
 	-- Always load pvp
 	UF["raiddebuffs"].pvp()
 
 	if (loadedDebuffZone ~= zoneName) then
+		loadedDebuffZone = nil
 
 		local add = UF["raiddebuffs"].instances[zoneName] or nil
 
@@ -73,86 +73,82 @@ end
 --[[
 
 --]]
-local Update
-do
-	local name, icon, count, dtype, duration, expires
+local Update = function(self, event, unit)
+	if (unit and self.unit ~= unit) then return end
+	unit = unit or self.unit
 
-	Update = function(self, event, unit)
-		if (unit and self.unit ~= unit) then return end
-		unit = unit or self.unit
+	if (not UnitIsDeadOrGhost(unit)) then
+		local d_name, d_icon, d_color, d_start, d_duration, d_count, d_pulse
+		local d_name2, d_icon2, d_color2, d_start2, d_duration2, d_count2, d_pulse2
 
-		if (not UnitIsDeadOrGhost(unit)) then
-			local d_name, d_icon, d_color, d_start, d_duration, d_count, d_pulse
-			local d_name2, d_icon2, d_color2, d_start2, d_duration2, d_count2, d_pulse2
+		local d_priority = 0
+		local d_priority2 = 0
 
-			local d_priority = 0
-			local d_priority2 = 0
+		local index = 1
 
-			local index = 1
+		while (true) do
+			local name, _, icon, count, dispelType, duration, expires, caster, _, _, spellID, _, isBossDebuff = UnitAura(unit, index, "HARMFUL")
 
-			while (true) do
-				name, _, icon, count, dtype, duration, expires, caster, _, _, spellid, _, isBossDebuff = UnitAura(unit, index, "HARMFUL")
-
-				if (not name) then
-					break
-				end
-
-				if (debuff_list[spellid]) then
-					local data = debuff_list[spellid]
-
-					if (data.enable) then
-						if (not data.icon2 and d_priority < data.priority) then
-							d_priority = data.priority
-							d_name = name
-							d_icon = icon
-							d_start = expires - duration
-							d_duration = duration
-							d_count = count
-							d_color = dtype and debuffTypeColor[dtype] or nil
-							d_pulse = data.pulse
-						end
-
-						if (data.icon2 and d_priority2 < data.priority) then
-							d_priority2 = data.priority
-							d_name2 = name
-							d_icon2 = icon
-							d_start2 = expires - duration
-							d_duration2 = duration
-							d_count2 = count
-							d_color2 = dtype and debuffTypeColor[dtype] or nil
-							d_pulse2 = data.pulse
-						end
-					end
-				elseif (not loadedDebuffZone and isBossDebuff) then
-                    if (d_priority < 5) then
-                        d_priority = 5
-                        d_name = name
-                        d_icon = icon
-                        d_start = expires - duration
-                        d_duration = duration
-                        d_count = count
-                        d_color = dtype and debuffTypeColor[dtype] or nil
-                    end
-                end
-
-				index = index + 1
+			if (not name) then
+				break
 			end
 
-			if (d_name) then
-				self:GainedStatus(unit, "status_raiddebuff", d_priority, d_color, d_icon, nil, nil, nil, d_start, d_duration, d_count, nil, d_pulse)
-			else
-				self:LostStatus(unit, "status_raiddebuff")
+			if (debuff_list[spellID]) then
+				local debuff = debuff_list[spellID]
+print("MATCH > ", debuff.name .. " | " .. spellID)
+--				if (debuff.enable) then
+--					if (not debuff.icon2 and d_priority < debuff.priority) then
+						d_priority = debuff.priority
+						d_name = name
+						d_icon = icon
+						d_start = expires - duration
+						d_duration = duration
+						d_count = count
+						d_color = dispelType and debuffTypeColor[dispelType] or nil
+						d_pulse = debuff.pulse or nil
+--					end
+--[[
+					if (debuff.icon2 and d_priority2 < debuff.priority) then
+						d_priority2 = debuff.priority
+						d_name2 = name
+						d_icon2 = icon
+						d_start2 = expires - duration
+						d_duration2 = duration
+						d_count2 = count
+						d_color2 = dispelType and debuffTypeColor[dispelType] or nil
+						d_pulse2 = debuff.pulse or nil
+					end]]
+--				end
+--[[			elseif (not loadedDebuffZone) then
+				d_priority = 1
+				d_name = name
+				d_icon = icon
+				d_start = expires - duration
+				d_duration = duration
+				d_count = count
+				d_color = dispelType and debuffTypeColor[dispelType] or nil
+				d_pulse = nil
+
+				break]]
 			end
 
-			if (d_name2) then
-				self:GainedStatus(unit, "status_raiddebuff2", d_priority2, d_color2, d_icon2, nil, nil, nil, d_start2, d_duration2, d_count2, nil, d_pulse2)
-			else
-				self:LostStatus(unit, "status_raiddebuff2")
-			end
+			index = index + 1
+		end
+
+		if (d_name) then
+			self:GainedStatus(unit, "status_raiddebuff", d_priority, d_color, d_icon, nil, nil, nil, d_start, d_duration, d_count, nil, d_pulse)
 		else
 			self:LostStatus(unit, "status_raiddebuff")
+		end
+
+		if (d_name2) then
+			self:GainedStatus(unit, "status_raiddebuff2", d_priority2, d_color2, d_icon2, nil, nil, nil, d_start2, d_duration2, d_count2, nil, d_pulse2)
+		else
 			self:LostStatus(unit, "status_raiddebuff2")
 		end
+	else
+		self:LostStatus(unit, "status_raiddebuff")
+		self:LostStatus(unit, "status_raiddebuff2")
 	end
 end
 

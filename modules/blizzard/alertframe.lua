@@ -28,7 +28,7 @@ B.PostAlertMove = function()
     AlertFrame:ClearAllPoints()
     AlertFrame:SetAllPoints(AlertFrameHolder)
     GroupLootContainer:ClearAllPoints()
-    GroupLootContainer:SetPoint(POSITION, AlertFrameHolder, ANCHOR_POINT, 0, YOFFSET)
+    GroupLootContainer:Point(POSITION, AlertFrameHolder, ANCHOR_POINT, 0, YOFFSET)
 
     if GroupLootContainer:IsShown() then
         B.GroupLootContainer_Update(GroupLootContainer)
@@ -43,10 +43,10 @@ B.GroupLootContainer_Update = function(self)
 		local prevFrame = self.rollFrames[i-1]
 		if ( frame ) then
 			frame:ClearAllPoints()
-			if prevFrame then
-				frame:Point(POSITION, prevFrame or self, ANCHOR_POINT, 0, YOFFSET)
+			if prevFrame and not (prevFrame == frame) then
+				frame:Point(POSITION, prevFrame, ANCHOR_POINT, 0, YOFFSET)
 			else
-				frame:Point("CENTER", self, "BOTTOM", 0, self.reservedSize * (i-1 + 0.5))
+				frame:Point(POSITION, self, POSITION, 0, 0)
 			end
 			lastIdx = i
 		end
@@ -63,47 +63,37 @@ end
 B.AdjustAnchors = function(self, relativeAlert)
 	if self.alertFrame:IsShown() then
 		self.alertFrame:ClearAllPoints()
-		self.alertFrame:SetPoint(POSITION, relativeAlert, ANCHOR_POINT, 0, YOFFSET)
+		self.alertFrame:Point(POSITION, relativeAlert, ANCHOR_POINT, 0, YOFFSET)
+
+		return self.alertFrame
 	end
+
+	return relativeAlert
 end
 
 B.AdjustQueuedAnchors = function(self, relativeAlert)
 	for alertFrame in self.alertFramePool:EnumerateActive() do
 		alertFrame:ClearAllPoints()
-		alertFrame:SetPoint(POSITION, relativeAlert, ANCHOR_POINT, 0, YOFFSET)
+		alertFrame:Point(POSITION, relativeAlert, ANCHOR_POINT, 0, YOFFSET)
 		relativeAlert = alertFrame
 	end
+
+	return relativeAlert
 end
 
 B.AlertMovers = function(self)
-	self:SecureHook(AlertFrame, "UpdateAnchors",B.PostAlertMove)
-	hooksecurefunc("GroupLootContainer_Update", B.GroupLootContainer_Update)
+	UIPARENT_MANAGED_FRAME_POSITIONS["GroupLootContainer"] = nil
 
-	--From Leatrix Plus
-	-- Achievements
-	hooksecurefunc(AchievementAlertSystem, "AdjustAnchors", B.AdjustQueuedAnchors) 		-- /run AchievementAlertSystem:AddAlert(5192)
-	hooksecurefunc(CriteriaAlertSystem, "AdjustAnchors", B.AdjustQueuedAnchors) 		-- /run CriteriaAlertSystem:AddAlert(9023, "Doing great!")
-	-- Encounters
-	hooksecurefunc(DungeonCompletionAlertSystem, "AdjustAnchors", B.AdjustAnchors) 		-- /run DungeonCompletionAlertSystem
-	hooksecurefunc(GuildChallengeAlertSystem, "AdjustAnchors", B.AdjustAnchors) 		-- /run GuildChallengeAlertSystem:AddAlert(3, 2, 5)
-	hooksecurefunc(InvasionAlertSystem, "AdjustAnchors", B.AdjustAnchors) 				-- /run InvasionAlertSystem:AddAlert(1)
-	hooksecurefunc(ScenarioAlertSystem, "AdjustAnchors",  B.AdjustAnchors) 				-- ScenarioAlertSystem
-	hooksecurefunc(WorldQuestCompleteAlertSystem, "AdjustAnchors", B.AdjustAnchors) 	-- /run WorldQuestCompleteAlertSystem:AddAlert(112)
-	-- Garrisons
-	hooksecurefunc(GarrisonBuildingAlertSystem, "AdjustAnchors",  B.AdjustAnchors) 		-- /run GarrisonBuildingAlertSystem:AddAlert("Barracks")
-	hooksecurefunc(GarrisonFollowerAlertSystem, "AdjustAnchors",  B.AdjustAnchors) 		-- /run GarrisonFollowerAlertSystem:AddAlert(204, "Ben Stone", 90, 3, false)
-	hooksecurefunc(GarrisonMissionAlertSystem, "AdjustAnchors", B.AdjustAnchors) 		-- /run GarrisonMissionAlertSystem:AddAlert(681)
-	hooksecurefunc(GarrisonShipMissionAlertSystem, "AdjustAnchors", B.AdjustAnchors)	-- No test for this, it was missing from Leatrix Plus
-	hooksecurefunc(GarrisonRandomMissionAlertSystem, "AdjustAnchors", B.AdjustAnchors)	-- GarrisonRandomMissionAlertSystem
-	hooksecurefunc(GarrisonShipFollowerAlertSystem, "AdjustAnchors", B.AdjustAnchors)	-- /run GarrisonShipFollowerAlertSystem:AddAlert(592, "Test", "Transport", "GarrBuilding_Barracks_1_H", 3, 2, 1)
-	hooksecurefunc(GarrisonTalentAlertSystem, "AdjustAnchors",  B.AdjustAnchors) 		-- GarrisonTalentAlertSystem
-	-- Loot
-	hooksecurefunc(LegendaryItemAlertSystem, "AdjustAnchors",  B.AdjustAnchors) 		-- /run LegendaryItemAlertSystem:AddAlert("\\124cffa335ee\\124Hitem:18832::::::::::\\124h[Brutality Blade]\\124h\\124r")
-	hooksecurefunc(LootAlertSystem, "AdjustAnchors", B.AdjustQueuedAnchors) 			-- /run LootAlertSystem:AddAlert("\\124cffa335ee\\124Hitem:18832::::::::::\\124h[Brutality Blade]\\124h\\124r", 1, 1, 1, 1, false, false, 0, false, false)
-	hooksecurefunc(LootUpgradeAlertSystem, "AdjustAnchors", B.AdjustQueuedAnchors) 		-- /run LootUpgradeAlertSystem:AddAlert("\\124cffa335ee\\124Hitem:18832::::::::::\\124h[Brutality Blade]\\124h\\124r", 1, 1, 1, nil, nil, false)
-	hooksecurefunc(MoneyWonAlertSystem, "AdjustAnchors", B.AdjustQueuedAnchors) 		-- /run MoneyWonAlertSystem:AddAlert(815)
-	hooksecurefunc(StorePurchaseAlertSystem, "AdjustAnchors", B.AdjustAnchors) 			-- /run StorePurchaseAlertSystem:AddAlert("\\124cffa335ee\\124Hitem:180545::::::::::\\124h[Mystic Runesaber]\\124h\\124r", "", "", 214)
-	-- Professions
-	hooksecurefunc(DigsiteCompleteAlertSystem, "AdjustAnchors", B.AdjustAnchors) 		-- /run DigsiteCompleteAlertSystem:AddAlert(1)
-	hooksecurefunc(NewRecipeLearnedAlertSystem, "AdjustAnchors", B.AdjustQueuedAnchors)	-- /run NewRecipeLearnedAlertSystem:AddAlert(204)
+	--Replace AdjustAnchors functions to allow alerts to grow down if needed.
+	--We will need to keep an eye on this in case it taints. It shouldn't, but you never know.
+	for i, alertFrameSubSystem in ipairs(AlertFrame.alertFrameSubSystems) do
+		if alertFrameSubSystem.alertFramePool then --queued alert system
+			alertFrameSubSystem.AdjustAnchors = B.AdjustQueuedAnchors
+		elseif not alertFrameSubSystem.anchorFrame then --simple alert system
+			alertFrameSubSystem.AdjustAnchors = B.AdjustAnchors
+		end
+	end
+
+	self:SecureHook(AlertFrame, "UpdateAnchors", B.PostAlertMove)
+	hooksecurefunc("GroupLootContainer_Update", B.GroupLootContainer_Update)
 end

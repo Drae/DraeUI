@@ -84,7 +84,7 @@ AT.UpdateArtifact = function(self, event, unit)
 
 	local r1, g1, b1 = T.ColorGradient(pct / 100 - 0.001, 1, 0, 0, 1, 1, 0, 0, 1, 0)
 
-	LDB.text = format("|cff%02x%02x%02x%s: |r|cff%02x%02x%02x%s|r|cff%02x%02x%02x / %s|r", 255, 255, 255, name, r1 * 255, g1 * 255, b1 * 255, xp, 255, 255, 255, pointsAvailable)
+	LDB.text = format("|cff%02x%02x%02x%s: |r|cff%02x%02x%02x%s|r|cff%02x%02x%02x / %s|r [|cff00ff00%dpoints|r]", 255, 255, 255, name, r1 * 255, g1 * 255, b1 * 255, xp, 255, 255, 255, pointsAvailable, pointsSpent)
 
 	LDB.statusbar__artifact_min_max = "0," .. xpForNextPoint
 	LDB.statusbar__artifact_cur = xp
@@ -110,6 +110,15 @@ end
 
 LDB.OnLeave = function(self)
 	GameTooltip:Hide()
+end
+
+LDB.OnClick = function(self)
+	ArtifactFrame_LoadUI()
+	if ( ArtifactFrame:IsVisible() ) then
+		HideUIPanel(ArtifactFrame)
+	else
+		SocketInventoryItem(16);
+	end
 end
 
 AT.OnInitialize = function(self)

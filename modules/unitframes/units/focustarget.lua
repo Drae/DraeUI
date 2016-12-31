@@ -20,7 +20,7 @@ local StyleDrae_FocusTarget = function(frame, unit, isSingle)
 
 	local arrow = frame:CreateTexture(nil, "BACKGROUND", nil, 0)
 	arrow:Size(16, 32)
-	arrow:Point("RIGHT", frame, "LEFT", -12, 10)
+	arrow:Point("RIGHT", frame, "LEFT", -2, 10)
 	arrow:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\targetArrow")
 
 	frame.Health = UF.CreateHealthBar(frame, 120, 16, 0, 0)

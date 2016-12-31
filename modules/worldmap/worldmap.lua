@@ -14,8 +14,23 @@ local hidePlayerCoords = false
 --[[
 
 --]]
+
+M.EnableCoords = function(self)
+	local x = GetPlayerMapPosition("player")
+	if not x then
+		self.inRestrictedArea = true
+		self:CancelTimer(self.CoordsTimer)
+		self.CoordsTimer = nil
+		CoordsHolder.playerCoords:SetText("")
+		CoordsHolder.mouseCoords:SetText("")
+	elseif not self.CoordsTimer then
+		self.inRestrictedArea = false
+		self.CoordsTimer = self:ScheduleRepeatingTimer('UpdateCoords', 0.05)
+	end
+end
+
 function M:UpdateCoords()
-	if(not WorldMapFrame:IsShown()) then return end
+	if(not WorldMapFrame:IsShown() or self.inRestrictedArea) then return end
 
 	local inInstance, _ = IsInInstance()
 	local x, y = GetPlayerMapPosition("player")
