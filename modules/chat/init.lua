@@ -1339,7 +1339,7 @@ CH.PositionChat = function(self, override)
 		if (id ~= 2 and not (id > NUM_CHAT_WINDOWS)) then
 			chat:ClearAllPoints()
 			chat:Point("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 5, 5)
-			chat:Size(450, 175)
+			chat:Size(450, 180)
 			FCF_SavePositionAndDimensions(chat)
 		end
 
@@ -1361,19 +1361,6 @@ CH.OnInitialize = function(self)
 end
 
 CH.OnEnable = function(self)
---[[	if T.private.chat.enable ~= true then
-		stopScript = true
-		DEFAULT_CHAT_FRAME:RegisterEvent("GUILD_MOTD")
-
-		local msg = GetGuildRosterMOTD()
-		if msg == "" then msg = nil end
-		if msg then
-			ChatFrame_SystemEventHandler(DEFAULT_CHAT_FRAME, "GUILD_MOTD", msg)
-		end
-
-		return
-	end]]
-
 	self:UpdateFading()
 
 	self:SecureHook("ChatEdit_OnEnterPressed")
@@ -1474,7 +1461,7 @@ CH.OnEnable = function(self)
 		insets = { left = 3, right = 3, top = 5, bottom = 3 }
 	})
 	frame:SetBackdropColor(0, 0, 0, 1)
-	frame:Size(700, 200)
+	frame:Size(700, 150)
 	frame:Point('BOTTOM', T.UIParent, 'BOTTOM', 0, 3)
 	frame:SetMovable(true)
 	frame:EnableMouse(true)

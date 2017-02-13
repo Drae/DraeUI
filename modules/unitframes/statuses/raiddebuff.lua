@@ -16,6 +16,8 @@ local twipe = table.wipe
 
 --
 local loadedDebuffZone
+local loadedCommon
+
 local debuff_list = {}
 
 local priority = 99
@@ -29,30 +31,41 @@ local debuffTypeColor = {
 --[[
 
 --]]
-UF.AddRaidDebuff = function(self, enable, spellID, pr, icon2, pulse)
-	local name = GetSpellInfo(spellID)
+local CommonDebuffs = function()
+	if (loadedCommon) then return end
 
-	if (not name) then
-		T.Print("[ DEBUG ] Cannot find spell for raid debuff with id: ", spellID)
-		return
+	-- Mythic+
+	UF:AddRaidDebuff(true, 209858, 8, true) -- Necrotic Rot (affix)
+
+	loadedCommon = true
+end
+
+--[[
+
+]]
+UF.AddRaidDebuff = function(self, enable, spell, priority, secondary, pulse, flash)
+	if type(spell) == "number" then
+		name, _, icon = GetSpellInfo(spell)
+		id = spell
+	else
+		name = spell
+		order = 9999
 	end
 
-	if (not debuff_list[spellID]) then
-		debuff_list[spellID] = {
-			enable = enable and true,
-			name = name or "",
-			priority = pr or 1,
-			icon2 = icon2 and true,
-			pulse = pulse or nil
+	if (not debuff_list[name]) then
+		debuff_list[name] = {
+			enable = enable or false,
+			icon = icon or "",
+			priority = priority or 1,
+			secondary = secondary or false,
+			pulse = pulse or false,
+			flash = flash or false
 		}
 	end
 end
 
 local LoadZoneDebuffs = function()
 	local zoneName, _ = GetInstanceInfo()
-
-	-- Always load pvp
-	UF["raiddebuffs"].pvp()
 
 	if (loadedDebuffZone ~= zoneName) then
 		loadedDebuffZone = nil
@@ -63,10 +76,15 @@ local LoadZoneDebuffs = function()
 			twipe(debuff_list)
 
 			add()
+
 			loadedDebuffZone = zoneName
+			loadedCommon = false
 
 			T.Print("Debuff indicators loaded for |cff00dd00" .. zoneName .. "|r")
 		end
+
+		-- Add general debuffs common across specs/classes/etc.
+		CommonDebuffs()
 	end
 end
 
@@ -87,17 +105,17 @@ local Update = function(self, event, unit)
 		local index = 1
 
 		while (true) do
-			local name, _, icon, count, dispelType, duration, expires, caster, _, _, spellID, _, isBossDebuff = UnitAura(unit, index, "HARMFUL")
+			local name, _, icon, count, dispelType, duration, expires, caster = UnitAura(unit, index, "HARMFUL")
 
 			if (not name) then
 				break
 			end
 
-			if (debuff_list[spellID]) then
-				local debuff = debuff_list[spellID]
-print("MATCH > ", debuff.name .. " | " .. spellID)
---				if (debuff.enable) then
---					if (not debuff.icon2 and d_priority < debuff.priority) then
+			if (debuff_list[name]) then
+				local debuff = debuff_list[name]
+
+				if (debuff.enable) then
+					if (not debuff.secondary and d_priority < debuff.priority) then
 						d_priority = debuff.priority
 						d_name = name
 						d_icon = icon
@@ -106,9 +124,9 @@ print("MATCH > ", debuff.name .. " | " .. spellID)
 						d_count = count
 						d_color = dispelType and debuffTypeColor[dispelType] or nil
 						d_pulse = debuff.pulse or nil
---					end
---[[
-					if (debuff.icon2 and d_priority2 < debuff.priority) then
+					end
+
+					if (debuff.secondary and d_priority2 < debuff.priority) then
 						d_priority2 = debuff.priority
 						d_name2 = name
 						d_icon2 = icon
@@ -117,19 +135,8 @@ print("MATCH > ", debuff.name .. " | " .. spellID)
 						d_count2 = count
 						d_color2 = dispelType and debuffTypeColor[dispelType] or nil
 						d_pulse2 = debuff.pulse or nil
-					end]]
---				end
---[[			elseif (not loadedDebuffZone) then
-				d_priority = 1
-				d_name = name
-				d_icon = icon
-				d_start = expires - duration
-				d_duration = duration
-				d_count = count
-				d_color = dispelType and debuffTypeColor[dispelType] or nil
-				d_pulse = nil
-
-				break]]
+					end
+				end
 			end
 
 			index = index + 1

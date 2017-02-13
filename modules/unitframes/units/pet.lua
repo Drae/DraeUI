@@ -35,8 +35,8 @@ local StyleDrae_Pet = function(frame, unit, isSingle)
 	frame:Tag(level, "[level]")
 
 	-- Auras - just debuffs for target of target
-	UF.AddBuffs(frame, "TOPLEFT", frame.Power, "BOTTOMLEFT", -1, -17, T.db["frames"].auras.maxPetBuff or 2, T.db["frames"].auras.auraTny, 10, "RIGHT", "DOWN")
-	UF.AddDebuffs(frame, "TOPRIGHT", frame.Power, "BOTTOMRIGHT", 0, -12, T.db["frames"].auras.maPetDebuff or 15, T.db["frames"].auras.auraSml, 8, "LEFT", "DOWN")
+	UF.AddBuffs(frame, "BOTTOMLEFT", frame.Health, "TOPLEFT", 1, 28, T.db["frames"].auras.maxPetBuff or 2, T.db["frames"].auras.auraTny, 10, "RIGHT", "UP")
+	UF.AddDebuffs(frame, "BOTTOMRIGHT", frame.Health, "TOPRIGHT", -1, 28, T.db["frames"].auras.maPetDebuff or 4, T.db["frames"].auras.auraSml, 8, "LEFT", "UP")
 
 	-- The number here is the size of the raid icon
 	UF.CommonPostInit(frame, 30)

@@ -14,11 +14,6 @@ P["HUNTER"] = {
 		["dispel_curse"] 		= { debuff = "Curse",	pr = 50, mine = false, color = { r = 0.6, g = 0,   b = 1.0} },
 		["buff_feigndeath"]		= { buff = "Feign Death", pr = 50, mine = false, text = "FEIGN" },
 
-		-- Attack Power
-		["buff_trueshotaura"] 	= { buff = "Trueshot Aura",  pr = 5, mine = false, color = { r = 0.8, g = 0.8, b = 0.8} },
-		["buff_hornofwinter"] 	= { buff = "Horn of Winter", pr = 5, mine = false, color = { r = 0.8, g = 0.8, b = 0.8} }, -- Deathknight
-		["buff_battleshout"] 	= { buff = "Battle Shout",   pr = 5, mine = false, color = { r = 0.8, g = 0.8, b = 0.8} }, -- Warrior
-
 		-- Specific
 		["buff_misdirection"] 	= { buff = "Misdirection",   pr = 5, mine = false, color = { r = 0, g = 0.4, b = 0.9 } },
 	},
@@ -56,14 +51,15 @@ P["HUNTER"] = {
 			["buff_feigndeath"] = true,
 		},
 
+        ["LEFT"] = {
+            ["status_dmgred"] = true,
+        },
+
 		["TOP"] = {
 			["buff_misdirection"] = true
 		},
 
 		["BOTTOMRIGHT"] = {
-			["buff_trueshotaura"] = true,
-			["buff_hornofwinter"] = true,
-			["buff_battleshout"] = true,
 		},
 	}
 }

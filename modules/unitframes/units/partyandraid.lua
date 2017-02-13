@@ -15,30 +15,30 @@ local Smoothing = LibStub("LibCutawaySmooth-1.0", true)
 -- Default indicator positions
 local indicators = {
 	-- Icons
-	["CENTERICON"]		= { type = "icon",  width = 22, height = 22, at = "CENTER",      to = "CENTER",      offsetX = 0,  offsetY = 0},
-	["BOTTOMICON"]		= { type = "icon",  width = 18, height = 18, at = "CENTER",      to = "BOTTOM",      offsetX = 0,  offsetY = -2},
-	["TOPICON"]			= { type = "icon",  width = 18, height = 18, at = "CENTER",      to = "TOP",      	 offsetX = 0,  offsetY = 2},
+	["CENTERICON"]		= { type = "icon",  width = 20, height = 20, at = "CENTER",      to = "CENTER",      offsetX = 0,  offsetY = -4},
+	["BOTTOMICON"]		= { type = "icon",  width = 18, height = 18, at = "CENTER",      to = "BOTTOM",      offsetX = 0,  offsetY = -3},
+	["TOPICON"]			= { type = "icon",  width = 18, height = 18, at = "CENTER",      to = "TOP",      	 offsetX = 0,  offsetY = 3},
 
 	-- Colour only indicators
-	["TOP"]				= { type = "color", width = 9,  height = 9,  at = "TOP",         to = "TOP",         offsetX = 0,  offsetY = 1},
-	["TOPR"]			= { type = "color", width = 9,  height = 9,  at = "TOP",         to = "TOP",         offsetX = -9, offsetY = 1},
-	["TOPL"]			= { type = "color", width = 9,  height = 9,  at = "TOP",         to = "TOP",         offsetX = 9,  offsetY = 1},
+	["TOP"]				= { type = "color", width = 8,  height = 8,  at = "TOP",         to = "TOP",         offsetX = 0,  offsetY = 1},
+	["TOPR"]			= { type = "color", width = 8,  height = 8,  at = "TOP",         to = "TOP",         offsetX = -8, offsetY = 1},
+	["TOPL"]			= { type = "color", width = 8,  height = 8,  at = "TOP",         to = "TOP",         offsetX = 8,  offsetY = 1},
 
-	["TOPLEFT"] 		= { type = "color", width = 9,  height = 9,  at = "TOPLEFT",     to = "TOPLEFT",     offsetX = 0,  offsetY = 1},
+	["TOPLEFT"] 		= { type = "color", width = 8,  height = 8,  at = "TOPLEFT",     to = "TOPLEFT",     offsetX = 0,  offsetY = 1},
 
-	["TOPRIGHT"]		= { type = "color", width = 9,  height = 9,  at = "TOPRIGHT",    to = "TOPRIGHT",    offsetX = 1,  offsetY = 1},
+	["TOPRIGHT"]		= { type = "color", width = 8,  height = 8,  at = "TOPRIGHT",    to = "TOPRIGHT",    offsetX = 1,  offsetY = 1},
 
-	["BOTTOM"] 			= { type = "color", width = 9,  height = 9,  at = "BOTTOM",      to = "BOTTOM",      offsetX = 0,  offsetY = -1},
-	["BOTTOML"] 		= { type = "color", width = 9,  height = 9,  at = "BOTTOM",      to = "BOTTOM",      offsetX = -9, offsetY = -1},
-	["BOTTOMR"] 		= { type = "color", width = 9,  height = 9,  at = "BOTTOM",      to = "BOTTOM",      offsetX = 9,  offsetY = -1},
+	["BOTTOM"] 			= { type = "color", width = 8,  height = 8,  at = "BOTTOM",      to = "BOTTOM",      offsetX = 0,  offsetY = -1},
+	["BOTTOML"] 		= { type = "color", width = 8,  height = 8,  at = "BOTTOM",      to = "BOTTOM",      offsetX = -8, offsetY = -1},
+	["BOTTOMR"] 		= { type = "color", width = 8,  height = 8,  at = "BOTTOM",      to = "BOTTOM",      offsetX = 8,  offsetY = -1},
 
-	["BOTTOMLEFT"]		= { type = "color", width = 9,  height = 9,  at = "BOTTOMLEFT",  to = "BOTTOMLEFT",  offsetX = 0,  offsetY = -1},
+	["BOTTOMLEFT"]		= { type = "color", width = 8,  height = 8,  at = "BOTTOMLEFT",  to = "BOTTOMLEFT",  offsetX = 0,  offsetY = -1},
 
-	["LEFT"] 			= { type = "color", width = 9,  height = 9,  at = "LEFT",        to = "LEFT",        offsetX = 0,  offsetY = 0},
-	["LEFTT"]	 		= { type = "color", width = 9,  height = 9,  at = "LEFT",        to = "LEFT",        offsetX = 0,  offsetY = -9},
-	["LEFTB"]	 		= { type = "color", width = 9,  height = 9,  at = "LEFT",        to = "LEFT",        offsetX = 0,  offsetY = 9},
+	["LEFT"] 			= { type = "color", width = 8,  height = 8,  at = "LEFT",        to = "LEFT",        offsetX = 0,  offsetY = 0},
+	["LEFTT"]	 		= { type = "color", width = 8,  height = 8,  at = "LEFT",        to = "LEFT",        offsetX = 0,  offsetY = -8},
+	["LEFTB"]	 		= { type = "color", width = 8,  height = 8,  at = "LEFT",        to = "LEFT",        offsetX = 0,  offsetY = 8},
 
-	["RIGHT"] 			= { type = "color", width = 9,  height = 9,  at = "RIGHT",       to = "RIGHT",       offsetX = 1, offsetY = 0},
+	["RIGHT"] 			= { type = "color", width = 8,  height = 8,  at = "RIGHT",       to = "RIGHT",       offsetX = 1, offsetY = 0},
 
 	-- Additional indicators are:
 	-- Border
@@ -91,6 +91,22 @@ local SetStatus_Indicator = function(ind, data)
 	if (color) then
 		ind:SetBackdropColor(color.r, color.g, color.b, color.a or 1.0)
 	end
+
+	if (data.pulse) then
+		if (not ind.pulse:IsPlaying()) then
+			ind.pulse:Play()
+		end
+	elseif (ind.pulse:IsPlaying()) then
+		ind.pulse:Stop()
+	end
+
+	if (data.flash) then
+		if (not ind.flash:IsPlaying()) then
+			ind.flash:Play()
+		end
+	elseif (ind.flash:IsPlaying()) then
+		ind.flash:Stop()
+	end
 end
 
 local SetStatus_Icon = function(ind, data)
@@ -126,6 +142,14 @@ local SetStatus_Icon = function(ind, data)
 		end
 	elseif (ind.pulse:IsPlaying()) then
 		ind.pulse:Stop()
+	end
+
+	if (data.flash) then
+		if (not ind.flash:IsPlaying()) then
+			ind.flash:Play()
+		end
+	elseif (ind.flash:IsPlaying()) then
+		ind.flash:Stop()
 	end
 end
 
@@ -190,28 +214,44 @@ local CreateIndicator = function(frame, indicator)
 		t:SetTexCoord(.1, .9, .1, .9)
 		t:Point("CENTER", ind, "CENTER")
 		t:Size(indicators[indicator].width - 2, indicators[indicator].height - 2)
-		t:SetTexture(0, 0, 0, 1)
+		t:SetColorTexture(0, 0, 0, 1)
 
 		ind.icon = t
 		ind.SetJob = SetStatus_Icon
-
-		local g = ind:CreateAnimationGroup()
-		g:SetLooping("BOUNCE")
-
-		local grow = g:CreateAnimation("Scale")
-		grow:SetScale(1.25, 1.25)
-		grow:SetOrigin("CENTER", 0, 0)
-		grow:SetDuration(0.25)
-		grow:SetOrder(0)
-
-		ind.pulse = g
-
-		ind:SetScript("OnHide", function()
-			if (ind.pulse:IsPlaying()) then
-				ind.pulse:Stop()
-			end
-		end)
 	end
+
+	-- Pulsing
+	local pulse = ind:CreateAnimationGroup()
+	pulse:SetLooping("BOUNCE")
+
+	local grow = pulse:CreateAnimation("Scale")
+	grow:SetScale(1.15, 1.15)
+	grow:SetOrigin("CENTER", 0, 0)
+	grow:SetDuration(0.25)
+	grow:SetOrder(0)
+
+	ind.pulse = pulse
+
+	local flash = ind:CreateAnimationGroup()
+	flash:SetLooping("BOUNCE")
+
+	local alpha = flash:CreateAnimation("Alpha")
+	alpha:SetFromAlpha(1)
+	alpha:SetToAlpha(0)
+	alpha:SetDuration(0.25)
+	alpha:SetOrder(0)
+
+	ind.flash = flash
+
+	ind:SetScript("OnHide", function()
+		if (ind.pulse:IsPlaying()) then
+			ind.pulse:Stop()
+		end
+
+		if (ind.flash:IsPlaying()) then
+			ind.flash:Stop()
+		end
+	end)
 
 	ind:ClearAllPoints()
 	ind:SetFrameLevel(frame:GetFrameLevel() + 7)
@@ -311,7 +351,7 @@ local GainedStatus
 do
 	local cached
 
-	GainedStatus = function(self, unit, status, priority, color, texture, text, value, maxValue, start, duration, stack, notMine, pulse)
+	GainedStatus = function(self, unit, status, priority, color, texture, text, value, maxValue, start, duration, stack, notMine, pulse, flash)
 		if (unit and self.unit ~= unit) then return end
 		unit = unit or self.unit
 
@@ -327,7 +367,7 @@ do
 
 		-- create cache for unit if needed
 		if (not statuscache[status]) then
-			statuscache[status] = { nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil }
+			statuscache[status] = { nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil }
 		end
 
 		cached = statuscache[status]
@@ -345,7 +385,8 @@ do
 			and cached.duration == duration
 			and cached.stack == stack
 			and cached.notMine == notMine
-			and cached.pulse == pulse)
+			and cached.pulse == pulse
+			and cached.flash == flash)
 		then
 			return
 		end
@@ -363,6 +404,7 @@ do
 		cached.stack = stack
 		cached.notMine = notMine
 		cached.pulse = pulse
+		cached.flash = flash
 
 		self:UpdateIndicator(status)
 	end
@@ -443,6 +485,7 @@ local StyleDrae_Raid = function(frame, unit)
 
 	-- Get height of powerbar so we can size the healthbar correctly
 	local powerBarSize = 4
+	frame.powerBarSize = powerBarSize
 
 	-- Health
 	local hp = CreateFrame("StatusBar", nil, frame)
@@ -454,7 +497,7 @@ local StyleDrae_Raid = function(frame, unit)
 	hp:Point("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -1, frame.isPet and 1 or 1 + powerBarSize)
 
 	if (T.db["raidframes"].colorSmooth) then
-		Smoothing:EnableBarAnimation(hp)
+--		Smoothing:EnableBarAnimation(hp)
 	end
 
 	hp.colorClassPet = T.db["raidframes"].colorPet
@@ -465,66 +508,82 @@ local StyleDrae_Raid = function(frame, unit)
 
 	frame.Health = hp
 
-	-- Total absorb/shields on target
-	local absorb = CreateFrame("StatusBar", nil, frame.Health)
-	absorb:SetStatusBarTexture("Interface\\Buttons\\White8x8")
-	absorb:SetOrientation("VERTICAL")
-	absorb:Height(hp:GetHeight() - powerBarSize)
-	absorb:SetStatusBarColor(1.0, 1.0, 1.0, 0.5)
-	absorb:SetPoint("LEFT")
-	absorb:SetPoint("RIGHT")
-	absorb:SetPoint("BOTTOM", frame.Health:GetStatusBarTexture(), "TOP")
+	do
+		-- Total healing required to increase units health due to a heal absorb debuff/effect
+		local healAbsorbBar = CreateFrame("StatusBar", nil, frame.Health)
+		healAbsorbBar:SetStatusBarTexture("Interface\\Buttons\\White8x8")
+		healAbsorbBar:SetOrientation("VERTICAL")
+		healAbsorbBar:SetReverseFill(true)
+		healAbsorbBar:Height(hp:GetHeight() - powerBarSize)
+		healAbsorbBar:SetStatusBarColor(1.0, 0, 0, 0.33)
+		healAbsorbBar:SetPoint("LEFT")
+		healAbsorbBar:SetPoint("RIGHT")
+		healAbsorbBar:SetPoint("TOP", frame.Health:GetStatusBarTexture(), "TOP")
 
-	-- Total healing required to increase units health due to a heal absorb debuff/effect
-	local absorbHeal = CreateFrame("StatusBar", nil, frame.Health)
-	absorbHeal:SetStatusBarTexture("Interface\\Buttons\\White8x8")
-	absorbHeal:SetOrientation("VERTICAL")
-	absorbHeal:Height(hp:GetHeight() - powerBarSize)
-	absorbHeal:SetStatusBarColor(1.0, 0, 0, 0.8)
-	absorbHeal:SetPoint("LEFT")
-	absorbHeal:SetPoint("RIGHT")
-	absorbHeal:SetPoint("BOTTOM", frame.Health:GetStatusBarTexture(), "TOP")
+		-- My incoming heals
+		local myBar = CreateFrame("StatusBar", nil, frame.Health)
+		myBar:SetStatusBarTexture("Interface\\Buttons\\White8x8")
+		myBar:SetOrientation("VERTICAL")
+		myBar:Height(hp:GetHeight() - powerBarSize)
+		myBar:SetStatusBarColor(0, 1, 0, 0.7)
+		myBar:SetPoint("LEFT")
+		myBar:SetPoint("RIGHT")
+		myBar:SetPoint("BOTTOM", healAbsorbBar:GetStatusBarTexture(), "TOP")
 
-	-- My incoming heals
-	local heal = CreateFrame("StatusBar", nil, frame.Health)
-	heal:SetStatusBarTexture("Interface\\Buttons\\White8x8")
-	heal:SetOrientation("VERTICAL")
-	heal:Height(hp:GetHeight() - powerBarSize)
-	heal:SetStatusBarColor(0, 1, 0, 0.8)
-	heal:SetPoint("LEFT")
-	heal:SetPoint("RIGHT")
-	heal:SetPoint("BOTTOM", frame.Health:GetStatusBarTexture(), "TOP")
+		-- Other incoming heals
+		local otherBar = CreateFrame("StatusBar", nil, frame.Health)
+		otherBar:SetStatusBarTexture("Interface\\Buttons\\White8x8")
+		otherBar:SetOrientation("VERTICAL")
+		otherBar:Height(hp:GetHeight() - powerBarSize)
+		otherBar:SetStatusBarColor(0.5, 0, 1, 0.7)
+		otherBar:SetPoint("LEFT")
+		otherBar:SetPoint("RIGHT")
+		otherBar:SetPoint("BOTTOM", myBar:GetStatusBarTexture(), "TOP")
 
-	-- Other incoming heals
-	local othersHeal = CreateFrame("StatusBar", nil, frame.Health)
-	othersHeal:SetStatusBarTexture("Interface\\Buttons\\White8x8")
-	othersHeal:SetOrientation("VERTICAL")
-	othersHeal:Height(hp:GetHeight() - powerBarSize)
-	othersHeal:SetStatusBarColor(0.5, 0, 1, 0.8)
-	othersHeal:SetPoint("LEFT")
-	othersHeal:SetPoint("RIGHT")
-	othersHeal:SetPoint("BOTTOM", heal:GetStatusBarTexture(), "TOP")
+		-- Total absorb/shields on target
+		local absorbBar = CreateFrame("StatusBar", nil, frame.Health)
+		absorbBar:SetStatusBarTexture("Interface\\Buttons\\White8x8")
+		absorbBar:SetOrientation("VERTICAL")
+		absorbBar:Height(hp:GetHeight() - powerBarSize)
+		absorbBar:SetStatusBarColor(1.0, 1.0, 1.0, 0.33)
+		absorbBar:SetPoint("LEFT")
+		absorbBar:SetPoint("RIGHT")
+		absorbBar:SetPoint("BOTTOM", otherBar:GetStatusBarTexture(), "TOP")
 
-	-- Over-absorb - show a brighter "line"
-	local overAbsorb = hp:CreateTexture(nil, "OVERLAY")
-	overAbsorb:SetTexture(1.0, 1.0, 1.0, 0.5) -- Always white
-	overAbsorb:SetBlendMode("ADD")
-	overAbsorb:SetPoint("LEFT")
-	overAbsorb:SetPoint("RIGHT")
-	overAbsorb:SetPoint("TOP")
-	overAbsorb:Height(2)
-	overAbsorb:Hide()
+		-- Damage (shields/absorbs) greater than health
+		local overAbsorb = hp:CreateTexture(nil, "OVERLAY")
+		overAbsorb:SetTexture("Interface\\Buttons\\White8x8")
+		overAbsorb:SetColorTexture(1.0, 1.0, 1.0, 0.66) -- Always white
+		overAbsorb:SetBlendMode("ADD")
+		overAbsorb:SetPoint("LEFT")
+		overAbsorb:SetPoint("RIGHT")
+		overAbsorb:SetPoint("TOP")
+		overAbsorb:Height(2)
+		overAbsorb:Hide()
 
-	frame.HealPrediction = {
-		myBar = heal,
-		otherBar = othersHeal,
-		absorbBar = absorb,
-		healAbsorbBar = absorbHeal,
-		overHealAbsorb = overAbsorb,
-		maxOverflow = 1.0,
-		frequentUpdates = true,
-		PostUpdate = UF.PostUpdateHealPrediction
-	}
+		-- Healing absorb greater than health
+		local overHealAbsorb = hp:CreateTexture(nil, "OVERLAY")
+		overHealAbsorb:SetTexture("Interface\\Buttons\\White8x8")
+		overHealAbsorb:SetColorTexture(1.0, 0, 0, 0.66) -- Always red
+		overHealAbsorb:SetBlendMode("ADD")
+		overHealAbsorb:SetPoint("LEFT")
+		overHealAbsorb:SetPoint("RIGHT")
+		overHealAbsorb:SetPoint("BOTTOM")
+		overHealAbsorb:Height(2)
+		overHealAbsorb:Hide()
+
+		frame.HealthPrediction = {
+			myBar = myBar,
+			otherBar = otherBar,
+			absorbBar = absorbBar,
+			healAbsorbBar = healAbsorbBar,
+			overAbsorb = overAbsorb,
+			overHealAbsorb = overHealAbsorb,
+			maxOverflow = 1.0,
+			frequentUpdates = true,
+--			PostUpdate = UF.PostUpdateHealPrediction
+		}
+	end
 
 	if (not frame.isPet) then
 		-- Power
@@ -543,7 +602,7 @@ local StyleDrae_Raid = function(frame, unit)
 		frame.Power = pp
 
 		if (T.db["raidframes"].colorSmooth) then
-			Smoothing:EnableBarAnimation(pp)
+--			Smoothing:EnableBarAnimation(pp)
 		end
 	end
 
@@ -569,29 +628,30 @@ local StyleDrae_Raid = function(frame, unit)
 
 	-- Leader Icon
 	local leaderFrame = CreateFrame("Frame", nil, hp)
-	leaderFrame:SetSize(15, 15)
+	leaderFrame:Size(15, 15)
 	leaderFrame:Point("TOPLEFT", frame, -7, 9)
 	leaderFrame:SetFrameLevel(baseLevel + 4)
 	local leader = leaderFrame:CreateTexture(nil, "OVERLAY")
 	leader:SetAllPoints(leaderFrame)
 	leader:SetTexture("Interface\\GroupFrame\\UI-Group-LeaderIcon")
 	leader:Hide()
-	frame.Leader = leader
+	frame.LeaderIndicator = leader
 
 	-- Role Icon
 	local lfdroleFrame = CreateFrame("Frame", nil, hp)
-	lfdroleFrame:SetSize(12, 12)
+	lfdroleFrame:Size(12, 12)
 	lfdroleFrame:Point("BOTTOMRIGHT", frame, 7, -7)
 	lfdroleFrame:SetFrameLevel(baseLevel + 4)
 	local lfdrole = lfdroleFrame:CreateTexture(nil, "OVERLAY")
 	lfdrole:SetAllPoints(lfdroleFrame)
 	lfdrole:SetTexture("Interface\\LFGFrame\\UI-LFG-ICON-PORTRAITROLES")
 	lfdrole:Hide()
+	lfdrole.Override = UF.OverrideLFDRole
 	frame.LFDRole = lfdrole
 
 	-- Raid Icon - unit and target of unit
 	local raidIconFrame = CreateFrame("Frame", nil, hp)
-	raidIconFrame:SetSize(16, 16)
+	raidIconFrame:Size(16, 16)
 	raidIconFrame:Point("CENTER", frame, "TOP", 0, 0)
 	raidIconFrame:SetFrameLevel(baseLevel + 4)
 	local raidIcon = raidIconFrame:CreateTexture(nil, "OVERLAY")
@@ -599,14 +659,14 @@ local StyleDrae_Raid = function(frame, unit)
 	raidIcon:SetAlpha(0.75)
 	raidIcon:SetTexture("Interface\\TargetingFrame\\UI-RaidTargetingIcons")
 	raidIcon:Hide()
-	frame.RaidIcon = raidIcon
+	frame.RaidTargetIndicator = raidIcon
 
 	-- Readycheck
 	local readyCheck = hp:CreateTexture(nil, "OVERLAY")
 	readyCheck:Height(22)
 	readyCheck:SetWidth(22)
 	readyCheck:Point("CENTER", frame, "CENTER", 0, 0)
-	frame.ReadyCheck = readyCheck
+	frame.ReadyCheckIndicator = readyCheck
 --[[
 	-- Debuffs
 	local debuffs = CreateFrame("Frame", nil, hp)

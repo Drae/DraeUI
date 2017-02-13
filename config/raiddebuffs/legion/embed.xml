@@ -1,0 +1,5 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="emeraldnightmare.lua" />
+	<Script file="trialofvalor.lua" />
+	<Script file="nighthold.lua" />
+</Ui>

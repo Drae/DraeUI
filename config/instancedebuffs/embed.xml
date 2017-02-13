@@ -3,4 +3,5 @@
 
 	<!-- Expacs -->
 	<Include file="warlordsofdraenor\embed.xml" />
+	<Include file="legion\embed.xml" />
 </Ui>
