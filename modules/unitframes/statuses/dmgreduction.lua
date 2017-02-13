@@ -26,6 +26,7 @@ local cooldowns = {
 
 	-- Hunter
 	["Deterrence"] 					= { id = 19263,  type = "HELPFUL", pr = 7, color = { r = 1.0, g = 1.0, b = 1.0 } },
+	["Aspect of the Turtle"]		= { id = 186265, type = "HELPFUL", pr = 7, color = { r = 0.9, g = 1.0, b = 0.9 } },
 
 	-- Monk
 	["Fortifying Brew"] 			= { id = 115203, type = "HELPFUL", pr = 7, color = { r = 1.0, g = 1.0, b = 1.0 } },
@@ -97,7 +98,7 @@ do
 		if (cooldownSeen) then
 			local start = expirationTime and (expirationTime - duration)
 
-			self:GainedStatus(unit, "status_dmgred", priority, cooldowns[cooldownSeen].color, icon, nil, nil, nil, start, duration, count, false)
+			self:GainedStatus(unit, "status_dmgred", priority, cooldowns[cooldownSeen].color, icon, nil, nil, nil, start, duration, count, false, false, true)
 		else
 			self:LostStatus(unit, "status_dmgred")
 		end

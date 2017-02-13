@@ -19,7 +19,6 @@ P["PALADIN"] = {
         ["buff_auraofsacrifice"]     		= { buff = "Aura of Sacrifice",     		pr = 50, mine = true, color = { r = 1.0, g = 0, b = 0.7 } },
         ["buff_devotionaura"]     			= { buff = "Devotion Aura",     			pr = 50, mine = true, color = { r = 1.0, g = 0, b = 0.7 } },
 
-        ["buff_greaterblessingofmight"]     = { buff = "Greater Blessing of Might",     pr = 50, mine = true, color = { r = 0, g = 0.4, b = 1.0 } },
         ["buff_greaterblessingofkings"]     = { buff = "Greater Blessing of Kings",     pr = 50, mine = true, color = { r = 0.8, g = 0.8, b = 0.8} },
         ["buff_greaterblessingofwisdom"]    = { buff = "Greater Blessing of Wisdom",    pr = 50, mine = true, color = { r = 0.8, g = 0.0, b = 0.4} },
 
@@ -30,7 +29,7 @@ P["PALADIN"] = {
         ["buff_blessingofspellwarding"]     = { buff = "Blessing of Spellwarding",      pr = 85, mine = false, color = { r = 0, g = 0.8, b = 0.5 } },
 
         ["buff_bestowfaith"]                = { buff = "Bestow Faith", 				    pr = 60, mine = true, color = { r = 1.0, g = 0.8, b = 0 } },
-        ["buff_tyrsdeliverance"]           	= { buff = "Tyr's Deliverance",			    pr = 80, mine = false, color = { r = 1.0, g = 0.7, b = 0 } },
+        ["buff_tyrsdeliverance"]           	= { buff = "Tyr's Deliverance",			    pr = 80, mine = false, color = { r = 1.0, g = 0.7, b = 0 }, flash = true },
         ["buff_beaconoflight"]           	= { buff = "Beacon of Light",   			pr = 40, mine = true, color = { r = 1.0, g = 0.8, b = 0 } },
         ["buff_beaconoffaith"]           	= { buff = "Beacon of Faith",   			pr = 40, mine = true, color = { r = 1.0, g = 0.6, b = 0 } },
         ["buff_beaconofvirtue"]          	= { buff = "Beacon of Virtue",   			pr = 40, mine = true, color = { r = 1.0, g = 0.8, b = 0.2 } },
@@ -94,11 +93,10 @@ P["PALADIN"] = {
         },
 
         ["BOTTOMRIGHTL"] = {
-            ["buff_greaterblessingofmight"] = true,
+            ["buff_greaterblessingofwisdom"] = true,
         },
 
         ["BOTTOMRIGHTT"] = {
-            ["buff_greaterblessingofwisdom"] = true,
         },
 
         ["BOTTOMLEFT"] = {

@@ -227,7 +227,7 @@ local function UpdateTextures(self, elapsed)
 					else
 						TextureCache[texturePath] = 0
 						texture:Size(textureWidth, textureHeight)
-						texture:SetTexture(0,.113,.16)
+						texture:SetColorTexture(0,.113,.16)
 						texture:Show()
 					end
 					tremove(TextureQueue, i)
@@ -251,7 +251,7 @@ local function SuperSetTexture(texture, texturePath, textureWidth, textureHeight
 		else
 			--texture:Hide()
 			texture:Size(textureWidth, textureHeight)
-			texture:SetTexture(0,.113,.16)
+			texture:SetColorTexture(0,.113,.16)
 			texture:Show()
 		end
 	else
@@ -270,12 +270,12 @@ local function update_overlays()
 	local areaID = GetCurrentMapAreaID()
 	local mapName, _, _, isMicroDungeon, microDungeonPath = GetMapInfo()
 	local floorNum, dBRx, dBRy, dTLx, dTLy = GetCurrentMapDungeonLevel()
-	
+
 	local currentArea = format('%d.%s', floorNum or 0, microDungeonPath or mapName or '')
 	if currentArea == cachedArea then return end -- return if the map hasn't actually changed
 	cachedArea = currentArea
 	--print('new map', currentArea)
-	
+
 	local info = OverlayInfo[strlower(mapName or '')]
 	local texNum = 1
 	if info then

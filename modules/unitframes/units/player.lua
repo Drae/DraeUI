@@ -68,7 +68,7 @@ local StyleDrae_Player = function(frame, unit, isSingle)
 	combat:Point("BOTTOMRIGHT", portrait, 0, -5)
 	combat:SetTexture("Interface\\CharacterFrame\\UI-StateIcon")
 	combat:SetTexCoord(0.58, 0.90, 0.08, 0.41)
-	frame.Combat = combat
+	frame.CombatIndicator = combat
 
 	-- Auras
 	UF.AddLongBuffs(frame, "BOTTOMRIGHT", T.UIParent, "BOTTOMRIGHT", -20, 20)

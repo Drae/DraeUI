@@ -97,7 +97,8 @@ local UnitGainedBuff = function(self, unit, name, rank, icon, count, debuffType,
 		local start = expirationTime and (expirationTime - duration)
 		local notMine = caster and caster ~= "player" and true or false
 
-		self:GainedStatus(unit, status, settings.pr, settings.color, icon, settings.text, nil, nil, start, duration, count, notMine)
+		-- unit, status, priority, color, texture, text, value, maxValue, start, duration, stack, notMine, pulse, flash
+		self:GainedStatus(unit, status, settings.pr, settings.color, icon, settings.text, nil, nil, start, duration, count, notMine, settings.pulse, settings.flash)
 	else
 		self:LostStatus(unit, status)
 	end
@@ -120,7 +121,8 @@ local UnitGainedPlayerBuff = function(self, unit, name, rank, icon, count, debuf
 	if (not settings.disable) then
 		local start = expirationTime and (expirationTime - duration)
 
-		self:GainedStatus(unit, status, settings.pr, settings.color, icon, settings.text, nil, nil, start, duration, count)
+		-- unit, status, priority, color, texture, text, value, maxValue, start, duration, stack, notMine, pulse, flash
+		self:GainedStatus(unit, status, settings.pr, settings.color, icon, settings.text, nil, nil, start, duration, count, nil, settings.pulse, settings.flash)
 	else
 		self:LostStatus(unit, status)
 	end
@@ -143,7 +145,8 @@ local UnitGainedDebuff = function(self, unit, name, rank, icon, count, debuffTyp
 	if (not settings.disable) then
 		local start = expirationTime and (expirationTime - duration)
 
-		self:GainedStatus(unit, status, settings.pr, settings.color, icon, settings.text, nil, nil, start, duration, count)
+		-- unit, status, priority, color, texture, text, value, maxValue, start, duration, stack, notMine, pulse, flash
+		self:GainedStatus(unit, status, settings.pr, settings.color, icon, settings.text, nil, nil, start, duration, count, nil, settings.pulse, settings.flash)
 	else
 		self:LostStatus(unit, status)
 	end
@@ -166,7 +169,8 @@ local UnitGainedDebuffType = function(self, unit, name, rank, icon, count, debuf
 	if (not settings.disable and ((UF.dispellClasses[T.playerClass] and UF.dispellClasses[T.playerClass][debuffType]) or not T.db["raidframes"].showOnlyDispellable)) then
 		local start = expirationTime and (expirationTime - duration)
 
-		self:GainedStatus(unit, status, settings.pr, settings.color, icon, nil, nil, nil, start, duration, count)
+		-- unit, status, priority, color, texture, text, value, maxValue, start, duration, stack, notMine, pulse, flash
+		self:GainedStatus(unit, status, settings.pr, settings.color, icon, nil, nil, nil, start, duration, count, nil, settings.pulse, settings.flash)
 	else
 		self:LostStatus(unit, status)
 	end

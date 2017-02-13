@@ -184,7 +184,7 @@ function B:EnhanceColorPicker()
 	local t = ColorPickerFrame:CreateTexture("ColorPPOldColorSwatch")
 	local w, h = ColorSwatch:GetSize()
 	t:Size(w * 0.75, h * 0.75)
-	t:SetTexture(0, 0, 0)
+	t:SetColorTexture(0, 0, 0)
 	-- OldColorSwatch to appear beneath ColorSwatch
 	t:SetDrawLayer("BORDER")
 	t:Point("BOTTOMLEFT", "ColorSwatch", "TOPRIGHT", -(w / 2), -(h / 3))
@@ -192,7 +192,7 @@ function B:EnhanceColorPicker()
 	-- add Color Swatch for the copied color
 	t = ColorPickerFrame:CreateTexture("ColorPPCopyColorSwatch")
 	t:Size(w, h)
-	t:SetTexture(0, 0, 0)
+	t:SetColorTexture(0, 0, 0)
 	t:Hide()
 
 	-- add copy button to the ColorPickerFrame

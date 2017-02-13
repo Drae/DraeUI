@@ -22,6 +22,49 @@ local GetFramerate = GetFramerate
 --[[
 
 --]]
+local CutawayStatusBar
+do
+	local diffThreshold = 0.0025
+
+	CutawayStatusBar = function(bar, cur, max)
+		if bar.Gain and bar.Loss then
+			if max ~= 0 then
+				local prev = bar.prev or 0
+				local diff = cur - prev
+
+				if math.abs(diff) / max < diffThreshold then
+					diff = 0
+				end
+
+				if diff > 0 then
+					if bar.Gain:GetAlpha() == 0 then
+						local offset = bar:GetWidth() * (1 - prev / max)
+
+						bar.Gain:SetAlpha(1)
+						bar.Gain:SetPoint("TOPLEFT", bar, "TOPRIGHT", -offset, 0)
+						bar.Gain:SetPoint("BOTTOMLEFT", bar, "BOTTOMRIGHT", -offset, 0)
+						bar.Gain.FadeOut:Play()
+					end
+				elseif diff < 0 then
+					bar.Gain.FadeOut:Stop()
+					bar.Gain:SetAlpha(0)
+
+					if bar.Loss:GetAlpha() == 0 then
+						local offset = bar:GetWidth() * (1 - prev / max)
+
+						bar.Loss:SetAlpha(1)
+						bar.Loss:SetPoint("TOPRIGHT", bar, "TOPRIGHT", -offset, 0)
+						bar.Loss:SetPoint("BOTTOMRIGHT", bar, "BOTTOMRIGHT", -offset, 0)
+						bar.Loss.FadeOut:Play()
+					end
+				end
+			end
+
+			bar.prev = cur
+		end
+	end
+end
+
 UF.OverridePower = function(self, event, unit)
 	local arenaPrep = event == 'ArenaPreparation'
 
@@ -116,6 +159,8 @@ UF.OverridePower = function(self, event, unit)
 		end
 	end
 
+--	CutawayStatusBar(power, cur, max)
+
 	if(power.PostUpdate) then
 		return power:PostUpdate(unit, cur, max, min)
 	end
@@ -139,6 +184,8 @@ UF.PostUpdateHealth = function(health, u, min, max)
 		local hpvalue = min ~= max and ("|cffB62220%s|r.%d|cff0090ff%%|r"):format(T.ShortVal(min - max), min / max * 100) or ("|cffffffff%s"):format(T.ShortVal(min))
 		health.value:SetText(hpvalue)
 	end
+
+--	CutawayStatusBar(health, min, max)
 end
 
 UF.UpdateText2 = function(self, state)
@@ -173,6 +220,7 @@ end
 
 do
 	local r, g, b
+	local diffThreshold = 0.1
 
 	local GetFrameUnitState = function(self)
 		local unit = self.realUnit or self.unit
@@ -285,6 +333,7 @@ do
 	end
 end
 
+--[[
 UF.PostUpdateHealPrediction = function(hp, unit, overAbsorb, overHealAbsorb)
 	if (overAbsorb) then
 		hp.overHealAbsorb:Show()
@@ -292,6 +341,7 @@ UF.PostUpdateHealPrediction = function(hp, unit, overAbsorb, overHealAbsorb)
 		hp.overHealAbsorb:Hide()
 	end
 end
+]]
 
 UF.UpdateRaidPower = function(self, event, unit)
 	if (unit and self.unit ~= unit and unit ~= self.realUnit) then return end
@@ -301,6 +351,7 @@ UF.UpdateRaidPower = function(self, event, unit)
 
 	if (not power) then return end
 
+	local role = UnitGroupRolesAssigned(unit)
 	local _, ptype = UnitPowerType(unit)
 	local min, max = UnitPower(unit), UnitPowerMax(unit)
 
@@ -313,18 +364,27 @@ UF.UpdateRaidPower = function(self, event, unit)
 			power:Show()
 		end
 
-		if (power.__ptype ~= ptype) then
-			if (ptype ~= "MANA") then
+		if (power.__ptype ~= ptype or power.__prole ~= role) then
+			if (ptype ~= "MANA" or (role ~= "HEALER" and role ~= "NONE")) then
 				self.Health:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -1, 1)
+				self.HealthPrediction.myBar:Height(self.Health:GetHeight())
+				self.HealthPrediction.healAbsorbBar:Height(self.Health:GetHeight())
+				self.HealthPrediction.otherBar:Height(self.Health:GetHeight())
+				self.HealthPrediction.absorbBar:Height(self.Health:GetHeight())
+
 				power:Hide()
 			else
-				local powerBarSize = 4 + 1 -- height of the powerbars + 1
+				self.Health:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -1, self.powerBarSize + 1)
+				self.HealthPrediction.myBar:Height(self.Health:GetHeight() - self.powerBarSize)
+				self.HealthPrediction.healAbsorbBar:Height(self.Health:GetHeight() - self.powerBarSize)
+				self.HealthPrediction.otherBar:Height(self.Health:GetHeight() - self.powerBarSize)
+				self.HealthPrediction.absorbBar:Height(self.Health:GetHeight() - self.powerBarSize)
 
-				self.Health:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -1, 5)
 				power:Show()
 			end
 
 			power.__ptype = ptype
+			power.__prole = role
 		end
 	end
 
@@ -334,4 +394,16 @@ UF.UpdateRaidPower = function(self, event, unit)
 	end
 
 	power.__disconnected = disconnected
+end
+
+UF.OverrideLFDRole = function(self, event)
+	local lfdrole = self.GroupRoleIndicator
+
+	local role = UnitGroupRolesAssigned(self.unit)
+	if(role == 'TANK' or role == 'HEALER') then
+		lfdrole:SetTexCoord(GetTexCoordsForRoleSmallCircle(role))
+		lfdrole:Show()
+	else
+		lfdrole:Hide()
+	end
 end

@@ -200,11 +200,11 @@ UF.OnEnable = function(self)
 
 	-- Pet
 	oUF:SetActiveStyle("DraePet")
-	oUF:Spawn("pet", "DraePet"):Point("TOPLEFT", "DraePlayer", "BOTTOMLEFT", T.db["frames"].petXoffset, T.db["frames"].petYoffset)
+	oUF:Spawn("pet", "DraePet"):Point("BOTTOMRIGHT", "DraePlayer", "TOPRIGHT", T.db["frames"].petXoffset, T.db["frames"].petYoffset)
 
 	-- Pet target
-	oUF:SetActiveStyle("DraeFocusTarget")
-	oUF:Spawn("pettarget", "DraePetTarget"):Point("LEFT", "DraePet", "RIGHT", T.db["frames"].petTargetXoffset, T.db["frames"].petTargetYoffset)
+	oUF:SetActiveStyle("DraePet")
+	oUF:Spawn("pettarget", "DraePetTarget"):Point("BOTTOMLEFT", "DraeTarget", "TOPLEFT", T.db["frames"].petTargetXoffset, T.db["frames"].petTargetYoffset)
 
 	-- Boss frames
 	if (T.db["frames"].showBoss) then
@@ -294,10 +294,11 @@ UF.OnEnable = function(self)
 	self.relPoint = relPoint
 
 	oUF:SetActiveStyle("DraeRaid")
---[[
+
 	-- Create raid headers
 	for i = 1, NUM_RAID_GROUPS do
 		local header = oUF:SpawnHeader("DraeRaid"..i, nil, visibility,
+			"showSolo", true,
 			"showPlayer", true,
 			"showRaid", true,
 
@@ -338,6 +339,7 @@ UF.OnEnable = function(self)
 
 	if (T.db["raidframes"].showPets) then
 		local headerPet = oUF:SpawnHeader("DraeRaidPet", "SecureGroupPetHeaderTemplate", visibility,
+			"showSolo", true,
 			"showPlayer", true,
 			"showParty", true,
 			"showRaid", true,
@@ -372,7 +374,7 @@ UF.OnEnable = function(self)
 
 	CompactRaidFrameContainer.Show = CompactRaidFrameContainer.Hide
 	CompactRaidFrameContainer:UnregisterAllEvents()
-	CompactRaidFrameContainer:Hide()]]
+	CompactRaidFrameContainer:Hide()
 end
 
 
@@ -405,11 +407,11 @@ UF.UpdateRaidLayout = function(self)
 		self.raidHeaders["pet"]:SetPoint(T.db["raidframes"].gridGroupsAnchor, self.raidHeaders[lastGroup], self.relPoint, 0, 15) -- Offset from the raid group
 	end
 end
---[[
+
 UF.PLAYER_ENTERING_WORLD = function(self)
 	self:UpdateRaidLayout()
 end
 UF.PLAYER_REGEN_ENABLED	= UF.PLAYER_ENTERING_WORLD
 UF.GROUP_ROSTER_UPDATE = UF.PLAYER_ENTERING_WORLD
 UF.UNIT_PET = UF.PLAYER_ENTERING_WORLD
-]]
+

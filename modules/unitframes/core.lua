@@ -53,7 +53,7 @@ UF.CommonPostInit = function(self, size, noRaidIcons)
 		raidIcon:SetTexture("Interface\\TargetingFrame\\UI-RaidTargetingIcons")
 		raidIcon:Point("TOP", self.Power and self.Power or self.Health, "BOTTOM", 0, size / 2)
 		raidIcon:Size(size, size)
-		self.RaidIcon = raidIcon
+		self.RaidTargetIndicator = raidIcon
 	end
 
 	self.SpellRange = {
@@ -93,7 +93,39 @@ UF.CreateHealthBar = function(self, width, height, x, y, point, reverse)
 
 	hp.PostUpdate = UF.PostUpdateHealth
 
-	Smoothing:EnableBarAnimation(hp)
+	local gainTexture = hp:CreateTexture(nil, "OVERLAY")
+	gainTexture:SetPoint("TOPRIGHT", hp:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+	gainTexture:SetPoint("BOTTOMRIGHT", hp:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
+	gainTexture:SetColorTexture(0, 1, 0, 0.66)
+	gainTexture:SetAlpha(0)
+	hp.Gain = gainTexture
+
+	local lossTexture = hp:CreateTexture(nil, "BACKGROUND")
+	lossTexture:SetPoint("TOPLEFT", hp:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+	lossTexture:SetPoint("BOTTOMLEFT", hp:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
+	lossTexture:SetColorTexture(1, 1, 1, 0.66)
+	lossTexture:SetAlpha(0)
+	hp.Loss = lossTexture
+
+	local ag = gainTexture:CreateAnimationGroup()
+	ag:SetToFinalAlpha(true)
+	gainTexture.FadeOut = ag
+
+	local anim1 = ag:CreateAnimation("Alpha")
+	anim1:SetFromAlpha(1)
+	anim1:SetToAlpha(0)
+	anim1:SetStartDelay(0.05)
+	anim1:SetDuration(0.15)
+
+	ag = lossTexture:CreateAnimationGroup()
+	ag:SetToFinalAlpha(true)
+	lossTexture.FadeOut = ag
+
+	anim1 = ag:CreateAnimation("Alpha")
+	anim1:SetFromAlpha(1)
+	anim1:SetToAlpha(0)
+	anim1:SetStartDelay(0.05)
+	anim1:SetDuration(0.15)
 
 	return hp
 end
@@ -128,53 +160,66 @@ UF.CreatePowerBar = function(self, width, height, point, reverse)
 
 	pp.frequentUpdates = true
 
-	Smoothing:EnableBarAnimation(pp)
+	local gainTexture = pp:CreateTexture(nil, "OVERLAY")
+	gainTexture:SetPoint("TOPRIGHT", pp:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+	gainTexture:SetPoint("BOTTOMRIGHT", pp:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
+	gainTexture:SetColorTexture(0, 1, 0, 0.66)
+	gainTexture:SetAlpha(0)
+	pp.Gain = gainTexture
+
+	local lossTexture = pp:CreateTexture(nil, "BACKGROUND")
+	lossTexture:SetPoint("TOPLEFT", pp:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
+	lossTexture:SetPoint("BOTTOMLEFT", pp:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
+	lossTexture:SetColorTexture(1, 1, 1)
+	lossTexture:SetAlpha(0)
+	pp.Loss = lossTexture
+
+	local ag = gainTexture:CreateAnimationGroup()
+	ag:SetToFinalAlpha(true)
+	gainTexture.FadeOut = ag
+
+	local anim1 = ag:CreateAnimation("Alpha")
+	anim1:SetFromAlpha(1)
+	anim1:SetToAlpha(0)
+	anim1:SetStartDelay(0.05)
+	anim1:SetDuration(0.15)
+
+	ag = lossTexture:CreateAnimationGroup()
+	ag:SetToFinalAlpha(true)
+	lossTexture.FadeOut = ag
+
+	anim1 = ag:CreateAnimation("Alpha")
+	anim1:SetFromAlpha(1)
+	anim1:SetToAlpha(0)
+	anim1:SetStartDelay(0.05)
+	anim1:SetDuration(0.15)
 
 	return pp
 end
 
-do
-	local PostUpdateVisibility = function(self, show, is_shown)
-		if (show) then
-			self.appborder:Show()
-			self.appbg:Show()
-		else
-			self.appborder:Hide()
-			self.appbg:Hide()
-		end
-	end
+UF.CreateAdditionalPower = function(self, width, height, point, reverse)
+--[[	local ppborder = self:CreateTexture(nil, "BORDER", nil, 1)
+	ppborder:Size(width + 4, height + 4)
+	ppborder:Point(point and "TOPRIGHT" or "TOPLEFT", self.Power.ppborder, point and "BOTTOMRIGHT" or "BOTTOMLEFT", 0, 3)
+	ppborder:SetTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\gwstatusbar-bg")
 
-	UF.CreateAdditionalPower = function(self, width, height, point, reverse)
-		local ppborder = self:CreateTexture(nil, "BORDER", nil, 1)
-		ppborder:Size(width + 4, height + 4)
-		ppborder:Point(point and "TOPRIGHT" or "TOPLEFT", self.Power.ppborder, point and "BOTTOMRIGHT" or "BOTTOMLEFT", 0, 3)
-		ppborder:SetTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\gwstatusbar-bg")
+	local ppbg = self:CreateTexture(nil, "BORDER", nil, 0)
+	ppbg:Size(width + 2, height + 2)
+	ppbg:Point("TOPLEFT", ppborder, "TOPLEFT", 1, -1)
+	ppbg:SetTexture("Interface\\BUTTONS\\WHITE8X8")
+	ppbg:SetVertexColor(0, 0, 0)
+]]
+	local pp = CreateFrame("StatusBar", nil, self)
+	pp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
+	pp:SetReverseFill(reverse and true or false)
+	pp:Size(width, height)
+	pp:Point("TOPLEFT", ppborder, "TOPLEFT", 2, -2)
 
-		local ppbg = self:CreateTexture(nil, "BORDER", nil, 0)
-		ppbg:Size(width + 2, height + 2)
-		ppbg:Point("TOPLEFT", ppborder, "TOPLEFT", 1, -1)
-		ppbg:SetTexture("Interface\\BUTTONS\\WHITE8X8")
-		ppbg:SetVertexColor(0, 0, 0)
+	pp.colorDisconnected = true
+	pp.colorPower = true
+	pp.frequentUpdates = true
 
-		local pp = CreateFrame("StatusBar", nil, self)
-		pp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
-		pp:SetReverseFill(reverse and true or false)
-		pp:Size(width, height)
-		pp:Point("TOPLEFT", ppborder, "TOPLEFT", 2, -2)
-
-		pp.appborder = ppborder
-		pp.appbg = ppbg
-
-		pp.PostUpdateVisibility = PostUpdateVisibility
-
-		pp.colorDisconnected = true
-		pp.colorPower = true
-		pp.frequentUpdates = true
-
-		Smoothing:EnableBarAnimation(pp)
-
-		return pp
-	end
+	return pp
 end
 
 -- Leader, PvP, Role, etc.
@@ -183,25 +228,25 @@ UF.FlagIcons = function(frame, reverse)
 	local leader = frame:CreateTexture(nil, "OVERLAY", 6)
 	leader:Point("CENTER", frame.Portrait and frame.Portrait or frame, reverse and "TOPLEFT" or "TOPRIGHT", 0, -5)
 	leader:Size(16, 16)
-	frame.Leader = leader
+	frame.LeaderIndicator = leader
 
 	-- Assistant icon
 	local assistant = frame:CreateTexture(nil, "OVERLAY", 6)
 	assistant:Point("CENTER", frame.Portrait and frame.Portrait or frame, reverse and "TOPLEFT" or "TOPRIGHT", 0, -5)
 	assistant:Size(16, 16)
-	frame.Assistant = assistant
+	frame.AssistantIndicator = assistant
 
 	-- pvp icon
 	local pvp = frame:CreateTexture(nil, "OVERLAY", nil, 6)
 	pvp:Size(28, 28)
 	pvp:Point("CENTER", frame.Portrait and frame.Portrait or frame, reverse and "TOPRIGHT" or "TOPLEFT", 0, -8)
-	frame.PvP = pvp
+	frame.PvPIndicator = pvp
 
 	-- Dungeon role
 	local lfdRole = frame:CreateTexture(nil, "OVERLAY", 6)
 	lfdRole:Point("CENTER", frame.Portrait and frame.Portrait or frame, reverse and "BOTTOMRIGHT" or "BOTTOMLEFT", 0, 0)
 	lfdRole:Size(16, 16)
-	frame.LFDRole = lfdRole
+	frame.GroupRoleIndicator = lfdRole
 end
 
 -- Aura handling
@@ -235,8 +280,6 @@ do
 	end
 
 	local CreateAuraIcon = function(icons, index)
-		icons.createdIcons = icons.createdIcons and icons.createdIcons + 1
-
 		local button = CreateFrame("Button", nil, icons)
 
 		button:EnableMouse(true)
@@ -296,8 +339,6 @@ do
 				CancelUnitBuff(self.parent:GetParent().unit, self:GetID(), self.filter)
 			end)
 		end
-
-		insert(icons, button)
 
 		return button
 	end

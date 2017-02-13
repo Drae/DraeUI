@@ -255,7 +255,7 @@ local CreateStatusBar = function(self, name, settings)
 	end
 
 	if (settings.smooth) then
-		Smoothing:EnableBarAnimation(bar)
+--		Smoothing:EnableBarAnimation(bar)
 	end
 
 	return bar
