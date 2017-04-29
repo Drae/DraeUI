@@ -7,4 +7,3 @@ LSM:Register("font",		"Proza",			"Interface\\AddOns\\draeUI\\media\\fonts\\Proza
 LSM:Register("font",		"Oblik Bold",		"Interface\\AddOns\\draeUI\\media\\fonts\\oblikbold.ttf")
 
 LSM:Register("statusbar",	"Striped",			"Interface\\AddOns\\draeUI\\media\\statusbars\\Striped")
-LSM:Register("statusbar",	"Guild Wars",		"Interface\\AddOns\\draeUI\\media\\statusbars\\statusbarsfill")
