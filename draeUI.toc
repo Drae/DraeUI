@@ -1,4 +1,4 @@
-## Interface: 70300
+## Interface: 72000
 ## Author: Drae
 ## Title: draeUI
 ## Version: 3.1
@@ -23,7 +23,6 @@ functions\fonts.lua
 functions\functions.lua
 functions\maths.lua
 functions\toolkit.lua
-functions\pixelperfect.lua
 functions\console.lua
 functions\animation.lua
 
@@ -35,19 +34,9 @@ modules\unitframes\events.lua
 modules\unitframes\tags.lua
 
 modules\unitframes\elements\classification.lua
-modules\unitframes\elements\extrapower.lua
 modules\unitframes\elements\spellrange.lua
 modules\unitframes\elements\sword.lua
-
-modules\unitframes\resources\combo.lua
-modules\unitframes\resources\deathknight.lua
-modules\unitframes\resources\druid.lua
-modules\unitframes\resources\mage.lua
-modules\unitframes\resources\monk.lua
-modules\unitframes\resources\paladin.lua
-modules\unitframes\resources\priest.lua
-modules\unitframes\resources\totems.lua
-modules\unitframes\resources\warlock.lua
+modules\unitframes\elements\totems.lua
 
 modules\unitframes\units\player.lua
 modules\unitframes\units\pet.lua
@@ -89,9 +78,6 @@ modules\infobar\ldb\artifact.lua
 modules\misc\init.lua
 modules\misc\alreadyknown.lua
 modules\misc\autoinvite.lua
-modules\misc\enhanceraidbrowser.lua
-modules\misc\openall.lua
-modules\misc\switchset.lua
 
 # Blizzard
 modules\blizzard\init.lua
