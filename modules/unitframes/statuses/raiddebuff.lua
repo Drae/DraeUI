@@ -36,6 +36,8 @@ local CommonDebuffs = function()
 
 	-- Mythic+
 	UF:AddRaidDebuff(true, 209858, 8, true) -- Necrotic Rot (affix)
+	UF:AddRaidDebuff(true, 240449, 8, true) -- Grievous (M+)
+	UF:AddRaidDebuff(true, 240443, 8, true) -- Burst (M+)
 
 	loadedCommon = true
 end

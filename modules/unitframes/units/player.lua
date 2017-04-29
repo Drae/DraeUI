@@ -12,20 +12,20 @@ local UF = T:GetModule("UnitFrames")
 
 -- Player frame
 local StyleDrae_Player = function(frame, unit, isSingle)
-	frame:Size(320, 70)
+	frame:SetSize(320, 70)
 	frame:SetHitRectInsets(0, 0, 23, 23)
 	frame:SetFrameStrata("LOW")
 
 	UF.CommonInit(frame)
 
 	local framebg = frame:CreateTexture(nil, "BACKGROUND", nil, 0)
-	framebg:Size(512, 128)
+	framebg:SetSize(512, 128)
 	framebg:SetPoint("CENTER", frame, "CENTER")
 	framebg:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\largeframe-bg")
 	framebg:SetTexCoord(0, 1, 0, 0.5)
 
 	framebg.overlay = frame:CreateTexture(nil, "BACKGROUND", nil, 1)
-	framebg.overlay:Size(512, 128)
+	framebg.overlay:SetSize(512, 128)
 	framebg.overlay:SetPoint("CENTER", frame, "CENTER")
 	framebg.overlay:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\largeframe-bg")
 	framebg.overlay:SetTexCoord(0, 1, 0.5, 1)
@@ -38,13 +38,13 @@ local StyleDrae_Player = function(frame, unit, isSingle)
 	frame.AdditionalPower = UF.CreateAdditionalPower(frame, 250, 3)
 
 	local portrait = frame:CreateTexture(nil, "BACKGROUND", nil, 1)
-	portrait:Size(56, 56)
-	portrait:Point("TOPLEFT", 3, -5)
+	portrait:SetSize(56, 56)
+	portrait:SetPoint("TOPLEFT", 3, -5)
 
 	frame.Portrait = portrait
 
 	local portraitOverlay = frame:CreateTexture(nil, "BACKGROUND", nil, 2)
-	portraitOverlay:Size(62, 62)
+	portraitOverlay:SetSize(62, 62)
 	portraitOverlay:SetPoint("CENTER", portrait, "CENTER")
 	portraitOverlay:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\targetPortraitinner")
 
@@ -54,7 +54,7 @@ local StyleDrae_Player = function(frame, unit, isSingle)
 	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize2, T["media"].font, "RIGHT", -2, 0)
 
 	local level = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "LEFT", 2, 22)
-	level:Size(40, 20)
+	level:SetSize(40, 20)
 	frame:Tag(level, "[level]")
 
 	--[[
@@ -64,8 +64,8 @@ local StyleDrae_Player = function(frame, unit, isSingle)
 
 	-- Combat icon
 	local combat = frame.Health:CreateTexture(nil, "OVERLAY")
-	combat:Size(18, 18)
-	combat:Point("BOTTOMRIGHT", portrait, 0, -5)
+	combat:SetSize(18, 18)
+	combat:SetPoint("BOTTOMRIGHT", portrait, 0, -5)
 	combat:SetTexture("Interface\\CharacterFrame\\UI-StateIcon")
 	combat:SetTexCoord(0.58, 0.90, 0.08, 0.41)
 	frame.CombatIndicator = combat
@@ -85,19 +85,6 @@ local StyleDrae_Player = function(frame, unit, isSingle)
 
 	]]
 	UF.CreateTotemBar(frame, "TOP", portrait, "BOTTOM", 0, -12)
-
-	-- Class specific resource bars
-	UF.CreateMageClassBar(frame, "TOPRIGHT", frame.Health, "TOPRIGHT", 0, 24)
---	UF.CreatePaladinClassBar(frame, "TOPRIGHT", frame.Health, "TOPRIGHT", 0, 24)
-	UF.CreateMonkClassBar(frame, "TOPRIGHT", frame.Health, "TOPRIGHT", 0, 24)
-	UF.CreateDeathknightClassBar(frame, "TOPRIGHT", frame.Health, "TOPRIGHT", 0, 24)
---[[
-	UF.CreateDeathknightBar(frame, "CENTER", frame.Castbar, "CENTER", rbp.xOffset, rbp.yOffset)
-	UF.CreateDemonhunterBar(frame, "CENTER", frame.Castbar, "CENTER", rbp.xOffset, rbp.yOffset)
-	UF.CreateDruidBar(frame, "CENTER", frame.Castbar, "CENTER", rbp.xOffset, rbp.yOffset)
-	UF.CreateRogueBar(frame, "CENTER", frame.Castbar, "CENTER", rbp.xOffset, rbp.yOffset)
-	UF.CreateWarlockBar(frame, "CENTER", frame.Castbar, "CENTER", rbp.xOffset, rbp.yOffset)
-]]
 end
 
 oUF:RegisterStyle("DraePlayer", StyleDrae_Player)

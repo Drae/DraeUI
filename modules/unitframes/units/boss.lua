@@ -12,7 +12,7 @@ local UF = T:GetModule("UnitFrames")
 
 -- Boss frames - basically focus with classifications
 local StyleDrae_Boss = function(frame, unit, isSingle)
-	frame:Size(175, 47)
+	frame:SetSize(175, 47)
 	frame:SetHitRectInsets(0, 0, 0, 10)
 	frame:SetFrameStrata("LOW")
 
@@ -24,11 +24,11 @@ local StyleDrae_Boss = function(frame, unit, isSingle)
 	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "RIGHT", -2, 0)
 
 	local info = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "LEFT", -2, 22)
-	info:Size(140, 20)
+	info:SetSize(140, 20)
 	frame:Tag(info, "[drae:shortclassification][drae:unitcolour][name]")
 
 	local level = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "RIGHT", 2, 22)
-	level:Size(40, 20)
+	level:SetSize(40, 20)
 	frame:Tag(level, "[level]")
 
 	-- Castbar

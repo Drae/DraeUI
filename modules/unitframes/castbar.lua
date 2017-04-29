@@ -45,7 +45,7 @@ local OnCastbarUpdate = function(self, elapsed)
 		self:SetValue(duration)
 
 		if(self.Spark) then
-			self.Spark:Point("CENTER", self, "LEFT", (duration / self.max) * self:GetWidth(), 0)
+			self.Spark:SetPoint("CENTER", self, "LEFT", (duration / self.max) * self:GetWidth(), 0)
 		end
 	else
 		self.unitName = nil
@@ -98,7 +98,7 @@ local PostCastStop = function(self, unit, name, rank, castid)
 		self.fadeOut = nil
 
 		local sparkPosition = (self.duration / self.max) * self:GetWidth()
-		self.Spark:Point("CENTER", self, "LEFT", sparkPosition, 2)
+		self.Spark:SetPoint("CENTER", self, "LEFT", sparkPosition, 2)
 		self.Spark:Show()
 	else
 		if (not self.fadeOut) then
@@ -136,9 +136,9 @@ end
 --]]
 UF.CreateCastBar = function(self, width, height, anchor, anchorAt, anchorTo, xOffset, yOffset, reverse)
 	local castbar = CreateFrame("StatusBar", nil, self)
-	castbar:Size(width, height)
-	castbar:Point(anchorAt, anchor, anchorTo, xOffset, yOffset)
-	castbar:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\statusbarsfill")
+	castbar:SetSize(width, height)
+	castbar:SetPoint(anchorAt, anchor, anchorTo, xOffset, yOffset)
+	castbar:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\Striped")
 --	castbar:SetReverseFill(reverse and true or false)
 	castbar:SetStatusBarColor(0.5, 0.5, 1, 1)
 
@@ -158,8 +158,8 @@ UF.CreateCastBar = function(self, width, height, anchor, anchorAt, anchorTo, xOf
 
 	-- Border
 	local border = CreateFrame("Frame", nil, castbar)
-	border:Point("TOPLEFT", -2, 2)
-	border:Point("BOTTOMRIGHT", 2, -2)
+	border:SetPoint("TOPLEFT", -2, 2)
+	border:SetPoint("BOTTOMRIGHT", 2, -2)
 	border:SetFrameStrata("BACKGROUND")
 	border:SetBackdrop {
 		bgFile = "Interface\\BUTTONS\\WHITE8X8",
@@ -175,7 +175,7 @@ UF.CreateCastBar = function(self, width, height, anchor, anchorAt, anchorTo, xOf
 	local spark = castbar:CreateTexture(nil, "OVERLAY")
 	spark:SetBlendMode("ADD")
 	spark:SetAlpha(0.75)
-	spark:Height(castbar:GetHeight() * 2.75)
+	spark:SetHeight(castbar:GetHeight() * 2.75)
 	castbar.Spark = spark
 
 	-- Cast time
@@ -186,8 +186,8 @@ UF.CreateCastBar = function(self, width, height, anchor, anchorAt, anchorTo, xOf
 
 	local shield = castbar:CreateTexture(nil, "BACKGROUND", nil, 7)
 	shield:SetTexture("Interface\\TARGETINGFRAME\\PortraitQuestBadge")
-	shield:Point(reverse and "RIGHT" or "LEFT", castbar, reverse and "RIGHT" or "LEFT", reverse and 15 or -15, 0)
-	shield:Size(30, 30)
+	shield:SetPoint(reverse and "RIGHT" or "LEFT", castbar, reverse and "RIGHT" or "LEFT", reverse and 15 or -15, 0)
+	shield:SetSize(30, 30)
 	castbar.Shield = shield
 
 	self.Castbar = castbar
@@ -219,8 +219,8 @@ do
 			--glowing borders
 			local border = CreateFrame("Frame", nil, _G[bar])
 			border:SetFrameStrata("BACKGROUND")
-			border:Point("TOPLEFT", -2, 2)
-			border:Point("BOTTOMRIGHT", 2, -2)
+			border:SetPoint("TOPLEFT", -2, 2)
+			border:SetPoint("BOTTOMRIGHT", 2, -2)
 			border:SetBackdrop {
 				edgeFile = "Interface\\Buttons\\White8x8",
 				tile = false,
@@ -230,18 +230,18 @@ do
 
 			_G[bar]:SetParent(UIParent)
 			_G[bar]:SetScale(1)
-			_G[bar]:Height(T.db["castbar"].player.height)
-			_G[bar]:Width(T.db["castbar"].player.width / 2)
+			_G[bar]:SetHeight(T.db["castbar"].player.height)
+			_G[bar]:SetWidth(T.db["castbar"].player.width / 2)
 			if (bar == "MirrorTimer1") then
 				_G[bar]:ClearAllPoints()
-				_G[bar]:Point("RIGHT", self.Castbar, "RIGHT", 0, 30)
+				_G[bar]:SetPoint("RIGHT", self.Castbar, "RIGHT", 0, 30)
 			else
 				_G[bar]:ClearAllPoints()
-				_G[bar]:Point("BOTTOM", _G["MirrorTimer"..(barId - 1)], "TOP", 0, 5)
+				_G[bar]:SetPoint("BOTTOM", _G["MirrorTimer"..(barId - 1)], "TOP", 0, 5)
 			end
 
 			_G[bar.."Background"] = _G[bar]:CreateTexture(bar.."Background", "BACKGROUND", _G[bar])
-			_G[bar.."Background"]:SetTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\statusbarsfill")
+			_G[bar.."Background"]:SetTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\Striped")
 			_G[bar.."Background"]:SetAllPoints(bar)
 			_G[bar.."Background"]:SetVertexColor(0, 0, 0, 0)
 
@@ -249,12 +249,12 @@ do
 
 			_G[bar.."Text"]:ClearAllPoints()
 			_G[bar.."Text"]:SetFont(T["media"].font, 10)
-			_G[bar.."Text"]:Point("LEFT", _G[bar.."StatusBar"], 5, 1)
+			_G[bar.."Text"]:SetPoint("LEFT", _G[bar.."StatusBar"], 5, 1)
 
 			_G[bar.."TextTime"] = T.CreateFontObject(_G[bar.."StatusBar"], 10, T["media"].font, "RIGHT", -5, 1, "NONE") -- Our timer
 
 			_G[bar.."StatusBar"]:ClearAllPoints()
-			_G[bar.."StatusBar"]:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\statusbarsfill")
+			_G[bar.."StatusBar"]:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\Striped")
 			_G[bar.."StatusBar"]:SetAllPoints(_G[bar])
 
 			local timeMsg = ""

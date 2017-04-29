@@ -111,8 +111,8 @@ local noop = function() end
 -- Animate the minimap frame
 local CreateRotateTextures = function(texture, width, height, scale, framelevel, texr, texg, texb, alpha, duration, side, blendmode)
 	local h = CreateFrame("Frame", nil, Minimap)
-	h:Height(height)
-	h:Width(width)
+	h:SetHeight(height)
+	h:SetWidth(width)
 	h:SetPoint("CENTER", 0, 0)
 	h:SetScale(scale)
 	h:SetFrameLevel(framelevel)
@@ -174,14 +174,14 @@ end
 MM.OnEnable = function(self)
 	MinimapBackdrop:ClearAllPoints()
 	MinimapBackdrop:SetParent(Minimap)
-	MinimapBackdrop:Point("CENTER", Minimap, "CENTER", -8, -23)
+	MinimapBackdrop:SetPoint("CENTER", Minimap, "CENTER", -8, -23)
 
 	Minimap:SetMaskTexture("Textures\\MinimapMask")
 	Minimap:SetScale(1.1)
-	Minimap:Point("TOPRIGHT", UIParent, "TOPRIGHT", -30, -30)
+	Minimap:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -30, -30)
 
 	-- Move the minibackdrop and border
-	MinimapBackdrop:Point("CENTER", Minimap, "CENTER", -8, -24)
+	MinimapBackdrop:SetPoint("CENTER", Minimap, "CENTER", -8, -24)
 
 	-- Change some basic textures
 	MinimapBorder:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\UI-Minimap-Border")
@@ -202,9 +202,9 @@ MM.OnEnable = function(self)
 	})
 	pingFrame:SetBackdropColor(0, 0, 0, 0.8)
 	pingFrame:SetBackdropBorderColor(0, 0, 0, 0.6)
-	pingFrame:Height(20)
-	pingFrame:Width(100)
-	pingFrame:Point("BOTTOM", Minimap, "BOTTOM", 0, 10)
+	pingFrame:SetHeight(20)
+	pingFrame:SetWidth(100)
+	pingFrame:SetPoint("BOTTOM", Minimap, "BOTTOM", 0, 10)
 	pingFrame:SetFrameStrata("HIGH")
 	pingFrame.name = pingFrame:CreateFontString(nil, nil, "GameFontNormalSmall")
 	pingFrame.name:SetAllPoints()
@@ -224,8 +224,8 @@ MM.OnEnable = function(self)
 		local color = class and RAID_CLASS_COLORS[class] or GRAY_FONT_COLOR
 
 		pingFrame.name:SetFormattedText("|cFF%02x%02x%02x%s|r", color.r * 255, color.g * 255, color.b * 255, UnitName(unit))
-		pingFrame:Width(pingFrame.name:GetStringWidth() + 14)
-		pingFrame:Height(pingFrame.name:GetStringHeight() + 10)
+		pingFrame:SetWidth(pingFrame.name:GetStringWidth() + 14)
+		pingFrame:SetHeight(pingFrame.name:GetStringHeight() + 10)
 		animGroup:Stop()
 		pingFrame:Show()
 		animGroup:Play()

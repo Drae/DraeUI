@@ -27,21 +27,24 @@ local class
 
 RES.UpdateTimer = function(self)
 	local charges, maxCharges, started, duration = GetSpellCharges(20484) -- Rebirth
---		if (not charges) then return end
 
-	local time = duration - (GetTime() - started)
-	local min = floor(time / 60)
-	local sec = mod(time, 60)
+	if (started) then
+		local time = duration - (GetTime() - started)
+		local min = floor(time / 60)
+		local sec = mod(time, 60)
 
-	if (next(theDead)) then
-		for k, v in next, theDead do
-			if (UnitBuff(k, redemption) or UnitBuff(k, feign) or UnitIsFeignDeath(k)) then -- The backup plan, you need one with Blizz
-				theDead[k] = nil
+		if (next(theDead)) then
+			for k, v in next, theDead do
+				if (UnitBuff(k, redemption) or UnitBuff(k, feign) or UnitIsFeignDeath(k)) then -- The backup plan, you need one with Blizz
+					theDead[k] = nil
+				end
 			end
 		end
-	end
 
-	LDB.text = format(charges == 0 and "|cffff0000%d|rres (%d:%02d)" or "|cff00ff00%d|rres (%d:%02d)", charges, min, sec)
+		LDB.text = format(charges == 0 and "|cffff0000%d|rres (%d:%02d)" or "|cff00ff00%d|rres (%d:%02d)", charges, min, sec)
+	else
+		LDB.text = format("|cff00ff000|rres (0:00)")
+	end
 end
 
 RES.UpdateRes = function(self)
@@ -138,7 +141,7 @@ end
 
 LDB.OnEnter = function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_NONE")
-	GameTooltip:Point("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
+	GameTooltip:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
 
 	GameTooltip:ClearLines()
 

@@ -222,11 +222,11 @@ local function UpdateTextures(self, elapsed)
 				if size > 0 then
 					if size > 10 then
 						TextureCache[texturePath] = 1
-						texture:Size(textureWidth, textureHeight)
+						texture:SetSize(textureWidth, textureHeight)
 						texture:Show()
 					else
 						TextureCache[texturePath] = 0
-						texture:Size(textureWidth, textureHeight)
+						texture:SetSize(textureWidth, textureHeight)
 						texture:SetColorTexture(0,.113,.16)
 						texture:Show()
 					end
@@ -246,16 +246,16 @@ local function SuperSetTexture(texture, texturePath, textureWidth, textureHeight
 	if cached then
 		if cached == 1 then
 			texture:SetTexture(texturePath)
-			texture:Size(textureWidth, textureHeight)
+			texture:SetSize(textureWidth, textureHeight)
 			texture:Show()
 		else
 			--texture:Hide()
-			texture:Size(textureWidth, textureHeight)
+			texture:SetSize(textureWidth, textureHeight)
 			texture:SetColorTexture(0,.113,.16)
 			texture:Show()
 		end
 	else
-		texture:Width(0) -- force dimensions
+		texture:SetWidth(0) -- force dimensions
 		texture:Hide()
 		tinsert(TextureQueue, {texture, textureWidth, textureHeight})
 		if #TextureQueue == 1 then
@@ -332,9 +332,9 @@ local function update_overlays()
 									texture:Show()
 								end
 								texNum = texNum + 1
-								texture:Size(texturePixelWidth,texturePixelHeight)
+								texture:SetSize(texturePixelWidth,texturePixelHeight)
 								texture:SetTexCoord(0, texturePixelWidth/textureFileWidth, 0, texturePixelHeight/textureFileHeight)
-								texture:Point("TOPLEFT", overlayFrame, "TOPLEFT", offsetX + (256 * (k-1)), -(offsetY + 256 * (j - 1)))
+								texture:SetPoint("TOPLEFT", overlayFrame, "TOPLEFT", offsetX + (256 * (k-1)), -(offsetY + 256 * (j - 1)))
 								texture:SetTexture(textureName..(((j - 1) * numTexturesWide) + k))
 							end
 						end
@@ -446,7 +446,7 @@ local function update_overlays()
 					local paf = (areaID == 610 or areaID == 614 or areaID == 615) and UNDERWATER_PATH or TERRAIN_PATH
 					local texturePath = paf:format(TERRAIN_MAPS[terrainMapID], iTileX+(x-1), iTileY+(y-1))
 					texture:SetTexture(texturePath)
-					texture:Size(textureWidth, textureHeight)
+					texture:SetSize(textureWidth, textureHeight)
 					texture:Show()
 					--SuperSetTexture(texture, texturePath, textureWidth, textureHeight)
 				end
@@ -470,7 +470,7 @@ local function update_overlays()
 			end
 		end
 
-		CoordsHolder.playerCoords:Point("BOTTOMLEFT", WorldMapScrollFrame, "BOTTOMLEFT", 120, 8)
+		CoordsHolder.playerCoords:SetPoint("BOTTOMLEFT", WorldMapScrollFrame, "BOTTOMLEFT", 120, 8)
 	else
 		menu:Hide()
 		--if activeMode == button3 then WorldMapHighlight:SetParent(WorldMapDetailFrame) end
@@ -480,7 +480,7 @@ local function update_overlays()
 			terrainTextures[i]:Hide()
 		end
 
-		CoordsHolder.playerCoords:Point("BOTTOMLEFT", WorldMapScrollFrame, "BOTTOMLEFT", 8, 8)
+		CoordsHolder.playerCoords:SetPoint("BOTTOMLEFT", WorldMapScrollFrame, "BOTTOMLEFT", 8, 8)
 	end
 end
 

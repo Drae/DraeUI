@@ -14,7 +14,7 @@ local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeArtifact", {
 		artifact = {
 			isStatusBar = true,
 			level = 2,
-			texture = "Interface\\AddOns\\draeUI\\media\\statusbars\\artifactbar",
+			texture = "Interface\\AddOns\\draeUI\\media\\statusbars\\Striped",
 			position = {
 				{
 					anchorat = "TOPLEFT",
@@ -77,8 +77,8 @@ AT.UpdateArtifact = function(self, event, unit)
 		LDB.ShowPlugin = true
 	end
 
-	local _, _, name, _, totalXP, pointsSpent, quality, artifactAppearanceID, appearanceModID, itemAppearanceID, altItemAppearanceID, altOnTop = C_ArtifactUI.GetEquippedArtifactInfo()
-	local pointsAvailable, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP)
+	local _, _, name, _, totalXP, pointsSpent, quality, artifactAppearanceID, appearanceModID, itemAppearanceID, altItemAppearanceID, altOnTop, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
+	local pointsAvailable, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
 
 	local pct = (xp / xpForNextPoint) * 100
 
@@ -92,15 +92,15 @@ end
 
 LDB.OnEnter = function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_NONE")
-	GameTooltip:Point("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
+	GameTooltip:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
 
 	GameTooltip:ClearLines()
 
 	GameTooltip:AddLine(ARTIFACT_POWER)
 	GameTooltip:AddLine(" ")
 
-	local itemID, altItemID, name, icon, totalXP, pointsSpent, quality, artifactAppearanceID, appearanceModID, itemAppearanceID, altItemAppearanceID, altOnTop = C_ArtifactUI.GetEquippedArtifactInfo()
-	local numPointsAvailableToSpend, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP)
+	local itemID, altItemID, name, icon, totalXP, pointsSpent, quality, artifactAppearanceID, appearanceModID, itemAppearanceID, altItemAppearanceID, altOnTop, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
+	local numPointsAvailableToSpend, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
 
 	GameTooltip:AddDoubleLine("XP:", format(" %d / %d (%d%%)", xp, xpForNextPoint, xp / xpForNextPoint * 100), 1, 1, 1)
 	GameTooltip:AddDoubleLine("Remaining:", format(" %d (%d%% - %d Bars)", xpForNextPoint - xp, (xpForNextPoint - xp) / xpForNextPoint * 100, 20 * (xpForNextPoint - xp) / xpForNextPoint), 1, 1, 1)

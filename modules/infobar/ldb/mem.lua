@@ -102,7 +102,7 @@ local TooltipMem = function(self)
 
 	if (total > 0) then
 		GameTooltip:SetOwner(self, "ANCHOR_NONE")
-		GameTooltip:Point("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
+		GameTooltip:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
 
 		GameTooltip:ClearLines()
 

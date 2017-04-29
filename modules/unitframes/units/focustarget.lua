@@ -12,15 +12,15 @@ local UF = T:GetModule("UnitFrames")
 
 -- Target of target frame
 local StyleDrae_FocusTarget = function(frame, unit, isSingle)
-	frame:Size(120, 47)
+	frame:SetSize(120, 47)
 	frame:SetHitRectInsets(0, 0, 0, 23)
 	frame:SetFrameStrata("LOW")
 
 	UF.CommonInit(frame)
 
 	local arrow = frame:CreateTexture(nil, "BACKGROUND", nil, 0)
-	arrow:Size(16, 32)
-	arrow:Point("RIGHT", frame, "LEFT", -2, 10)
+	arrow:SetSize(16, 32)
+	arrow:SetPoint("RIGHT", frame, "LEFT", -2, 10)
 	arrow:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\targetArrow")
 
 	frame.Health = UF.CreateHealthBar(frame, 120, 16, 0, 0)
@@ -29,11 +29,11 @@ local StyleDrae_FocusTarget = function(frame, unit, isSingle)
 	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "RIGHT", -2, 0)
 
 	local info = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "LEFT", -2, 22)
-	info:Size(95, 20)
+	info:SetSize(95, 20)
 	frame:Tag(info, "[drae:shortclassification][drae:unitcolour][name]")
 
 	local level = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "RIGHT", 2, 22)
-	level:Size(40, 20)
+	level:SetSize(40, 20)
 	frame:Tag(level, "[level]")
 
 	-- Auras - just debuffs for target of target
