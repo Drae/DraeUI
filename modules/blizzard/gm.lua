@@ -11,7 +11,7 @@ local B = T:GetModule("Blizzard")
 --]]
 function B:PositionGMFrames()
 	TicketStatusFrame:ClearAllPoints()
-	TicketStatusFrame:Point("TOPLEFT", UIParent, "TOPLEFT", 250, -10)
+	TicketStatusFrame:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 250, -10)
 
 	HelpOpenTicketButton:SetParent(Minimap)
 	HelpOpenTicketButton:ClearAllPoints()

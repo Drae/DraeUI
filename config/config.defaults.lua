@@ -34,20 +34,20 @@ C["frames"] = {
 	numFormatLong		= false,
 
 	-- Display or hide frames
-	showBoss			= true, 	-- Boss frames
+	showBoss			= false, 	-- Boss frames
 	showArena			= true,
 
 	-- Player and Target are positioned relative to center of screen,
 	-- all other frames are positioned relative to those
 	playerXoffset		= -410,
-	playerYoffset		= -100,
+	playerYoffset		= -120,
 	targetXoffset		= 410,
-	targetYoffset		= -100,
-	totXoffset			= 20, 	-- Relative to right of target
+	targetYoffset		= -120,
+	totXoffset			= 25, 	-- Relative to right of target
 	totYoffset			= 0,
 	focusXoffset		= 6,  	-- Relative to left of target
 	focusYoffset		= 75,
-	focusTargetXoffset	= 10, 	-- Relative to right of focus target
+	focusTargetXoffset	= 25, 	-- Relative to right of focus target
 	focusTargetYoffset	= 0,
 	petXoffset			= -6, --62, 	-- Relative to left of player
 	petYoffset			= 30, ---100,
@@ -167,9 +167,9 @@ C["raidframes"] = {
 	-- specify a position for a total number of groups the position of the last highest
 	-- will be used
 	position = {
-		[1] = { "BOTTOMLEFT", UIParent, "CENTER", -176, -320 },
-		[2] = { "BOTTOMLEFT", UIParent, "CENTER", -176, -390 },
-		[3] = { "BOTTOMLEFT", UIParent, "CENTER", -176, -420 },
+		[1] = { "BOTTOMLEFT", UIParent, "CENTER", -176, -240 },
+		[2] = { "BOTTOMLEFT", UIParent, "CENTER", -176, -340 },
+		[3] = { "BOTTOMLEFT", UIParent, "CENTER", -176, -440 },
 		[6] = { "BOTTOMLEFT", UIParent, "CENTER", -940, -150 },
 	},
 
@@ -202,12 +202,12 @@ C["castbar"] = {
 		anchorto = "LEFT",
 	},
 	focus = {
-		width	 = 150,
+		width	 = 118,
 		height	 = 6,
-		xOffset  = -12,
-		yOffset  = 8,
+		xOffset  = 3,
+		yOffset  = 54,
 		anchor 	 = "DraeFocus",
-		anchorat = "RIGHT",
+		anchorat = "LEFT",
 		anchorto = "LEFT",
 	},
 	boss = {

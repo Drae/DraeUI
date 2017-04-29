@@ -51,8 +51,8 @@ UF.CommonPostInit = function(self, size, noRaidIcons)
 	if (not noRaidIcons) then
 		local raidIcon = self.Health:CreateTexture(nil, "OVERLAY")
 		raidIcon:SetTexture("Interface\\TargetingFrame\\UI-RaidTargetingIcons")
-		raidIcon:Point("TOP", self.Power and self.Power or self.Health, "BOTTOM", 0, size / 2)
-		raidIcon:Size(size, size)
+		raidIcon:SetPoint("TOP", self.Power and self.Power or self.Health, "BOTTOM", 0, size / 2)
+		raidIcon:SetSize(size, size)
 		self.RaidTargetIndicator = raidIcon
 	end
 
@@ -64,21 +64,22 @@ end
 
 UF.CreateHealthBar = function(self, width, height, x, y, point, reverse)
 	local hpborder = self:CreateTexture(nil, "BORDER", nil, 1)
-	hpborder:Size(width + 4, height + 4)
-	hpborder:Point(point and "TOPRIGHT" or "TOPLEFT", self, point and "TOPRIGHT" or "TOPLEFT", x, y)
-	hpborder:SetTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\gwstatusbar-bg")
+	hpborder:SetSize(width + 4, height + 4)
+	hpborder:SetPoint(point and "TOPRIGHT" or "TOPLEFT", self, point and "TOPRIGHT" or "TOPLEFT", x, y)
+	hpborder:SetTexture("Interface\\BUTTONS\\WHITE8X8")
+	hpborder:SetVertexColor(0.05, 0.05, 0.05)
 
 	local hpbg = self:CreateTexture(nil, "BORDER", nil, 0)
-	hpbg:Size(width + 2, height + 2)
-	hpbg:Point("TOPLEFT", hpborder, "TOPLEFT", 1, -1)
+	hpbg:SetSize(width + 2, height + 2)
+	hpbg:SetPoint("TOPLEFT", hpborder, "TOPLEFT", 1, -1)
 	hpbg:SetTexture("Interface\\BUTTONS\\WHITE8X8")
 	hpbg:SetVertexColor(0, 0, 0)
 
 	local hp = CreateFrame("StatusBar", nil, self)
 	hp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
 	hp:SetReverseFill(reverse and true or false)
-	hp:Size(width, height)
-	hp:Point("TOPLEFT", hpborder, "TOPLEFT", 2, -2)
+	hp:SetSize(width, height)
+	hp:SetPoint("TOPLEFT", hpborder, "TOPLEFT", 2, -2)
 
 	hp.hpborder = hpborder
 	hp.hpbg = hpbg
@@ -93,60 +94,29 @@ UF.CreateHealthBar = function(self, width, height, x, y, point, reverse)
 
 	hp.PostUpdate = UF.PostUpdateHealth
 
-	local gainTexture = hp:CreateTexture(nil, "OVERLAY")
-	gainTexture:SetPoint("TOPRIGHT", hp:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
-	gainTexture:SetPoint("BOTTOMRIGHT", hp:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
-	gainTexture:SetColorTexture(0, 1, 0, 0.66)
-	gainTexture:SetAlpha(0)
-	hp.Gain = gainTexture
-
-	local lossTexture = hp:CreateTexture(nil, "BACKGROUND")
-	lossTexture:SetPoint("TOPLEFT", hp:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
-	lossTexture:SetPoint("BOTTOMLEFT", hp:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
-	lossTexture:SetColorTexture(1, 1, 1, 0.66)
-	lossTexture:SetAlpha(0)
-	hp.Loss = lossTexture
-
-	local ag = gainTexture:CreateAnimationGroup()
-	ag:SetToFinalAlpha(true)
-	gainTexture.FadeOut = ag
-
-	local anim1 = ag:CreateAnimation("Alpha")
-	anim1:SetFromAlpha(1)
-	anim1:SetToAlpha(0)
-	anim1:SetStartDelay(0.05)
-	anim1:SetDuration(0.15)
-
-	ag = lossTexture:CreateAnimationGroup()
-	ag:SetToFinalAlpha(true)
-	lossTexture.FadeOut = ag
-
-	anim1 = ag:CreateAnimation("Alpha")
-	anim1:SetFromAlpha(1)
-	anim1:SetToAlpha(0)
-	anim1:SetStartDelay(0.05)
-	anim1:SetDuration(0.15)
+	Smoothing:EnableBarAnimation(hp)
 
 	return hp
 end
 
 UF.CreatePowerBar = function(self, width, height, point, reverse)
 	local ppborder = self:CreateTexture(nil, "BORDER", nil, 1)
-	ppborder:Size(width + 4, height + 4)
-	ppborder:Point(point and "TOPRIGHT" or "TOPLEFT", self.Health.hpborder, point and "BOTTOMRIGHT" or "BOTTOMLEFT", 0, 3)
-	ppborder:SetTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\gwstatusbar-bg")
+	ppborder:SetSize(width + 4, height + 4)
+	ppborder:SetPoint(point and "TOPRIGHT" or "TOPLEFT", self.Health.hpborder, point and "BOTTOMRIGHT" or "BOTTOMLEFT", 0, 3)
+	ppborder:SetTexture("Interface\\BUTTONS\\WHITE8X8")
+	ppborder:SetVertexColor(0.05, 0.05, 0.05)
 
 	local ppbg = self:CreateTexture(nil, "BORDER", nil, 0)
-	ppbg:Size(width + 2, height + 2)
-	ppbg:Point("TOPLEFT", ppborder, "TOPLEFT", 1, -1)
+	ppbg:SetSize(width + 2, height + 2)
+	ppbg:SetPoint("TOPLEFT", ppborder, "TOPLEFT", 1, -1)
 	ppbg:SetTexture("Interface\\BUTTONS\\WHITE8X8")
 	ppbg:SetVertexColor(0, 0, 0)
 
 	local pp = CreateFrame("StatusBar", nil, self)
 	pp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
 	pp:SetReverseFill(reverse and true or false)
-	pp:Size(width, height)
-	pp:Point("TOPLEFT", ppborder, "TOPLEFT", 2, -2)
+	pp:SetSize(width, height)
+	pp:SetPoint("TOPLEFT", ppborder, "TOPLEFT", 2, -2)
 
 	pp.ppborder = ppborder
 	pp.ppbg = ppbg
@@ -160,64 +130,34 @@ UF.CreatePowerBar = function(self, width, height, point, reverse)
 
 	pp.frequentUpdates = true
 
-	local gainTexture = pp:CreateTexture(nil, "OVERLAY")
-	gainTexture:SetPoint("TOPRIGHT", pp:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
-	gainTexture:SetPoint("BOTTOMRIGHT", pp:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
-	gainTexture:SetColorTexture(0, 1, 0, 0.66)
-	gainTexture:SetAlpha(0)
-	pp.Gain = gainTexture
-
-	local lossTexture = pp:CreateTexture(nil, "BACKGROUND")
-	lossTexture:SetPoint("TOPLEFT", pp:GetStatusBarTexture(), "TOPRIGHT", 0, 0)
-	lossTexture:SetPoint("BOTTOMLEFT", pp:GetStatusBarTexture(), "BOTTOMRIGHT", 0, 0)
-	lossTexture:SetColorTexture(1, 1, 1)
-	lossTexture:SetAlpha(0)
-	pp.Loss = lossTexture
-
-	local ag = gainTexture:CreateAnimationGroup()
-	ag:SetToFinalAlpha(true)
-	gainTexture.FadeOut = ag
-
-	local anim1 = ag:CreateAnimation("Alpha")
-	anim1:SetFromAlpha(1)
-	anim1:SetToAlpha(0)
-	anim1:SetStartDelay(0.05)
-	anim1:SetDuration(0.15)
-
-	ag = lossTexture:CreateAnimationGroup()
-	ag:SetToFinalAlpha(true)
-	lossTexture.FadeOut = ag
-
-	anim1 = ag:CreateAnimation("Alpha")
-	anim1:SetFromAlpha(1)
-	anim1:SetToAlpha(0)
-	anim1:SetStartDelay(0.05)
-	anim1:SetDuration(0.15)
+	Smoothing:EnableBarAnimation(pp)
 
 	return pp
 end
 
 UF.CreateAdditionalPower = function(self, width, height, point, reverse)
 --[[	local ppborder = self:CreateTexture(nil, "BORDER", nil, 1)
-	ppborder:Size(width + 4, height + 4)
-	ppborder:Point(point and "TOPRIGHT" or "TOPLEFT", self.Power.ppborder, point and "BOTTOMRIGHT" or "BOTTOMLEFT", 0, 3)
-	ppborder:SetTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\gwstatusbar-bg")
+	ppborder:SetSize(width + 4, height + 4)
+	ppborder:SetPoint(point and "TOPRIGHT" or "TOPLEFT", self.Power.ppborder, point and "BOTTOMRIGHT" or "BOTTOMLEFT", 0, 3)
+	ppborder:SetTexture("Interface\\BUTTONS\\WHITE8X8")
 
 	local ppbg = self:CreateTexture(nil, "BORDER", nil, 0)
-	ppbg:Size(width + 2, height + 2)
-	ppbg:Point("TOPLEFT", ppborder, "TOPLEFT", 1, -1)
+	ppbg:SetSize(width + 2, height + 2)
+	ppbg:SetPoint("TOPLEFT", ppborder, "TOPLEFT", 1, -1)
 	ppbg:SetTexture("Interface\\BUTTONS\\WHITE8X8")
 	ppbg:SetVertexColor(0, 0, 0)
 ]]
 	local pp = CreateFrame("StatusBar", nil, self)
 	pp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
 	pp:SetReverseFill(reverse and true or false)
-	pp:Size(width, height)
-	pp:Point("TOPLEFT", ppborder, "TOPLEFT", 2, -2)
+	pp:SetSize(width, height)
+	pp:SetPoint("TOPLEFT", ppborder, "TOPLEFT", 2, -2)
 
 	pp.colorDisconnected = true
 	pp.colorPower = true
 	pp.frequentUpdates = true
+
+	Smoothing:EnableBarAnimation(pp)
 
 	return pp
 end
@@ -226,26 +166,26 @@ end
 UF.FlagIcons = function(frame, reverse)
 	-- Leader icon
 	local leader = frame:CreateTexture(nil, "OVERLAY", 6)
-	leader:Point("CENTER", frame.Portrait and frame.Portrait or frame, reverse and "TOPLEFT" or "TOPRIGHT", 0, -5)
-	leader:Size(16, 16)
+	leader:SetPoint("CENTER", frame.Portrait and frame.Portrait or frame, reverse and "TOPLEFT" or "TOPRIGHT", 0, -5)
+	leader:SetSize(16, 16)
 	frame.LeaderIndicator = leader
 
 	-- Assistant icon
 	local assistant = frame:CreateTexture(nil, "OVERLAY", 6)
-	assistant:Point("CENTER", frame.Portrait and frame.Portrait or frame, reverse and "TOPLEFT" or "TOPRIGHT", 0, -5)
-	assistant:Size(16, 16)
+	assistant:SetPoint("CENTER", frame.Portrait and frame.Portrait or frame, reverse and "TOPLEFT" or "TOPRIGHT", 0, -5)
+	assistant:SetSize(16, 16)
 	frame.AssistantIndicator = assistant
 
 	-- pvp icon
 	local pvp = frame:CreateTexture(nil, "OVERLAY", nil, 6)
-	pvp:Size(28, 28)
-	pvp:Point("CENTER", frame.Portrait and frame.Portrait or frame, reverse and "TOPRIGHT" or "TOPLEFT", 0, -8)
+	pvp:SetSize(28, 28)
+	pvp:SetPoint("CENTER", frame.Portrait and frame.Portrait or frame, reverse and "TOPRIGHT" or "TOPLEFT", 0, -8)
 	frame.PvPIndicator = pvp
 
 	-- Dungeon role
 	local lfdRole = frame:CreateTexture(nil, "OVERLAY", 6)
-	lfdRole:Point("CENTER", frame.Portrait and frame.Portrait or frame, reverse and "BOTTOMRIGHT" or "BOTTOMLEFT", 0, 0)
-	lfdRole:Size(16, 16)
+	lfdRole:SetPoint("CENTER", frame.Portrait and frame.Portrait or frame, reverse and "BOTTOMRIGHT" or "BOTTOMLEFT", 0, 0)
+	lfdRole:SetSize(16, 16)
 	frame.GroupRoleIndicator = lfdRole
 end
 
@@ -285,12 +225,12 @@ do
 		button:EnableMouse(true)
 		button:RegisterForClicks("RightButtonUp")
 
-		button:Width(icons.size or 16)
-		button:Height(icons.size or 16)
+		button:SetWidth(icons.size or 16)
+		button:SetHeight(icons.size or 16)
 
 		local border = CreateFrame("Frame", nil, button)
-		border:Point("TOPLEFT", button, -2, 2)
-		border:Point("BOTTOMRIGHT", button, 2, -2)
+		border:SetPoint("TOPLEFT", button, -2, 2)
+		border:SetPoint("BOTTOMRIGHT", button, 2, -2)
 		border:SetFrameStrata("BACKGROUND")
 		border:SetBackdrop {
 			edgeFile = "Interface\\Buttons\\White8x8",
@@ -315,7 +255,7 @@ do
 
 		local count = button:CreateFontString(nil)
 		count:SetFont(T["media"].font, T.db["general"].fontsize3, "THINOUTLINE")
-		count:Point("BOTTOMRIGHT", button, "BOTTOMRIGHT", 7, -6)
+		count:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 7, -6)
 		button.count = count
 
 		local stealable = button:CreateTexture(nil, "OVERLAY")
@@ -455,8 +395,8 @@ do
 		local height = (spacing * (num / debuffsPerRow)) + (size * (num / debuffsPerRow))
 
 		local debuffs = CreateFrame("Frame", nil, self)
-		debuffs:Point(point, relativeFrame, relativePoint, ofsx, ofsy)
-		debuffs:Size(width, height)
+		debuffs:SetPoint(point, relativeFrame, relativePoint, ofsx, ofsy)
+		debuffs:SetSize(width, height)
 
 		debuffs.num = num
 		debuffs.size = size
@@ -481,8 +421,8 @@ do
 		local height = (spacing * (num / buffsPerRow)) + (size * (num / buffsPerRow))
 
 		local buffs = CreateFrame("Frame", nil, self)
-		buffs:Point(point, relativeFrame, relativePoint, ofsx, ofsy)
-		buffs:Size(width, height)
+		buffs:SetPoint(point, relativeFrame, relativePoint, ofsx, ofsy)
+		buffs:SetSize(width, height)
 
 		buffs.num = num
 		buffs.size = size
@@ -507,8 +447,8 @@ do
 		local height = 60
 
 		local buffs = CreateFrame("Frame", nil, self)
-		buffs:Point(point, relativeFrame, relativePoint, ofsx, ofsy)
-		buffs:Size(width, height)
+		buffs:SetPoint(point, relativeFrame, relativePoint, ofsx, ofsy)
+		buffs:SetSize(width, height)
 
 		buffs.numDebuffs = 0
 

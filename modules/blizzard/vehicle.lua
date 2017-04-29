@@ -18,9 +18,9 @@ B.PositionVehicleFrame = function(self)
 			VehicleSeatIndicator:ClearAllPoints()
 
 			if (VehicleSeatMover) then
-				VehicleSeatIndicator:Point("TOPLEFT", VehicleSeatMover, "TOPLEFT", 0, 0)
+				VehicleSeatIndicator:SetPoint("TOPLEFT", VehicleSeatMover, "TOPLEFT", 0, 0)
 			else
-				VehicleSeatIndicator:Point("TOPLEFT", UIParent, "TOPLEFT", 22, -45)
+				VehicleSeatIndicator:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 22, -45)
 			end
 
 			VehicleSeatIndicator:SetScale(0.8)
@@ -28,5 +28,5 @@ B.PositionVehicleFrame = function(self)
 	end)
 
 	-- We've hooked Point for this frame as above so call it rather than our own Point()
-	VehicleSeatIndicator:Point('TOPLEFT', MinimapCluster, 'TOPLEFT', 2, 2) -- initialize mover
+	VehicleSeatIndicator:SetPoint('TOPLEFT', MinimapCluster, 'TOPLEFT', 2, 2) -- initialize mover
 end

@@ -14,7 +14,7 @@ local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeExp", {
 		xp = {
 			isStatusBar = true,
 			level = 3,
-			texture = "Interface\\AddOns\\draeUI\\media\\statusbars\\xpbar",
+			texture = "Interface\\AddOns\\draeUI\\media\\statusbars\\Striped",
 			position = {
 				{
 					anchorat = "TOPLEFT",
@@ -36,7 +36,7 @@ local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeExp", {
 		rested = {
 			isStatusBar = true,
 			level = 2,
-			texture = "Interface\\AddOns\\draeUI\\media\\statusbars\\xpbar",
+			texture = "Interface\\AddOns\\draeUI\\media\\statusbars\\Striped",
 			position = {
 				{
 					anchorat = "TOPLEFT",
@@ -120,7 +120,7 @@ end
 do
 	local OnEnter = function(self)
 		GameTooltip:SetOwner(self, "ANCHOR_NONE")
-		GameTooltip:Point("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
+		GameTooltip:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
 
 		GameTooltip:ClearLines()
 
@@ -196,7 +196,7 @@ end
 do
 	local OnEnter = function(self)
 		GameTooltip:SetOwner(self, "ANCHOR_NONE")
-		GameTooltip:Point("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
+		GameTooltip:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
 
 		GameTooltip:ClearLines()
 
@@ -280,7 +280,7 @@ end
 do
 	local OnEnter = function(self)
 		GameTooltip:SetOwner(self, "ANCHOR_NONE")
-		GameTooltip:Point("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
+		GameTooltip:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
 
 		GameTooltip:ClearLines()
 

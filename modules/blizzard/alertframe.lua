@@ -14,9 +14,9 @@ local FORCE_POSITION = false
 
 --]]
 local AlertFrameHolder = CreateFrame("Frame", "AlertFrameHolder", UIParent)
-AlertFrameHolder:Width(180)
-AlertFrameHolder:Height(20)
-AlertFrameHolder:Point("TOP", UIParent, "TOP", 0, -25)
+AlertFrameHolder:SetWidth(180)
+AlertFrameHolder:SetHeight(20)
+AlertFrameHolder:SetPoint("TOP", UIParent, "TOP", 0, -25)
 
 local POSITION, ANCHOR_POINT, YOFFSET = "TOP", "BOTTOM", -10
 local FORCE_POSITION = false
@@ -28,7 +28,7 @@ B.PostAlertMove = function()
     AlertFrame:ClearAllPoints()
     AlertFrame:SetAllPoints(AlertFrameHolder)
     GroupLootContainer:ClearAllPoints()
-    GroupLootContainer:Point(POSITION, AlertFrameHolder, ANCHOR_POINT, 0, YOFFSET)
+    GroupLootContainer:SetPoint(POSITION, AlertFrameHolder, ANCHOR_POINT, 0, YOFFSET)
 
     if GroupLootContainer:IsShown() then
         B.GroupLootContainer_Update(GroupLootContainer)
@@ -44,16 +44,16 @@ B.GroupLootContainer_Update = function(self)
 		if ( frame ) then
 			frame:ClearAllPoints()
 			if prevFrame and not (prevFrame == frame) then
-				frame:Point(POSITION, prevFrame, ANCHOR_POINT, 0, YOFFSET)
+				frame:SetPoint(POSITION, prevFrame, ANCHOR_POINT, 0, YOFFSET)
 			else
-				frame:Point(POSITION, self, POSITION, 0, 0)
+				frame:SetPoint(POSITION, self, POSITION, 0, 0)
 			end
 			lastIdx = i
 		end
 	end
 
 	if ( lastIdx ) then
-		self:Height(self.reservedSize * lastIdx)
+		self:SetHeight(self.reservedSize * lastIdx)
 		self:Show()
 	else
 		self:Hide()
@@ -63,7 +63,7 @@ end
 B.AdjustAnchors = function(self, relativeAlert)
 	if self.alertFrame:IsShown() then
 		self.alertFrame:ClearAllPoints()
-		self.alertFrame:Point(POSITION, relativeAlert, ANCHOR_POINT, 0, YOFFSET)
+		self.alertFrame:SetPoint(POSITION, relativeAlert, ANCHOR_POINT, 0, YOFFSET)
 
 		return self.alertFrame
 	end
@@ -74,7 +74,7 @@ end
 B.AdjustQueuedAnchors = function(self, relativeAlert)
 	for alertFrame in self.alertFramePool:EnumerateActive() do
 		alertFrame:ClearAllPoints()
-		alertFrame:Point(POSITION, relativeAlert, ANCHOR_POINT, 0, YOFFSET)
+		alertFrame:SetPoint(POSITION, relativeAlert, ANCHOR_POINT, 0, YOFFSET)
 		relativeAlert = alertFrame
 	end
 

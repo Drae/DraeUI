@@ -30,7 +30,7 @@ end
 
 local TooltipLatency = function(self)
 	GameTooltip:SetOwner(self, "ANCHOR_NONE")
-	GameTooltip:Point("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
+	GameTooltip:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
 
 	GameTooltip:ClearLines()
 

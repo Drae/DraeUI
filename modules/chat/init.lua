@@ -83,12 +83,12 @@ local function ChatFrame_OnMouseScroll(frame, delta)
 			end
 		end
 
-		if T.dbGlobal["chat"].scrollDownInterval ~= 0 then
+		if CH.dbGlobalChat.scrollDownInterval ~= 0 then
 			if frame.ScrollTimer then
 				CH:CancelTimer(frame.ScrollTimer, true)
 			end
 
-			frame.ScrollTimer = CH:ScheduleTimer("ScrollToBottom", T.dbGlobal["chat"].scrollDownInterval, frame)
+			frame.ScrollTimer = CH:ScheduleTimer("ScrollToBottom", CH.dbGlobalChat.scrollDownInterval, frame)
 		end
 	end
 end
@@ -141,7 +141,7 @@ function CH:StyleChat(frame)
 
 	if tab.conversationIcon then
 		tab.conversationIcon:ClearAllPoints()
-		tab.conversationIcon:Point("RIGHT", tab.text, "LEFT", -1, 0)
+		tab.conversationIcon:SetPoint("RIGHT", tab.text, "LEFT", -1, 0)
 	end
 
 	frame:SetClampRectInsets(0,0,0,0)
@@ -152,8 +152,8 @@ function CH:StyleChat(frame)
 	editbox:SetAltArrowKeyMode(false)
 
 	editbox:ClearAllPoints()
-	editbox:Point("BOTTOMLEFT",  ChatFrame1, "TOPLEFT",  -5, tabHeight - 5)
-	editbox:Point("BOTTOMRIGHT", ChatFrame1, "TOPRIGHT", 10, tabHeight - 5)
+	editbox:SetPoint("BOTTOMLEFT",  ChatFrame1, "TOPLEFT",  -5, tabHeight - 5)
+	editbox:SetPoint("BOTTOMRIGHT", ChatFrame1, "TOPRIGHT", 10, tabHeight - 5)
 
 	self:SecureHook(editbox, "AddHistoryLine", "ChatEdit_AddHistory")
 
@@ -469,12 +469,14 @@ function CH:ShortChannel()
 end
 
 function CH:AddMessage(msg, ...)
-	if (T.dbGlobal["chat"].timeStampFormat and T.dbGlobal["chat"].timeStampFormat ~= "NONE" ) then
-		local timeStamp = BetterDate(T.dbGlobal["chat"].timeStampFormat, CH.timeOverride or time())
+	if (CH.dbGlobalChat.timeStampFormat and CH.dbGlobalChat.timeStampFormat ~= "NONE" ) then
+		local timeStamp = BetterDate(CH.dbGlobalChat.timeStampFormat, CH.timeOverride or time())
 		timeStamp = timeStamp:gsub(" ", "")
 		timeStamp = timeStamp:gsub("AM", " AM")
 		timeStamp = timeStamp:gsub("PM", " PM")
+
 		msg = "|cffB3B3B3["..timeStamp.."] |r"..msg
+
 		CH.timeOverride = nil
 	end
 
@@ -1039,8 +1041,8 @@ function CH:CHAT_MSG_CHANNEL(event, message, author, ...)
 
 	-- ignore player messages
 	if author == PLAYER_NAME then return CH.FindURL(self, event, message, author, ...) end
-	if msgList[msg] and T.dbGlobal["chat"].throttleInterval ~= 0 then
-		if difftime(time(), msgTime[msg]) <= T.dbGlobal["chat"].throttleInterval then
+	if msgList[msg] and CH.dbGlobalChat.throttleInterval ~= 0 then
+		if difftime(time(), msgTime[msg]) <= CH.dbGlobalChat.throttleInterval then
 			blockFlag = true
 		end
 	end
@@ -1048,7 +1050,7 @@ function CH:CHAT_MSG_CHANNEL(event, message, author, ...)
 	if blockFlag then
 		return true
 	else
-		if T.dbGlobal["chat"].throttleInterval ~= 0 then
+		if CH.dbGlobalChat.throttleInterval ~= 0 then
 			msgTime[msg] = time()
 		end
 
@@ -1064,8 +1066,8 @@ function CH:CHAT_MSG_YELL(event, message, author, ...)
 
 	-- ignore player messages
 	if author == PLAYER_NAME then return CH.FindURL(self, event, message, author, ...) end
-	if msgList[msg] and msgCount[msg] > 1 and T.dbGlobal["chat"].throttleInterval ~= 0 then
-		if difftime(time(), msgTime[msg]) <= T.dbGlobal["chat"].throttleInterval then
+	if msgList[msg] and msgCount[msg] > 1 and CH.dbGlobalChat.throttleInterval ~= 0 then
+		if difftime(time(), msgTime[msg]) <= CH.dbGlobalChat.throttleInterval then
 			blockFlag = true
 		end
 	end
@@ -1073,7 +1075,7 @@ function CH:CHAT_MSG_YELL(event, message, author, ...)
 	if blockFlag then
 		return true
 	else
-		if T.dbGlobal["chat"].throttleInterval ~= 0 then
+		if CH.dbGlobalChat.throttleInterval ~= 0 then
 			msgTime[msg] = time()
 		end
 
@@ -1102,7 +1104,7 @@ function CH:ChatEdit_OnEnterPressed(editBox)
 	local type = editBox:GetAttribute("chatType")
 	local chatFrame = editBox:GetParent()
 	if not chatFrame.isTemporary and ChatTypeInfo[type].sticky == 1 then
-		if not T.dbGlobal["chat"].sticky then type = "SAY" end
+		if not CH.dbGlobalChat.sticky then type = "SAY" end
 		editBox:SetAttribute("chatType", type)
 	end
 end
@@ -1170,8 +1172,20 @@ function CH:DisplayChatHistory()
 		data = self.db.ChatLog[tostring(temp[i])]
 
 		if type(data) == "table" and data[20] ~= nil then
+			local event = data[20]
+
+			if event == "CHAT_MSG_BN_WHISPER" or event == "CHAT_MSG_BN_WHISPER_INFORM" then
+				--Sender info is stored as |Kf#|k0000000000|k, which is a unique identifier for the current session only
+				--We need to update it in case the WoW client has been closed between the time the message was saved and now
+				local bnetIDAccount = data[13] --Unique identifier which persists between sessions (integer)
+				local _, presenceName = BNGetFriendInfoByID(bnetIDAccount)
+				if presenceName then
+					data[2] = presenceName --Update sender with correct name
+				end
+			end
+
 			CH.timeOverride = temp[i]
-			CH.ChatFrame_MessageEventHandler(DEFAULT_CHAT_FRAME, data[20], unpack(data))
+			CH.ChatFrame_MessageEventHandler(DEFAULT_CHAT_FRAME, event, unpack(data))
 		end
 	end
 end
@@ -1188,7 +1202,7 @@ function CH:SaveChatHistory(event, ...)
 		local message, author = ...
 		local msg = PrepareMessage(author, message)
 		if author ~= PLAYER_NAME and msgList[msg] then
-			if difftime(time(), msgTime[msg]) <= T.dbGlobal["chat"].throttleInterval then
+			if difftime(time(), msgTime[msg]) <= CH.dbGlobalChat.throttleInterval then
 				return
 			end
 		end
@@ -1310,9 +1324,6 @@ function CH:CheckLFGRoles()
 	end
 end
 
-
-
-
 CH.PositionChat = function(self, override)
 	if ((InCombatLockdown() and not override and self.initialMove) or (IsMouseButtonDown("LeftButton") and not override)) then return end
 
@@ -1338,8 +1349,8 @@ CH.PositionChat = function(self, override)
 
 		if (id ~= 2 and not (id > NUM_CHAT_WINDOWS)) then
 			chat:ClearAllPoints()
-			chat:Point("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 5, 5)
-			chat:Size(450, 180)
+			chat:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 5, 5)
+			chat:SetSize(450, 180)
 			FCF_SavePositionAndDimensions(chat)
 		end
 
@@ -1354,7 +1365,10 @@ CH.PositionChat = function(self, override)
 end
 
 CH.OnInitialize = function(self)
+	T.dbGlobal.chat = T.dbGlobal.chat or {}
+
 	self.db = T.dbChar
+	CH.dbGlobalChat = T.dbGlobal.chat
 
 	self.db.ChatEditHistory = self.db.ChatEditHistory or {}
 	self.db.ChatLog = self.db.ChatLog or {}
@@ -1452,6 +1466,10 @@ CH.OnEnable = function(self)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_WHISPER_INFORM", CH.FindURL)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_INLINE_TOAST_BROADCAST", CH.FindURL)
 
+	if (self.db.ChatLog) then
+		self:DisplayChatHistory()
+	end
+
 	local frame = CreateFrame("Frame", "CopyChatFrame", T.UIParent)
 	tinsert(UISpecialFrames, "CopyChatFrame")
 	frame:SetBackdrop({
@@ -1461,8 +1479,8 @@ CH.OnEnable = function(self)
 		insets = { left = 3, right = 3, top = 5, bottom = 3 }
 	})
 	frame:SetBackdropColor(0, 0, 0, 1)
-	frame:Size(700, 150)
-	frame:Point('BOTTOM', T.UIParent, 'BOTTOM', 0, 3)
+	frame:SetSize(700, 150)
+	frame:SetPoint('BOTTOM', T.UIParent, 'BOTTOM', 0, 3)
 	frame:SetMovable(true)
 	frame:EnableMouse(true)
 	frame:SetResizable(true)
@@ -1503,8 +1521,8 @@ CH.OnEnable = function(self)
 	scrollArea:SetPoint("TOPLEFT", frame, "TOPLEFT", 8, -30)
 	scrollArea:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -30, 8)
 	scrollArea:SetScript("OnSizeChanged", function(self)
-		CopyChatFrameEditBox:Width(self:GetWidth())
-		CopyChatFrameEditBox:Height(self:GetHeight())
+		CopyChatFrameEditBox:SetWidth(self:GetWidth())
+		CopyChatFrameEditBox:SetHeight(self:GetHeight())
 	end)
 
 	local editBox = CreateFrame("EditBox", "CopyChatFrameEditBox", frame)
@@ -1513,8 +1531,8 @@ CH.OnEnable = function(self)
 	editBox:EnableMouse(true)
 	editBox:SetAutoFocus(false)
 	editBox:SetFontObject(ChatFontNormal)
-	editBox:Width(scrollArea:GetWidth())
-	editBox:Height(200)
+	editBox:SetWidth(scrollArea:GetWidth())
+	editBox:SetHeight(200)
 	editBox:SetScript("OnEscapePressed", function() CopyChatFrame:Hide() end)
 	scrollArea:SetScrollChild(editBox)
 	CopyChatFrameEditBox:SetScript("OnTextChanged", function(self, userInput)
@@ -1534,8 +1552,4 @@ CH.OnEnable = function(self)
 	InterfaceOptionsSocialPanelChatStyle:EnableMouse(false)
 	InterfaceOptionsSocialPanelChatStyleButton:Hide()
 	InterfaceOptionsSocialPanelChatStyle:SetAlpha(0)
-
-	if (self.db.ChatLog) then
-		self:DisplayChatHistory()
-	end
 end

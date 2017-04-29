@@ -180,31 +180,31 @@ UF.OnEnable = function(self)
 
 	-- Player
 	oUF:SetActiveStyle("DraePlayer")
-	oUF:Spawn("player", "DraePlayer"):Point("CENTER", T.UIParent, T.db["frames"].playerXoffset, T.db["frames"].playerYoffset)
+	oUF:Spawn("player", "DraePlayer"):SetPoint("CENTER", T.UIParent, T.db["frames"].playerXoffset, T.db["frames"].playerYoffset)
 
 	-- Target
 	oUF:SetActiveStyle("DraeTarget")
-	oUF:Spawn("target", "DraeTarget"):Point("CENTER", T.UIParent, T.db["frames"].targetXoffset, T.db["frames"].targetYoffset)
+	oUF:Spawn("target", "DraeTarget"):SetPoint("CENTER", T.UIParent, T.db["frames"].targetXoffset, T.db["frames"].targetYoffset)
 
 	-- Target of target
 	oUF:SetActiveStyle("DraeTargetTarget")
-	oUF:Spawn("targettarget", "DraeTargetTarget"):Point("BOTTOMLEFT", "DraeTarget", "BOTTOMRIGHT", T.db["frames"].totXoffset, T.db["frames"].totYoffset)
+	oUF:Spawn("targettarget", "DraeTargetTarget"):SetPoint("BOTTOMLEFT", "DraeTarget", "BOTTOMRIGHT", T.db["frames"].totXoffset, T.db["frames"].totYoffset)
 
 	-- Focus
 	oUF:SetActiveStyle("DraeFocus")
-	oUF:Spawn("focus", "DraeFocus"):Point("BOTTOMLEFT", "DraeTarget", "TOPLEFT", T.db["frames"].focusXoffset, T.db["frames"].focusYoffset)
+	oUF:Spawn("focus", "DraeFocus"):SetPoint("BOTTOMLEFT", "DraeTarget", "TOPLEFT", T.db["frames"].focusXoffset, T.db["frames"].focusYoffset)
 
 	-- Focus target
 	oUF:SetActiveStyle("DraeFocusTarget")
-	oUF:Spawn("focustarget", "DraeFocusTarget"):Point("LEFT", "DraeFocus", "RIGHT", T.db["frames"].focusTargetXoffset, T.db["frames"].focusTargetYoffset)
+	oUF:Spawn("focustarget", "DraeFocusTarget"):SetPoint("LEFT", "DraeFocus", "RIGHT", T.db["frames"].focusTargetXoffset, T.db["frames"].focusTargetYoffset)
 
 	-- Pet
 	oUF:SetActiveStyle("DraePet")
-	oUF:Spawn("pet", "DraePet"):Point("BOTTOMRIGHT", "DraePlayer", "TOPRIGHT", T.db["frames"].petXoffset, T.db["frames"].petYoffset)
+	oUF:Spawn("pet", "DraePet"):SetPoint("BOTTOMRIGHT", "DraePlayer", "TOPRIGHT", T.db["frames"].petXoffset, T.db["frames"].petYoffset)
 
 	-- Pet target
 	oUF:SetActiveStyle("DraePet")
-	oUF:Spawn("pettarget", "DraePetTarget"):Point("BOTTOMLEFT", "DraeTarget", "TOPLEFT", T.db["frames"].petTargetXoffset, T.db["frames"].petTargetYoffset)
+	oUF:Spawn("pettarget", "DraePetTarget"):SetPoint("BOTTOMLEFT", "DraeTarget", "TOPLEFT", T.db["frames"].petTargetXoffset, T.db["frames"].petTargetYoffset)
 
 	-- Boss frames
 	if (T.db["frames"].showBoss) then
@@ -215,9 +215,9 @@ UF.OnEnable = function(self)
 			local frame = oUF:Spawn("boss" .. i, "DraeBoss" .. i)
 
 			if (i == 1) then
-				frame:Point("LEFT", "DraeTarget", "LEFT", T.db["frames"].bossXoffset, T.db["frames"].bossYoffset)
+				frame:SetPoint("LEFT", "DraeTarget", "LEFT", T.db["frames"].bossXoffset, T.db["frames"].bossYoffset)
 			else
-				frame:Point("TOP", boss[i - 1], "BOTTOM", 0, -35)
+				frame:SetPoint("TOP", boss[i - 1], "BOTTOM", 0, -35)
 			end
 
 			boss[i] = frame
@@ -234,9 +234,9 @@ UF.OnEnable = function(self)
 			local frame = oUF:Spawn("arena"..i, "DraeArenaPlayer"..i)
 
 			if (i == 1) then
-				frame:Point("LEFT", "DraePlayer", "LEFT", T.db["frames"].arenaXoffset, T.db["frames"].arenaYoffset)
+				frame:SetPoint("LEFT", "DraePlayer", "LEFT", T.db["frames"].arenaXoffset, T.db["frames"].arenaYoffset)
 			else
-				frame:Point("BOTTOM", arena[i - 1], "TOP", 0, 35)
+				frame:SetPoint("BOTTOM", arena[i - 1], "TOP", 0, 35)
 			end
 
 			arena[i] = frame
@@ -279,11 +279,11 @@ UF.OnEnable = function(self)
 	else
 		if (T.db["raidframes"].gridGroupsAnchor == "TOPLEFT" or T.db["raidframes"].gridGroupsAnchor == "TOPRIGHT") then
 			xOffset = 0
-			yOffset = -6
+			yOffset = -4
 			point = "TOP"
 		else
 			xOffset = 0
-			yOffset = 6
+			yOffset = 4
 			point = "BOTTOM"
 		end
 	end
@@ -298,7 +298,6 @@ UF.OnEnable = function(self)
 	-- Create raid headers
 	for i = 1, NUM_RAID_GROUPS do
 		local header = oUF:SpawnHeader("DraeRaid"..i, nil, visibility,
-			"showSolo", true,
 			"showPlayer", true,
 			"showRaid", true,
 
@@ -331,7 +330,7 @@ UF.OnEnable = function(self)
 				yMult = 0
 			end
 
-			header:Point(T.db["raidframes"].gridGroupsAnchor, self.raidHeaders[i - 1], relPoint, 10 * xMult, 10 * yMult)
+			header:SetPoint(T.db["raidframes"].gridGroupsAnchor, self.raidHeaders[i - 1], relPoint, 10 * xMult, 10 * yMult)
 		end
 
 		self.raidHeaders[i] = header
@@ -339,7 +338,6 @@ UF.OnEnable = function(self)
 
 	if (T.db["raidframes"].showPets) then
 		local headerPet = oUF:SpawnHeader("DraeRaidPet", "SecureGroupPetHeaderTemplate", visibility,
-			"showSolo", true,
 			"showPlayer", true,
 			"showParty", true,
 			"showRaid", true,

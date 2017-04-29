@@ -41,13 +41,13 @@ do
 					plugin:ClearAllPoints()
 
 					if (v_prev) then
-						plugin:Point("BOTTOMLEFT", v_prev, "BOTTOMRIGHT", 25, 0)
-						plugin:Point("TOP", plugin.bar, 0, 0)
-						plugin:Point("BOTTOM", plugin.bar, 0, 0)
+						plugin:SetPoint("BOTTOMLEFT", v_prev, "BOTTOMRIGHT", 25, 0)
+						plugin:SetPoint("TOP", plugin.bar, 0, 0)
+						plugin:SetPoint("BOTTOM", plugin.bar, 0, 0)
 					else
-						plugin:Point("BOTTOMLEFT", plugin.bar, startLeft, 0)
-						plugin:Point("TOP", plugin.bar, 0, 0)
-						plugin:Point("BOTTOM", plugin.bar, 0, 0)
+						plugin:SetPoint("BOTTOMLEFT", plugin.bar, startLeft, 0)
+						plugin:SetPoint("TOP", plugin.bar, 0, 0)
+						plugin:SetPoint("BOTTOM", plugin.bar, 0, 0)
 					end
 
 					v_prev = plugin
@@ -138,9 +138,9 @@ InfoBar.OnEnable = function(self)
 	-- Parent bar
 	local infoBar = CreateFrame("Frame", nil, T.UIParent)
 	infoBar:SetFrameStrata("LOW")
-	infoBar:Point("TOPLEFT", 20, -20)
-	infoBar:Point("TOPRIGHT", _G["MinimapCluster"], "TOPLEFT", -20, 0)
-	infoBar:Height(30)
+	infoBar:SetPoint("TOPLEFT", 20, -20)
+	infoBar:SetPoint("TOPRIGHT", _G["MinimapCluster"], "TOPLEFT", -20, 0)
+	infoBar:SetHeight(30)
 
 	self.infoBar = infoBar
 

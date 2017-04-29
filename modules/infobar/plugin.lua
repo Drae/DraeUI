@@ -26,7 +26,7 @@ local resizePlugin = function(self)
 ]]
 	width = width + self.text:GetStringWidth()
 
-	self:Width(width)
+	self:SetWidth(width)
 end
 
 local TextUpdater = function(frame, value)
@@ -214,9 +214,9 @@ local CreateStatusBar = function(self, name, settings)
 	if (type(settings.position) == "table") then
 		for _, v in pairs(settings.position) do
 			if (v.anchorto) then
-				bar:Point(v.anchorat, self, v.anchorto, v.offsetX, v.offsetY)
+				bar:SetPoint(v.anchorat, self, v.anchorto, v.offsetX, v.offsetY)
 			else
-				bar:Point(v.anchorat, v.offsetX, v.offsetY)
+				bar:SetPoint(v.anchorat, v.offsetX, v.offsetY)
 			end
 		end
 	elseif (type(settings.position) == "string") then
@@ -226,11 +226,11 @@ local CreateStatusBar = function(self, name, settings)
 	end
 
 	if (settings.width) then
-		bar:Width(settings.width)
+		bar:SetWidth(settings.width)
 	end
 
 	if (settings.height) then
-		bar:Height(settings.height)
+		bar:SetHeight(settings.height)
 	end
 
 	if (settings.isStatusBar and settings.color and type(settings.color) == "table") then
@@ -247,15 +247,15 @@ local CreateStatusBar = function(self, name, settings)
 	if (settings.spark) then
 		local spark = bar:CreateTexture(nil, "OVERLAY", nil, 5)
 		spark:SetTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\statusbar-spark-white")
-		spark:Point("BOTTOMRIGHT", bar:GetStatusBarTexture(), "BOTTOMRIGHT")
-		spark:Point("TOPRIGHT", bar:GetStatusBarTexture(), "TOPRIGHT")
-		spark:Width(8)
+		spark:SetPoint("BOTTOMRIGHT", bar:GetStatusBarTexture(), "BOTTOMRIGHT")
+		spark:SetPoint("TOPRIGHT", bar:GetStatusBarTexture(), "TOPRIGHT")
+		spark:SetWidth(8)
 
 		bar.spark = spark
 	end
 
 	if (settings.smooth) then
---		Smoothing:EnableBarAnimation(bar)
+		Smoothing:EnableBarAnimation(bar)
 	end
 
 	return bar

@@ -85,7 +85,7 @@ do
 	local CreateHUDBg = function(frame, width, height, texture, sub, tex)
 		local t = frame:CreateTexture(nil, "BACKGROUND", T.UIParent, sub)
 		t:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\" .. texture)
-		t:Size(width, height)
+		t:SetSize(width, height)
 
 		if (type(tex) == "table") then
 			t:SetTexCoord(tex[1], tex[2], tex[3], tex[4])
@@ -95,12 +95,12 @@ do
 	end
 
 	T.OnEnable = function(self)
-		self:UIScale("PLAYER_LOGIN")
+--		self:UIScale("PLAYER_LOGIN")
 
 		self:UpdateBlizzardFonts()
 		self:InitializeConsoleCommands()
 
-		self:RegisterEvent("UI_SCALE_CHANGED", "UIScale")
+--		self:RegisterEvent("UI_SCALE_CHANGED", "UIScale")
 
 		-- Hide the guild hall command bar
 		if (not IsAddOnLoaded("Blizzard_OrderHallUI")) then
@@ -136,11 +136,11 @@ do
 ]]
 		local actionBarBg = CreateFrame("frame", nil, T.UIParent)
 		actionBarBg:SetFrameStrata("BACKGROUND")
-		actionBarBg:Size(1024, 256)
-		actionBarBg:Point("BOTTOM", 0, 14)
+		actionBarBg:SetSize(1024, 256)
+		actionBarBg:SetPoint("BOTTOM", 0, 14)
 
---		CreateHUDBg(actionBarBg, 512, 256, "leftshadow", 0):Point("LEFT", 0, 0)
---		CreateHUDBg(actionBarBg, 512, 256, "rightshadow", 0):Point("RIGHT", 0, 0)
+--		CreateHUDBg(actionBarBg, 512, 256, "leftshadow", 0):SetPoint("LEFT", 0, 0)
+--		CreateHUDBg(actionBarBg, 512, 256, "rightshadow", 0):SetPoint("RIGHT", 0, 0)
 	end
 end
 

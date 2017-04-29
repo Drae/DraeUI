@@ -12,7 +12,7 @@ local UF = T:GetModule("UnitFrames")
 
 -- Focus is a common frame type used for most other frames inc. pet, pettarget, etc.
 local StyleDrae_Focus = function(frame, unit, isSingle)
-	frame:Size(120, 47)
+	frame:SetSize(120, 47)
 	frame:SetHitRectInsets(0, 0, 0, 10)
 	frame:SetFrameStrata("LOW")
 
@@ -24,11 +24,11 @@ local StyleDrae_Focus = function(frame, unit, isSingle)
 	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "RIGHT", -2, 0)
 
 	local info = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "LEFT", -2, 22)
-	info:Size(95, 20)
+	info:SetSize(95, 20)
 	frame:Tag(info, "[drae:shortclassification][drae:unitcolour][name]")
 
 	local level = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "RIGHT", 2, 22)
-	level:Size(40, 20)
+	level:SetSize(40, 20)
 	frame:Tag(level, "[level]")
 
 	-- Castbar

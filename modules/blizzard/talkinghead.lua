@@ -13,7 +13,7 @@ local function InitializeTalkingHead()
 
 	--Set default position
 	TalkingHeadFrame:ClearAllPoints()
-	TalkingHeadFrame:Point("TOP", 0, -125)
+	TalkingHeadFrame:SetPoint("TOP", 0, -125)
 
 	--Iterate through all alert subsystems in order to find the one created for TalkingHeadFrame, and then remove it.
 	--We do this to prevent alerts from anchoring to this frame when it is shown.

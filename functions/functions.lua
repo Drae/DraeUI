@@ -127,8 +127,8 @@ do
 				tx:SetColorTexture(0, 0, 0, 0.5)
 			end
 
-			tx:Point("TOPLEFT", grid, "TOPLEFT", i * wStep - (size / 2), 0)
-			tx:Point("BOTTOMRIGHT", grid, "BOTTOMLEFT", i * wStep + (size / 2), 0)
+			tx:SetPoint("TOPLEFT", grid, "TOPLEFT", i * wStep - (size / 2), 0)
+			tx:SetPoint("BOTTOMRIGHT", grid, "BOTTOMLEFT", i * wStep + (size / 2), 0)
 		end
 
 		height = T.screenHeight
@@ -136,22 +136,22 @@ do
 		do
 			local tx = grid:CreateTexture(nil, "BACKGROUND")
 			tx:SetColorTexture(1, 0, 0, 0.5)
-			tx:Point("TOPLEFT", grid, "TOPLEFT", 0, -(height / 2) + (size / 2))
-			tx:Point("BOTTOMRIGHT", grid, "TOPRIGHT", 0, -(height / 2 + size / 2))
+			tx:SetPoint("TOPLEFT", grid, "TOPLEFT", 0, -(height / 2) + (size / 2))
+			tx:SetPoint("BOTTOMRIGHT", grid, "TOPRIGHT", 0, -(height / 2 + size / 2))
 		end
 
 		for i = 1, floor((height / 2) / hStep) do
 			local tx = grid:CreateTexture(nil, "BACKGROUND")
 			tx:SetColorTexture(0, 0, 0, 0.5)
 
-			tx:Point("TOPLEFT", grid, "TOPLEFT", 0, -(height / 2 + i * hStep) + (size / 2))
-			tx:Point("BOTTOMRIGHT", grid, "TOPRIGHT", 0, -(height / 2 + i * hStep + size / 2))
+			tx:SetPoint("TOPLEFT", grid, "TOPLEFT", 0, -(height / 2 + i * hStep) + (size / 2))
+			tx:SetPoint("BOTTOMRIGHT", grid, "TOPRIGHT", 0, -(height / 2 + i * hStep + size / 2))
 
 			tx = grid:CreateTexture(nil, "BACKGROUND")
 			tx:SetColorTexture(0, 0, 0, 0.5)
 
-			tx:Point("TOPLEFT", grid, "TOPLEFT", 0, -(height / 2 - i * hStep) + (size / 2))
-			tx:Point("BOTTOMRIGHT", grid, "TOPRIGHT", 0, -(height / 2 - i * hStep + size / 2))
+			tx:SetPoint("TOPLEFT", grid, "TOPLEFT", 0, -(height / 2 - i * hStep) + (size / 2))
+			tx:SetPoint("BOTTOMRIGHT", grid, "TOPRIGHT", 0, -(height / 2 - i * hStep + size / 2))
 		end
 	end
 end
@@ -184,12 +184,12 @@ T.CreateFontObject = function(parent, size, font, anchorAt, oX, oY, type, anchor
 	fo:SetFont(font, size, type or "THINOUTLINE")
 
 	if (anchor) then
-		fo:Point(anchorAt, anchor, anchorTo, oX, oY)
+		fo:SetPoint(anchorAt, anchor, anchorTo, oX, oY)
 	else
 		fo:SetJustifyH(anchorAt or "LEFT")
 
 		if (oX or oY) then
-			fo:Point(anchorAt or "LEFT", oX or 0, oY or 0)
+			fo:SetPoint(anchorAt or "LEFT", oX or 0, oY or 0)
 		end
 	end
 

@@ -100,9 +100,6 @@ end
 		PLAYER_LOGIN
 --]]
 M.OnEnable = function(self)
---	self:LoadLoot()
---	self:LoadLootRoll()
-
 	self:RegisterEvent("PLAYER_REGEN_DISABLED", "ErrorFrameToggle")
 	self:RegisterEvent("PLAYER_REGEN_ENABLED", "ErrorFrameToggle")
 	self:RegisterEvent("MERCHANT_SHOW")
