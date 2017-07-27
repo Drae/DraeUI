@@ -26,5 +26,8 @@ B.PositionAltPowerBar = function(self)
 		self:SetPoint("CENTER", holder, "CENTER")
 	end
 
+	ExtraActionBarFrame:Hide()
+	ExtraActionBarFrame.Show = ExtraActionBarFrame.Hide
+
 	hooksecurefunc(PlayerPowerBarAlt, "ClearAllPoints", Position)
 end

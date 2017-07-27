@@ -2,4 +2,5 @@
 	<Script file="emeraldnightmare.lua" />
 	<Script file="trialofvalor.lua" />
 	<Script file="nighthold.lua" />
+	<Script file="tombofsargeras.lua" />
 </Ui>

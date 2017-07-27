@@ -38,6 +38,7 @@ local CommonDebuffs = function()
 	UF:AddRaidDebuff(true, 209858, 8, true) -- Necrotic Rot (affix)
 	UF:AddRaidDebuff(true, 240449, 8, true) -- Grievous (M+)
 	UF:AddRaidDebuff(true, 240443, 8, true) -- Burst (M+)
+	UF:AddRaidDebuff(true, 240448, 8, true) -- Quake (M+)
 
 	loadedCommon = true
 end
@@ -126,6 +127,7 @@ local Update = function(self, event, unit)
 						d_count = count
 						d_color = dispelType and debuffTypeColor[dispelType] or nil
 						d_pulse = debuff.pulse or nil
+						d_flash = debuff.flash or nil
 					end
 
 					if (debuff.secondary and d_priority2 < debuff.priority) then
@@ -137,6 +139,7 @@ local Update = function(self, event, unit)
 						d_count2 = count
 						d_color2 = dispelType and debuffTypeColor[dispelType] or nil
 						d_pulse2 = debuff.pulse or nil
+						d_flash2 = debuff.flash or nil
 					end
 				end
 			end
@@ -145,13 +148,13 @@ local Update = function(self, event, unit)
 		end
 
 		if (d_name) then
-			self:GainedStatus(unit, "status_raiddebuff", d_priority, d_color, d_icon, nil, nil, nil, d_start, d_duration, d_count, nil, d_pulse)
+			self:GainedStatus(unit, "status_raiddebuff", d_priority, d_color, d_icon, nil, nil, nil, d_start, d_duration, d_count, nil, d_pulse, d_flash)
 		else
 			self:LostStatus(unit, "status_raiddebuff")
 		end
 
 		if (d_name2) then
-			self:GainedStatus(unit, "status_raiddebuff2", d_priority2, d_color2, d_icon2, nil, nil, nil, d_start2, d_duration2, d_count2, nil, d_pulse2)
+			self:GainedStatus(unit, "status_raiddebuff2", d_priority2, d_color2, d_icon2, nil, nil, nil, d_start2, d_duration2, d_count2, nil, d_pulse2, d_flash2)
 		else
 			self:LostStatus(unit, "status_raiddebuff2")
 		end

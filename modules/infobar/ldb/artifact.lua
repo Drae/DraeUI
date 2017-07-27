@@ -63,6 +63,25 @@ local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeArtifact", {
 
 local format = string.format
 
+local ReadableNumber = function(num, places)
+    local ret
+    local placeValue = ("%%.%df"):format(places or 2)
+
+    if not num then
+        return 0
+    elseif num >= 1000000000000 then
+        ret = placeValue:format(num / 1000000000000) .. " Tril" -- trillion
+    elseif num >= 1000000000 then
+        ret = placeValue:format(num / 1000000000) .. " Bil" -- billion
+    elseif num >= 1000000 then
+        ret = placeValue:format(num / 1000000) .. " Mil" -- million
+    else
+        ret = num -- hundreds
+    end
+
+    return ret
+end
+
 --[[
 
 ]]
@@ -84,7 +103,7 @@ AT.UpdateArtifact = function(self, event, unit)
 
 	local r1, g1, b1 = T.ColorGradient(pct / 100 - 0.001, 1, 0, 0, 1, 1, 0, 0, 1, 0)
 
-	LDB.text = format("|cff%02x%02x%02x%s: |r|cff%02x%02x%02x%s|r|cff%02x%02x%02x / %s|r [|cff00ff00%dpoints|r]", 255, 255, 255, name, r1 * 255, g1 * 255, b1 * 255, xp, 255, 255, 255, pointsAvailable, pointsSpent)
+	LDB.text = format("|cff%02x%02x%02x%s: |r|cff%02x%02x%02x%s|r|cff%02x%02x%02x / %s|r [|cff00ff00%dpoints|r]", 255, 255, 255, name, r1 * 255, g1 * 255, b1 * 255, ReadableNumber(xp), 255, 255, 255, pointsAvailable, pointsSpent)
 
 	LDB.statusbar__artifact_min_max = "0," .. xpForNextPoint
 	LDB.statusbar__artifact_cur = xp
@@ -102,8 +121,8 @@ LDB.OnEnter = function(self)
 	local itemID, altItemID, name, icon, totalXP, pointsSpent, quality, artifactAppearanceID, appearanceModID, itemAppearanceID, altItemAppearanceID, altOnTop, artifactTier = C_ArtifactUI.GetEquippedArtifactInfo()
 	local numPointsAvailableToSpend, xp, xpForNextPoint = MainMenuBar_GetNumArtifactTraitsPurchasableFromXP(pointsSpent, totalXP, artifactTier)
 
-	GameTooltip:AddDoubleLine("XP:", format(" %d / %d (%d%%)", xp, xpForNextPoint, xp / xpForNextPoint * 100), 1, 1, 1)
-	GameTooltip:AddDoubleLine("Remaining:", format(" %d (%d%% - %d Bars)", xpForNextPoint - xp, (xpForNextPoint - xp) / xpForNextPoint * 100, 20 * (xpForNextPoint - xp) / xpForNextPoint), 1, 1, 1)
+	GameTooltip:AddDoubleLine("XP:", format(" %s / %s (%d%%)", ReadableNumber(xp), ReadableNumber(xpForNextPoint), xp / xpForNextPoint * 100), 1, 1, 1)
+	GameTooltip:AddDoubleLine("Remaining:", format(" %s (%d%% - %d Bars)", ReadableNumber(xpForNextPoint - xp), (xpForNextPoint - xp) / xpForNextPoint * 100, 20 * (xpForNextPoint - xp) / xpForNextPoint), 1, 1, 1)
 
 	GameTooltip:Show()
 end

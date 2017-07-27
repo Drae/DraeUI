@@ -34,14 +34,14 @@ C["frames"] = {
 	numFormatLong		= false,
 
 	-- Display or hide frames
-	showBoss			= false, 	-- Boss frames
+	showBoss			= true, 	-- Boss frames
 	showArena			= true,
 
 	-- Player and Target are positioned relative to center of screen,
 	-- all other frames are positioned relative to those
-	playerXoffset		= -410,
+	playerXoffset		= -450,
 	playerYoffset		= -120,
-	targetXoffset		= 410,
+	targetXoffset		= 450,
 	targetYoffset		= -120,
 	totXoffset			= 25, 	-- Relative to right of target
 	totYoffset			= 0,
@@ -53,8 +53,8 @@ C["frames"] = {
 	petYoffset			= 30, ---100,
 	petTargetXoffset	= 6,  	-- Relative to right of pet
 	petTargetYoffset	= -10,
-	bossXoffset			= 0,	-- Relative to left of target
-	bossYoffset			= -100,
+	bossXoffset			= 300,	-- Relative to left of target
+	bossYoffset			= 100,
 	arenaXoffset		= 0, 	-- Relative to left of player
 	arenaYoffset		= 140,
 
@@ -169,7 +169,7 @@ C["raidframes"] = {
 	position = {
 		[1] = { "BOTTOMLEFT", UIParent, "CENTER", -176, -240 },
 		[2] = { "BOTTOMLEFT", UIParent, "CENTER", -176, -340 },
-		[3] = { "BOTTOMLEFT", UIParent, "CENTER", -176, -440 },
+		[3] = { "BOTTOMLEFT", UIParent, "CENTER", -176, -450 },
 		[6] = { "BOTTOMLEFT", UIParent, "CENTER", -940, -150 },
 	},
 
@@ -184,8 +184,8 @@ C["raidframes"] = {
 -- Player, target and focus castbar
 C["castbar"] = {
 	player = {
-		width	 = 150,
-		height	 = 6,
+		width	 = 200,
+		height	 = 8,
 		xOffset  = -6,
 		yOffset  = 40,
 		anchor 	 = "DraePlayer",
@@ -193,8 +193,8 @@ C["castbar"] = {
 		anchorto = "RIGHT",
 	},
 	target = {
-		width	 = 150,
-		height	 = 6,
+		width	 = 200,
+		height	 = 8,
 		xOffset  = 7,
 		yOffset  = 40,
 		anchor 	 = "DraeTarget",
@@ -202,7 +202,7 @@ C["castbar"] = {
 		anchorto = "LEFT",
 	},
 	focus = {
-		width	 = 118,
+		width	 = 150,
 		height	 = 6,
 		xOffset  = 3,
 		yOffset  = 54,
