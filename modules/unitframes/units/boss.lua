@@ -36,8 +36,8 @@ local StyleDrae_Boss = function(frame, unit, isSingle)
 	UF.CreateCastBar(frame, cb.width, cb.height, self, cb.anchorat, cb.anchorto, cb.xOffset, cb.yOffset, true)
 
 	-- Auras - just debuffs for target of target
-	UF.AddDebuffs(frame, "TOPRIGHT", frame.Power, "BOTTOMRIGHT", 0, -12, T.db["frames"].auras.maxFocusDebuff or 15, T.db["frames"].auras.auraSml, 8, "LEFT", "DOWN")
-	UF.AddBuffs(frame, "TOPLEFT", frame.Power, "BOTTOMLEFT", 0, -12, T.db["frames"].auras.maxFocusBuff or 15, T.db["frames"].auras.auraSml, 8, "RIGHT", "DOWN")
+	UF.AddDebuffs(frame, "TOPRIGHT", frame.Power, "BOTTOMRIGHT", 0, -12, 2, T.db["frames"].auras.auraSml, 8, "LEFT", "DOWN")
+	UF.AddBuffs(frame, "TOPLEFT", frame.Power, "BOTTOMLEFT", 0, -12, 2, T.db["frames"].auras.auraSml, 8, "RIGHT", "DOWN")
 
 	-- The number here is the size of the raid icon
 	UF.CommonPostInit(frame, 30)

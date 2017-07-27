@@ -126,10 +126,16 @@ UF.PostUpdateHealth = function(health, u, min, max)
 
 	if (not UnitIsConnected(u)) then
 		health.value:SetText("|cffaaaaaaOffline|r")
+	--	self.Portrait:SetVertexColor(0.5, 0.5, 0.5, 0.7)
+		self.__state = "DISCONNECTED"
 	elseif (UnitIsGhost(u)) then
 		health.value:SetText("|cffaaaaaaGhost|r")
+	--	self.Portrait:SetVertexColor(0.3, 0.3, 0.9, 0.7)
+		self.__state = "GHOST"
 	elseif (UnitIsDead(u)) then
 		health.value:SetText("|cffaaaaaaDead|r")
+	--	self.Portrait:SetVertexColor(0.35, 0.35, 0.35, 0.7)
+		self.__state = "DEAD"
 	elseif (T.db["frames"].numFormatLong) then
 		local left, num, right = string.match(min ~= max and (min - max) or min,'^([^%d]*%d)(%d*)(.-)$')
 
@@ -138,6 +144,11 @@ UF.PostUpdateHealth = function(health, u, min, max)
 	else
 		local hpvalue = min ~= max and ("|cffB62220%s|r.%d|cff0090ff%%|r"):format(T.ShortVal(min - max), min / max * 100) or ("|cffffffff%s"):format(T.ShortVal(min))
 		health.value:SetText(hpvalue)
+
+		if (self.__state) then
+	--		self.Portrait:SetVertexColor(1, 1, 1, 1)
+			self.__state = nil
+		end
 	end
 end
 

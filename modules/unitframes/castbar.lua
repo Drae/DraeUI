@@ -139,7 +139,6 @@ UF.CreateCastBar = function(self, width, height, anchor, anchorAt, anchorTo, xOf
 	castbar:SetSize(width, height)
 	castbar:SetPoint(anchorAt, anchor, anchorTo, xOffset, yOffset)
 	castbar:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\Striped")
---	castbar:SetReverseFill(reverse and true or false)
 	castbar:SetStatusBarColor(0.5, 0.5, 1, 1)
 
 	--color
@@ -189,6 +188,13 @@ UF.CreateCastBar = function(self, width, height, anchor, anchorAt, anchorTo, xOf
 	shield:SetPoint(reverse and "RIGHT" or "LEFT", castbar, reverse and "RIGHT" or "LEFT", reverse and 15 or -15, 0)
 	shield:SetSize(30, 30)
 	castbar.Shield = shield
+
+	if (self.unit and self.unit == "player") then
+		local safezone = castbar:CreateTexture(nil, 'OVERLAY')
+		safezone:SetTexture("Interface\\Buttons\\White8x8")
+		safezone:SetVertexColor(1.0, 0, 0, 0.75)
+		castbar.SafeZone = safezone
+	end
 
 	self.Castbar = castbar
 end

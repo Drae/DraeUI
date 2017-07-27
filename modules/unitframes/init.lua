@@ -230,7 +230,7 @@ UF.OnEnable = function(self)
 
 		local arena = {}
 
-		for i = 5, 1, -1 do
+		for i = 1, 5 do
 			local frame = oUF:Spawn("arena"..i, "DraeArenaPlayer"..i)
 
 			if (i == 1) then

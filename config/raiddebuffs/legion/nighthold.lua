@@ -39,12 +39,13 @@ UF["raiddebuffs"]["instances"]["The Nighthold"] = function()
 
 	-- Star Augur Etraeus
 	UF:AddRaidDebuff(true, 214167, 5, true) -- Gravitational Pull (tank debuff)
-	UF:AddRaidDebuff(true, 206404, 8) 		-- P0 - Coronal Ejection - becomes one of the other ejections in later phases
+	UF:AddRaidDebuff(true, 206464, 8) 		-- P0 - Coronal Ejection - becomes one of the other ejections in later phases
 	UF:AddRaidDebuff(true, 206585, 6) 		-- P1 - Absolute Zero
 	UF:AddRaidDebuff(true, 206589, 5, true) -- P1 - Chilled (Heroic)
 	UF:AddRaidDebuff(true, 206936, 7) 		-- P1 - Icy Ejection (non-dispellable, stacks) (DoT + Slow-to-Stun)
-	UF:AddRaidDebuff(true, 206388, 8) 		-- P2 - Felburst (non-dispellable, stacks) (DMG + DoT)
-	UF:AddRaidDebuff(true, 205649, 6) 		-- P2 - Fel Ejection (non-dispellable, stacks) (DMG + DoT)
+	UF:AddRaidDebuff(true, 206388, 6) 		-- P2 - Felburst (non-dispellable, stacks) (DMG + DoT)
+	UF:AddRaidDebuff(true, 205649, 5)		-- P2 - Fel Ejection
+	UF:AddRaidDebuff(true, 206399, 7) 		-- P2 - Felflame
 	UF:AddRaidDebuff(true, 206965, 7) 		-- P3 - Voidburst (non-dispellable) (DoT)
 	UF:AddRaidDebuff(true, 207143, 8) 		-- P3 - Void Ejection (non-dispellable) (DMG + DoT)
 
@@ -81,5 +82,10 @@ UF["raiddebuffs"]["instances"]["The Nighthold"] = function()
 	UF:AddRaidDebuff(true, 208672, 5) -- Carrion Wave (non-dispellable) (AoE DMG + Sleep)
 	UF:AddRaidDebuff(true, 208903, 5) -- Burning Claws (non-dispellable) (ground AoE)
 	UF:AddRaidDebuff(true, 208802, 5, nil, nil, true) -- Soul Corrosion (non-dispellable) (DMG + DoT)
+	UF:AddRaidDebuff(true, 206847, 7, true) -- Parasitic Wound (mythic)
+	UF:AddRaidDebuff(true, 221408, 5, true) -- Bulwark of Azzinoth (mythic)
+	UF:AddRaidDebuff(true, 206506, 6, nil, nil, true) -- Severed Soul (tank absorb) (mythic)
+	UF:AddRaidDebuff(true, 227040, 5) -- Severed  (mythic)
+
 
 end

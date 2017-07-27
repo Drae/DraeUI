@@ -136,30 +136,34 @@ UF.CreatePowerBar = function(self, width, height, point, reverse)
 end
 
 UF.CreateAdditionalPower = function(self, width, height, point, reverse)
---[[	local ppborder = self:CreateTexture(nil, "BORDER", nil, 1)
-	ppborder:SetSize(width + 4, height + 4)
-	ppborder:SetPoint(point and "TOPRIGHT" or "TOPLEFT", self.Power.ppborder, point and "BOTTOMRIGHT" or "BOTTOMLEFT", 0, 3)
-	ppborder:SetTexture("Interface\\BUTTONS\\WHITE8X8")
+	local apborder = self:CreateTexture(nil, "BORDER", nil, 1)
+	apborder:SetSize(width + 4, height + 4)
+	apborder:SetPoint(point and "TOPRIGHT" or "TOPLEFT", self.Power.ppborder, point and "BOTTOMRIGHT" or "BOTTOMLEFT", 0, 3)
+	apborder:SetTexture("Interface\\BUTTONS\\WHITE8X8")
+	apborder:SetVertexColor(0.05, 0.05, 0.05)
 
-	local ppbg = self:CreateTexture(nil, "BORDER", nil, 0)
-	ppbg:SetSize(width + 2, height + 2)
-	ppbg:SetPoint("TOPLEFT", ppborder, "TOPLEFT", 1, -1)
-	ppbg:SetTexture("Interface\\BUTTONS\\WHITE8X8")
-	ppbg:SetVertexColor(0, 0, 0)
-]]
-	local pp = CreateFrame("StatusBar", nil, self)
-	pp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
-	pp:SetReverseFill(reverse and true or false)
-	pp:SetSize(width, height)
-	pp:SetPoint("TOPLEFT", ppborder, "TOPLEFT", 2, -2)
+	local apbg = self:CreateTexture(nil, "BORDER", nil, 0)
+	apbg:SetSize(width + 2, height + 2)
+	apbg:SetPoint("TOPLEFT", apborder, "TOPLEFT", 1, -1)
+	apbg:SetTexture("Interface\\BUTTONS\\WHITE8X8")
+	apbg:SetVertexColor(0, 0, 0)
 
-	pp.colorDisconnected = true
-	pp.colorPower = true
-	pp.frequentUpdates = true
+	local ap = CreateFrame("StatusBar", nil, self)
+	ap:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
+	ap:SetReverseFill(reverse and true or false)
+	ap:SetSize(width, height)
+	ap:SetPoint("TOPLEFT", apborder, "TOPLEFT", 2, -2)
 
-	Smoothing:EnableBarAnimation(pp)
+	ap.apborder = apborder
+	ap.apbg = apbg
 
-	return pp
+	ap.colorDisconnected = true
+	ap.colorPower = true
+	ap.frequentUpdates = true
+
+	Smoothing:EnableBarAnimation(ap)
+
+	return ap
 end
 
 -- Leader, PvP, Role, etc.
