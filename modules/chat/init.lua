@@ -40,6 +40,36 @@ local DEFAULT_STRINGS = {
 	PET_BATTLE_COMBAT_LOG = PET_BATTLE_COMBAT_LOG,
 }
 
+local GlobalStrings = {
+	["AFK"] = AFK,
+	["BN_INLINE_TOAST_BROADCAST"] = BN_INLINE_TOAST_BROADCAST,
+	["BN_INLINE_TOAST_BROADCAST_INFORM"] = BN_INLINE_TOAST_BROADCAST_INFORM,
+	["BN_INLINE_TOAST_CONVERSATION"] = BN_INLINE_TOAST_CONVERSATION,
+	["BN_INLINE_TOAST_FRIEND_PENDING"] = BN_INLINE_TOAST_FRIEND_PENDING,
+	["CHAT_BN_CONVERSATION_GET_LINK"] = CHAT_BN_CONVERSATION_GET_LINK,
+	["CHAT_BN_CONVERSATION_LIST"] = CHAT_BN_CONVERSATION_LIST,
+	["CHAT_FILTERED"] = CHAT_FILTERED,
+	["CHAT_IGNORED"] = CHAT_IGNORED,
+	["CHAT_MSG_BLOCK_CHAT_CHANNEL_INVITE"] = CHAT_MSG_BLOCK_CHAT_CHANNEL_INVITE,
+	["CHAT_RESTRICTED_TRIAL"] = CHAT_RESTRICTED_TRIAL,
+	["CHAT_TELL_ALERT_TIME"] = CHAT_TELL_ALERT_TIME,
+	["CHAT_TRIAL_RESTRICTED_NOTICE_TRIAL"] = CHAT_TRIAL_RESTRICTED_NOTICE_TRIAL,
+	["DND"] = DND,
+	["ERR_CHAT_PLAYER_NOT_FOUND_S"] = ERR_CHAT_PLAYER_NOT_FOUND_S,
+	["ERR_FRIEND_OFFLINE_S"] = ERR_FRIEND_OFFLINE_S,
+	["ERR_FRIEND_ONLINE_SS"] = ERR_FRIEND_ONLINE_SS,
+	["MAX_WOW_CHAT_CHANNELS"] = MAX_WOW_CHAT_CHANNELS,
+	["PET_BATTLE_COMBAT_LOG"] = PET_BATTLE_COMBAT_LOG,
+	["PLAYER_LIST_DELIMITER"] = PLAYER_LIST_DELIMITER,
+	["RAID_WARNING"] = RAID_WARNING,
+}
+
+local TELL_MESSAGE
+if SOUNDKIT then
+	TELL_MESSAGE = SOUNDKIT.TELL_MESSAGE
+end
+local PlaySoundKitID = PlaySoundKitID
+
 local hyperlinkTypes = {
 	["item"] = true,
 	["spell"] = true,
@@ -911,10 +941,10 @@ function CH:ChatFrame_MessageEventHandler(event, ...)
 			--BN_WHISPER FIXME
 			ChatEdit_SetLastTellTarget(arg2, type)
 			if ( self.tellTimer and (GetTime() > self.tellTimer) ) then
-				PlaySound("TellMessage")
+				PlaySound(PlaySoundKitID and "TellMessage" or TELL_MESSAGE)
 			end
-			self.tellTimer = GetTime() + CHAT_TELL_ALERT_TIME
-			--FCF_FlashTab(self)
+			self.tellTimer = GetTime() + GlobalStrings.CHAT_TELL_ALERT_TIME
+			--FCF_FlashTab(self);
 		end
 
 		if ( not self:IsShown() ) then
@@ -1467,7 +1497,7 @@ CH.OnEnable = function(self)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_INLINE_TOAST_BROADCAST", CH.FindURL)
 
 	if (self.db.ChatLog) then
-		self:DisplayChatHistory()
+--		self:DisplayChatHistory()
 	end
 
 	local frame = CreateFrame("Frame", "CopyChatFrame", T.UIParent)

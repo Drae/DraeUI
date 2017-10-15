@@ -37,10 +37,10 @@ UF["raiddebuffs"]["instances"]["Tomb of Sargeras"] = function()
 	UF:AddRaidDebuff(true, 236072, 6) -- Wailing Souls
 	UF:AddRaidDebuff(true, 235989, 6) -- Tormented Cries
 	UF:AddRaidDebuff(true, 236361, 6) -- Spirit Chains (BoF peeps)
-	UF:AddRaidDebuff(true, 236449, 7, true) -- Soulbind (players need to stack)
-	UF:AddRaidDebuff(true, 235933, 8, true) -- Spear of Anguish
-	UF:AddRaidDebuff(true, 236135, 8, true) -- Wither (switch realms)
-	UF:AddRaidDebuff(true, 236515, 8, nil, nil, true) -- Shattering Scream
+	UF:AddRaidDebuff(true, 236449, 7) -- Soulbind (players need to stack)
+	UF:AddRaidDebuff(true, 235933, 9, nil, nil, true) -- Spear of Anguish
+	UF:AddRaidDebuff(true, 236135, 8, true, nil, true) -- Wither (switch realms)
+	UF:AddRaidDebuff(true, 236515, 8, nil, true) -- Shattering Scream
 
 	-- Mistress Sassz'ine
 	UF:AddRaidDebuff(true, 230959, 6) -- Concealing Murk
@@ -51,6 +51,7 @@ UF["raiddebuffs"]["instances"]["Tomb of Sargeras"] = function()
 	UF:AddRaidDebuff(true, 232913, 6, true) -- Befouling Ink
 	UF:AddRaidDebuff(true, 232754, 8, true) -- Thundering Shock
 	UF:AddRaidDebuff(true, 230358, 7, nil, nil, true) -- Thundering Shock
+	UF:AddRaidDebuff(true, 230384, 7, nil, nil, true) -- Consuming Hunger
 
 	-- Maiden of Vigilance
 	UF:AddRaidDebuff(true, 235117, 6) -- Unstable Soul
