@@ -108,7 +108,7 @@ local Update = function(self, event, unit)
 		local index = 1
 
 		while (true) do
-			local name, _, icon, count, dispelType, duration, expires, caster = UnitAura(unit, index, "HARMFUL")
+			local name, icon, count, dispelType, duration, expires, caster = UnitAura(unit, index, "HARMFUL")
 
 			if (not name) then
 				break

@@ -1,4 +1,4 @@
-## Interface: 72000
+## Interface: 80000
 ## Author: Drae
 ## Title: draeUI
 ## Version: 3.1
@@ -15,7 +15,6 @@ oUF\oUF.xml
 init.lua
 
 config\config.defaults.lua
-config\config.lua
 
 functions\variables.lua
 functions\colours.lua
@@ -49,7 +48,6 @@ modules\unitframes\units\boss.lua
 modules\unitframes\units\arena.lua
 
 modules\unitframes\statuses\embed.xml
-
 config\indicators\embed.xml
 config\raiddebuffs\embed.xml
 config\instancedebuffs\embed.xml
@@ -72,7 +70,7 @@ modules\infobar\ldb\latency.lua
 modules\infobar\ldb\gold.lua
 modules\infobar\ldb\durability.lua
 modules\infobar\ldb\res.lua
-modules\infobar\ldb\artifact.lua
+modules\infobar\ldb\azerite.lua
 
 # Misc
 modules\misc\init.lua
@@ -89,9 +87,4 @@ modules\blizzard\gm.lua
 modules\blizzard\vehicle.lua
 modules\blizzard\watchframe.lua
 modules\blizzard\talkinghead.lua
-
-# Worldmap
-modules\worldmap\init.lua
-modules\worldmap\worldmap.lua
-modules\worldmap\foglight.lua
 

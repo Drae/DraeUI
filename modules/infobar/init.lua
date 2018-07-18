@@ -26,7 +26,7 @@ local infoBarPlugins = {}
 	Plugin handling for the bar
 ]]
 do
-	local initOrder = {"DraeFPS", "DraeMem", "DraeLatency", "DraeDurability", "DraeCoin", "DraeExp", "DraeArtifact", "DraeRes"}
+	local initOrder = {"DraeFPS", "DraeMem", "DraeLatency", "DraeDurability", "DraeCoin", "DraeExp", "DraeArtifact", "DraeAzerite", "DraeRes"}
 
 	InfoBar.RepositionPlugins = function(self)
 		local startLeft = 10

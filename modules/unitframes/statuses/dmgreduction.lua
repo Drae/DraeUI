@@ -84,8 +84,8 @@ do
 		if (UnitIsVisible(unit) and not UnitIsDeadOrGhost(unit)) then
 			-- scan for buffs
 			for _, settings in pairs(cooldowns) do
-				if (settings.name) then
-					name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable = UnitAura(unit, settings.name, nil, settings.type)
+				if (settings.id) then
+					name, icon, count, debuffType, duration, expirationTime, caster, isStealable = UnitAura(unit, settings.id, nil, settings.type)
 
 					if (name) then
 						cooldownSeen = name
