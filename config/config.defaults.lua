@@ -228,26 +228,6 @@ C["castbar"] = {
 	},
 }
 
--- Information bar (fps, mem use, etc.)
-C["infobar"] = {
-	showXP = true,
-	showReputation = true,
-	xp = {
-		enable = true,
-		altxp = "reputation",	-- honor -or- reputation
-	},
-	artifact = {
-		enable = true,
-	},
-}
-
-C["worldMap"] = {
-	fogLightMode = 1, -- 0 = disable, 1 = hybrid, 2 = full terrain, 3 = no terrain
-	terrainAlpha = 0.5, -- transparency of the terrain overlay (if used)
-
-	unexploredColor = { r = 0.7, g = 0.7, b = 0.7, a = 0.9 }, -- Unexplored areas will still be highlighted in this colour overlay
-}
-
 --[[
 		Global variables - for all chars
 --]]
@@ -276,21 +256,3 @@ G["minimap"] = {
 	},
 }
 
--- Equipment set mappings
-G["equipSets"] = {
-	["PALADIN"]	= {
-		[1] = "Holy",
-		[2] = "Protection",
-		[3] = "Retribution",
-	},
-	["MAGE"]	= {
-		[1] = "Arcane",
-		[2] = "Fire",
-		[3] = "Frost",
-	},
-	["MONK"]	= {
-		[1]	= "Brewmaster",
-		[2]	= "Mistweaver",
-		[3]	= "Windwalker",
-	},
-}

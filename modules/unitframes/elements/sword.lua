@@ -19,7 +19,7 @@ local GetDebuffType = function(unit)
 	local pr = 0
 
 	while (true) do
-		local name, _, _, _, dtype = UnitAura(unit, index, "HARMFUL")
+		local name, _, _, dtype = UnitAura(unit, index, "HARMFUL")
 
 		if (not name) then break end
 

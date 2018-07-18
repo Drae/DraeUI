@@ -566,7 +566,7 @@ function eventFrame:UNIT_AURA(event, unit)
 	if not guid then return end
 	--debug(5, event, unit)
 	if not isDead[guid] then
-		local stoned = UnitAura(unit, SOULSTONE)
+--[[		local stoned = UnitAura(unit, SOULSTONE)
 		if stoned ~= hasSoulstone[guid] then
 			if not stoned and UnitHealth(unit) <= 1 then
 				return
@@ -574,7 +574,7 @@ function eventFrame:UNIT_AURA(event, unit)
 			hasSoulstone[guid] = stoned
 			debug(2, nameFromGUID[guid], stoned and "gained" or "lost", SOULSTONE)
 		end
-	end
+]]	end
 end
 
 function eventFrame:UNIT_CONNECTION(event, unit)

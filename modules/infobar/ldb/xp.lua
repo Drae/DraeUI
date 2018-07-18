@@ -161,11 +161,8 @@ do
 end
 
 XP.UpdateHonor = function(self, event, unit)
-	if event == "HONOR_PRESTIGE_UPDATE" and unit ~= "player" then return end
-
 	local cur, max = UnitHonor("player"), UnitHonorMax("player")
 	local level, levelMax = UnitHonorLevel("player"), GetMaxPlayerHonorLevel()
-	local prestige = UnitPrestige("player") or 0
 
 	local pct = cur / max * 100
 
@@ -180,9 +177,7 @@ XP.UpdateHonor = function(self, event, unit)
 	LDB.statusbar__rested_hide = true
 
 	local affix = ""
-	if (CanPrestige()) then
-		affix = " [|cff00ff00" .. PVP_HONOR_PRESTIGE_AVAILABLE .. "|r]"
-	elseif (level == levelmax) then
+	if (level == levelmax) then
 		affix = " [|cff00ff00" .. MAX_HONOR_LEVEL .. "|r]"
 	else
 		affix = " [" .. level .. "]"
@@ -208,9 +203,7 @@ do
 		GameTooltip:AddDoubleLine("Current Level:", level, 1, 1, 1)
 		GameTooltip:AddLine(" ")
 
-		if (CanPrestige()) then
-			GameTooltip:AddLine(PVP_HONOR_PRESTIGE_AVAILABLE)
-		elseif (level == levelmax) then
+		if (level == levelmax) then
 			GameTooltip:AddLine(MAX_HONOR_LEVEL)
 		else
 			GameTooltip:AddDoubleLine("Honor XP:", format(" %d / %d (%d%%)", cur, max, cur/max * 100), 1, 1, 1)
@@ -225,16 +218,12 @@ do
 	end
 
 	XP.EnableHonor = function(self)
-		self:RegisterEvent("HONOR_XP_UPDATE", "UpdateHonor")
-		self:RegisterEvent("HONOR_PRESTIGE_UPDATE", "UpdateHonor")
-
 		LDB.OnEnter = OnEnter
 		LDB.OnLeave = OnLeave
 	end
 
 	XP.DisableHonor = function(self)
 		self:UnregisterEvent("HONOR_XP_UPDATE", "UpdateHonor")
-		self:UnregisterEvent("HONOR_PRESTIGE_UPDATE", "UpdateHonor")
 
 		LDB.OnEnter = nil
 		LDB.OnLeave = nil
@@ -382,6 +371,8 @@ XP.PlayerEnteringWorld = function(self)
 end
 
 XP.OnInitialize = function(self)
+	IB.db = IB.db or {}
+	IB.db["xp"] = IB.db["xp"] or {}
 	self.db = IB.db["xp"]
 
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", "PlayerEnteringWorld")

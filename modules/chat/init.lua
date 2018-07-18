@@ -65,9 +65,11 @@ local GlobalStrings = {
 }
 
 local TELL_MESSAGE
+
 if SOUNDKIT then
 	TELL_MESSAGE = SOUNDKIT.TELL_MESSAGE
 end
+
 local PlaySoundKitID = PlaySoundKitID
 
 local hyperlinkTypes = {
@@ -87,7 +89,6 @@ local tabTexs = {
 	"Selected",
 	"Highlight"
 }
-
 
 local rolePaths = {
 	TANK = [[|TInterface\AddOns\DraeUI\media\textures\tank.tga:15:15:0:0:64:64:2:56:2:56|t]],
@@ -177,15 +178,13 @@ function CH:StyleChat(frame)
 	frame:SetClampRectInsets(0,0,0,0)
 	frame:SetClampedToScreen(false)
 	frame:StripTextures(true)
-	_G[name.."ButtonFrame"]:Kill()
+--	_G[name.."ButtonFrame"]:Kill()
 
 	editbox:SetAltArrowKeyMode(false)
 
 	editbox:ClearAllPoints()
 	editbox:SetPoint("BOTTOMLEFT",  ChatFrame1, "TOPLEFT",  -5, tabHeight - 5)
 	editbox:SetPoint("BOTTOMRIGHT", ChatFrame1, "TOPRIGHT", 10, tabHeight - 5)
-
-	self:SecureHook(editbox, "AddHistoryLine", "ChatEdit_AddHistory")
 
 	editbox:SetAlpha(0)
 	hooksecurefunc("ChatEdit_DeactivateChat", function(self)
@@ -238,10 +237,6 @@ function CH:StyleChat(frame)
 		end
 	end)
 
-	for i, text in pairs(self.db.ChatEditHistory) do
-		editbox:AddHistoryLine(text)
-	end
-
 	hooksecurefunc("ChatEdit_UpdateHeader", function()
 		local type = editbox:GetAttribute("chatType")
 		if ( type == "CHANNEL" ) then
@@ -262,13 +257,32 @@ function CH:StyleChat(frame)
 		frame.AddMessage = CH.AddMessage
 	end
 
-	hooksecurefunc("FCF_Tab_OnClick", function(self)
-		local info = UIDropDownMenu_CreateInfo()
-		info.text = "Copy Chat Contents"
-		info.notCheckable = true
-		info.func = CH.CopyChat
-		info.arg1 = self
-		UIDropDownMenu_AddButton(info)
+	--copy chat button
+	frame.button = CreateFrame('Frame', format("CopyChatButton%d", id), frame)
+	frame.button:EnableMouse(true)
+	frame.button:SetAlpha(0.35)
+	frame.button:SetSize(20, 22)
+	frame.button:SetPoint('TOPRIGHT')
+	frame.button:SetFrameLevel(frame:GetFrameLevel() + 5)
+
+	frame.button.tex = frame.button:CreateTexture(nil, 'OVERLAY')
+	frame.button.tex:SetTexture([[Interface\AddOns\ElvUI\media\textures\copy.tga]])
+
+	frame.button:SetScript("OnMouseUp", function(self, btn)
+		if btn == "RightButton" and id == 1 then
+			ToggleFrame(ChatMenu)
+		else
+			CH:CopyChat(frame)
+		end
+	end)
+
+	frame.button:SetScript("OnEnter", function(self) self:SetAlpha(1) end)
+	frame.button:SetScript("OnLeave", function(self)
+		if _G[self:GetParent():GetName().."TabText"]:IsShown() then
+			self:SetAlpha(0.35)
+		else
+			self:SetAlpha(0)
+		end
 	end)
 
 	CreatedFrames = id
@@ -926,13 +940,13 @@ function CH:ChatFrame_MessageEventHandler(event, ...)
 			if CH.db.shortChannels and type ~= "EMOTE" and type ~= "TEXT_EMOTE" then
 				body = body:gsub("|Hchannel:(.-)|h%[(.-)%]|h", CH.ShortChannel)
 				body = body:gsub('CHANNEL:', '')
-				body = body:gsub("^(.-|h) "..L["whispers"], "%1")
-				body = body:gsub("^(.-|h) "..L["says"], "%1")
-				body = body:gsub("^(.-|h) "..L["yells"], "%1")
-				body = body:gsub("<"..Var.AFK..">", "[|cffFF0000"..L["AFK"].."|r] ")
-				body = body:gsub("<"..Var.DND..">", "[|cffE7E716"..L["DND"].."|r] ")
+				body = body:gsub("^(.-|h) ".."whispers", "%1")
+				body = body:gsub("^(.-|h) ".."says", "%1")
+				body = body:gsub("^(.-|h) ".."yells", "%1")
+				body = body:gsub("<"..Var.AFK..">", "[|cffFF0000".."AFK".."|r] ")
+				body = body:gsub("<"..Var.DND..">", "[|cffE7E716".."DND".."|r] ")
 				body = body:gsub("%[BN_CONVERSATION:", '%[1'.."")
-				body = body:gsub("^%["..Var.RAID_WARNING.."%]", '['..L["RW"]..']')
+				body = body:gsub("^%["..Var.RAID_WARNING.."%]", '['.."RW"..']')
 			end
 			self:AddMessage(body, info.r, info.g, info.b, info.id, false, accessID, typeID)
 		end
@@ -1153,23 +1167,6 @@ function CH:SetChatFont(dropDown, frame, fontSize)
 	frame:SetShadowColor(0, 0, 0, 0.2)
 end
 
-function CH:ChatEdit_AddHistory(editBox, line)
-	if line:find("/rl") then return end
-
-	if ( strlen(line) > 0 ) then
-		for i, text in pairs(self.db.ChatEditHistory) do
-			if text == line then
-				return
-			end
-		end
-
-		tinsert(self.db.ChatEditHistory, #self.db.ChatEditHistory + 1, line)
-		if #self.db.ChatEditHistory > 5 then
-			tremove(self.db.ChatEditHistory, 1)
-		end
-	end
-end
-
 function CH:PET_BATTLE_CLOSE()
 	for _, frameName in pairs(CHAT_FRAMES) do
 		local frame = _G[frameName]
@@ -1188,78 +1185,9 @@ function CH:UpdateFading()
 	end
 end
 
-function CH:DisplayChatHistory()
-	local temp, data = {}
-	for id, _ in pairs(self.db.ChatLog) do
-		tinsert(temp, tonumber(id))
-	end
-
-	tsort(temp, function(a, b)
-		return a < b
-	end)
-
-	for i = 1, #temp do
-		data = self.db.ChatLog[tostring(temp[i])]
-
-		if type(data) == "table" and data[20] ~= nil then
-			local event = data[20]
-
-			if event == "CHAT_MSG_BN_WHISPER" or event == "CHAT_MSG_BN_WHISPER_INFORM" then
-				--Sender info is stored as |Kf#|k0000000000|k, which is a unique identifier for the current session only
-				--We need to update it in case the WoW client has been closed between the time the message was saved and now
-				local bnetIDAccount = data[13] --Unique identifier which persists between sessions (integer)
-				local _, presenceName = BNGetFriendInfoByID(bnetIDAccount)
-				if presenceName then
-					data[2] = presenceName --Update sender with correct name
-				end
-			end
-
-			CH.timeOverride = temp[i]
-			CH.ChatFrame_MessageEventHandler(DEFAULT_CHAT_FRAME, event, unpack(data))
-		end
-	end
-end
-
 local function GetTimeForSavedMessage()
 	local randomTime = select(2, ("."):split(GetTime() or "0."..random(1, 999), 2)) or 0
 	return time().."."..randomTime
-end
-
-function CH:SaveChatHistory(event, ...)
-	if self.db.throttleInterval ~= 0 and (event == "CHAT_MSG_SAY" or event == "CHAT_MSG_YELL" or event == "CHAT_MSG_CHANNEL") then
-		self:ChatThrottleHandler(event, ...)
-
-		local message, author = ...
-		local msg = PrepareMessage(author, message)
-		if author ~= PLAYER_NAME and msgList[msg] then
-			if difftime(time(), msgTime[msg]) <= CH.dbGlobalChat.throttleInterval then
-				return
-			end
-		end
-	end
-
-	local temp = {}
-	for i = 1, select("#", ...) do
-		temp[i] = select(i, ...) or false
-	end
-
-	if #temp > 0 then
-	  temp[20] = event
-	  local timeForMessage = GetTimeForSavedMessage()
-	  self.db.ChatLog[timeForMessage] = temp
-
-		local c, k = 0
-		for id, data in pairs(self.db.ChatLog) do
-			c = c + 1
-			if (not k) or k > id then
-				k = id
-			end
-		end
-
-		if c > 128 then
-			self.db.ChatLog[k] = nil
-		end
-	end
 end
 
 function CH:ChatFrame_AddMessageEventFilter (event, filter)
@@ -1329,24 +1257,182 @@ do
 	end
 end
 
+function CH:ON_FCF_SavePositionAndDimensions(_, noLoop)
+	if not noLoop then
+		CH:PositionChat()
+	end
+
+	CH:UpdateChatTabs() --It was not done in PositionChat, so do it now
+end
+
+function CH:SocialQueueIsLeader(playerName, leaderName)
+	if leaderName == playerName then
+		return true
+	end
+
+	local numGameAccounts, accountName, isOnline, gameCharacterName, gameClient, realmName, _
+
+	for i = 1, BNGetNumFriends() do
+		_, accountName, _, _, _, _, _, isOnline = BNGetFriendInfo(i)
+
+		if isOnline then
+			numGameAccounts = BNGetNumFriendGameAccounts(i)
+
+			if numGameAccounts > 0 then
+				for y = 1, numGameAccounts do
+					_, gameCharacterName, gameClient, realmName = BNGetFriendGameAccountInfo(i, y)
+
+					if (gameClient == BNET_CLIENT_WOW) and (accountName == playerName) then
+						playerName = gameCharacterName
+
+						if realmName ~= E.myrealm then
+							playerName = format('%s-%s', playerName, gsub(realmName,'[%s%-]',''))
+						end
+
+						if leaderName == playerName then
+							return true
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
+local socialQueueCache = {}
+local function RecentSocialQueue(TIME, MSG)
+	local previousMessage = false
+
+	if next(socialQueueCache) then
+		for guid, tbl in pairs(socialQueueCache) do
+			-- !dont break this loop! its used to keep the cache updated
+			if TIME and (difftime(TIME, tbl[1]) >= 300) then
+				socialQueueCache[guid] = nil --remove any older than 5m
+			elseif MSG and (MSG == tbl[2]) then
+				previousMessage = true --dont show any of the same message within 5m
+				-- see note for `message` in `SocialQueueMessage` about `MSG` content
+			end
+		end
+	end
+
+	return previousMessage
+end
+
+function CH:SocialQueueMessage(guid, message)
+	if not (guid and message) then return end
+	-- `guid` is something like `Party-1147-000011202574` and appears to update each time for solo requeue, otherwise on new group creation.
+	-- `message` is something like `|cff82c5ff|Kf58|k000000000000|k|r queued for: |cff00CCFFRandom Legion Heroic|r `
+
+	-- prevent duplicate messages within 5 minutes
+	local TIME = time()
+	if RecentSocialQueue(TIME, message) then return end
+
+	socialQueueCache[guid] = {TIME, message}
+
+	--UI_71_SOCIAL_QUEUEING_TOAST = 79739; appears to have no sound?
+	PlaySound(7355) --TUTORIAL_POPUP
+
+--	E:Print(format('|Hsqu:%s|h%s|h', guid, strtrim(message)))
+end
+
+function CH:SocialQueueEvent(event, guid, numAddedItems)
+--	if not self.db.socialQueueMessages then return end
+	if numAddedItems == 0 or not guid then return end
+
+	local coloredName, players = UNKNOWN, C_SocialQueue.GetGroupMembers(guid)
+	local members = players and SocialQueueUtil_SortGroupMembers(players)
+	local playerName, nameColor
+
+	if members then
+		local firstMember, numMembers, extraCount = members[1], #members, ''
+		playerName, nameColor = SocialQueueUtil_GetNameAndColor(firstMember)
+
+		if numMembers > 1 then
+			extraCount = format(' +%s', numMembers - 1)
+		end
+
+		if playerName then
+			coloredName = format('%s%s|r%s', nameColor, playerName, extraCount)
+		else
+			coloredName = format('{%s%s}', UNKNOWN, extraCount)
+		end
+	end
+
+	local isLFGList, firstQueue
+	local queues = C_SocialQueue.GetGroupQueues(guid)
+
+	firstQueue = queues and queues[1]
+	isLFGList = firstQueue and firstQueue.queueData and firstQueue.queueData.queueType == 'lfglist'
+
+	if isLFGList and firstQueue and firstQueue.eligible then
+		local activityID, name, comment, leaderName, fullName, isLeader, _
+
+		if firstQueue.queueData.lfgListID then
+			_, activityID, name, comment, _, _, _, _, _, _, _, _, leaderName = C_LFGList.GetSearchResultInfo(firstQueue.queueData.lfgListID)
+			isLeader = self:SocialQueueIsLeader(playerName, leaderName)
+		end
+
+		-- ignore groups created by the addon World Quest Group Finder/World Quest Tracker/World Quest Assistant/HandyNotes_Argus to reduce spam
+		if comment and (find(comment, "World Quest Group Finder") or find(comment, "World Quest Tracker") or find(comment, "World Quest Assistant") or find(comment, "HandyNotes_Argus")) then return end
+
+		if activityID or firstQueue.queueData.activityID then
+			fullName = C_LFGList.GetActivityInfo(activityID or firstQueue.queueData.activityID)
+		end
+
+		if name then
+			self:SocialQueueMessage(guid, format('%s %s: [%s] |cff00CCFF%s|r', coloredName, (isLeader and "is looking for members") or "joined a group", fullName or UNKNOWN, name))
+		else
+			self:SocialQueueMessage(guid, format('%s %s: |cff00CCFF%s|r', coloredName, (isLeader and "is looking for members") or "joined a group", fullName or UNKNOWN))
+		end
+	elseif firstQueue then
+		local output, outputCount, queueCount, queueName = '', '', 0
+
+		for _, queue in pairs(queues) do
+			if type(queue) == 'table' and queue.eligible then
+				queueName = (queue.queueData and SocialQueueUtil_GetQueueName(queue.queueData)) or ''
+
+				if queueName ~= '' then
+					if output == '' then
+						output = queueName:gsub('\n.+','') -- grab only the first queue name
+						queueCount = queueCount + select(2, queueName:gsub('\n','')) -- collect additional on single queue
+					else
+						queueCount = queueCount + 1 + select(2, queueName:gsub('\n','')) -- collect additional on additional queues
+					end
+				end
+			end
+		end
+
+		if output ~= '' then
+			if queueCount > 0 then
+				outputCount = format(LFG_LIST_AND_MORE, queueCount)
+			end
+
+			self:SocialQueueMessage(guid, format('%s %s: |cff00CCFF%s|r %s', coloredName, SOCIAL_QUEUE_QUEUED_FOR, output, outputCount))
+		end
+	end
+end
+
 function CH:CheckLFGRoles()
 	local isInGroup, isInRaid = IsInGroup(), IsInRaid()
 	local unit = isInRaid and "raid" or "party"
 	local name, realm
+
 	twipe(lfgRoles)
+
 	if(not isInGroup or not self.db.lfgIcons) then return end
 
 	local role = UnitGroupRolesAssigned("player")
-	if(role) then
+
+	if (role) then
 		lfgRoles[PLAYER_NAME] = rolePaths[role]
 	end
 
 	for i=1, GetNumGroupMembers() do
-		if(UnitExists(unit..i) and not UnitIsUnit(unit..i, "player")) then
+		if (UnitExists(unit..i) and not UnitIsUnit(unit..i, "player")) then
 			role = UnitGroupRolesAssigned(unit..i)
 			name, realm = UnitName(unit..i)
 
-			if(role and name) then
+			if (role and name) then
 				name = realm and name.."-"..realm or name.."-"..T.playerRealm
 				lfgRoles[name] = rolePaths[role]
 			end
@@ -1370,6 +1456,7 @@ CH.PositionChat = function(self, override)
 
 		if id > NUM_CHAT_WINDOWS then
 			point = point or select(1, chat:GetPoint())
+
 			if select(2, tab:GetPoint()):GetName() ~= bg then
 				isDocked = true
 			else
@@ -1379,7 +1466,7 @@ CH.PositionChat = function(self, override)
 
 		if (id ~= 2 and not (id > NUM_CHAT_WINDOWS)) then
 			chat:ClearAllPoints()
-			chat:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 5, 5)
+			chat:SetPoint("BOTTOMLEFT", UIParent, "BOTTOMLEFT", 35, 5)
 			chat:SetSize(450, 180)
 			FCF_SavePositionAndDimensions(chat)
 		end
@@ -1399,9 +1486,6 @@ CH.OnInitialize = function(self)
 
 	self.db = T.dbChar
 	CH.dbGlobalChat = T.dbGlobal.chat
-
-	self.db.ChatEditHistory = self.db.ChatEditHistory or {}
-	self.db.ChatLog = self.db.ChatLog or {}
 end
 
 CH.OnEnable = function(self)
@@ -1409,8 +1493,8 @@ CH.OnEnable = function(self)
 
 	self:SecureHook("ChatEdit_OnEnterPressed")
 
-	QuickJoinToastButton:Kill()
-	ChatFrameMenuButton:Kill()
+--	QuickJoinToastButton:Kill()
+--	ChatFrameMenuButton:Kill()
 
     if WIM then
       WIM.RegisterWidgetTrigger("chat_display", "whisper,chat,w2w,demo", "OnHyperlinkClick", function(self) CH.clickedframe = self end)
@@ -1418,34 +1502,18 @@ CH.OnEnable = function(self)
     end
 
 	self:SecureHook("FCF_SetChatWindowFontSize", "SetChatFont")
+--	self:SecureHook("FCF_SavePositionAndDimensions", "ON_FCF_SavePositionAndDimensions")
+
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", "DelayGMOTD")
 	self:RegisterEvent("UPDATE_CHAT_WINDOWS", "SetupChat")
 	self:RegisterEvent("UPDATE_FLOATING_CHAT_WINDOWS", "SetupChat")
 	self:RegisterEvent("PET_BATTLE_CLOSE")
+	self:RegisterEvent('SOCIAL_QUEUE_UPDATE', 'SocialQueueEvent')
 
 	self:SetupChat()
 	self:PositionChat(true)
 
 	self:RegisterEvent("GROUP_ROSTER_UPDATE", "CheckLFGRoles")
-
-	self:RegisterEvent("CHAT_MSG_INSTANCE_CHAT", "SaveChatHistory")
-	self:RegisterEvent("CHAT_MSG_INSTANCE_CHAT_LEADER", "SaveChatHistory")
-	self:RegisterEvent("CHAT_MSG_BN_WHISPER", "SaveChatHistory")
-	self:RegisterEvent("CHAT_MSG_BN_WHISPER_INFORM", "SaveChatHistory")
-	self:RegisterEvent("CHAT_MSG_CHANNEL", "SaveChatHistory")
-	self:RegisterEvent("CHAT_MSG_EMOTE", "SaveChatHistory")
-	self:RegisterEvent("CHAT_MSG_GUILD", "SaveChatHistory")
-	self:RegisterEvent("CHAT_MSG_GUILD_ACHIEVEMENT", "SaveChatHistory")
-	self:RegisterEvent("CHAT_MSG_OFFICER", "SaveChatHistory")
-	self:RegisterEvent("CHAT_MSG_PARTY", "SaveChatHistory")
-	self:RegisterEvent("CHAT_MSG_PARTY_LEADER", "SaveChatHistory")
-	self:RegisterEvent("CHAT_MSG_RAID", "SaveChatHistory")
-	self:RegisterEvent("CHAT_MSG_RAID_LEADER", "SaveChatHistory")
-	self:RegisterEvent("CHAT_MSG_RAID_WARNING", "SaveChatHistory")
-	self:RegisterEvent("CHAT_MSG_SAY", "SaveChatHistory")
-	self:RegisterEvent("CHAT_MSG_WHISPER", "SaveChatHistory")
-	self:RegisterEvent("CHAT_MSG_WHISPER_INFORM", "SaveChatHistory")
-	self:RegisterEvent("CHAT_MSG_YELL", "SaveChatHistory")
 
 	--First get all pre-existing filters and copy them to our version of chatFilters using ChatFrame_GetMessageEventFilters
 	for name, _ in pairs(ChatTypeGroup) do
@@ -1496,8 +1564,72 @@ CH.OnEnable = function(self)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_WHISPER_INFORM", CH.FindURL)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_BN_INLINE_TOAST_BROADCAST", CH.FindURL)
 
-	if (self.db.ChatLog) then
---		self:DisplayChatHistory()
+	--First get all pre-existing filters and copy them to our version of chatFilters using ChatFrame_GetMessageEventFilters
+	for name, _ in pairs(ChatTypeGroup) do
+		for i=1, #ChatTypeGroup[name] do
+			local filterFuncTable = ChatFrame_GetMessageEventFilters(ChatTypeGroup[name][i])
+			if filterFuncTable then
+				chatFilters[ChatTypeGroup[name][i]] = {};
+
+				for j=1, #filterFuncTable do
+					local filterFunc = filterFuncTable[j]
+					tinsert(chatFilters[ChatTypeGroup[name][i]], filterFunc);
+				end
+			end
+		end
+	end
+
+	--CHAT_MSG_CHANNEL isn't located inside ChatTypeGroup
+	local filterFuncTable = ChatFrame_GetMessageEventFilters("CHAT_MSG_CHANNEL")
+	if filterFuncTable then
+		chatFilters["CHAT_MSG_CHANNEL"] = {};
+
+		for j=1, #filterFuncTable do
+			local filterFunc = filterFuncTable[j]
+			tinsert(chatFilters["CHAT_MSG_CHANNEL"], filterFunc);
+		end
+	end
+
+	GeneralDockManagerOverflowButton:ClearAllPoints()
+	GeneralDockManagerOverflowButton:SetPoint('BOTTOMRIGHT', LeftChatTab, 'BOTTOMRIGHT', -2, 2)
+--	GeneralDockManagerOverflowButtonList:SetTemplate('Transparent')
+	hooksecurefunc(GeneralDockManagerScrollFrame, 'SetPoint', function(self, point, anchor, attachTo, x, y)
+		if anchor == GeneralDockManagerOverflowButton and x == 0 and y == 0 then
+			self:SetPoint(point, anchor, attachTo, -2, -6)
+		end
+	end)
+
+
+	do
+		local FindURL_Events = {
+			"CHAT_MSG_WHISPER",
+			"CHAT_MSG_WHISPER_INFORM",
+			"CHAT_MSG_BN_WHISPER",
+			"CHAT_MSG_BN_WHISPER_INFORM",
+			"CHAT_MSG_BN_INLINE_TOAST_BROADCAST",
+			"CHAT_MSG_GUILD_ACHIEVEMENT",
+			"CHAT_MSG_GUILD",
+			"CHAT_MSG_OFFICER",
+			"CHAT_MSG_PARTY",
+			"CHAT_MSG_PARTY_LEADER",
+			"CHAT_MSG_RAID",
+			"CHAT_MSG_RAID_LEADER",
+			"CHAT_MSG_RAID_WARNING",
+			"CHAT_MSG_INSTANCE_CHAT",
+			"CHAT_MSG_INSTANCE_CHAT_LEADER",
+			"CHAT_MSG_CHANNEL",
+			"CHAT_MSG_SAY",
+			"CHAT_MSG_YELL",
+			"CHAT_MSG_EMOTE",
+			"CHAT_MSG_AFK",
+			"CHAT_MSG_DND",
+		}
+
+		for _, event in pairs(FindURL_Events) do
+			ChatFrame_AddMessageEventFilter(event, CH[event] or CH.FindURL)
+
+			local nType = strsub(event, 10)
+		end
 	end
 
 	local frame = CreateFrame("Frame", "CopyChatFrame", T.UIParent)
@@ -1509,7 +1641,7 @@ CH.OnEnable = function(self)
 		insets = { left = 3, right = 3, top = 5, bottom = 3 }
 	})
 	frame:SetBackdropColor(0, 0, 0, 1)
-	frame:SetSize(700, 150)
+	frame:SetSize(700, 200)
 	frame:SetPoint('BOTTOM', T.UIParent, 'BOTTOM', 0, 3)
 	frame:SetMovable(true)
 	frame:EnableMouse(true)
@@ -1550,9 +1682,13 @@ CH.OnEnable = function(self)
 	local scrollArea = CreateFrame("ScrollFrame", "CopyChatScrollFrame", frame, "UIPanelScrollFrameTemplate")
 	scrollArea:SetPoint("TOPLEFT", frame, "TOPLEFT", 8, -30)
 	scrollArea:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -30, 8)
+--	S:HandleScrollBar(CopyChatScrollFrameScrollBar)
 	scrollArea:SetScript("OnSizeChanged", function(self)
 		CopyChatFrameEditBox:SetWidth(self:GetWidth())
 		CopyChatFrameEditBox:SetHeight(self:GetHeight())
+	end)
+	scrollArea:HookScript("OnVerticalScroll", function(self, offset)
+		CopyChatFrameEditBox:SetHitRectInsets(0, 0, offset, (CopyChatFrameEditBox:GetHeight() - offset - self:GetHeight()))
 	end)
 
 	local editBox = CreateFrame("EditBox", "CopyChatFrameEditBox", frame)
@@ -1573,13 +1709,21 @@ CH.OnEnable = function(self)
 		end
 	end)
 
+--	CombatLogQuickButtonFrame_CustomAdditionalFilterButton:SetSize(20, 22)
+--	CombatLogQuickButtonFrame_CustomAdditionalFilterButton:SetPoint("TOPRIGHT", CombatLogQuickButtonFrame_Custom, "TOPRIGHT", 0, -1)
+
+--	ChatFrameMenuButton:Kill() -- We have it on your CopyChatButton via right click
+
+	-- The width got changed in Bfa
+--	CombatLogQuickButtonFrame_CustomTexture:Hide()
+
 	--Disable Blizzard
-	InterfaceOptionsSocialPanelTimestampsButton:SetAlpha(0)
+--[[	InterfaceOptionsSocialPanelTimestampsButton:SetAlpha(0)
 	InterfaceOptionsSocialPanelTimestampsButton:SetScale(0.000001)
 	InterfaceOptionsSocialPanelTimestamps:SetAlpha(0)
 	InterfaceOptionsSocialPanelTimestamps:SetScale(0.000001)
 
 	InterfaceOptionsSocialPanelChatStyle:EnableMouse(false)
 	InterfaceOptionsSocialPanelChatStyleButton:Hide()
-	InterfaceOptionsSocialPanelChatStyle:SetAlpha(0)
+	InterfaceOptionsSocialPanelChatStyle:SetAlpha(0)]]
 end

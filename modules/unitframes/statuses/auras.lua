@@ -189,40 +189,54 @@ end
 --]]
 local ScanUnitAuras
 do
-	local name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable
+	local index, name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable
 
 	ScanUnitAuras = function(self, event, unit)
 		if (unit and self.unit ~= unit) then return end
 		unit = unit or self.unit
 
-		if (not UnitIsDeadOrGhost(unit)) then -- UnitIsVisible(unit) and
+		if (UnitIsVisible(unit) and not UnitIsDeadOrGhost(unit)) then
 			-- scan for buffs
-			for buff_name in pairs(buff_names) do
-				name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable = UnitAura(unit, buff_name, nil, "HELPFUL")
 
-				if (name) then
-					buff_names_seen[name] = true
-					UnitGainedBuff(self, unit, name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable)
+			index = 1
+			while (true) do
+				name, icon, count, debuffType, duration, expirationTime, caster, isStealable = UnitBuff(unit, index, "HELPFUL")
+
+				if (not name) then break end
+
+				for buff_name in pairs(buff_names) do
+					if (buff_name == name) then
+						buff_names_seen[name] = true
+						UnitGainedBuff(self, unit, name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable)
+					end
 				end
+
+				index = index + 1
 			end
 
 			-- scan for buffs cast by the player
-			for buff_name in pairs(player_buff_names) do
-				name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable = UnitAura(unit, buff_name, nil, "HELPFUL|PLAYER")
+			index = 1
+			while (true) do
+				name, icon, count, debuffType, duration, expirationTime, caster, isStealable = UnitBuff(unit, index, "HELPFUL|PLAYER")
 
-				if (name) then
-					player_buff_names_seen[name] = true
-					UnitGainedPlayerBuff(self, unit, name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable)
+				if (not name) then break end
+
+				for buff_name in pairs(player_buff_names) do
+					if (buff_name == name) then
+						player_buff_names_seen[name] = true
+						UnitGainedPlayerBuff(self, unit, name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable)
+					end
 				end
+
+				index = index + 1
 			end
 
 			-- scan for debuffs
-			for index = 1, 40 do
-				name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable = UnitDebuff(unit, index)
+			index = 1
+			while (true) do
+				name, icon, count, debuffType, duration, expirationTime, caster, isStealable = UnitDebuff(unit, index)
 
-				if (not name) then
-					break
-				end
+				if (not name) then break end
 
 				if (debuff_names[name]) then
 					debuff_names_seen[name] = true
@@ -231,6 +245,8 @@ do
 					debuff_types_seen[debuffType] = true
 					UnitGainedDebuffType(self, unit, name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable)
 				end
+
+				index = index + 1
 			end
 		end
 
