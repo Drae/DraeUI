@@ -29,7 +29,6 @@ P["PALADIN"] = {
         ["buff_blessingofspellwarding"]     = { buff = "Blessing of Spellwarding",      pr = 85, mine = false, color = { r = 0, g = 0.8, b = 0.5 } },
 
         ["buff_bestowfaith"]                = { buff = "Bestow Faith", 				    pr = 60, mine = true, color = { r = 1.0, g = 0.8, b = 0 } },
-        ["buff_sacreddawn"]           		= { buff = "Sacred Dawn",			    	pr = 80, mine = true, color = { r = 1.0, g = 1.0, b = 1.0 }, flash = true },
         ["buff_beaconoflight"]           	= { buff = "Beacon of Light",   			pr = 40, mine = true, color = { r = 1.0, g = 0.8, b = 0 } },
         ["buff_beaconoffaith"]           	= { buff = "Beacon of Faith",   			pr = 40, mine = true, color = { r = 1.0, g = 0.6, b = 0 } },
         ["buff_beaconofvirtue"]          	= { buff = "Beacon of Virtue",   			pr = 40, mine = true, color = { r = 1.0, g = 0.8, b = 0.2 } },
@@ -103,7 +102,6 @@ P["PALADIN"] = {
         },
 
         ["LEFTT"] = {
-            ["buff_sacreddawn"] = true,
         },
 
         ["LEFT"] = {

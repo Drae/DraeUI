@@ -224,7 +224,7 @@ do
 	end
 
 	local CreateAuraIcon = function(icons, index)
-		local button = CreateFrame("Button", nil, icons)
+		local button = CreateFrame("Button", icons:GetDebugName() .. 'Button' .. index, icons)
 
 		button:EnableMouse(true)
 		button:RegisterForClicks("RightButtonUp")
@@ -232,7 +232,7 @@ do
 		button:SetWidth(icons.size or 16)
 		button:SetHeight(icons.size or 16)
 
-		local border = CreateFrame("Frame", nil, button)
+		local border = CreateFrame("Frame", icons:GetDebugName() .. 'ButtonFrame' .. index, button)
 		border:SetPoint("TOPLEFT", button, -2, 2)
 		border:SetPoint("BOTTOMRIGHT", button, 2, -2)
 		border:SetFrameStrata("BACKGROUND")
@@ -252,7 +252,7 @@ do
 		local overlay = button:CreateTexture(nil, "OVERLAY")
 		button.overlay = overlay
 
-		local cd = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
+		local cd = CreateFrame("Cooldown", icons:GetDebugName() .. 'ButtonCooldown' .. index, button, "CooldownFrameTemplate")
 		cd:SetReverse(true)
 		cd:SetAllPoints(button)
 		button.cd = cd
@@ -303,7 +303,7 @@ do
 		end
 	end
 
-	local CustomFilter = function(element, unit, button, name, _, _, _, dtype, duration, _, caster, _, _, spellid, _, isBossDebuff)
+	local CustomFilter = function(element, unit, button, name, _, _, dtype, duration, _, caster, _, _, spellid, _, isBossDebuff)
 		button.isPlayer = (caster == "player" or caster == "vehicle" or caster == "pet")
 		button.isFriendly = UnitCanAssist("player", unit)
 		button.isEnemy = UnitCanAttack("player", unit)
@@ -370,7 +370,7 @@ do
 		return false
 	end
 
-	local CustomFilterLongBuffs = function(element, unit, button, name, _, _, _, dtype, duration, _, caster, _, _, spellid, _, isBossDebuff)
+	local CustomFilterLongBuffs = function(element, unit, button, name, _, _, dtype, duration, _, caster, _, _, spellid, _, isBossDebuff)
 		button.isPlayer = (caster == "player" or caster == "vehicle" or caster == "pet")
 		button.isFriendly = UnitCanAssist("player", unit)
 		button.isEnemy = UnitCanAttack("player", unit)

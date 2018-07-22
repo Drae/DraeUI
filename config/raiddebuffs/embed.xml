@@ -2,4 +2,5 @@
 	<Include file="mistsofpandaria\embed.xml" />
 	<Include file="warlordsofdraenor\embed.xml" />
 	<Include file="legion\embed.xml" />
+	<Include file="bfa\embed.xml" />
 </Ui>

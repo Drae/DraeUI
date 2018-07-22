@@ -136,7 +136,7 @@ end
 
 InfoBar.OnEnable = function(self)
 	-- Parent bar
-	local infoBar = CreateFrame("Frame", nil, T.UIParent)
+	local infoBar = CreateFrame("Frame", nil, UIParent)
 	infoBar:SetFrameStrata("LOW")
 	infoBar:SetPoint("TOPLEFT", 20, -20)
 	infoBar:SetPoint("TOPRIGHT", _G["MinimapCluster"], "TOPLEFT", -20, 0)

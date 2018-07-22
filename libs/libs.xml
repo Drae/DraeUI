@@ -12,4 +12,5 @@
 	<Script file="LibSharedMedia-3.0\LibSharedMedia-3.0.lua" />
 	<Script file="LibResInfo-1.0\LibResInfo-1.0.lua" />
 	<Script file="LibCutawaySmooth-1.0.lua" />
+	<Script file="LibChatAnims.lua" />
 </Ui>

@@ -103,8 +103,8 @@ do
 		if (not grid or (gridSize and grid.gridSize ~= gridSize)) then
 			grid = nil
 
-			grid = CreateFrame("Frame", nil, T.UIParent)
-			grid:SetAllPoints(T.UIParent)
+			grid = CreateFrame("Frame", nil, UIParent)
+			grid:SetAllPoints(UIParent)
 		end
 
 		gridSize = gridSize or 128

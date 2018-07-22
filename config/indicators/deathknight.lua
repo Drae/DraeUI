@@ -12,18 +12,6 @@ P["DEATHKNIGHT"] = {
 		["dispel_disease"] 	= { debuff = "Disease",	pr = 70, mine = false, color = { r = 0.6, g = 0.4, b = 0} },
 		["dispel_poison"] 	= { debuff = "Poison",	pr = 60, mine = false, color = { r = 0, g = 0.6, b = 1.0} },
 		["dispel_curse"] 	= { debuff = "Curse",	pr = 50, mine = false, color = { r = 0.6, g = 0, b = 1.0} },
-
-		-- Attack power
-		["buff_hornofwinter"] 		= { buff = "Horn of Winter", 		pr = 50, mine = false, color = { r = 0.8, g = 0.8, b = 0.8} }, -- Attack Power
-		["buff_trueshotaura"] 		= { buff = "Trueshot Aura", 		pr = 50, mine = false, color = { r = 0.8, g = 0.8, b = 0.8} }, -- Attack Power (Hunter)
-		["buff_battleshout"] 		= { buff = "Battle Shout", 			pr = 50, mine = false, color = { r = 0.8, g = 0.8, b = 0.8} }, -- Attack Power (Warrior)
-
-		-- Attack speed
-		["buff_unholyaura"] 		= { buff = "Unholy Aura", 			pr = 50, mine = false, color = { r = 0, g = 0.4, b = 1.0 } }, -- Attack Speed
-		["buff_swiftbladescunning"]	= { buff = "Swiftblade's Cunning", 	pr = 50, mine = false, color = { r = 0, g = 0.4, b = 1.0 } }, -- Attack Speed (Rogue)
-		["buff_unleashedrage"] 		= { buff = "Unleashed Rage", 		pr = 50, mine = false, color = { r = 0, g = 0.4, b = 1.0 } }, -- Attack Speed (Shaman)
-		["buff_cacklinghowl"] 		= { buff = "Cackling Howl", 		pr = 50, mine = false, color = { r = 0, g = 0.4, b = 1.0 } }, -- Attack Speed (Hunter - Hyena)
-		["buff_serpentsswiftness"] 	= { buff = "Serpent's Swiftness", 	pr = 50, mine = false, color = { r = 0, g = 0.4, b = 1.0 } }, -- Attack Speed (Hunter - Wind Serpent)
 	},
 
 	statusmap = {
@@ -60,17 +48,9 @@ P["DEATHKNIGHT"] = {
 		},
 
 		["BOTTOMRIGHT"] = {
-			["buff_hornofwinter"] = true,
-			["buff_trueshotaura"] = true,
-			["buff_battleshout"] = true,
 		},
 
 		["BOTTOMRIGHTL"] = {
-			["buff_unholyaura"] = true,
-			["buff_swiftbladescunning"] = true,
-			["buff_unleashedrage"] = true,
-			["buff_cacklinghowl"] = true,
-			["buff_serpentsswiftness"] = true,
 		},
 	}
 }

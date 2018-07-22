@@ -34,11 +34,6 @@ local  T, C, G, P, U, _ = select(2, ...):UnPack()
 
 local LSM = LibStub("LibSharedMedia-3.0")
 
-T.UIParent = CreateFrame("Frame", "DraeUIParent", UIParent)
-T.UIParent:SetFrameLevel(UIParent:GetFrameLevel())
-T.UIParent:SetPoint("CENTER", UIParent, "CENTER")
-T.UIParent:SetSize(UIParent:GetSize())
-
 T.HiddenFrame = CreateFrame("Frame")
 T.HiddenFrame:Hide()
 
@@ -81,66 +76,15 @@ T.HookAddons = function(self, event)
 	end
 end
 
-do
-	local CreateHUDBg = function(frame, width, height, texture, sub, tex)
-		local t = frame:CreateTexture(nil, "BACKGROUND", T.UIParent, sub)
-		t:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\" .. texture)
-		t:SetSize(width, height)
+T.OnEnable = function(self)
+	self:UpdateBlizzardFonts()
+	self:InitializeConsoleCommands()
 
-		if (type(tex) == "table") then
-			t:SetTexCoord(tex[1], tex[2], tex[3], tex[4])
-		end
-
-		return t
-	end
-
-	T.OnEnable = function(self)
---		self:UIScale("PLAYER_LOGIN")
-
-		self:UpdateBlizzardFonts()
-		self:InitializeConsoleCommands()
-
---		self:RegisterEvent("UI_SCALE_CHANGED", "UIScale")
-
-		-- Hide the guild hall command bar
-		if (not IsAddOnLoaded("Blizzard_OrderHallUI")) then
-			self:RegisterEvent("ADDON_LOADED", "HookAddons")
-		else
-			HideCommandBar()
-		end
---[[
-		local borderFrame = CreateFrame("frame", nil, T.UIParent)
-		borderFrame:SetFrameStrata("BACKGROUND")
-		borderFrame:SetAllPoints(T.UIParent)
-
---		CreateHUDBg(borderFrame, 512, 256, "windowcorner", 0):SetPoint("TOPLEFT", 0, 0)
---		CreateHUDBg(borderFrame, 512, 256, "windowcorner", 0, {1, 0, 0, 1}):SetPoint("TOPRIGHT", 0, 0)
---		CreateHUDBg(borderFrame, 512, 256, "windowcorner", 0, {1, 0, 1, 0}):SetPoint("BOTTOMRIGHT", 0, 0)
---		CreateHUDBg(borderFrame, 512, 256, "windowcorner", 0, {0, 1, 1, 0}):SetPoint("BOTTOMLEFT", 0, 0)
-		local temp
-		temp = CreateHUDBg(borderFrame, 512, 256, "windowborder", 0)
-		temp:SetPoint("TOPLEFT", 512, 0)
-		temp:SetPoint("TOPRIGHT", -512, 0)
-
-		temp = CreateHUDBg(borderFrame, 512, 256, "windowborder", 0, {1, 0, 1, 0})
-		temp:SetPoint("BOTTOMLEFT", 512, 0)
-		temp:SetPoint("BOTTOMRIGHT", -512, 0)
-
-		temp = CreateHUDBg(borderFrame, 256, 512, "windowborder-side", 0, {0, 1, 1, 0})
-		temp:SetPoint("TOPRIGHT", 0, -256)
-		temp:SetPoint("BOTTOMRIGHT", 0, 256)
-
-		temp = CreateHUDBg(borderFrame, 512, 256, "windowborder-side", 0, {1, 0, 1, 0})
-		temp:SetPoint("TOPLEFT", 0, -256)
-		temp:SetPoint("BOTTOMLEFT", 0, 256)
-]]
-		local actionBarBg = CreateFrame("frame", nil, T.UIParent)
-		actionBarBg:SetFrameStrata("BACKGROUND")
-		actionBarBg:SetSize(1024, 256)
-		actionBarBg:SetPoint("BOTTOM", 0, 14)
-
---		CreateHUDBg(actionBarBg, 512, 256, "leftshadow", 0):SetPoint("LEFT", 0, 0)
---		CreateHUDBg(actionBarBg, 512, 256, "rightshadow", 0):SetPoint("RIGHT", 0, 0)
+	-- Hide the guild hall command bar
+	if (not IsAddOnLoaded("Blizzard_OrderHallUI")) then
+		self:RegisterEvent("ADDON_LOADED", "HookAddons")
+	else
+		HideCommandBar()
 	end
 end
 

@@ -72,70 +72,10 @@ local menuList = {
 	func = function() if not IsAddOnLoaded('Blizzard_EncounterJournal') then EncounterJournal_LoadUI(); end ToggleFrame(EncounterJournal) end}
 }
 
-local minimapRotate	= {
-	[1] = {
-		texture 	= "Interface\\AddOns\\draeUI\\media\\textures\\zahnrad", --texturename under media folder --"SPELLS\\AURARUNE256.BLP"
-		width 		= 210,
-		height 		= 210,
-		scale 		= 0.82, --0.95,
-		framelevel 	= "0",
-		duration 	= 60, --how long should the rotation need to finish 360�
-		direction 	= 1, --0 = counter-clockwise, 1 = clockwise
-		color_red 	= 48/255, --0.3098039215686275,
-		color_green = 44/255, --0.4784313725490196
-		color_blue 	= 35/255, --1.0
-		alpha 		= 1,
-		blendmode 	= "BLEND", --"BLEND", --ADD or BLEND
-	},
-	[2] = {
-		texture 	= "Interface\\AddOns\\draeUI\\media\\textures\\ring", --texturename under media folder
-		width 		= 190,
-		height 		= 190,
-		scale 		= 0.82,
-		framelevel 	= "3", --defines the framelevel to overlay or underlay other stuff
-		duration 	= 60, --how long should the rotation need to finish 360�
-		direction 	= 1, --0 = counter-clockwise, 1 = clockwise
-		color_red 	= 0/255,
-		color_green = 0/255,
-		color_blue 	= 0/255,
-		alpha 		= 0.4,
-		blendmode 	= "BLEND", --ADD or BLEND
-	},
-}
-
 --[[
 
 --]]
 local noop = function() end
-
--- Animate the minimap frame
-local CreateRotateTextures = function(texture, width, height, scale, framelevel, texr, texg, texb, alpha, duration, side, blendmode)
-	local h = CreateFrame("Frame", nil, Minimap)
-	h:SetHeight(height)
-	h:SetWidth(width)
-	h:SetPoint("CENTER", 0, 0)
-	h:SetScale(scale)
-	h:SetFrameLevel(framelevel)
-
-	local t = h:CreateTexture()
-	t:SetAllPoints(h)
-	t:SetTexture(texture)
-	t:SetBlendMode(blendmode)
-	t:SetVertexColor(texr, texg, texb, alpha)
-
-	local ag = h:CreateAnimationGroup()
-	local a1 = ag:CreateAnimation("Rotation")
-
-	if (side == 0) then
-		a1:SetDegrees(360)
-	else
-		a1:SetDegrees(-360)
-	end
-	a1:SetDuration(duration)
-
-	ag:Play()
-	ag:SetLooping("REPEAT")
-end
 
 do
 	local alreadyGrabbed = {}
@@ -264,12 +204,6 @@ MM.OnEnable = function(self)
 			Minimap_OnClick(self)
 		end
 	end)
-
-	-- Create  the rotating textures
-	for k, _ in ipairs(minimapRotate) do
-		local v = minimapRotate[k]
-		CreateRotateTextures(v.texture, v.width, v.height, v.scale, v.framelevel, v.color_red, v.color_green, v.color_blue, v.alpha, v.duration, v.direction, v.blendmode)
-	end
 
 	-- Grab all the buttons and stuffs
 	self:StartFrameGrab()
