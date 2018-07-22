@@ -167,18 +167,22 @@ C["raidframes"] = {
 	-- specify a position for a total number of groups the position of the last highest
 	-- will be used
 	position = {
-		[1] = { "BOTTOMLEFT", UIParent, "CENTER", -176, -340 },
-		[2] = { "BOTTOMLEFT", UIParent, "CENTER", -176, -340 },
-		[3] = { "BOTTOMLEFT", UIParent, "CENTER", -176, -450 },
-		[6] = { "BOTTOMLEFT", UIParent, "CENTER", -940, -150 },
+		[1] = { "BOTTOM", UIParent, "CENTER", 0, -340 },
+		[2] = { "BOTTOM", UIParent, "CENTER", 0, -340 },
+		[3] = { "BOTTOM", UIParent, "CENTER", 0, -450 },
+		[5] = { "BOTTOM", UIParent, "CENTER", -1600, -300 },
+	},
+
+	scale = {
+		[1] = 1.0,
+		[4] = 0.95,
+		[5] = 0.9,
 	},
 
 	-- Button parameters
 	raidnamelength = 7,
 	showRaidHealthPct = false, -- Show health as a "remaining percentage" rather than an "absolute deficit"
 	showOnlyDispellable = false, -- true to only show dispellable unknown debuffs
-
-
 }
 
 -- Player, target and focus castbar
@@ -255,4 +259,3 @@ G["minimap"] = {
 		["TimeManagerClockButton"] 		= { anchorat = "BOTTOM", anchorto = "BOTTOM", posx = 0, posy = -11 }, -- The clock
 	},
 }
-

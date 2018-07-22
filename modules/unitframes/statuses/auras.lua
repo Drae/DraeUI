@@ -54,31 +54,33 @@ local UpdateAuraList = function()
 	wipe(debuff_names_seen_prev)
 	wipe(debuff_types_seen_prev)
 
-	for status, settings in pairs(T.dbClass["auras"]) do
-		if (type(settings) == "table" and not settings.disable) then
-			local name = settings.buff or settings.debuff
+	if (T.dbClass["auras"]) then
+		for status, settings in pairs(T.dbClass["auras"]) do
+			if (type(settings) == "table" and not settings.disable) then
+				local name = settings.buff or settings.debuff
 
-			if (name and not debuff_types[name]) then
-				local isBuff = not not settings.buff
+				if (name and not debuff_types[name]) then
+					local isBuff = not not settings.buff
 
-				if (isBuff) then
-					if (settings.mine) then
-						player_buff_names[name] = status
-						player_buff_names_seen[name] = false
-						player_buff_names_seen_prev[name] = false
+					if (isBuff) then
+						if (settings.mine) then
+							player_buff_names[name] = status
+							player_buff_names_seen[name] = false
+							player_buff_names_seen_prev[name] = false
+						else
+							buff_names[name] = status
+							buff_names_seen[name] = false
+							buff_names_seen_prev[name] = false
+						end
 					else
-						buff_names[name] = status
-						buff_names_seen[name] = false
-						buff_names_seen_prev[name] = false
+						debuff_names[name] = status
+						debuff_names_seen[name] = false
+						debuff_names_seen_prev[name] = false
 					end
-				else
-					debuff_names[name] = status
-					debuff_names_seen[name] = false
-					debuff_names_seen_prev[name] = false
+				elseif (debuff_types[name]) then
+					debuff_types_seen[name] = false
+					debuff_types_seen_prev[name] = false
 				end
-			elseif (debuff_types[name]) then
-				debuff_types_seen[name] = false
-				debuff_types_seen_prev[name] = false
 			end
 		end
 	end

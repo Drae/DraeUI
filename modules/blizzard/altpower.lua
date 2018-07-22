@@ -11,7 +11,7 @@ local B = T:GetModule("Blizzard")
 --]]
 B.PositionAltPowerBar = function(self)
 	local holder = CreateFrame("Frame", "AltPowerBarHolder")
-	holder:SetPoint("TOP", T.UIParent, "TOP", 0, -80)
+	holder:SetPoint("TOP", UIParent, "TOP", 0, -80)
 	holder:SetSize(128, 50)
 
 	PlayerPowerBarAlt:ClearAllPoints()

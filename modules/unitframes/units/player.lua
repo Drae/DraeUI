@@ -71,7 +71,7 @@ local StyleDrae_Player = function(frame, unit, isSingle)
 	frame.CombatIndicator = combat
 
 	-- Auras
-	UF.AddLongBuffs(frame, "BOTTOMRIGHT", T.UIParent, "BOTTOMRIGHT", -20, 20)
+	UF.AddLongBuffs(frame, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -20, 20)
 	UF.AddBuffs(frame, "TOPLEFT", frame.Power, "BOTTOMLEFT", 0, -12, T.db["frames"].auras.maxPlayerBuff or 4, T.db["frames"].auras.auraLrg, 8, "RIGHT", "DOWN")
 	UF.AddDebuffs(frame, "TOPRIGHT", frame.Power, "BOTTOMRIGHT", 0, -12, T.db["frames"].auras.maxPlayerDebuff or 15, T.db["frames"].auras.auraSml, 8, "LEFT", "DOWN")
 

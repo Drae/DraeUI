@@ -92,9 +92,8 @@ end
 --[[
 		Local functions
 --]]
-local CreateRaidAnchor = function(header, n)
-	local numRaidMembers = n and n or GetNumGroupMembers()
-
+local GetNumSubGroupsinRaid = function()
+	local numRaidMembers = GetNumGroupMembers()
 	local numSubGroups, maxInSubGroup, currentGroup = 1, 0, 0
 
 	for i = 1, numRaidMembers do
@@ -115,10 +114,40 @@ local CreateRaidAnchor = function(header, n)
 		currentGroup = groupNum
 	end
 
+	return numSubGroups
+end
+
+local CreateRaidAnchor = function(header, numSubGroups)
+	local scaled = 1
+
+	for i = numSubGroups, 1, -1 do
+		if (T.db["raidframes"].scale[i]) then
+			scaled = (2 - T.db["raidframes"].scale[i]) / 2
+			header:SetScale(T.db["raidframes"].scale[i])
+
+			break
+		end
+	end
+
 	for i = numSubGroups, 1, -1 do
 		if (T.db["raidframes"].position[i]) then
-			header:SetPoint(unpack(T.db["raidframes"].position[i]))
+			local a, b, c, d, e = unpack(T.db["raidframes"].position[i])
 
+			if (b ~= nil and c ~= nil and d ~= nil and e ~= nil) then
+				header:SetPoint(a, b, c, d * scaled, e * scaled)
+			else
+				header:SetPoint(a)
+			end
+
+			break
+		end
+	end
+end
+
+local SetRaidScale = function(header, numSubGroups)
+	for i = numSubGroups, 1, -1 do
+		if (T.db["raidframes"].scale[i]) then
+			header:SetScale(T.db["raidframes"].scale[i])
 			break
 		end
 	end
@@ -180,11 +209,11 @@ UF.OnEnable = function(self)
 
 	-- Player
 	oUF:SetActiveStyle("DraePlayer")
-	oUF:Spawn("player", "DraePlayer"):SetPoint("CENTER", T.UIParent, T.db["frames"].playerXoffset, T.db["frames"].playerYoffset)
+	oUF:Spawn("player", "DraePlayer"):SetPoint("CENTER", UIParent, T.db["frames"].playerXoffset, T.db["frames"].playerYoffset)
 
 	-- Target
 	oUF:SetActiveStyle("DraeTarget")
-	oUF:Spawn("target", "DraeTarget"):SetPoint("CENTER", T.UIParent, T.db["frames"].targetXoffset, T.db["frames"].targetYoffset)
+	oUF:Spawn("target", "DraeTarget"):SetPoint("CENTER", UIParent, T.db["frames"].targetXoffset, T.db["frames"].targetYoffset)
 
 	-- Target of target
 	oUF:SetActiveStyle("DraeTargetTarget")
@@ -295,6 +324,8 @@ UF.OnEnable = function(self)
 
 	oUF:SetActiveStyle("DraeRaid")
 
+	local numSubGroups = GetNumSubGroupsinRaid()
+
 	-- Create raid headers
 	for i = 1, NUM_RAID_GROUPS do
 		local header = oUF:SpawnHeader("DraeRaid"..i, nil, visibility,
@@ -322,8 +353,10 @@ UF.OnEnable = function(self)
 		if (i == 1) then
 			header:SetAttribute("showParty", true)
 
-			CreateRaidAnchor(header)
+			CreateRaidAnchor(header, numSubGroups)
 		else
+			SetRaidScale(header, numSubGroups)
+
 			if (T.db["raidframes"].gridLayout == "HORIZONTAL") then
 				xMult = 0
 			else
@@ -358,6 +391,8 @@ UF.OnEnable = function(self)
 		)
 
 		self.raidHeaders["pet"] = headerPet
+
+		SetRaidScale(headerPet, numSubGroups)
 	end
 
 	self:RegisterEvent("PLAYER_TALENT_UPDATE", CheckSpec)
@@ -387,22 +422,19 @@ UF.UpdateRaidLayout = function(self)
 	end
 	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
 
-	local lastGroup = 1
-	local numRaidMembers = GetNumGroupMembers()
+	if (GetNumGroupMembers() > 0) then
+		local numSubGroups = GetNumSubGroupsinRaid()
 
-	if (numRaidMembers > 0) then
-		-- loop through ALL raid members and find the last group (blargh)
-		local playerGroup
-		for member = 1, numRaidMembers do
-			local _, _, playerGroup = GetRaidRosterInfo(member)
-			lastGroup = mmax(lastGroup, playerGroup)
+		CreateRaidAnchor(self.raidHeaders[1], numSubGroups)
+
+		for i = 2, numSubGroups do
+			SetRaidScale(self.raidHeaders[i], numSubGroups)
 		end
 
-		CreateRaidAnchor(self.raidHeaders[1], numRaidMembers)
-	end
-
-	if (T.db["raidframes"].showPets) then
-		self.raidHeaders["pet"]:SetPoint(T.db["raidframes"].gridGroupsAnchor, self.raidHeaders[lastGroup], self.relPoint, 0, 15) -- Offset from the raid group
+		if (T.db["raidframes"].showPets) then
+			self.raidHeaders["pet"]:SetPoint(T.db["raidframes"].gridGroupsAnchor, self.raidHeaders[lastGroup], self.relPoint, 0, 15) -- Offset from the raid group
+			SetRaidScale(self.raidHeaders["pet"], numSubGroups)
+		end
 	end
 end
 

@@ -16,9 +16,6 @@ P["MAGE"] = {
 
 		["buff_arcanebrilliance"]  	= { buff = "Arcane Brilliance",  pr = 5, mine = false, color = { r = 0.8, g = 0.8, b = 0.8 } },  -- Spell Power + Crit
 		["buff_dalaranbrilliance"] 	= { buff = "Dalaran Brilliance", pr = 5, mine = false, color = { r = 0.8, g = 0.8, b = 0.8 } },  -- Spell Power + Crit
-		["buff_burningwrath"] 		= { buff = "Burning Wrath", 	 pr = 5, mine = false, color = { r = 0.8, g = 0.8, b = 0.8 } },  -- Spell Power (Shaman)
-		["buff_darkintent"] 		= { buff = "Dark Intent", 		 pr = 5, mine = false, color = { r = 0.8, g = 0.8, b = 0.8 } },  -- Spell Power (Warlock)
-		["buff_stillwater"] 		= { buff = "Still Water", 		 pr = 5, mine = false, color = { r = 0.8, g = 0.8, b = 0.8 } },  -- Spell Power (Hunter - Wavestrider)
 	},
 
 	statusmap = {
@@ -57,9 +54,6 @@ P["MAGE"] = {
 		["BOTTOMRIGHT"] = {
 			["buff_arcanebrilliance"] = true,
 			["buff_dalaranbrilliance"] = true,
-			["buff_burningwrath"] = true,
-			["buff_darkintent"] = true,
-			["buff_stillwater"] = true,
 		},
 	}
 }
