@@ -232,6 +232,13 @@ C["castbar"] = {
 	},
 }
 
+C["infobar"] = {
+	xp = {
+		enable = true,
+		altxp = "reputation"
+	}
+}
+
 --[[
 		Global variables - for all chars
 --]]
@@ -242,8 +249,6 @@ G["chat"] = {
 	timeStampFormat = "%H:%M ",
 	scrollDownInterval = 15,
 	throttleInterval = 45,
-
-	keywords = "%MYNAME%",
 }
 
 -- Minimap
