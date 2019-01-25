@@ -19,8 +19,6 @@ C["general"] = {
 	statusbar = "Striped",
 	font = "Liberation Sans",
 	fontFancy = "Proza",
-	fontTimers = "Bignoodle",
-	fontCombat = "Bignoodle",
 
 	fontsize0 = 16,
 	fontsize1 = 13,
@@ -53,8 +51,8 @@ C["frames"] = {
 	petYoffset			= 30, ---100,
 	petTargetXoffset	= 6,  	-- Relative to right of pet
 	petTargetYoffset	= -10,
-	bossXoffset			= 300,	-- Relative to left of target
-	bossYoffset			= 100,
+	bossXoffset			= 0,	-- Relative to left of target
+	bossYoffset			= 300,
 	arenaXoffset		= 0, 	-- Relative to left of player
 	arenaYoffset		= 140,
 
@@ -147,8 +145,8 @@ C["frames"] = {
 
 C["raidframes"] = {
 	-- General frame parameters
-	width = 65,
-	height = 40,
+	width = 60,
+	height = 35,
 	gridLayout = "HORIZONTAL", -- groups are arranged horizontally - one above (or below) the other,
 							   -- VERTICAL would have groups appear to the right (or left) of each other
 	gridGroupsAnchor = "BOTTOMLEFT", -- This is the anchor point for each group - groups will grow from this point
@@ -167,20 +165,12 @@ C["raidframes"] = {
 	-- specify a position for a total number of groups the position of the last highest
 	-- will be used
 	position = {
-		[1] = { "BOTTOM", UIParent, "CENTER", 0, -340 },
-		[2] = { "BOTTOM", UIParent, "CENTER", 0, -340 },
-		[3] = { "BOTTOM", UIParent, "CENTER", 0, -450 },
-		[5] = { "BOTTOM", UIParent, "CENTER", -1600, -300 },
-	},
-
-	scale = {
-		[1] = 1.0,
-		[4] = 0.95,
-		[5] = 0.9,
+		[1] = { "BOTTOM", UIParent, "CENTER", 0, -410 },
+		[6] = { "BOTTOM", UIParent, "CENTER", -780, 0 },
 	},
 
 	-- Button parameters
-	raidnamelength = 7,
+	raidnamelength = 6,
 	showRaidHealthPct = false, -- Show health as a "remaining percentage" rather than an "absolute deficit"
 	showOnlyDispellable = false, -- true to only show dispellable unknown debuffs
 }
