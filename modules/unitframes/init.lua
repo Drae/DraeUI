@@ -121,33 +121,8 @@ local CreateRaidAnchor = function(header, numSubGroups)
 	local scaled = 1
 
 	for i = numSubGroups, 1, -1 do
-		if (T.db["raidframes"].scale[i]) then
-			scaled = (2 - T.db["raidframes"].scale[i]) / 2
-			header:SetScale(T.db["raidframes"].scale[i])
-
-			break
-		end
-	end
-
-	for i = numSubGroups, 1, -1 do
 		if (T.db["raidframes"].position[i]) then
-			local a, b, c, d, e = unpack(T.db["raidframes"].position[i])
-
-			if (b ~= nil and c ~= nil and d ~= nil and e ~= nil) then
-				header:SetPoint(a, b, c, d * scaled, e * scaled)
-			else
-				header:SetPoint(a)
-			end
-
-			break
-		end
-	end
-end
-
-local SetRaidScale = function(header, numSubGroups)
-	for i = numSubGroups, 1, -1 do
-		if (T.db["raidframes"].scale[i]) then
-			header:SetScale(T.db["raidframes"].scale[i])
+			header:SetPoint(unpack(T.db["raidframes"].position[i]))
 			break
 		end
 	end
@@ -355,15 +330,13 @@ UF.OnEnable = function(self)
 
 			CreateRaidAnchor(header, numSubGroups)
 		else
-			SetRaidScale(header, numSubGroups)
-
 			if (T.db["raidframes"].gridLayout == "HORIZONTAL") then
 				xMult = 0
 			else
 				yMult = 0
 			end
 
-			header:SetPoint(T.db["raidframes"].gridGroupsAnchor, self.raidHeaders[i - 1], relPoint, 10 * xMult, 10 * yMult)
+			header:SetPoint(T.db["raidframes"].gridGroupsAnchor, self.raidHeaders[i - 1], relPoint, 8 * xMult, 8 * yMult)
 		end
 
 		self.raidHeaders[i] = header
@@ -372,7 +345,6 @@ UF.OnEnable = function(self)
 	if (T.db["raidframes"].showPets) then
 		local headerPet = oUF:SpawnHeader("DraeRaidPet", "SecureGroupPetHeaderTemplate", visibility,
 			"showPlayer", true,
-			"showParty", true,
 			"showRaid", true,
 
 			"oUF-initialConfigFunction", initialConfigFunction:format(T.db["raidframes"].width, 25),
@@ -384,15 +356,15 @@ UF.OnEnable = function(self)
 			"xOffset", xOffset, -- +ve for right, -ve for left
 			"yOffset", yOffset,
 			"point", point,  -- RIGHT for growing right to left, LEFT for growing left to right
+			"sortMethod", "NAME",
+			"sortDir", "ASC", -- DESC for left to right, ASC for right to left
 			"unitsPerColumn", 5,
 			"maxColumns", 8,
-			"columnSpacing", 8,
+			"columnSpacing", 10,
 			"columnAnchorPoint", colAnchor
 		)
 
 		self.raidHeaders["pet"] = headerPet
-
-		SetRaidScale(headerPet, numSubGroups)
 	end
 
 	self:RegisterEvent("PLAYER_TALENT_UPDATE", CheckSpec)
@@ -427,13 +399,8 @@ UF.UpdateRaidLayout = function(self)
 
 		CreateRaidAnchor(self.raidHeaders[1], numSubGroups)
 
-		for i = 2, numSubGroups do
-			SetRaidScale(self.raidHeaders[i], numSubGroups)
-		end
-
 		if (T.db["raidframes"].showPets) then
 			self.raidHeaders["pet"]:SetPoint(T.db["raidframes"].gridGroupsAnchor, self.raidHeaders[lastGroup], self.relPoint, 0, 15) -- Offset from the raid group
-			SetRaidScale(self.raidHeaders["pet"], numSubGroups)
 		end
 	end
 end
