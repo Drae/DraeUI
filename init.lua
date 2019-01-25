@@ -93,8 +93,6 @@ T.UpdateMedia = function(self)
 
 	self["media"].font = LSM:Fetch("font", self.db["general"].font)
 	self["media"].fontFancy = LSM:Fetch("font", self.db["general"].fontFancy)
-	self["media"].fontTimers = LSM:Fetch("font", self.db["general"].fontTimers)
-	self["media"].fontCombat = LSM:Fetch("font", self.db["general"].fontCombat)
 
 	self["media"].statusbar = LSM:Fetch("statusbar", self.db["general"].statusbar)
 end
