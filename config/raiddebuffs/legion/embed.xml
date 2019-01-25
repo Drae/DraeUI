@@ -1,7 +1,0 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file="emeraldnightmare.lua" />
-	<Script file="trialofvalor.lua" />
-	<Script file="nighthold.lua" />
-	<Script file="tombofsargeras.lua" />
-	<Script file="antorus.lua" />
-</Ui>
