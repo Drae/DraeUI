@@ -37,8 +37,6 @@ T.UpdateBlizzardFonts = function(self)
 	local FontStandard = self["media"].font
 	local FontSmall = FontStandard
 	local FontFancy = self["media"].fontFancy
-	local FontCombat = self["media"].fontCombat
-	local FontTimers = self["media"].fontTimers
 
 	local SizeSmall    = 10
 	local SizeMedium   = 12
@@ -49,7 +47,6 @@ T.UpdateBlizzardFonts = function(self)
 	-- Game engine fonts
 	STANDARD_TEXT_FONT = FontStandard
 	NAMEPLATE_FONT = FontStandard
-	UNIT_NAME_FONT = FontCombat
 	DAMAGE_TEXT_FONT = FontBold
 
 	UIDROPDOWNMENU_DEFAULT_TEXT_HEIGHT = 14
@@ -68,7 +65,6 @@ T.UpdateBlizzardFonts = function(self)
 	ChangeFont(SystemFont_Shadow_Med3            , FontStandard, SizeMedium, nil)
 	ChangeFont(SystemFont_Large                  , FontStandard, SizeLarge , nil)
 	ChangeFont(SystemFont_Shadow_Large           , FontStandard, SizeLarge , nil)
-	ChangeFont(SystemFont_Shadow_Large_Outline   , FontTimers,   SizeLarge , "OUTLINE")
 	ChangeFont(SystemFont_Shadow_Huge1           , FontStandard, SizeHuge  , nil)
 	ChangeFont(SystemFont_OutlineThick_Huge2     , FontStandard, SizeHuge  , "THICKOUTLINE")
 	ChangeFont(SystemFont_Shadow_Outline_Huge2   , FontStandard, SizeHuge  , "THICKOUTLINE")
