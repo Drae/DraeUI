@@ -107,7 +107,7 @@ AT.UpdateAzerite = function(self, event, unit)
 
 	LDB.text = format('Azerite: %s / |cff%02x%02x%02x%s%%|r (%s) [%s]', ReadableNumber(xp), r1 * 255, g1 * 255, b1 * 255, floor(xp / totalLevelXP * 100), ReadableNumber(xpToNextLevel), currentLevel)
 
-	LDB.statusbar__azerite_min_max = "0," .. xpToNextLevel
+	LDB.statusbar__azerite_min_max = "0," .. totalLevelXP
 	LDB.statusbar__azerite_cur = xp
 end
 
