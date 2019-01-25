@@ -667,22 +667,7 @@ local StyleDrae_Raid = function(frame, unit)
 	readyCheck:SetWidth(22)
 	readyCheck:SetPoint("CENTER", frame, "CENTER", 0, 0)
 	frame.ReadyCheckIndicator = readyCheck
---[[
-	-- Debuffs
-	local debuffs = CreateFrame("Frame", nil, hp)
-	debuffs:SetFrameLevel(baseLevel + 4)
-	debuffs:SetPoint("CENTER", frame, "BOTTOM", 0, -3)
-	debuffs.num = 2
-	debuffs.size = 21
-	debuffs.spacing = 0
-	debuffs:SetSize(debuffs.num * (debuffs.size + debuffs.spacing), debuffs.size + debuffs.spacing)
-	debuffs.initialAnchor = "BOTTOMLEFT"
-	debuffs.growthX = "RIGHT"
-	debuffs.growthY = "UP"
-	debuffs.showDebuffType = true
 
-	frame.PartyDebuffs = debuffs
-]]
 	-- Show/hide mana bar
 	frame:RegisterEvent("UNIT_DISPLAYPOWER", UF.UpdateRaidPower)
 
