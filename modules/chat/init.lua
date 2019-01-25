@@ -1499,10 +1499,8 @@ CH.OnEnable = function(self)
 
 	QuickJoinToastButton:ClearAllPoints()
 	QuickJoinToastButton:SetPoint("BOTTOMLEFT", _G["GeneralDockManager"], "TOPLEFT", 3, 75)
-	QuickJoinToastButton:SetScale(0.9)
 
 	ChatFrameChannelButton:ClearAllPoints()
 	ChatFrameChannelButton:SetPoint("BOTTOMLEFT", _G["GeneralDockManager"], "TOPLEFT", 5, 44)
-	ChatFrameChannelButton:SetScale(0.9)
 end
 
