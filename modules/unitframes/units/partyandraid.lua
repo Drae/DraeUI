@@ -26,7 +26,9 @@ local indicators = {
 
 	["TOPLEFT"] 		= { type = "color", width = 8,  height = 8,  at = "TOPLEFT",     to = "TOPLEFT",     offsetX = 0,  offsetY = 1},
 
+	["TOPRIGHTL"]		= { type = "color", width = 6,  height = 6,  at = "TOPRIGHT",    to = "TOPRIGHT",    offsetX = -6,  offsetY = 1},
 	["TOPRIGHT"]		= { type = "color", width = 8,  height = 8,  at = "TOPRIGHT",    to = "TOPRIGHT",    offsetX = 1,  offsetY = 1},
+	["TOPRIGHTB"]		= { type = "color", width = 6,  height = 6,  at = "TOPRIGHT",    to = "TOPRIGHT",    offsetX = 1,  offsetY = -6},
 
 	["BOTTOM"] 			= { type = "color", width = 8,  height = 8,  at = "BOTTOM",      to = "BOTTOM",      offsetX = 0,  offsetY = -1},
 	["BOTTOML"] 		= { type = "color", width = 8,  height = 8,  at = "BOTTOM",      to = "BOTTOM",      offsetX = -8, offsetY = -1},

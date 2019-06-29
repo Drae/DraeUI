@@ -34,6 +34,9 @@ P["PALADIN"] = {
         ["buff_beaconofvirtue"]          	= { buff = "Beacon of Virtue",   			pr = 40, mine = true, color = { r = 1.0, g = 0.8, b = 0.2 } },
 
         ["debuff_forbearance"]            	= { debuff = "Forbearance", 				pr = 60, mine = false, color = { r = 1.0, g = 0, b = 0 } },
+
+        ["buff_enveloping_protection"]      = { buff = "Enveloping Protection",     	pr = 40, mine = true, color = { r = 0.2, g = 0.2, b = 0.2 } },
+        ["buff_glimmeroflight"]             = { buff = "Glimmer of Light",     	        pr = 40, mine = true, color = { r = 0, g = 0.5, b = 0 } }
     },
 
     statusmap = {
@@ -64,6 +67,10 @@ P["PALADIN"] = {
         ["TOPRIGHT"] = {
             ["status_incheal"] = true,
         },
+        
+        ["TOPRIGHTB"] = {
+            ["buff_glimmeroflight"] = true,
+        },
 
         ["BOTTOM"] = {
             ["status_res"] = true,
@@ -78,6 +85,7 @@ P["PALADIN"] = {
         },
 
         ["TOPL"] = {
+            ["buff_enveloping_protection"] = true,
         },
 
         ["TOPR"] = {
@@ -99,9 +107,6 @@ P["PALADIN"] = {
 
         ["BOTTOMLEFT"] = {
             ["debuff_forbearance"] = true,
-        },
-
-        ["LEFTT"] = {
         },
 
         ["LEFT"] = {
