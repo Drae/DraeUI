@@ -85,9 +85,7 @@ end
 --[[
 
 ]]
-AT.UpdateAzerite = function(self, event, unit)
-	if (unit and unit ~= "player") then return end
-
+AT.UpdateAzerite = function(self)
 	local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem()
 
 	if (not azeriteItemLocation) then
@@ -149,12 +147,18 @@ LDB.OnClick = function(self)
 	end]]
 end
 
+AT.PlayerEnteringWorld = function(self)
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD", "PlayerEnteringWorld")
+
+	self:UpdateAzerite()
+end
+
 AT.OnInitialize = function(self)
 	self:RegisterEvent("AZERITE_ITEM_EXPERIENCE_CHANGED", "UpdateAzerite")
 	self:RegisterEvent("AZERITE_ITEM_POWER_LEVEL_CHANGED", "UpdateAzerite")
 	self:RegisterEvent("UNIT_INVENTORY_CHANGED", "UpdateAzerite")
 
-	self:UpdateAzerite()
+	self:RegisterEvent("PLAYER_ENTERING_WORLD", "PlayerEnteringWorld")
 end
 
 AT.OnDisable = function(self)
@@ -162,5 +166,5 @@ AT.OnDisable = function(self)
 	self:UnregisterEvent("AZERITE_ITEM_POWER_LEVEL_CHANGED", "UpdateAzerite")
 	self:UnregisterEvent("UNIT_INVENTORY_CHANGED", "UpdateAzerite")
 
-	self:UpdateAzerite()
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD", "PlayerEnteringWorld")
 end
