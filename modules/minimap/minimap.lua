@@ -112,14 +112,10 @@ do
 end
 
 MM.OnEnable = function(self)
-	MinimapBackdrop:ClearAllPoints()
-	MinimapBackdrop:SetParent(Minimap)
-	MinimapBackdrop:SetPoint("CENTER", Minimap, "CENTER", -8, -23)
-
-	Minimap:SetMaskTexture("Textures\\MinimapMask")
 	Minimap:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -30, -30)
 
-	-- Move the minibackdrop and border
+	MinimapBackdrop:ClearAllPoints()
+	MinimapBackdrop:SetParent(Minimap)
 	MinimapBackdrop:SetPoint("CENTER", Minimap, "CENTER", -8, -24)
 
 	-- Change some basic textures
