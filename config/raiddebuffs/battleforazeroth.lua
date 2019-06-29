@@ -61,6 +61,60 @@ end
 
 -- Battle for Dazar'alor
 UF["raiddebuffs"]["instances"]["Battle of Dazar'alor"] = function()
+	UF:AddRaidDebuff(true, 289384, 5) --Savage Swipe
+	UF:AddRaidDebuff(true, 287437, 5) --Frozen Beam
+	UF:AddRaidDebuff(true, 287294, 5) --Blizzard
+	UF:AddRaidDebuff(true, 286740, 5) --Light's Fury
+	UF:AddRaidDebuff(true, 285250, 5) --Sundering Slam
+	UF:AddRaidDebuff(true, 289645, 5) --Polymorph
+	UF:AddRaidDebuff(true, 289578, 5) --Lit Torch
+	UF:AddRaidDebuff(true, 287325, 5) --Comet Storm
+	UF:AddRaidDebuff(true, 289772, 5) --Impale
+	UF:AddRaidDebuff(true, 285292, 5) --Frozen Tides
+	UF:AddRaidDebuff(true, 285280, 5) --Searing Waves
+	UF:AddRaidDebuff(true, 287147, 5) --Dread Reaping
+	UF:AddRaidDebuff(true, 284573, 5) --Tailwinds
+	UF:AddRaidDebuff(true, 253562, 5) --Wildfire
+	UF:AddRaidDebuff(true, 289917, 5, true) --Bwonsamdi's Pact
+	UF:AddRaidDebuff(true, 289418, 5) --Predator's Gaze
+	UF:AddRaidDebuff(true, 287295, 5) --Chilled
+	UF:AddRaidDebuff(true, 289937, 5) --Thundering Slam
+	UF:AddRaidDebuff(true, 289514, 5) --Molten Ground
+	UF:AddRaidDebuff(true, 289512, 5) --Molten Punch
+	UF:AddRaidDebuff(true, 289373, 5) --Lacerating Pounce
+	UF:AddRaidDebuff(true, 287456, 5) --Frost Nova
+	UF:AddRaidDebuff(true, 287556, 5) --Soul Barrage
+	UF:AddRaidDebuff(true, 289484, 5) --Burning Bite
+	UF:AddRaidDebuff(true, 289918, 5) --Bwonsamdi's Bargain
+
+	-- Champions
+	UF:AddRaidDebuff(true, 283617, 5) --Wave of Light
+	UF:AddRaidDebuff(true, 283651, 6, nil, nil, true) --Blinding Faith
+
+	-- Grong
+	UF:AddRaidDebuff(true, 282010, 5) --Shattered
+	UF:AddRaidDebuff(true, 285875, 5) --Rending Bite
+	UF:AddRaidDebuff(true, 289307, 5) --Bestial Throw Target
+	UF:AddRaidDebuff(true, 283069, 5) --Megatomic Fire
+	UF:AddRaidDebuff(true, 289292, 5) --Bestial Throw
+	UF:AddRaidDebuff(true, 285998, 5) --Ferocious Roar
+	UF:AddRaidDebuff(true, 285671, 5) --Crushed
+	UF:AddRaidDebuff(true, 285659, 5) --Apetagonizer Core
+	UF:AddRaidDebuff(true, 289412, 5) --Bestial Impact
+
+	-- Jadefire Masters
+	UF:AddRaidDebuff(true, 284374, 5) --Magma Trap
+	UF:AddRaidDebuff(true, 282037, 5) --Rising Flames
+	UF:AddRaidDebuff(true, 286503, 5) --Beam
+	UF:AddRaidDebuff(true, 288151, 5) --Tested
+	UF:AddRaidDebuff(true, 284089, 5) --Successful Defense
+	UF:AddRaidDebuff(true, 285632, 5) --Stalking
+	UF:AddRaidDebuff(true, 287747, 5) --Force Orb
+	UF:AddRaidDebuff(true, 286988, 7) --Searing Embers
+	UF:AddRaidDebuff(true, 284453, 5, true) --Chi-Ji's Song
+	UF:AddRaidDebuff(true, 286369, 5, true) --Chi-Ji's Song
+	UF:AddRaidDebuff(true, 288051, 5) --Dragon's Breath
+
 	-- Oppulence
 	UF:AddRaidDebuff(true, 284556, 8, true) -- Shadow-Touched buff
 	UF:AddRaidDebuff(true, 284573, 7, true) -- Tailwinds buff
@@ -69,6 +123,43 @@ UF["raiddebuffs"]["instances"]["Battle of Dazar'alor"] = function()
 
 	-- Conclave
 	UF:AddRaidDebuff(true, 282135, 7) -- Crawling Hex
-	UF:AddRaidDebuff(true, 282447, 7, true) -- Kimbul's Wrath
+	UF:AddRaidDebuff(true, 282447, 7) -- Kimbul's Wrath
+	UF:AddRaidDebuff(true, 282592, 7, true) -- Bleeding Wounds (debuff from Kimbul's Wrath)
 	UF:AddRaidDebuff(true, 285878, 7, nil, true) -- Mind Wipe
+
+	-- King
+	UF:AddRaidDebuff(true, 285213, 9, true) -- Caress of Death (immune to healing)
+	UF:AddRaidDebuff(true, 285195, 5) -- Deathly withering
+	UF:AddRaidDebuff(true, 288449, 6) -- Deaths Door
+	UF:AddRaidDebuff(true, 286742, 8) -- Necrotic Smash (tank)
+	
+	-- Mekka'torque
+	UF:AddRaidDebuff(true, 286646, 8) -- Gigavolt charge
+	UF:AddRaidDebuff(true, 287891, 8) -- Sheep Shrapnel
+	UF:AddRaidDebuff(true, 289699, 8, true) -- Electroshock Amplification (tanks)
+	UF:AddRaidDebuff(true, 284168, 8, true) -- Shrunk!
+	
+	-- Stonewall
+	UF:AddRaidDebuff(true, 284106, 8) -- Crackling lightning - Sister Katherine
+	UF:AddRaidDebuff(true, 284360, 8) -- Sea Storm
+	UF:AddRaidDebuff(true, 284405, 8, true) -- Tempting song -  Brother Joseph
+	UF:AddRaidDebuff(true, 285350, 8, nil, nil, true) -- Storm's wail - P2
+	UF:AddRaidDebuff(true, 284997, 8, true) -- Kelp Wrapped Fists (tank - dispell near add) - P2
+
+	-- Jaina
+	UF:AddRaidDebuff(true, 287993, 5, true) --Chilling Touch
+	UF:AddRaidDebuff(true, 288394, 5, true) --Warmth
+	UF:AddRaidDebuff(true, 285253, 5) --Ice Shard
+	UF:AddRaidDebuff(true, 288169, 5) --Howling Winds	
+	UF:AddRaidDebuff(true, 287490, 5) --Frozen Solid
+	UF:AddRaidDebuff(true, 288297, 5) --Arctic Ground
+	UF:AddRaidDebuff(true, 287365, 5) --Searing Pitch
+	UF:AddRaidDebuff(true, 287626, 5) --Grasp of Frost
+	UF:AddRaidDebuff(true, 289220, 5) --Heart of Frost
+	UF:AddRaidDebuff(true, 288212, 5, nil, nil, true) --Broadside
+	UF:AddRaidDebuff(true, 285254, 5, nil, nil, true) --Avalanche
+	UF:AddRaidDebuff(true, 288374, 5) --Siegebreaker Blast
+	UF:AddRaidDebuff(true, 288038, 5) --Marked Target
+	UF:AddRaidDebuff(true, 288434, 5) --Hand of Frost
+	UF:AddRaidDebuff(true, 287199, 5) --Ring of Ice
 end
