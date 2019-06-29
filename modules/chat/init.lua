@@ -174,7 +174,7 @@ function CH:StyleChat(frame)
 
 	local a, b, c = select(6, editbox:GetRegions()) a:Kill() b:Kill() c:Kill()
 	editbox:SetAltArrowKeyMode(CH.db.useAltKey)
-	editbox:SetAllPoints(LeftChatDataPanel)
+--	editbox:SetAllPoints(LeftChatDataPanel)
 	self:SecureHook(editbox, "AddHistoryLine", "ChatEdit_AddHistory")
 --	editbox:HookScript("OnTextChanged", OnTextChanged)
 
