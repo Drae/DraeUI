@@ -258,13 +258,6 @@ UF.OnEnable = function(self)
 	--[[
 		Raid and party frames
 	--]]
-	local initialConfigFunction = ([[
-		local unit = ...
-
-		self:SetWidth(%d)
-		self:SetHeight(%d)
-	]])
-
 	local visibility = "raid,party,solo"
 
 	-- Setup orientation and determine relative points and directions for groups
@@ -307,7 +300,10 @@ UF.OnEnable = function(self)
 			"showPlayer", true,
 			"showRaid", true,
 
-			"oUF-initialConfigFunction", initialConfigFunction:format(T.db["raidframes"].width, T.db["raidframes"].height),
+			"oUF-initialConfigFunction", ([[
+				self:SetWidth(%d)
+				self:SetHeight(%d)
+			]]):format(T.db["raidframes"].width, T.db["raidframes"].height),
 
 			"groupBy", "GROUP",
 			"groupFilter", tostring(i),
@@ -343,13 +339,17 @@ UF.OnEnable = function(self)
 	end
 
 	if (T.db["raidframes"].showPets) then
+		-- Force display of party and raid pets
+		SetCVar("showPartyPets",1)
+
 		local headerPet = oUF:SpawnHeader("DraeRaidPet", "SecureGroupPetHeaderTemplate", visibility,
 			"showPlayer", true,
 			"showRaid", true,
 
-			"oUF-initialConfigFunction", initialConfigFunction:format(T.db["raidframes"].width, 25),
-
-			"filterOnPet", true,
+			"oUF-initialConfigFunction", ([[
+				self:SetWidth(%d)
+				self:SetHeight(%d)
+			]]):format(T.db["raidframes"].width, 25),
 
 			"initial-width", T.db["raidframes"].width,
 			"initial-height", 25,
@@ -394,14 +394,12 @@ UF.UpdateRaidLayout = function(self)
 	end
 	self:UnregisterEvent("PLAYER_REGEN_ENABLED")
 
-	if (GetNumGroupMembers() > 0) then
-		local numSubGroups = GetNumSubGroupsinRaid()
+	local numSubGroups = GetNumSubGroupsinRaid()
 
-		CreateRaidAnchor(self.raidHeaders[1], numSubGroups)
+	CreateRaidAnchor(self.raidHeaders[1], numSubGroups)
 
-		if (T.db["raidframes"].showPets) then
-			self.raidHeaders["pet"]:SetPoint(T.db["raidframes"].gridGroupsAnchor, self.raidHeaders[lastGroup], self.relPoint, 0, 15) -- Offset from the raid group
-		end
+	if (T.db["raidframes"].showPets) then
+		self.raidHeaders["pet"]:SetPoint(T.db["raidframes"].gridGroupsAnchor, self.raidHeaders[numSubGroups], self.relPoint, 0, 15) -- Offset from the raid group
 	end
 end
 
