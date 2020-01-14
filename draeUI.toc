@@ -53,7 +53,7 @@ config\raiddebuffs\embed.xml
 config\instancedebuffs\embed.xml
 
 # Chat
-modules\chat\init.lua
+#modules\chat\init.lua
 
 # Minimap
 modules\minimap\init.lua
