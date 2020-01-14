@@ -17,10 +17,22 @@ local UIParent, CreateFrame, UnitName, UnitClass = UIParent, CreateFrame, UnitNa
 local IsPVPTimerRunning, GetPVPTimer, UnitCanAttack = IsPVPTimerRunning, GetPVPTimer, UnitCanAttack
 local UUnitReaction, UnitExists = UnitReaction, UnitExists
 local UnitIsPlayer, GameTooltip, InCombatLockdown = UnitIsPlayer, GameTooltip, InCombatLockdown
-local CancelUnitBuff, UnitIsFriend, GetShapeshiftFormID, DebuffTypeColor = CancelUnitBuff, UnitIsFriend, GetShapeshiftFormID, DebuffTypeColor
+local CancelUnitBuff, UnitIsFriend, GetShapeshiftFormID, DebuffTypeColor =
+	CancelUnitBuff,
+	UnitIsFriend,
+	GetShapeshiftFormID,
+	DebuffTypeColor
 local UnitFrame_OnEnter, UnitFrame_OnLeave = UnitFrame_OnEnter, UnitFrame_OnLeave
 local RAID_CLASS_COLORS, FACTION_BAR_COLORS = RAID_CLASS_COLORS, FACTION_BAR_COLORS
-local select, upper, format, gsub, unpack, pairs, huge, insert = select, string.upper, string.format, string.gsub, unpack, pairs, math.huge, table.insert
+local select, upper, format, gsub, unpack, pairs, huge, insert =
+	select,
+	string.upper,
+	string.format,
+	string.gsub,
+	unpack,
+	pairs,
+	math.huge,
+	table.insert
 
 --[[
 		Local functions
@@ -28,7 +40,7 @@ local select, upper, format, gsub, unpack, pairs, huge, insert = select, string.
 local Menu = function(self)
 	local cUnit = self.unit:gsub("(.)", upper, 1)
 
-	if(_G[cUnit .. "FrameDropDown"]) then
+	if (_G[cUnit .. "FrameDropDown"]) then
 		ToggleDropDownMenu(1, nil, _G[cUnit .. "FrameDropDown"], "cursor", 0, 0)
 	end
 end
@@ -102,7 +114,13 @@ end
 UF.CreatePowerBar = function(self, width, height, point, reverse)
 	local ppborder = self:CreateTexture(nil, "BORDER", nil, 1)
 	ppborder:SetSize(width + 4, height + 4)
-	ppborder:SetPoint(point and "TOPRIGHT" or "TOPLEFT", self.Health.hpborder, point and "BOTTOMRIGHT" or "BOTTOMLEFT", 0, 3)
+	ppborder:SetPoint(
+		point and "TOPRIGHT" or "TOPLEFT",
+		self.Health.hpborder,
+		point and "BOTTOMRIGHT" or "BOTTOMLEFT",
+		0,
+		3
+	)
 	ppborder:SetTexture("Interface\\BUTTONS\\WHITE8X8")
 	ppborder:SetVertexColor(0.05, 0.05, 0.05)
 
@@ -138,7 +156,13 @@ end
 UF.CreateAdditionalPower = function(self, width, height, point, reverse)
 	local apborder = self:CreateTexture(nil, "BORDER", nil, 1)
 	apborder:SetSize(width + 4, height + 4)
-	apborder:SetPoint(point and "TOPRIGHT" or "TOPLEFT", self.Power.ppborder, point and "BOTTOMRIGHT" or "BOTTOMLEFT", 0, 3)
+	apborder:SetPoint(
+		point and "TOPRIGHT" or "TOPLEFT",
+		self.Power.ppborder,
+		point and "BOTTOMRIGHT" or "BOTTOMLEFT",
+		0,
+		3
+	)
 	apborder:SetTexture("Interface\\BUTTONS\\WHITE8X8")
 	apborder:SetVertexColor(0.05, 0.05, 0.05)
 
@@ -196,7 +220,9 @@ end
 -- Aura handling
 do
 	local AuraOnEnter = function(self)
-		if (not self:IsVisible()) then return end
+		if (not self:IsVisible()) then
+			return
+		end
 
 		-- Add aura owner to tooltip if available - colour by class/reaction because it looks nice!
 		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
@@ -224,7 +250,7 @@ do
 	end
 
 	local CreateAuraIcon = function(icons, index)
-		local button = CreateFrame("Button", icons:GetDebugName() .. 'Button' .. index, icons)
+		local button = CreateFrame("Button", icons:GetDebugName() .. "Button" .. index, icons)
 
 		button:EnableMouse(true)
 		button:RegisterForClicks("RightButtonUp")
@@ -232,7 +258,7 @@ do
 		button:SetWidth(icons.size or 16)
 		button:SetHeight(icons.size or 16)
 
-		local border = CreateFrame("Frame", icons:GetDebugName() .. 'ButtonFrame' .. index, button)
+		local border = CreateFrame("Frame", icons:GetDebugName() .. "ButtonFrame" .. index, button)
 		border:SetPoint("TOPLEFT", button, -2, 2)
 		border:SetPoint("BOTTOMRIGHT", button, 2, -2)
 		border:SetFrameStrata("BACKGROUND")
@@ -252,7 +278,7 @@ do
 		local overlay = button:CreateTexture(nil, "OVERLAY")
 		button.overlay = overlay
 
-		local cd = CreateFrame("Cooldown", icons:GetDebugName() .. 'ButtonCooldown' .. index, button, "CooldownFrameTemplate")
+		local cd = CreateFrame("Cooldown", icons:GetDebugName() .. "ButtonCooldown" .. index, button, "CooldownFrameTemplate")
 		cd:SetReverse(true)
 		cd:SetAllPoints(button)
 		button.cd = cd
@@ -264,8 +290,8 @@ do
 
 		local stealable = button:CreateTexture(nil, "OVERLAY")
 		stealable:SetTexture("Interface\\TargetingFrame\\UI-TargetingFrame-Stealable")
-		stealable:SetPoint("TOPLEFT", icon, "TOPLEFT")
-		stealable:SetPoint("BOTTOMRIGHT", icon, "BOTTOMRIGHT")
+		stealable:SetPoint("TOPLEFT", button, "TOPLEFT")
+		stealable:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT")
 		stealable:SetBlendMode("ADD")
 		button.stealable = stealable
 
@@ -277,11 +303,16 @@ do
 		local unit = icons:GetParent().unit
 
 		if (unit == "player") then
-			button:SetScript("OnClick", function(self)
-				if (InCombatLockdown()) then return end
+			button:SetScript(
+				"OnClick",
+				function(self)
+					if (InCombatLockdown()) then
+						return
+					end
 
-				CancelUnitBuff(self.parent:GetParent().unit, self:GetID(), self.filter)
-			end)
+					CancelUnitBuff(self.parent:GetParent().unit, self:GetID(), self.filter)
+				end
+			)
 		end
 
 		return button
@@ -303,7 +334,22 @@ do
 		end
 	end
 
-	local CustomFilter = function(element, unit, button, name, _, _, dtype, duration, _, caster, _, _, spellid, _, isBossDebuff)
+	local CustomFilter = function(
+		element,
+		unit,
+		button,
+		name,
+		_,
+		_,
+		dtype,
+		duration,
+		_,
+		caster,
+		_,
+		_,
+		spellid,
+		_,
+		isBossDebuff)
 		button.isPlayer = (caster == "player" or caster == "vehicle" or caster == "pet")
 		button.isFriendly = UnitCanAssist("player", unit)
 		button.isEnemy = UnitCanAttack("player", unit)
@@ -324,7 +370,7 @@ do
 				* Short term buffs on player/pet
 		--]]
 		if (button.filter == "HELPFUL") then
-			if (unit ~= "player" and unit ~= "pet" and unit ~= "vehicle" and duration > 0) then
+			if (unit ~= "player" and unit ~= "pet" and unit ~= "vehicle") then
 				if (T.db["frames"].auras.showBuffsOnFriends and button.isFriendly) then
 					return true
 				elseif (T.db["frames"].auras.showBuffsOnEnemies and button.isEnemy) then
@@ -370,7 +416,22 @@ do
 		return false
 	end
 
-	local CustomFilterLongBuffs = function(element, unit, button, name, _, _, dtype, duration, _, caster, _, _, spellid, _, isBossDebuff)
+	local CustomFilterLongBuffs = function(
+		element,
+		unit,
+		button,
+		name,
+		_,
+		_,
+		dtype,
+		duration,
+		_,
+		caster,
+		_,
+		_,
+		spellid,
+		_,
+		isBossDebuff)
 		button.isPlayer = (caster == "player" or caster == "vehicle" or caster == "pet")
 		button.isFriendly = UnitCanAssist("player", unit)
 		button.isEnemy = UnitCanAttack("player", unit)
@@ -404,7 +465,7 @@ do
 
 		debuffs.num = num
 		debuffs.size = size
-		debuffs.spacing	= spacing
+		debuffs.spacing = spacing
 		debuffs.initialAnchor = point
 		debuffs["growth-x"] = growthx
 		debuffs["growth-y"] = growthy
@@ -421,7 +482,7 @@ do
 	UF.AddBuffs = function(self, point, relativeFrame, relativePoint, ofsx, ofsy, num, size, spacing, growthx, growthy)
 		local buffsPerRow = T.db["frames"].auras.buffs_per_row[self.unit] or T.db["frames"].auras.buffs_per_row["other"]
 
-		local width	= (spacing * buffsPerRow) + (size * buffsPerRow)
+		local width = (spacing * buffsPerRow) + (size * buffsPerRow)
 		local height = (spacing * (num / buffsPerRow)) + (size * (num / buffsPerRow))
 
 		local buffs = CreateFrame("Frame", nil, self)
@@ -447,7 +508,7 @@ do
 
 	UF.AddLongBuffs = function(self, point, relativeFrame, relativePoint, ofsx, ofsy)
 		-- 16 per row, 2 rows, 24px size, 6px spacing
-		local width	= 480
+		local width = 480
 		local height = 60
 
 		local buffs = CreateFrame("Frame", nil, self)

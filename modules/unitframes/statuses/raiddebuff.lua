@@ -11,7 +11,11 @@ local UF = T:GetModule("UnitFrames")
 local I = UF:NewModule("StatusRaidDebuffs", "AceEvent-3.0")
 
 --
-local UnitAura, UnitIsVisible, UnitIsDeadOrGhost, GetSpellInfo = UnitAura, UnitIsVisible, UnitIsDeadOrGhost, GetSpellInfo
+local UnitAura, UnitIsVisible, UnitIsDeadOrGhost, GetSpellInfo =
+	UnitAura,
+	UnitIsVisible,
+	UnitIsDeadOrGhost,
+	GetSpellInfo
 local twipe = table.wipe
 
 --
@@ -20,19 +24,20 @@ local loadedCommon
 
 local debuff_list = {}
 
-local priority = 99
 local debuffTypeColor = {
-	["Magic"] 	= { r = 0.2, g = 0.6, b = 1.0 },
-	["Disease"] = { r = 0.6, g = 0.4, b = 0   },
-	["Poison"] 	= { r = 0,   g = 0.6, b = 1.0 },
-	["Curse"] 	= { r = 0.6, g = 0,   b = 1.0 }
+	["Magic"] = {r = 0.2, g = 0.6, b = 1.0},
+	["Disease"] = {r = 0.6, g = 0.4, b = 0},
+	["Poison"] = {r = 0, g = 0.6, b = 1.0},
+	["Curse"] = {r = 0.6, g = 0, b = 1.0}
 }
 
 --[[
 
 --]]
 local CommonDebuffs = function()
-	if (loadedCommon) then return end
+	if (loadedCommon) then
+		return
+	end
 
 	-- Mythic+
 	UF:AddRaidDebuff(true, 209858, 8, true) -- Necrotic Rot (affix)
@@ -95,7 +100,9 @@ end
 
 --]]
 local Update = function(self, event, unit)
-	if (unit and self.unit ~= unit) then return end
+	if (unit and self.unit ~= unit) then
+		return
+	end
 	unit = unit or self.unit
 
 	if (not UnitIsDeadOrGhost(unit)) then
@@ -108,7 +115,8 @@ local Update = function(self, event, unit)
 		local index = 1
 
 		while (true) do
-			local name, icon, count, dispelType, duration, expires, caster = UnitAura(unit, index, "HARMFUL")
+			local name, icon, count, dispelType, duration, expires, caster, _, _, _, _, isBossDebuff, wasCastByPlayer =
+				UnitAura(unit, index, "HARMFUL")
 
 			if (not name) then
 				break
@@ -142,19 +150,59 @@ local Update = function(self, event, unit)
 						d_flash2 = debuff.flash or nil
 					end
 				end
+			elseif (isBossDebuff or not wasCastByPlayer) then
+				d_priority = 1
+				d_name = name
+				d_icon = icon
+				d_start = expires - duration
+				d_duration = duration
+				d_count = count
+				d_color = dispelType and debuffTypeColor[dispelType] or nil
+				d_pulse = nil
+				d_flash = nil
 			end
 
 			index = index + 1
 		end
 
 		if (d_name) then
-			self:GainedStatus(unit, "status_raiddebuff", d_priority, d_color, d_icon, nil, nil, nil, d_start, d_duration, d_count, nil, d_pulse, d_flash)
+			self:GainedStatus(
+				unit,
+				"status_raiddebuff",
+				d_priority,
+				d_color,
+				d_icon,
+				nil,
+				nil,
+				nil,
+				d_start,
+				d_duration,
+				d_count,
+				nil,
+				d_pulse,
+				d_flash
+			)
 		else
 			self:LostStatus(unit, "status_raiddebuff")
 		end
 
 		if (d_name2) then
-			self:GainedStatus(unit, "status_raiddebuff2", d_priority2, d_color2, d_icon2, nil, nil, nil, d_start2, d_duration2, d_count2, nil, d_pulse2, d_flash2)
+			self:GainedStatus(
+				unit,
+				"status_raiddebuff2",
+				d_priority2,
+				d_color2,
+				d_icon2,
+				nil,
+				nil,
+				nil,
+				d_start2,
+				d_duration2,
+				d_count2,
+				nil,
+				d_pulse2,
+				d_flash2
+			)
 		else
 			self:LostStatus(unit, "status_raiddebuff2")
 		end

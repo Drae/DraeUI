@@ -4,7 +4,12 @@ local _, ns = ...
 local oUF = oUF or ns.oUF
 
 -- Localise a bunch of functions
-local UnitIsUnit, UnitAura, UnitThreatSituation, GetThreatStatusColor, DebuffTypeColor = UnitIsUnit, UnitAura, UnitThreatSituation, GetThreatStatusColor, DebuffTypeColor
+local UnitIsUnit, UnitAura, UnitThreatSituation, GetThreatStatusColor, DebuffTypeColor =
+	UnitIsUnit,
+	UnitAura,
+	UnitThreatSituation,
+	GetThreatStatusColor,
+	DebuffTypeColor
 
 local dispellPriority = {
 	["Magic"] = 4,
@@ -21,9 +26,11 @@ local GetDebuffType = function(unit)
 	while (true) do
 		local name, _, _, dtype = UnitAura(unit, index, "HARMFUL")
 
-		if (not name) then break end
+		if (not name) then
+			break
+		end
 
-		if (dtype and pr < dispellPriority[dtype]) then
+		if (dtype and dispellPriority[dtype] and pr < dispellPriority[dtype]) then
 			debuffType = dtype
 			pr = dispellPriority[dtype]
 		end
@@ -35,7 +42,9 @@ local GetDebuffType = function(unit)
 end
 
 local Update = function(self, event, unit)
-	if (unit and self.unit ~= unit) then return end
+	if (unit and self.unit ~= unit) then
+		return
+	end
 	unit = unit or self.unit
 
 	local sword = self.Sword
@@ -77,11 +86,11 @@ local Update = function(self, event, unit)
 end
 
 local Path = function(self, ...)
-	return (self.Sword.Override or Update) (self, ...)
+	return (self.Sword.Override or Update)(self, ...)
 end
 
 local ForceUpdate = function(element)
-	return Path(element.__owner, 'ForceUpdate', element.__owner.unit)
+	return Path(element.__owner, "ForceUpdate", element.__owner.unit)
 end
 
 local Enable = function(self, unit)
@@ -103,7 +112,7 @@ end
 local Disable = function(self)
 	local sword = self.Sword
 
-	if(sword) then
+	if (sword) then
 		self:UnregisterEvent("UNIT_AURA", Path)
 		self:UnregisterEvent("UNIT_THREAT_LIST_UPDATE", Path)
 		self:UnregisterEvent("PLAYER_TARGET_CHANGED", Path)
@@ -111,4 +120,4 @@ local Disable = function(self)
 	end
 end
 
-oUF:AddElement('Sword', Path, Enable, Disable)
+oUF:AddElement("Sword", Path, Enable, Disable)
