@@ -2,7 +2,6 @@
 
 
 --]]
-
 local _, ns = ...
 local oUF = ns.oUF or draeUF
 
@@ -15,32 +14,33 @@ local Smoothing = LibStub("LibCutawaySmooth-1.0", true)
 -- Default indicator positions
 local indicators = {
 	-- Icons
-	["CENTERICON"]		= { type = "icon",  width = 20, height = 20, at = "CENTER",      to = "CENTER",      offsetX = 0,  offsetY = -4},
-	["BOTTOMICON"]		= { type = "icon",  width = 18, height = 18, at = "CENTER",      to = "BOTTOM",      offsetX = 0,  offsetY = -3},
-	["TOPICON"]			= { type = "icon",  width = 18, height = 18, at = "CENTER",      to = "TOP",      	 offsetX = 0,  offsetY = 3},
-
+	["CENTERICON"] = {type = "icon", width = 20, height = 20, at = "CENTER", to = "CENTER", offsetX = 0, offsetY = -4},
+	["BOTTOMICON"] = {type = "icon", width = 18, height = 18, at = "CENTER", to = "BOTTOM", offsetX = 0, offsetY = -3},
+	["TOPICON"] = {type = "icon", width = 18, height = 18, at = "CENTER", to = "TOP", offsetX = 0, offsetY = 3},
 	-- Colour only indicators
-	["TOP"]				= { type = "color", width = 8,  height = 8,  at = "TOP",         to = "TOP",         offsetX = 0,  offsetY = 1},
-	["TOPR"]			= { type = "color", width = 8,  height = 8,  at = "TOP",         to = "TOP",         offsetX = -8, offsetY = 1},
-	["TOPL"]			= { type = "color", width = 8,  height = 8,  at = "TOP",         to = "TOP",         offsetX = 8,  offsetY = 1},
-
-	["TOPLEFT"] 		= { type = "color", width = 8,  height = 8,  at = "TOPLEFT",     to = "TOPLEFT",     offsetX = 0,  offsetY = 1},
-
-	["TOPRIGHTL"]		= { type = "color", width = 6,  height = 6,  at = "TOPRIGHT",    to = "TOPRIGHT",    offsetX = -6,  offsetY = 1},
-	["TOPRIGHT"]		= { type = "color", width = 8,  height = 8,  at = "TOPRIGHT",    to = "TOPRIGHT",    offsetX = 1,  offsetY = 1},
-	["TOPRIGHTB"]		= { type = "color", width = 6,  height = 6,  at = "TOPRIGHT",    to = "TOPRIGHT",    offsetX = 1,  offsetY = -6},
-
-	["BOTTOM"] 			= { type = "color", width = 8,  height = 8,  at = "BOTTOM",      to = "BOTTOM",      offsetX = 0,  offsetY = -1},
-	["BOTTOML"] 		= { type = "color", width = 8,  height = 8,  at = "BOTTOM",      to = "BOTTOM",      offsetX = -8, offsetY = -1},
-	["BOTTOMR"] 		= { type = "color", width = 8,  height = 8,  at = "BOTTOM",      to = "BOTTOM",      offsetX = 8,  offsetY = -1},
-
-	["BOTTOMLEFT"]		= { type = "color", width = 8,  height = 8,  at = "BOTTOMLEFT",  to = "BOTTOMLEFT",  offsetX = 0,  offsetY = -1},
-
-	["LEFT"] 			= { type = "color", width = 8,  height = 8,  at = "LEFT",        to = "LEFT",        offsetX = 0,  offsetY = 0},
-	["LEFTT"]	 		= { type = "color", width = 8,  height = 8,  at = "LEFT",        to = "LEFT",        offsetX = 0,  offsetY = -8},
-	["LEFTB"]	 		= { type = "color", width = 8,  height = 8,  at = "LEFT",        to = "LEFT",        offsetX = 0,  offsetY = 8},
-
-	["RIGHT"] 			= { type = "color", width = 8,  height = 8,  at = "RIGHT",       to = "RIGHT",       offsetX = 1, offsetY = 0},
+	["TOP"] = {type = "color", width = 8, height = 8, at = "TOP", to = "TOP", offsetX = 0, offsetY = 1},
+	["TOPR"] = {type = "color", width = 8, height = 8, at = "TOP", to = "TOP", offsetX = -8, offsetY = 1},
+	["TOPL"] = {type = "color", width = 8, height = 8, at = "TOP", to = "TOP", offsetX = 8, offsetY = 1},
+	["TOPLEFT"] = {type = "color", width = 8, height = 8, at = "TOPLEFT", to = "TOPLEFT", offsetX = 0, offsetY = 1},
+	["TOPRIGHTL"] = {type = "color", width = 6, height = 6, at = "TOPRIGHT", to = "TOPRIGHT", offsetX = -6, offsetY = 1},
+	["TOPRIGHT"] = {type = "color", width = 8, height = 8, at = "TOPRIGHT", to = "TOPRIGHT", offsetX = 1, offsetY = 1},
+	["TOPRIGHTB"] = {type = "color", width = 6, height = 6, at = "TOPRIGHT", to = "TOPRIGHT", offsetX = 1, offsetY = -6},
+	["BOTTOM"] = {type = "color", width = 8, height = 8, at = "BOTTOM", to = "BOTTOM", offsetX = 0, offsetY = -1},
+	["BOTTOML"] = {type = "color", width = 8, height = 8, at = "BOTTOM", to = "BOTTOM", offsetX = -8, offsetY = -1},
+	["BOTTOMR"] = {type = "color", width = 8, height = 8, at = "BOTTOM", to = "BOTTOM", offsetX = 8, offsetY = -1},
+	["BOTTOMLEFT"] = {
+		type = "color",
+		width = 8,
+		height = 8,
+		at = "BOTTOMLEFT",
+		to = "BOTTOMLEFT",
+		offsetX = 0,
+		offsetY = -1
+	},
+	["LEFT"] = {type = "color", width = 8, height = 8, at = "LEFT", to = "LEFT", offsetX = 0, offsetY = 0},
+	["LEFTT"] = {type = "color", width = 8, height = 8, at = "LEFT", to = "LEFT", offsetX = 0, offsetY = -8},
+	["LEFTB"] = {type = "color", width = 8, height = 8, at = "LEFT", to = "LEFT", offsetX = 0, offsetY = 8},
+	["RIGHT"] = {type = "color", width = 8, height = 8, at = "RIGHT", to = "RIGHT", offsetX = 1, offsetY = 0}
 
 	-- Additional indicators are:
 	-- Border
@@ -125,7 +125,7 @@ local SetStatus_Icon = function(ind, data)
 	if (data.stack and data.color and type(data.color[1]) == "table") then
 		color = data.color[data.stack]
 	else
-		color = data.color or { 0, 0, 0, 1.0 }
+		color = data.color or {0, 0, 0, 1.0}
 	end
 
 	if (color) then
@@ -188,29 +188,35 @@ end
 local CreateIndicator = function(frame, indicator)
 	local ind = CreateFrame("Frame", nil, frame)
 
-	if (not indicators[indicator]) then return end
+	if (not indicators[indicator]) then
+		return
+	end
 
 	if (indicators[indicator].type == "color") then
 		ind:SetSize(indicators[indicator].width, indicators[indicator].height)
 
-		ind:SetBackdrop({
-			bgFile = "Interface\\BUTTONS\\WHITE8X8",
-			tile = true,
-			tileSize = 8,
-			edgeFile = "Interface\\BUTTONS\\WHITE8X8",
-			edgeSize = 1,
-			insets = { left = 1, right = 1, top = 1, bottom = 1},
-		})
+		ind:SetBackdrop(
+			{
+				bgFile = "Interface\\BUTTONS\\WHITE8X8",
+				tile = true,
+				tileSize = 8,
+				edgeFile = "Interface\\BUTTONS\\WHITE8X8",
+				edgeSize = 1,
+				insets = {left = 1, right = 1, top = 1, bottom = 1}
+			}
+		)
 
 		ind.SetJob = SetStatus_Indicator
 	elseif (indicators[indicator].type == "icon") then
 		ind:SetSize(indicators[indicator].width, indicators[indicator].height)
 
-		ind:SetBackdrop({
-			bgFile = "Interface\\BUTTONS\\WHITE8X8",
-			tile = true,
-			tileSize = 8,
-		})
+		ind:SetBackdrop(
+			{
+				bgFile = "Interface\\BUTTONS\\WHITE8X8",
+				tile = true,
+				tileSize = 8
+			}
+		)
 
 		local t = ind:CreateTexture(nil, "OVERLAY")
 		t:SetTexCoord(.1, .9, .1, .9)
@@ -245,19 +251,28 @@ local CreateIndicator = function(frame, indicator)
 
 	ind.flash = flash
 
-	ind:SetScript("OnHide", function()
-		if (ind.pulse:IsPlaying()) then
-			ind.pulse:Stop()
-		end
+	ind:SetScript(
+		"OnHide",
+		function()
+			if (ind.pulse:IsPlaying()) then
+				ind.pulse:Stop()
+			end
 
-		if (ind.flash:IsPlaying()) then
-			ind.flash:Stop()
+			if (ind.flash:IsPlaying()) then
+				ind.flash:Stop()
+			end
 		end
-	end)
+	)
 
 	ind:ClearAllPoints()
 	ind:SetFrameLevel(frame:GetFrameLevel() + 7)
-	ind:SetPoint(indicators[indicator].at, frame.Health, indicators[indicator].to, indicators[indicator].offsetX, indicators[indicator].offsetY)
+	ind:SetPoint(
+		indicators[indicator].at,
+		frame.Health,
+		indicators[indicator].to,
+		indicators[indicator].offsetX,
+		indicators[indicator].offsetY
+	)
 	ind:SetBackdropBorderColor(0, 0, 0, 1)
 	ind:SetBackdropColor(1, 1, 1, 1)
 	ind:Hide()
@@ -302,7 +317,7 @@ local SetIndicator = function(self, indicator, status)
 		self:CreateIndicator(indicator)
 	end
 
-	if  (self[indicator]) then
+	if (self[indicator]) then
 		if (self ~= self[indicator]) then
 			self[indicator]:Show()
 		end
@@ -314,7 +329,7 @@ local SetIndicator = function(self, indicator, status)
 end
 
 local ClearIndicator = function(self, indicator, status)
-	if  (self[indicator]) then
+	if (self[indicator]) then
 		if self[indicator].ClearJob then
 			self[indicator]:ClearJob()
 		elseif (self ~= self[indicator]) then
@@ -353,8 +368,25 @@ local GainedStatus
 do
 	local cached
 
-	GainedStatus = function(self, unit, status, priority, color, texture, text, value, maxValue, start, duration, stack, notMine, pulse, flash)
-		if (unit and self.unit ~= unit) then return end
+	GainedStatus = function(
+		self,
+		unit,
+		status,
+		priority,
+		color,
+		texture,
+		text,
+		value,
+		maxValue,
+		start,
+		duration,
+		stack,
+		notMine,
+		pulse,
+		flash)
+		if (unit and self.unit ~= unit) then
+			return
+		end
 		unit = unit or self.unit
 
 		local statuscache = self.statuscache
@@ -369,27 +401,25 @@ do
 
 		-- create cache for unit if needed
 		if (not statuscache[status]) then
-			statuscache[status] = { nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil }
+			statuscache[status] = {nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil}
 		end
 
 		cached = statuscache[status]
 
 		-- if no changes were made, return rather than triggering an event
-		if (cached
-			and cached.state == true
-			and cached.priority == priority
-			and cached.color == color
-			and cached.texture == texture
-			and cached.text == text
-			and cached.value == value
-			and cached.maxValue == maxValue
-			and cached.start == start
-			and cached.duration == duration
-			and cached.stack == stack
-			and cached.notMine == notMine
-			and cached.pulse == pulse
-			and cached.flash == flash)
-		then
+		if
+			(cached and cached.state == true and cached.priority == priority and cached.color == color and
+				cached.texture == texture and
+				cached.text == text and
+				cached.value == value and
+				cached.maxValue == maxValue and
+				cached.start == start and
+				cached.duration == duration and
+				cached.stack == stack and
+				cached.notMine == notMine and
+				cached.pulse == pulse and
+				cached.flash == flash)
+		 then
 			return
 		end
 
@@ -413,11 +443,15 @@ do
 end
 
 local LostStatus = function(self, unit, status)
-	if (unit and self.unit ~= unit) then return end
+	if (unit and self.unit ~= unit) then
+		return
+	end
 	unit = unit or self.unit
 
 	-- if status isn't cached or is not longer true don't update the indicator
-	if (not self.statuscache[status] or self.statuscache[status].state == false) then return end
+	if (not self.statuscache[status] or self.statuscache[status].state == false) then
+		return
+	end
 
 	self.statuscache[status].state = false
 
@@ -428,10 +462,14 @@ end
 
 --]]
 local CoreUpdate = function(frame, event)
-	if (not frame.unit) then return end
+	if (not frame.unit) then
+		return
+	end
 
 	local guid = UnitGUID(frame.unit)
-	if (not guid) then return end
+	if (not guid) then
+		return
+	end
 
 	if (not oUF.frames) then
 		oUF.frames = {}
@@ -451,9 +489,9 @@ local StyleDrae_Raid = function(frame, unit)
 	frame:SetScript("OnEnter", FrameOnEnter)
 	frame:SetScript("OnLeave", FrameOnLeave)
 
-	frame.Range	= {
-		insideAlpha	= 1.0,
-		outsideAlpha = 0.25,
+	frame.Range = {
+		insideAlpha = 1.0,
+		outsideAlpha = 0.25
 	}
 
 	local baseLevel = frame:GetFrameLevel()
@@ -503,8 +541,8 @@ local StyleDrae_Raid = function(frame, unit)
 	end
 
 	hp.colorClassPet = T.db["raidframes"].colorPet
-	hp.colorCharmed	= T.db["raidframes"].colorCharmed
-	hp.Override	= UF.UpdateRaidHealth -- override the oUF update
+	hp.colorCharmed = T.db["raidframes"].colorCharmed
+	hp.Override = UF.UpdateRaidHealth -- override the oUF update
 
 	hp.height = hp:GetHeight()
 
@@ -553,18 +591,18 @@ local StyleDrae_Raid = function(frame, unit)
 		absorbBar:SetPoint("BOTTOM", otherBar:GetStatusBarTexture(), "TOP")
 
 		-- Damage (shields/absorbs) greater than health
-		local overAbsorb = hp:CreateTexture(nil, "OVERLAY")
-		overAbsorb:SetTexture("Interface\\Buttons\\White8x8")
+		local overAbsorb = frame.Health:CreateTexture(nil, "OVERLAY")
+		overAbsorb:SetTexture("Interface/BUTTONS/WHITE8X8")
 		overAbsorb:SetColorTexture(1.0, 1.0, 1.0, 0.66) -- Always white
 		overAbsorb:SetBlendMode("ADD")
 		overAbsorb:SetPoint("LEFT")
 		overAbsorb:SetPoint("RIGHT")
 		overAbsorb:SetPoint("TOP")
-		overAbsorb:SetHeight(2)
+		overAbsorb:SetHeight(3)
 		overAbsorb:Hide()
 
 		-- Healing absorb greater than health
-		local overHealAbsorb = hp:CreateTexture(nil, "OVERLAY")
+		local overHealAbsorb = frame.Health:CreateTexture(nil, "OVERLAY")
 		overHealAbsorb:SetTexture("Interface\\Buttons\\White8x8")
 		overHealAbsorb:SetColorTexture(1.0, 0, 0, 0.66) -- Always red
 		overHealAbsorb:SetBlendMode("ADD")
@@ -582,7 +620,7 @@ local StyleDrae_Raid = function(frame, unit)
 			overAbsorb = overAbsorb,
 			overHealAbsorb = overHealAbsorb,
 			maxOverflow = 1.0,
-			frequentUpdates = true,
+			frequentUpdates = true
 		}
 	end
 
@@ -649,7 +687,7 @@ local StyleDrae_Raid = function(frame, unit)
 	lfdrole:SetTexture("Interface\\LFGFrame\\UI-LFG-ICON-PORTRAITROLES")
 	lfdrole:Hide()
 	lfdrole.Override = UF.OverrideGroupRoleIndicator
-	frame.GroupRoleIndicator  = lfdrole
+	frame.GroupRoleIndicator = lfdrole
 
 	-- Raid Icon - unit and target of unit
 	local raidIconFrame = CreateFrame("Frame", nil, hp)

@@ -2,7 +2,6 @@
 
 
 --]]
-
 local _, ns = ...
 local oUF = ns.oUF or oUF
 
@@ -12,80 +11,55 @@ local UF = T:GetModule("UnitFrames")
 
 -- Target frame
 local StyleDrae_Target = function(frame, unit, isSingle)
-
-	frame:SetSize(320, 70)
-	frame:SetHitRectInsets(0, 0, 23, 23)
+	frame:SetSize(250, 14)
+	--	frame:SetHitRectInsets(0, 0, 23, 23)
 	frame:SetFrameStrata("LOW")
 
 	UF.CommonInit(frame)
 
-	local framebg = frame:CreateTexture(nil, "BACKGROUND", nil, 0)
-	framebg:SetSize(512, 128)
-	framebg:SetPoint("CENTER", frame, "CENTER")
-	framebg:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\largeframe-bg")
-	framebg:SetTexCoord(1, 0, 0, 0.5)
+	frame.Sword = frame.Health
 
-	framebg.overlay = frame:CreateTexture(nil, "BACKGROUND", nil, 1)
-	framebg.overlay:SetSize(512, 128)
-	framebg.overlay:SetPoint("CENTER", frame, "CENTER")
-	framebg.overlay:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\largeframe-bg")
-	framebg.overlay:SetTexCoord(1, 0, 0.5, 1)
-	framebg.overlay:Hide()
+	frame.Health = UF.CreateHealthBar(frame, 250, 0, 0)
+	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "LEFT", -2, 15)
+	frame.Power = UF.CreatePowerBar(frame, 250, true, true)
 
-	frame.Sword = framebg
-
-	frame.Health = UF.CreateHealthBar(frame, 250, 16, -62, -23, true, true)
-	frame.Power = UF.CreatePowerBar(frame, 250, 5, true, true)
-
-	local portrait = frame:CreateTexture(nil, "BACKGROUND", nil, 1)
-	portrait:SetSize(56, 56)
-	portrait:SetPoint("TOPRIGHT", -3, -5)
-
-	frame.Portrait = portrait
-
-	local portraitOverlay = frame:CreateTexture(nil, "BACKGROUND", nil, 2)
-	portraitOverlay:SetSize(68, 68)
-	portraitOverlay:SetPoint("CENTER", portrait, "CENTER")
-	portraitOverlay:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\targetPortraitinner")
+	local level = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "RIGHT", 2, 15)
+	level:SetSize(190, 20)
+	frame:Tag(level, "[drae:afk] [drae:shortclassification][drae:unitcolour][name]|r | [level]")
 
 	-- Dragon texture on rare/elite
 	frame.Classification = {}
-
-	local dragonElite = frame:CreateTexture(nil, "BACKGROUND", nil, 3)
-	dragonElite:SetSize(128, 128)
-	dragonElite:SetPoint("CENTER", portrait, "CENTER")
-	dragonElite:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\target-elite")
-	dragonElite:SetTexCoord(1, 0, 0, 1)
-	dragonElite:Hide()
-	frame.Classification.elite = dragonElite
-
-	local dragonRare = frame:CreateTexture(nil, "BACKGROUND", nil, 3)
-	dragonRare:SetSize(128, 128)
-	dragonRare:SetPoint("CENTER", portrait, "CENTER")
-	dragonRare:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\target-rare")
-	dragonRare:SetTexCoord(1, 0, 0, 1)
-	dragonRare:Hide()
-	frame.Classification.rare = dragonRare
-
-	--[[
-
-	]]
-	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize2, T["media"].font, "LEFT", 2, 0)
-
-	local info = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "LEFT", 2, 22)
-	info:SetSize(210, 20)
-	frame:Tag(info, "[drae:shortclassification][drae:unitcolour][name][drae:afk]")
-
-	local level = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "RIGHT", -2, 22)
-	level:SetSize(40, 20)
-	frame:Tag(level, "[level]")
 
 	-- Flags for PvP, leader, etc.
 	UF.FlagIcons(frame, true)
 
 	-- Auras
-	UF.AddBuffs(frame, "TOPLEFT", frame.Power, "BOTTOMLEFT", 0, -12, T.db["frames"].auras.maxTargetBuff or 4, T.db["frames"].auras.auraLrg, 8, "RIGHT", "DOWN")
-	UF.AddDebuffs(frame, "TOPRIGHT", frame.Power, "BOTTOMRIGHT", 0, -12, T.db["frames"].auras.maxTargetDebuff or 15, T.db["frames"].auras.auraSml, 8, "LEFT", "DOWN")
+	UF.AddBuffs(
+		frame,
+		"TOPLEFT",
+		frame.Power,
+		"BOTTOMLEFT",
+		0,
+		-12,
+		T.db["frames"].auras.maxTargetBuff or 4,
+		T.db["frames"].auras.auraLrg,
+		8,
+		"RIGHT",
+		"DOWN"
+	)
+	UF.AddDebuffs(
+		frame,
+		"TOPRIGHT",
+		frame.Power,
+		"BOTTOMRIGHT",
+		0,
+		-12,
+		T.db["frames"].auras.maxTargetDebuff or 15,
+		T.db["frames"].auras.auraSml,
+		8,
+		"LEFT",
+		"DOWN"
+	)
 
 	-- Castbar
 	local cb = T.db["castbar"].target

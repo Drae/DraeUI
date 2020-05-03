@@ -74,16 +74,13 @@ UF.CommonPostInit = function(self, size, noRaidIcons)
 	}
 end
 
-UF.CreateHealthBar = function(self, width, height, x, y, point, reverse)
-	local hpborder = self:CreateTexture(nil, "BORDER", nil, 1)
-	hpborder:SetSize(width + 4, height + 4)
-	hpborder:SetPoint(point and "TOPRIGHT" or "TOPLEFT", self, point and "TOPRIGHT" or "TOPLEFT", x, y)
-	hpborder:SetTexture("Interface\\BUTTONS\\WHITE8X8")
-	hpborder:SetVertexColor(0.05, 0.05, 0.05)
+UF.CreateHealthBar = function(self, width, x, y, point, reverse)
+	local height = 7
 
 	local hpbg = self:CreateTexture(nil, "BORDER", nil, 0)
-	hpbg:SetSize(width + 2, height + 2)
-	hpbg:SetPoint("TOPLEFT", hpborder, "TOPLEFT", 1, -1)
+	hpbg:SetSize(width + 4, height + 4)
+	hpbg:SetPoint(point and "TOPRIGHT" or "TOPLEFT", self, point and "TOPRIGHT" or "TOPLEFT", x, y)
+	--	hpbg:SetPoint("TOPLEFT", hpborder, "TOPLEFT", 1, -1)
 	hpbg:SetTexture("Interface\\BUTTONS\\WHITE8X8")
 	hpbg:SetVertexColor(0, 0, 0)
 
@@ -91,9 +88,9 @@ UF.CreateHealthBar = function(self, width, height, x, y, point, reverse)
 	hp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
 	hp:SetReverseFill(reverse and true or false)
 	hp:SetSize(width, height)
-	hp:SetPoint("TOPLEFT", hpborder, "TOPLEFT", 2, -2)
+	hp:SetPoint("TOPLEFT", hpbg, "TOPLEFT", 2, -2)
 
-	hp.hpborder = hpborder
+	--	hp.hpborder = hpborder
 	hp.hpbg = hpbg
 
 	hp.colorClass = true
@@ -111,22 +108,14 @@ UF.CreateHealthBar = function(self, width, height, x, y, point, reverse)
 	return hp
 end
 
-UF.CreatePowerBar = function(self, width, height, point, reverse)
-	local ppborder = self:CreateTexture(nil, "BORDER", nil, 1)
-	ppborder:SetSize(width + 4, height + 4)
-	ppborder:SetPoint(
-		point and "TOPRIGHT" or "TOPLEFT",
-		self.Health.hpborder,
-		point and "BOTTOMRIGHT" or "BOTTOMLEFT",
-		0,
-		3
-	)
-	ppborder:SetTexture("Interface\\BUTTONS\\WHITE8X8")
-	ppborder:SetVertexColor(0.05, 0.05, 0.05)
+UF.CreatePowerBar = function(self, width, point, reverse)
+	local height = 3
+
+	local hpbg = self.Health.hpbg
 
 	local ppbg = self:CreateTexture(nil, "BORDER", nil, 0)
-	ppbg:SetSize(width + 2, height + 2)
-	ppbg:SetPoint("TOPLEFT", ppborder, "TOPLEFT", 1, -1)
+	ppbg:SetSize(width + 4, height + 4)
+	ppbg:SetPoint("TOPLEFT", hpbg, "BOTTOMLEFT", 0, 3)
 	ppbg:SetTexture("Interface\\BUTTONS\\WHITE8X8")
 	ppbg:SetVertexColor(0, 0, 0)
 
@@ -134,9 +123,8 @@ UF.CreatePowerBar = function(self, width, height, point, reverse)
 	pp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
 	pp:SetReverseFill(reverse and true or false)
 	pp:SetSize(width, height)
-	pp:SetPoint("TOPLEFT", ppborder, "TOPLEFT", 2, -2)
+	pp:SetPoint("TOPLEFT", ppbg, "TOPLEFT", 2, -2)
 
-	pp.ppborder = ppborder
 	pp.ppbg = ppbg
 
 	pp.Override = UF.OverridePower
@@ -194,25 +182,25 @@ end
 UF.FlagIcons = function(frame, reverse)
 	-- Leader icon
 	local leader = frame:CreateTexture(nil, "OVERLAY", 6)
-	leader:SetPoint("CENTER", frame.Portrait and frame.Portrait or frame, reverse and "TOPLEFT" or "TOPRIGHT", 0, -5)
+	leader:SetPoint("CENTER", frame, reverse and "TOPLEFT" or "TOPRIGHT", 0, -5)
 	leader:SetSize(16, 16)
 	frame.LeaderIndicator = leader
 
 	-- Assistant icon
 	local assistant = frame:CreateTexture(nil, "OVERLAY", 6)
-	assistant:SetPoint("CENTER", frame.Portrait and frame.Portrait or frame, reverse and "TOPLEFT" or "TOPRIGHT", 0, -5)
+	assistant:SetPoint("CENTER", frame, reverse and "TOPLEFT" or "TOPRIGHT", 0, -5)
 	assistant:SetSize(16, 16)
 	frame.AssistantIndicator = assistant
 
 	-- pvp icon
-	local pvp = frame:CreateTexture(nil, "OVERLAY", nil, 6)
-	pvp:SetSize(28, 28)
-	pvp:SetPoint("CENTER", frame.Portrait and frame.Portrait or frame, reverse and "TOPRIGHT" or "TOPLEFT", 0, -8)
+	local pvp = frame:CreateTexture(nil, "BACKGROUND", nil, 6)
+	pvp:SetSize(32, 32)
+	pvp:SetPoint("CENTER", frame, reverse and "TOPRIGHT" or "TOPLEFT", 2, 7)
 	frame.PvPIndicator = pvp
 
 	-- Dungeon role
 	local lfdRole = frame:CreateTexture(nil, "OVERLAY", 6)
-	lfdRole:SetPoint("CENTER", frame.Portrait and frame.Portrait or frame, reverse and "BOTTOMRIGHT" or "BOTTOMLEFT", 0, 0)
+	lfdRole:SetPoint("CENTER", frame, reverse and "BOTTOMRIGHT" or "BOTTOMLEFT", 0, 0)
 	lfdRole:SetSize(16, 16)
 	frame.GroupRoleIndicator = lfdRole
 end

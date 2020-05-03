@@ -12,25 +12,24 @@ local UF = T:GetModule("UnitFrames")
 
 -- Pet frame - this is the same as focus but we do this seperately so we can colour by happiness
 local StyleDrae_Pet = function(frame, unit, isSingle)
-	frame:SetSize(120, 47)
-	frame:SetHitRectInsets(0, 0, 0, 23)
+	frame:SetSize(150, 14)
 	frame:SetFrameStrata("LOW")
 
 	UF.CommonInit(frame)
 
-	frame.Health = UF.CreateHealthBar(frame, 120, 16, 0, 0)
-	frame.Power = UF.CreatePowerBar(frame, 120, 5)
+	frame.Health = UF.CreateHealthBar(frame, 150, 0, 0)
+	frame.Power = UF.CreatePowerBar(frame, 150)
 
 	frame.Health.colorClassPet = false
 	frame.Health.colorReaction = false
 
 	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "RIGHT", -2, 0)
 
-	local info = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "LEFT", -2, 22)
+	local info = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "LEFT", -2, 15)
 	info:SetSize(95, 20)
 	frame:Tag(info, "[drae:shortclassification][drae:unitcolour][name]")
 
-	local level = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "RIGHT", 2, 22)
+	local level = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "RIGHT", 2, 15)
 	level:SetSize(40, 20)
 	frame:Tag(level, "[level]")
 

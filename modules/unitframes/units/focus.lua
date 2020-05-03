@@ -12,24 +12,19 @@ local UF = T:GetModule("UnitFrames")
 
 -- Focus is a common frame type used for most other frames inc. pet, pettarget, etc.
 local StyleDrae_Focus = function(frame, unit, isSingle)
-	frame:SetSize(120, 47)
-	frame:SetHitRectInsets(0, 0, 0, 10)
+	frame:SetSize(150, 14)
 	frame:SetFrameStrata("LOW")
 
 	UF.CommonInit(frame)
 
-	frame.Health = UF.CreateHealthBar(frame, 120, 16, 0, 0)
-	frame.Power = UF.CreatePowerBar(frame, 120, 5)
+	frame.Health = UF.CreateHealthBar(frame, 150, 0, 0)
+	frame.Power = UF.CreatePowerBar(frame, 150)
 
-	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "RIGHT", -2, 0)
+	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "LEFT", -2, 15)
 
-	local info = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "LEFT", -2, 22)
-	info:SetSize(95, 20)
-	frame:Tag(info, "[drae:shortclassification][drae:unitcolour][name]")
-
-	local level = T.CreateFontObject(frame.Health, T.db["general"].fontsize0, T["media"].font, "RIGHT", 2, 22)
-	level:SetSize(40, 20)
-	frame:Tag(level, "[level]")
+	local info = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "RIGHT", 2, 15)
+	info:SetSize(110, 20)
+	frame:Tag(info, "[drae:shortclassification][drae:unitcolour][name]|r | [level]")
 
 	-- Castbar
 	local cb = T.db["castbar"].focus
