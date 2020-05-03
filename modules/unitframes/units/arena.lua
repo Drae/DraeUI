@@ -12,14 +12,13 @@ local UF = T:GetModule("UnitFrames")
 
 -- Arena player frames - basically focus frames with castbars
 local StyleDrae_ArenaPlayers = function(frame, unit, isSingle)
-	frame:SetSize(120, 47)
-	frame:SetHitRectInsets(0, 0, 0, 10)
+	frame:SetSize(120, 14)
 	frame:SetFrameStrata("LOW")
 
 	UF.CommonInit(frame)
 
-	frame.Health = UF.CreateHealthBar(frame, 150, 16, 0, 0)
-	frame.Power = UF.CreatePowerBar(frame, 150, 5)
+	frame.Health = UF.CreateHealthBar(frame, 150, 0, 0)
+	frame.Power = UF.CreatePowerBar(frame, 150)
 
 	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "RIGHT", -2, 0)
 

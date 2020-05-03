@@ -178,10 +178,10 @@ UF.CreateCastBar = function(self, width, height, anchor, anchorAt, anchorTo, xOf
 	castbar.Spark = spark
 
 	-- Cast time
-	castbar.Time = T.CreateFontObject(castbar, T.db["general"].fontsize3, T["media"].font, "RIGHT", 0, height + 6)
+	castbar.Time = T.CreateFontObject(castbar, T.db["general"].fontsize3, T["media"].font, "RIGHT", 2, height + 6)
 
 	-- Spell name
-	castbar.Text = T.CreateFontObject(castbar, T.db["general"].fontsize3, T["media"].font, "LEFT", 0, height + 6)
+	castbar.Text = T.CreateFontObject(castbar, T.db["general"].fontsize3, T["media"].font, "LEFT", -2, height + 6)
 
 	local shield = castbar:CreateTexture(nil, "BACKGROUND", nil, 7)
 	shield:SetTexture("Interface\\TARGETINGFRAME\\PortraitQuestBadge")

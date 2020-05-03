@@ -39,34 +39,33 @@ oUF.Tags.Events["drae:unitcolour"] = "UNIT_FACTION UNIT_ENTERED_VEHICLE UNIT_EXI
 
 oUF.Tags.Methods["drae:afk"] = function(u)
 	if (UnitIsAFK(u)) then
-		return "|cffff0000 - AFK|r"
+		return "|cffff0000 AFK -|r"
 	elseif (UnitIsDND(u)) then
-		return "|cffff0000 - DND|r"
+		return "|cffff0000 DND -|r"
 	end
 end
 oUF.Tags.Events["drae:afk"] = "PLAYER_FLAGS_CHANGED"
 
 oUF.Tags.Methods["drae:power"] = function(u, t)
 	local _, str = UnitPowerType(u)
---	return ("%s%s|r"):format(T.Hex(oUF.colors.power[str] or {1, 1, 1}), T.ShortVal(oUF.Tags.Methods["curpp"](u)))
+	--	return ("%s%s|r"):format(T.Hex(oUF.colors.power[str] or {1, 1, 1}), T.ShortVal(oUF.Tags.Methods["curpp"](u)))
 	return ("|cffffffff%s|r"):format(T.ShortVal(oUF.Tags.Methods["curpp"](u)))
 end
 oUF.Tags.Events["drae:power"] = "UNIT_POWER UNIT_MAXPOWER"
 
-oUF.Tags.Methods["draeraid:name"] =  function(u, r)
+oUF.Tags.Methods["draeraid:name"] = function(u, r)
 	local name = UnitName(r or u) or "Unknown"
 
 	return T.UTF8(name, T.db["raidframes"].raidnamelength or 4, false) .. "|r"
 end
-oUF.Tags.Events["draeraid:name"] =  "UNIT_NAME_UPDATE UNIT_ENTERED_VEHICLE UNIT_EXITED_VEHICLE UNIT_PET"
+oUF.Tags.Events["draeraid:name"] = "UNIT_NAME_UPDATE UNIT_ENTERED_VEHICLE UNIT_EXITED_VEHICLE UNIT_PET"
 
 oUF.Tags.Methods["drae:shortclassification"] = function(u)
 	local c = UnitClassification(u)
-	if(c == 'rare') then
-		return '[R] '
-	elseif(c == 'minus') then
-		return '[-] '
+	if (c == "rare") then
+		return "[R] "
+	elseif (c == "minus") then
+		return "[-] "
 	end
 end
-oUF.Tags.Events["drae:shortclassification"] =  "UNIT_CLASSIFICATION_CHANGED"
-
+oUF.Tags.Events["drae:shortclassification"] = "UNIT_CLASSIFICATION_CHANGED"

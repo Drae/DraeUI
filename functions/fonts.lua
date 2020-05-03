@@ -36,7 +36,7 @@ T.UpdateBlizzardFonts = function(self)
 
 	local FontStandard = self["media"].font
 	local FontSmall = FontStandard
-	local FontFancy = self["media"].fontFancy
+	local FontFancy = FontStandard --self["media"].fontFancy
 
 	local SizeSmall    = 10
 	local SizeMedium   = 12

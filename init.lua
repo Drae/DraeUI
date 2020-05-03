@@ -92,7 +92,7 @@ T.UpdateMedia = function(self)
 	if (not self.db["general"]) then return end
 
 	self["media"].font = LSM:Fetch("font", self.db["general"].font)
-	self["media"].fontFancy = LSM:Fetch("font", self.db["general"].fontFancy)
+--	self["media"].fontFancy = LSM:Fetch("font", self.db["general"].fontFancy)
 
 	self["media"].statusbar = LSM:Fetch("statusbar", self.db["general"].statusbar)
 end

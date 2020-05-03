@@ -50,4 +50,4 @@ local Disable = function(self)
 	end
 end
 
-oUF:AddElement("Classification", Path, Enable, Disable)
+--oUF:AddElement("Classification", Path, Enable, Disable)
