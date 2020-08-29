@@ -91,9 +91,10 @@ UF["raiddebuffs"]["instances"]["Battle of Dazar'alor"] = function()
 	UF:AddRaidDebuff(true, 288051, 5) --Dragon's Breath
 
 	-- Oppulence
-	UF:AddRaidDebuff(true, 284556, 8, true) -- Shadow-Touched buff
-	UF:AddRaidDebuff(true, 284573, 7, true) -- Tailwinds buff
-	UF:AddRaidDebuff(true, 290654, 7, true) -- Soothing Breeze buff
+	UF:AddRaidDebuff(true, 284556, 9) -- Shadow-Touched buff
+	UF:AddRaidDebuff(true, 287424, 6) -- Thief's Bane
+--	UF:AddRaidDebuff(true, 284573, 7, true) -- Tailwinds buff
+--	UF:AddRaidDebuff(true, 290654, 7, true) -- Soothing Breeze buff
 	UF:AddRaidDebuff(true, 284470, 7, nil, true) -- Hex of Lethargy
 
 	-- Conclave
@@ -156,4 +157,13 @@ UF["raiddebuffs"]["instances"]["The Eternal Palace"] = function()
 	UF:AddRaidDebuff(true, 300492, 6) -- Static Shock
 	UF:AddRaidDebuff(true, 300743, 5, true) -- Void Touched
 	UF:AddRaidDebuff(true, 298569, 4, true) -- Drained Soul
+end
+
+-- Ny'alotha
+UF["raiddebuffs"]["instances"]["Ny'alotha, the Waking City"] = function()
+
+	-- Ra'den
+	UF:AddRaidDebuff(true, 306819, 9, nil, true) -- Nullifying Strike - let the tanks HP drop low with this
+	UF:AddRaidDebuff(true, 313227, 8) -- Decaying strike - heal them back up with this
+
 end
