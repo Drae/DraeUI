@@ -1,7 +1,7 @@
-## Interface: 80100
+## Interface: 90001
 ## Author: Drae
 ## Title: draeUI
-## Version: 3.1
+## Version: 9.0.1
 ## SavedVariables: draeUIDB
 ## SavedVariablesPerCharacter: draeUICharDB
 ## OptionalDeps: SharedMedia
