@@ -28,6 +28,7 @@ P["MONK"] = {
 			["dispel_curse"] = true,
 			["status_raiddebuff"] = true
 		},
+
 		["CENTERICON"] = {
 			["dispel_magic"] = true,
 			["dispel_disease"] = true,
@@ -35,35 +36,51 @@ P["MONK"] = {
 			["dispel_curse"] = true,
 			["status_raiddebuff"] = true
 		},
+
+        ["BOTTOMICON"] = {
+            ["status_raiddebuff2"] = true,
+        },
+
 		["TOPLEFT"] = {
 			["status_aggro"] = true
 		},
+
 		["TOPRIGHT"] = {
 			["status_incheal"] = true
 		},
+
 		["BOTTOM"] = {
 			["status_res"] = true
 		},
+
 		["Text2"] = {
 			["buff_feigndeath"] = true
 		},
+
 		["BOTTOMRIGHT"] = {},
+
 		["BOTTOMRIGHTL"] = {},
+
 		["TOPL"] = {
 			["buff_envelopingmist"] = true
 		},
+
 		["TOP"] = {
 			["buff_renewingmist"] = true
 		},
+
 		["TOPR"] = {
 			["buff_essencefont"] = true
 		},
+
 		["LEFT"] = {
 			["status_dmgred"] = true
 		},
+
 		["LEFTT"] = {
 			["buff_lifecocoon"] = true
 		},
+
 		["LEFTB"] = {
 			["buff_tigerslust"] = true
 		}
