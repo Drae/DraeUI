@@ -88,7 +88,7 @@ do
 				t:SetPoint("RIGHT", totem[i - 1], "LEFT", -8, 0)
 			end
 
-			local border = CreateFrame("Frame", nil, t)
+			local border = CreateFrame("Frame", nil, t, BackdropTemplateMixin and "BackdropTemplate")
 			border:SetPoint("TOPLEFT", t, -2, 2)
 			border:SetPoint("BOTTOMRIGHT", t, 2, -2)
 			border:SetFrameStrata("BACKGROUND")

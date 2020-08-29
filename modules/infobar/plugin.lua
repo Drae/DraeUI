@@ -201,7 +201,7 @@ local OnDragStop = function(self)
 end
 
 local CreateStatusBar = function(self, name, settings)
-	local bar = CreateFrame((settings.isStatusBar) and "StatusBar" or "Frame", nil, self)
+	local bar = CreateFrame((settings.isStatusBar) and "StatusBar" or "Frame", nil, self, BackdropTemplateMixin and "BackdropTemplate")
 
 	if (settings.isStatusBar) then
 		bar:SetStatusBarTexture(settings.texture)

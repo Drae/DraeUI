@@ -135,7 +135,7 @@ end
 		Create a castbar
 --]]
 UF.CreateCastBar = function(self, width, height, anchor, anchorAt, anchorTo, xOffset, yOffset, reverse)
-	local castbar = CreateFrame("StatusBar", nil, self)
+	local castbar = CreateFrame("StatusBar", nil, self, BackdropTemplateMixin and "BackdropTemplate")
 	castbar:SetSize(width, height)
 	castbar:SetPoint(anchorAt, anchor, anchorTo, xOffset, yOffset)
 	castbar:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\Striped")
@@ -156,7 +156,7 @@ UF.CreateCastBar = function(self, width, height, anchor, anchorAt, anchorTo, xOf
 	castbar.PostCastInterrupted 	 = PostCastFailed
 
 	-- Border
-	local border = CreateFrame("Frame", nil, castbar)
+	local border = CreateFrame("Frame", nil, castbar, BackdropTemplateMixin and "BackdropTemplate")
 	border:SetPoint("TOPLEFT", -2, 2)
 	border:SetPoint("BOTTOMRIGHT", 2, -2)
 	border:SetFrameStrata("BACKGROUND")
@@ -223,7 +223,7 @@ do
 			end
 
 			--glowing borders
-			local border = CreateFrame("Frame", nil, _G[bar])
+			local border = CreateFrame("Frame", nil, _G[bar], BackdropTemplateMixin and "BackdropTemplate")
 			border:SetFrameStrata("BACKGROUND")
 			border:SetPoint("TOPLEFT", -2, 2)
 			border:SetPoint("BOTTOMRIGHT", 2, -2)

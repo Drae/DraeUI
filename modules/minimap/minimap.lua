@@ -127,7 +127,7 @@ MM.OnEnable = function(self)
 	MiniMapMailBorder:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\MiniMap-TrackingBorder")
 
 	-- The Pinger
-	pingFrame = CreateFrame("Frame", nil, Minimap)
+	pingFrame = CreateFrame("Frame", nil, Minimap, BackdropTemplateMixin and "BackdropTemplate")
 	pingFrame:SetBackdrop({
 		bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
 		edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",

@@ -80,7 +80,6 @@ modules\misc\autoinvite.lua
 # Blizzard
 modules\blizzard\init.lua
 modules\blizzard\alertframe.lua
-modules\blizzard\altpower.lua
 modules\blizzard\colorpicker.lua
 modules\blizzard\durability.lua
 modules\blizzard\gm.lua

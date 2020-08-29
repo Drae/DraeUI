@@ -99,7 +99,6 @@ UF.CreateHealthBar = function(self, width, x, y, point, reverse)
 	hp.colorDisconnected = true
 	hp.colorTapping = true
 	hp.colorReaction = true
-	hp.frequentUpdates = true
 
 	hp.PostUpdate = UF.PostUpdateHealth
 
@@ -133,8 +132,6 @@ UF.CreatePowerBar = function(self, width, point, reverse)
 	pp.colorPower = true
 
 	pp.__statusbartex = "Interface\\AddOns\\draeUI\\media\\statusbars\\striped"
-
-	pp.frequentUpdates = true
 
 	Smoothing:EnableBarAnimation(pp)
 
@@ -171,7 +168,6 @@ UF.CreateAdditionalPower = function(self, width, height, point, reverse)
 
 	ap.colorDisconnected = true
 	ap.colorPower = true
-	ap.frequentUpdates = true
 
 	Smoothing:EnableBarAnimation(ap)
 
@@ -246,7 +242,7 @@ do
 		button:SetWidth(icons.size or 16)
 		button:SetHeight(icons.size or 16)
 
-		local border = CreateFrame("Frame", icons:GetDebugName() .. "ButtonFrame" .. index, button)
+		local border = CreateFrame("Frame", icons:GetDebugName() .. "ButtonFrame" .. index, button, BackdropTemplateMixin and "BackdropTemplate")
 		border:SetPoint("TOPLEFT", button, -2, 2)
 		border:SetPoint("BOTTOMRIGHT", button, 2, -2)
 		border:SetFrameStrata("BACKGROUND")

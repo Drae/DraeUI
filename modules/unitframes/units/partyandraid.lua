@@ -186,7 +186,7 @@ end
 		Create the indicator frames
 --]]
 local CreateIndicator = function(frame, indicator)
-	local ind = CreateFrame("Frame", nil, frame)
+	local ind = CreateFrame("Frame", nil, frame, BackdropTemplateMixin and "BackdropTemplate")
 
 	if (not indicators[indicator]) then
 		return
@@ -497,7 +497,7 @@ local StyleDrae_Raid = function(frame, unit)
 	local baseLevel = frame:GetFrameLevel()
 
 	-- Frame edge glow
-	local border = CreateFrame("Frame", nil, frame)
+	local border = CreateFrame("Frame", nil, frame, BackdropTemplateMixin and "BackdropTemplate")
 	border:SetPoint("TOPLEFT", frame, -2, 2)
 	border:SetPoint("BOTTOMRIGHT", frame, 2, -2)
 	border:SetFrameStrata("BACKGROUND")
@@ -620,7 +620,6 @@ local StyleDrae_Raid = function(frame, unit)
 			overAbsorb = overAbsorb,
 			overHealAbsorb = overHealAbsorb,
 			maxOverflow = 1.0,
-			frequentUpdates = true
 		}
 	end
 

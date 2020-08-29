@@ -7,6 +7,8 @@ local T, C, G, P, U, _ = select(2, ...):UnPack()
 
 --]]
 local ChangeFont = function(obj, font, size, style, r, g, b, sr, sg, sb, sa, sox, soy)
+	if obj == nil then return end
+
 	local oldFont, oldSize, oldStyle  = obj:GetFont()
 
 	if not size then
