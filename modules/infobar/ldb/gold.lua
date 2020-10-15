@@ -78,13 +78,14 @@ LDB.OnEnter = function(self)
 	GameTooltip:AddLine(" ")
 	GameTooltip:AddDoubleLine("Total: ", T.IntToGold(totalGold, true), 1, 1, 1, 1, 1, 1)
 
+	local info
 	for i = 1, MAX_WATCHED_TOKENS do
-		local name, count, extraCurrencyType, icon, itemID = GetBackpackCurrencyInfo(i)
-		if name and i == 1 then
+		info = C_CurrencyInfo.GetBackpackCurrencyInfo(i)
+		if info.name and i == 1 then
 			GameTooltip:AddLine(" ")
 			GameTooltip:AddLine(CURRENCY)
 		end
-		if name and count then GameTooltip:AddDoubleLine(name, count, 1, 1, 1) end
+		if info.name and info.quantity then GameTooltip:AddDoubleLine(info.name, info.quantity, 1, 1, 1) end
 	end
 
 	GameTooltip:AddLine(" ")

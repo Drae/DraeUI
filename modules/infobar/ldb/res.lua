@@ -77,7 +77,7 @@ end
 RES.ZONE_CHANGED_NEW_AREA = function(self)
 	local _, instanceType = GetInstanceInfo()
 
-	if (instanceType == "raid") then
+	if (instanceType == "raid" or instanceType == "party") then
 		if (not inCombat) then
 			self:CancelTimer(updateResTimer)
 			self:CancelTimer(addResTimer)

@@ -85,16 +85,18 @@ end
 --[[
 
 ]]
-AT.UpdateAzerite = function(self)
-	local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem()
+AT.UpdateAzerite = function(self, event, unit)
+	if event == "UNIT_INVENTORY_CHANGED" and unit ~= 'player' then return end
 
-	if (not azeriteItemLocation) then
+	if (not C_AzeriteEmpoweredItem.IsHeartOfAzerothEquipped()) then
 		LDB.ShowPlugin = false
 
 		return
 	else
 		LDB.ShowPlugin = true
 	end
+
+	local azeriteItemLocation = C_AzeriteItem.FindActiveAzeriteItem()
 
 	local xp, totalLevelXP = C_AzeriteItem.GetAzeriteItemXPInfo(azeriteItemLocation)
 	local xpToNextLevel = totalLevelXP - xp
@@ -157,6 +159,7 @@ AT.OnInitialize = function(self)
 	self:RegisterEvent("AZERITE_ITEM_EXPERIENCE_CHANGED", "UpdateAzerite")
 	self:RegisterEvent("AZERITE_ITEM_POWER_LEVEL_CHANGED", "UpdateAzerite")
 	self:RegisterEvent("UNIT_INVENTORY_CHANGED", "UpdateAzerite")
+	self:RegisterEvent("PLAYER_EQUIPMENT_CHANGED", "UpdateAzerite")
 
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", "PlayerEnteringWorld")
 end
@@ -165,6 +168,7 @@ AT.OnDisable = function(self)
 	self:UnregisterEvent("AZERITE_ITEM_EXPERIENCE_CHANGED", "UpdateAzerite")
 	self:UnregisterEvent("AZERITE_ITEM_POWER_LEVEL_CHANGED", "UpdateAzerite")
 	self:UnregisterEvent("UNIT_INVENTORY_CHANGED", "UpdateAzerite")
+	self:UnregisterEvent("PLAYER_EQUIPMENT_CHANGED", "UpdateAzerite")
 
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD", "PlayerEnteringWorld")
 end
