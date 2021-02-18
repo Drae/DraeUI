@@ -175,6 +175,7 @@ end
 
 -- Create and set font
 T.CreateFontObject = function(parent, size, font, anchorAt, oX, oY, type, anchor, anchorTo)
+	local fo
 	if (parent:IsObjectType("EditBox") or parent:IsObjectType("FontString")) then
 		fo = parent
 	else
@@ -242,8 +243,23 @@ do
 	end
 end
 
-function print_r ( t )
-    local print_r_cache={}
+-- Search object for needle in haystack
+T.Contains = function(val, table)
+	for i = 1, #table do
+		if table[i] == val then
+			return true
+		end
+	end
+
+	return false
+end
+
+--[[
+
+]]
+T.Debug = function(self, t)
+    local print_r_cache = {}
+
     local function sub_print_r(t,indent)
         if (print_r_cache[tostring(t)]) then
             print(indent.."*"..tostring(t))
@@ -266,6 +282,7 @@ function print_r ( t )
             end
         end
     end
+
     if (type(t)=="table") then
         print(tostring(t).." {")
         sub_print_r(t,"  ")
@@ -273,5 +290,6 @@ function print_r ( t )
     else
         sub_print_r(t,"  ")
     end
+
     print()
 end
