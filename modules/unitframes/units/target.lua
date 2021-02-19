@@ -11,17 +11,17 @@ local UF = T:GetModule("UnitFrames")
 
 -- Target frame
 local StyleDrae_Target = function(frame, unit, isSingle)
-	frame:SetSize(250, 14)
-	--	frame:SetHitRectInsets(0, 0, 23, 23)
+	frame:SetSize(260, 14)
 	frame:SetFrameStrata("LOW")
 
 	UF.CommonInit(frame)
 
-	frame.Sword = frame.Health
+	UF.CreateHealthBar(frame, 260, 0, 0)
+	UF.CreatePowerBar(frame, 260)
+	UF.CreateUnitFrameBackground(frame)
+	UF.CreateUnitFrameHighlight(frame)
 
-	frame.Health = UF.CreateHealthBar(frame, 250, 0, 0)
-	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "LEFT", -2, 15)
-	frame.Power = UF.CreatePowerBar(frame, 250, true, true)
+	frame.Health.value = T.CreateFontObject(frame, T.db["general"].fontsize1, T["media"].font, "LEFT", -2, 15)
 
 	local level = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "RIGHT", 2, 15)
 	level:SetSize(190, 20)
@@ -34,32 +34,8 @@ local StyleDrae_Target = function(frame, unit, isSingle)
 	UF.FlagIcons(frame, true)
 
 	-- Auras
-	UF.AddBuffs(
-		frame,
-		"TOPLEFT",
-		frame.Power,
-		"BOTTOMLEFT",
-		0,
-		-12,
-		T.db["frames"].auras.maxTargetBuff or 4,
-		T.db["frames"].auras.auraLrg,
-		8,
-		"RIGHT",
-		"DOWN"
-	)
-	UF.AddDebuffs(
-		frame,
-		"TOPRIGHT",
-		frame.Power,
-		"BOTTOMRIGHT",
-		0,
-		-12,
-		T.db["frames"].auras.maxTargetDebuff or 15,
-		T.db["frames"].auras.auraSml,
-		8,
-		"LEFT",
-		"DOWN"
-	)
+	UF.AddBuffs(frame, "TOPLEFT", frame.Power, "BOTTOMLEFT", 0, -12, T.db["frames"].auras.maxTargetBuff or 8, T.db["frames"].auras.auraLrg, 8, "RIGHT", "DOWN")
+	UF.AddDebuffs(frame, "TOPRIGHT", frame.Power, "BOTTOMRIGHT", 0, -12, T.db["frames"].auras.maxTargetDebuff or 6, T.db["frames"].auras.auraSml, 8, "LEFT", "DOWN")
 
 	-- Castbar
 	local cb = T.db["castbar"].target

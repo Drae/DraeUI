@@ -17,13 +17,11 @@ local StyleDrae_FocusTarget = function(frame, unit, isSingle)
 
 	UF.CommonInit(frame)
 
-	local arrow = frame:CreateTexture(nil, "BACKGROUND", nil, 0)
-	arrow:SetSize(16, 32)
-	arrow:SetPoint("RIGHT", frame, "LEFT", -5, -2)
-	arrow:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\targetArrow")
-
-	frame.Health = UF.CreateHealthBar(frame, 150, 0, 0)
-	frame.Power = UF.CreatePowerBar(frame, 150)
+	UF.CreateHealthBar(frame, 150, 0, 0)
+	UF.CreatePowerBar(frame, 150)
+	UF.CreateUnitFrameBackground(frame)
+	UF.CreateUnitFrameHighlight(frame)
+	UF.CreateTargetArrow(frame)
 
 	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "RIGHT", 2, 15)
 

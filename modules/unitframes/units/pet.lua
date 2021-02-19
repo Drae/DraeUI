@@ -17,8 +17,10 @@ local StyleDrae_Pet = function(frame, unit, isSingle)
 
 	UF.CommonInit(frame)
 
-	frame.Health = UF.CreateHealthBar(frame, 150, 0, 0)
-	frame.Power = UF.CreatePowerBar(frame, 150)
+	UF.CreateHealthBar(frame, 150, 0, 0)
+	UF.CreatePowerBar(frame, 150)
+	UF.CreateUnitFrameBackground(frame)
+	UF.CreateUnitFrameHighlight(frame)
 
 	frame.Health.colorClassPet = false
 	frame.Health.colorReaction = false

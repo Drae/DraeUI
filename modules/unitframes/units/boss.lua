@@ -12,13 +12,15 @@ local UF = T:GetModule("UnitFrames")
 
 -- Boss frames - basically focus with classifications
 local StyleDrae_Boss = function(frame, unit, isSingle)
-	frame:SetSize(175, 14)
+	frame:SetSize(150, 14)
 	frame:SetFrameStrata("LOW")
 
 	UF.CommonInit(frame)
 
-	frame.Health = UF.CreateHealthBar(frame, 150, 0, 0)
-	frame.Power = UF.CreatePowerBar(frame, 150)
+	UF.CreateHealthBar(frame, 150, 0, 0)
+	UF.CreatePowerBar(frame, 150)
+	UF.CreateUnitFrameBackground(frame)
+	UF.CreateUnitFrameHighlight(frame)
 
 	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "RIGHT", -2, 0)
 
