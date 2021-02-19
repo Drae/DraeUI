@@ -34,15 +34,18 @@ local  T, C, G, P, U, _ = select(2, ...):UnPack()
 
 local LSM = LibStub("LibSharedMedia-3.0")
 
-T.HiddenFrame = CreateFrame("Frame")
-T.HiddenFrame:Hide()
-
 --
-T.TexCoords = {.08, .92, .08, .92}
+T.TexCoords = {.1, .9, .1, .9}
 
 --
 T.media = {}
 
+T.HiddenFrame = CreateFrame("Frame")
+T.HiddenFrame:Hide()
+
+--[[
+
+--]]
 T.OnInitialize = function(self)
 	--[[
 		C == config/.db.profile -> data stored under "name-realm" tables and available to all chars on this account
@@ -62,17 +65,30 @@ T.OnInitialize = function(self)
 	self:UpdateMedia()
 end
 
-
 local HideCommandBar = function()
 	OrderHallCommandBar:Hide()
 	OrderHallCommandBar:UnregisterAllEvents()
 	OrderHallCommandBar.Show = OrderHallCommandBar.Hide
 end
 
-T.HookAddons = function(self, event)
+T.ADDON_LOADED = function(self)
 	if (IsAddOnLoaded("Blizzard_OrderHallUI") and OrderHallCommandBar ~= nil) then
 		self:UnregisterEvent("ADDON_LOADED", "HookAddons")
 		HideCommandBar()
+	end
+
+	-- Hide ArenaUI
+	if (IsAddOnLoaded("Blizzard_ArenaUI") and T.db["frames"].showArena) then
+		Arena_LoadUI = function() end
+		SetCVar('showArenaEnemyFrames', '0', 'SHOW_ARENA_ENEMY_FRAMES_TEXT')
+
+		ArenaPrepFrames.Show = ArenaPrepFrames.Hide
+		ArenaPrepFrames:UnregisterAllEvents()
+		ArenaPrepFrames:Hide()
+
+		ArenaEnemyFrames.Show = ArenaEnemyFrames.Hide
+		ArenaEnemyFrames:UnregisterAllEvents()
+		ArenaEnemyFrames:Hide()
 	end
 end
 
@@ -80,19 +96,13 @@ T.OnEnable = function(self)
 	self:UpdateBlizzardFonts()
 	self:InitializeConsoleCommands()
 
-	-- Hide the guild hall command bar
-	if (not IsAddOnLoaded("Blizzard_OrderHallUI")) then
-		self:RegisterEvent("ADDON_LOADED", "HookAddons")
-	else
-		HideCommandBar()
-	end
+	self:RegisterEvent("ADDON_LOADED", "ADDON_LOADED")
+	T:ADDON_LOADED()
 end
 
 T.UpdateMedia = function(self)
 	if (not self.db["general"]) then return end
 
-	self["media"].font = LSM:Fetch("font", self.db["general"].font)
---	self["media"].fontFancy = LSM:Fetch("font", self.db["general"].fontFancy)
-
+	self["media"].font 		= LSM:Fetch("font", self.db["general"].font)
 	self["media"].statusbar = LSM:Fetch("statusbar", self.db["general"].statusbar)
 end
