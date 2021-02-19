@@ -9,42 +9,18 @@ local oUF = ns.oUF or oUF
 local T, C, G, P, U, _ = select(2, ...):UnPack()
 local UF = T:NewModule("UnitFrames", "AceEvent-3.0", "AceTimer-3.0")
 
-local mmax = math.max
+--
+local GetSpecialization, GetNumGroupMembers, GetRaidRosterInfo, InCombatLockdown = GetSpecialization, GetNumGroupMembers, GetRaidRosterInfo, InCombatLockdown
+local pairs = pairs
 
---[[
 
---]]
 -- Contains the raid headers
 UF.raidHeaders = {}
 UF.relPoint = ""
 
 -- Functions for instance specific raid debuffs
-UF["raiddebuffs"] = {
+UF.raiddebuffs = {
 	instances = {}
-}
-
-UF.dispellClasses = {
-	["PRIEST"] = {
-		["Magic"] = true
-	},
-	["SHAMAN"] = {
-		["Curse"] = true
-	},
-	["PALADIN"] = {
-		["Poison"] = true,
-		["Disease"] = true
-	},
-	["MAGE"] = {
-		["Curse"] = true
-	},
-	["DRUID"] = {
-		["Curse"] = true,
-		["Poison"] = true
-	},
-	["MONK"] = {
-		["Disease"] = true,
-		["Poison"] = true
-	}
 }
 
 local CheckSpec
@@ -63,28 +39,36 @@ do
 			return
 		end
 
+		-- Base dispel capabilities for each class regardless of spec
+		UF.dispellClasses = {}
+		UF.dispellClasses = {
+			["PRIEST"] = {
+				["Disease"] = true,
+				["Magic"] = true
+			},
+			["SHAMAN"] = {
+				["Curse"] = true
+			},
+			["PALADIN"] = {
+				["Poison"] = true,
+				["Disease"] = true
+			},
+			["MAGE"] = {
+				["Curse"] = true
+			},
+			["DRUID"] = {
+				["Curse"] = true,
+				["Poison"] = true
+			},
+			["MONK"] = {
+				["Disease"] = true,
+				["Poison"] = true
+			}
+		}
+
+		-- All healer classes can dispell magic
 		if (healerClasses[T.playerClass] and healerClasses[T.playerClass] == spec) then
-			UF.dispellClasses["SHAMAN"]["Disease"] = true
-			UF.dispellClasses["PALADIN"]["Disease"] = true
-			UF.dispellClasses["DRUID"]["Disease"] = true
-			UF.dispellClasses["MONK"]["Disease"] = true
-
-			T.Print("Indicators enabled for healer spec dispells")
-		elseif (T.playerClass == "PRIEST" and (spec == 1 or spec == 2)) then
-			UF.dispellClasses["PRIEST"]["Disease"] = true
-
-			T.Print("Indicators enabled for healer spec dispells")
-		else
-			if (T.playerClass == "PRIEST") then
-				UF.dispellClasses["PRIEST"]["Disease"] = nil
-			else
-				UF.dispellClasses["SHAMAN"]["Disease"] = nil
-				UF.dispellClasses["PALADIN"]["Disease"] = nil
-				UF.dispellClasses["DRUID"]["Disease"] = nil
-				UF.dispellClasses["MONK"]["Disease"] = nil
-			end
-
-			T.Print("Indicators disabled for healer spec dispells")
+			UF.dispellClasses[T.playerClass]["Magic"] = true
 		end
 
 		UF.playerSpec = spec
@@ -99,7 +83,7 @@ local GetNumSubGroupsinRaid = function()
 	local numSubGroups, maxInSubGroup, currentGroup = 1, 0, 0
 
 	for i = 1, numRaidMembers do
-		name, _, groupNum = GetRaidRosterInfo(i)
+		local groupNum = select(3, GetRaidRosterInfo(i))
 
 		-- If we have no one in group 1 but people in groups 2 and 3
 		-- we _still_ treat it as a > 10 man group, so this works fine
@@ -120,8 +104,6 @@ local GetNumSubGroupsinRaid = function()
 end
 
 local CreateRaidAnchor = function(header, numSubGroups)
-	local scaled = 1
-
 	for i = numSubGroups, 1, -1 do
 		if (T.db["raidframes"].position[i]) then
 			header:SetPoint(unpack(T.db["raidframes"].position[i]))
@@ -180,67 +162,55 @@ end
 		Spawn the frames
 --]]
 UF.OnEnable = function(self)
-	BuffFrame:Kill()
-
 	CheckSpec()
+
+	-- Invert the statusmap table so we have a list of statuses and the indicators
+	-- to which they map
+	do
+		local inv = {}
+
+		for indicator, statuses in pairs(T.dbClass.statusmap) do
+			for status, priority in pairs(statuses) do
+				if (not inv[status]) then
+					inv[status] = {}
+				end
+
+				inv[status][indicator] = priority
+			end
+		end
+
+		UF.inverted_statusmap = inv
+	end
+
+	-- Disable certain blizzard frames
+	BuffFrame:Kill()
+	TemporaryEnchantFrame:Kill()
+	CompactRaidFrameContainer:Kill()
+	CompactRaidFrameManager:Kill()
 
 	-- Player
 	oUF:SetActiveStyle("DraePlayer")
-	oUF:Spawn("player", "DraePlayer"):SetPoint(
-		"CENTER",
-		UIParent,
-		T.db["frames"].playerXoffset,
-		T.db["frames"].playerYoffset
-	)
+	oUF:Spawn("player", "DraePlayer"):SetPoint("CENTER", UIParent, T.db["frames"].playerXoffset, T.db["frames"].playerYoffset)
 
 	-- Target
 	oUF:SetActiveStyle("DraeTarget")
-	oUF:Spawn("target", "DraeTarget"):SetPoint(
-		"CENTER",
-		UIParent,
-		T.db["frames"].targetXoffset,
-		T.db["frames"].targetYoffset
-	)
+	oUF:Spawn("target", "DraeTarget"):SetPoint("CENTER", UIParent, T.db["frames"].targetXoffset, T.db["frames"].targetYoffset)
 
 	-- Target of target
 	oUF:SetActiveStyle("DraeTargetTarget")
-	oUF:Spawn("targettarget", "DraeTargetTarget"):SetPoint(
-		"BOTTOMLEFT",
-		"DraeTarget",
-		"BOTTOMRIGHT",
-		T.db["frames"].totXoffset,
-		T.db["frames"].totYoffset
-	)
+	oUF:Spawn("targettarget", "DraeTargetTarget"):SetPoint("BOTTOMLEFT", "DraeTarget", "BOTTOMRIGHT", T.db["frames"].totXoffset, T.db["frames"].totYoffset)
 
 	-- Focus
 	oUF:SetActiveStyle("DraeFocus")
-	oUF:Spawn("focus", "DraeFocus"):SetPoint(
-		"BOTTOMRIGHT",
-		"DraeTarget",
-		"TOPRIGHT",
-		T.db["frames"].focusXoffset,
-		T.db["frames"].focusYoffset
-	)
+	oUF:Spawn("focus", "DraeFocus"):SetPoint("BOTTOMRIGHT", "DraeTarget", "TOPRIGHT", T.db["frames"].focusXoffset, T.db["frames"].focusYoffset)
 
 	-- Focus target
 	oUF:SetActiveStyle("DraeFocusTarget")
-	oUF:Spawn("focustarget", "DraeFocusTarget"):SetPoint(
-		"LEFT",
-		"DraeFocus",
-		"RIGHT",
-		T.db["frames"].focusTargetXoffset,
-		T.db["frames"].focusTargetYoffset
-	)
+	oUF:Spawn("focustarget", "DraeFocusTarget"):SetPoint("LEFT", "DraeFocus", "RIGHT", T.db["frames"].focusTargetXoffset, T.db["frames"].focusTargetYoffset)
 
 	-- Pet
 	oUF:SetActiveStyle("DraePet")
-	oUF:Spawn("pet", "DraePet"):SetPoint(
-		"BOTTOMRIGHT",
-		"DraePlayer",
-		"TOPRIGHT",
-		T.db["frames"].petXoffset,
-		T.db["frames"].petYoffset
-	)
+	oUF:Spawn("pet", "DraePet"):SetPoint("BOTTOMRIGHT", "DraePlayer", "TOPRIGHT", T.db["frames"].petXoffset, T.db["frames"].petYoffset)
 
 	-- Boss frames
 	if (T.db["frames"].showBoss) then
@@ -262,58 +232,48 @@ UF.OnEnable = function(self)
 
 	-- Arena and arena prep frames
 	if (T.db["frames"].showArena) then
-		oUF:SetActiveStyle("DraeArenaPlayer")
+		oUF:SetActiveStyle("DraeArena")
 
 		local arena = {}
 
 		for i = 1, 5 do
-			local frame = oUF:Spawn("arena" .. i, "DraeArenaPlayer" .. i)
+			local frame = oUF:Spawn("arena" .. i, "DraeArena" .. i)
 
 			if (i == 1) then
-				frame:SetPoint("LEFT", "DraePlayer", "LEFT", T.db["frames"].arenaXoffset, T.db["frames"].arenaYoffset)
+				frame:SetPoint("LEFT", "DraeTarget", "LEFT", T.db["frames"].arenaXoffset, T.db["frames"].arenaYoffset)
 			else
 				frame:SetPoint("BOTTOM", arena[i - 1], "TOP", 0, 35)
 			end
 
 			arena[i] = frame
 		end
-
-		Arena_LoadUI = function()
-		end
-
-		if (ArenaEnemyFrames) then
-			ArenaEnemyFrames.Show = ArenaEnemyFrames.Hide
-			ArenaEnemyFrames:UnregisterAllEvents()
-			ArenaEnemyFrames:Hide()
-		end
 	end
 
 	--[[
 		Raid and party frames
 	--]]
-	local visibility = "raid,party,solo"
 
 	-- Setup orientation and determine relative points and directions for groups
 	local xOffset, yOffset, point
 
 	if (T.db["raidframes"].gridLayout == "HORIZONTAL") then
 		if (T.db["raidframes"].gridGroupsAnchor == "TOPLEFT" or T.db["raidframes"].gridGroupsAnchor == "BOTTOMLEFT") then
-			xOffset = 6
+			xOffset = T.db["raidframes"].padding
 			yOffset = 0
 			point = "LEFT"
 		else
-			xOffset = -6
+			xOffset = -T.db["raidframes"].padding
 			yOffset = 0
 			point = "RIGHT"
 		end
 	else
 		if (T.db["raidframes"].gridGroupsAnchor == "TOPLEFT" or T.db["raidframes"].gridGroupsAnchor == "TOPRIGHT") then
 			xOffset = 0
-			yOffset = -4
+			yOffset = -T.db["raidframes"].padding
 			point = "TOP"
 		else
 			xOffset = 0
-			yOffset = 4
+			yOffset = T.db["raidframes"].padding
 			point = "BOTTOM"
 		end
 	end
@@ -327,14 +287,15 @@ UF.OnEnable = function(self)
 
 	local numSubGroups = GetNumSubGroupsinRaid()
 
+	local visibility = "raid,party"
+
 	-- Create raid headers
 	for i = 1, NUM_RAID_GROUPS do
 		local header =
 			oUF:SpawnHeader("DraeRaid" .. i, nil, visibility,
 			"showPlayer", true,
 			"showRaid",	true,
-			"oUF-initialConfigFunction",
-			([[
+			"oUF-initialConfigFunction",([[
 				self:SetWidth(%d)
 				self:SetHeight(%d)
 			]]):format(T.db["raidframes"].width, T.db["raidframes"].height),
@@ -364,7 +325,7 @@ UF.OnEnable = function(self)
 				yMult = 0
 			end
 
-			header:SetPoint(T.db["raidframes"].gridGroupsAnchor, self.raidHeaders[i - 1], relPoint, 8 * xMult, 8 * yMult)
+			header:SetPoint(T.db["raidframes"].gridGroupsAnchor, self.raidHeaders[i - 1], relPoint, T.db["raidframes"].padding * xMult, T.db["raidframes"].padding * yMult)
 		end
 
 		self.raidHeaders[i] = header
@@ -375,41 +336,25 @@ UF.OnEnable = function(self)
 		SetCVar("showPartyPets", 1)
 
 		local headerPet =
-			oUF:SpawnHeader(
-			"DraeRaidPet",
-			"SecureGroupPetHeaderTemplate",
-			visibility,
-			"showPlayer",
-			true,
-			"showRaid",
-			true,
+			oUF:SpawnHeader("DraeRaidPet", "SecureGroupPetHeaderTemplate", visibility,
+			"showPlayer", true,
+			"showRaid",	true,
 			"oUF-initialConfigFunction",
 			([[
 				self:SetWidth(%d)
 				self:SetHeight(%d)
-			]]):format(T.db["raidframes"].width, 25),
-			"initial-width",
-			T.db["raidframes"].width,
-			"initial-height",
-			25,
-			"xOffset",
-			xOffset, -- +ve for right, -ve for left
-			"yOffset",
-			yOffset,
-			"point",
-			point, -- RIGHT for growing right to left, LEFT for growing left to right
-			"sortMethod",
-			"NAME",
-			"sortDir",
-			"ASC", -- DESC for left to right, ASC for right to left
-			"unitsPerColumn",
-			5,
-			"maxColumns",
-			8,
-			"columnSpacing",
-			10,
-			"columnAnchorPoint",
-			colAnchor
+			]]):format(T.db["raidframes"].width, T.db["raidframes"].petHeight),
+			"initial-width", T.db["raidframes"].width,
+			"initial-height", T.db["raidframes"].petHeight,
+			"xOffset", xOffset, -- +ve for right, -ve for left
+			"yOffset", yOffset,
+			"point", point, -- RIGHT for growing right to left, LEFT for growing left to right
+			"sortMethod", "NAME",
+			"sortDir", "ASC", -- DESC for left to right, ASC for right to left
+			"unitsPerColumn", 5,
+			"maxColumns", 8,
+			"columnSpacing", T.db["raidframes"].padding,
+			"columnAnchorPoint", colAnchor
 		)
 
 		self.raidHeaders["pet"] = headerPet
@@ -419,15 +364,6 @@ UF.OnEnable = function(self)
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self:RegisterEvent("GROUP_ROSTER_UPDATE")
 	self:RegisterEvent("UNIT_PET")
-
-	-- Disable Blizz raid frames
-	CompactRaidFrameManager.Show = CompactRaidFrameManager.Hide
-	CompactRaidFrameManager:UnregisterAllEvents()
-	CompactRaidFrameManager:Hide()
-
-	CompactRaidFrameContainer.Show = CompactRaidFrameContainer.Hide
-	CompactRaidFrameContainer:UnregisterAllEvents()
-	CompactRaidFrameContainer:Hide()
 end
 
 --[[
@@ -443,16 +379,13 @@ UF.UpdateRaidLayout = function(self)
 
 	local numSubGroups = GetNumSubGroupsinRaid()
 
-	CreateRaidAnchor(self.raidHeaders[1], numSubGroups)
+	if (GetNumGroupMembers() > 0) then
+		CreateRaidAnchor(self.raidHeaders[1], numSubGroups)
 
-	if (T.db["raidframes"].showPets) then
-		self.raidHeaders["pet"]:SetPoint(
-			T.db["raidframes"].gridGroupsAnchor,
-			self.raidHeaders[numSubGroups],
-			self.relPoint,
-			0,
-			15
-		) -- Offset from the raid group
+		-- This is NOT generic for the config anchorpoint!
+		if (T.db["raidframes"].showPets) then
+			self.raidHeaders["pet"]:SetPoint(T.db["raidframes"].gridGroupsAnchor, self.raidHeaders[numSubGroups], self.relPoint, 0, T.db["raidframes"].petOffset) -- Offset from the raid group
+		end
 	end
 end
 
