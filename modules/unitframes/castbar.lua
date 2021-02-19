@@ -138,7 +138,7 @@ UF.CreateCastBar = function(self, width, height, anchor, anchorAt, anchorTo, xOf
 	local castbar = CreateFrame("StatusBar", nil, self, BackdropTemplateMixin and "BackdropTemplate")
 	castbar:SetSize(width, height)
 	castbar:SetPoint(anchorAt, anchor, anchorTo, xOffset, yOffset)
-	castbar:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\Striped")
+	castbar:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
 	castbar:SetStatusBarColor(0.5, 0.5, 1, 1)
 
 	--color
@@ -247,7 +247,7 @@ do
 			end
 
 			_G[bar.."Background"] = _G[bar]:CreateTexture(bar.."Background", "BACKGROUND", _G[bar])
-			_G[bar.."Background"]:SetTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\Striped")
+			_G[bar.."Background"]:SetTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
 			_G[bar.."Background"]:SetAllPoints(bar)
 			_G[bar.."Background"]:SetVertexColor(0, 0, 0, 0)
 
@@ -260,7 +260,7 @@ do
 			_G[bar.."TextTime"] = T.CreateFontObject(_G[bar.."StatusBar"], 10, T["media"].font, "RIGHT", -5, 1, "NONE") -- Our timer
 
 			_G[bar.."StatusBar"]:ClearAllPoints()
-			_G[bar.."StatusBar"]:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\Striped")
+			_G[bar.."StatusBar"]:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
 			_G[bar.."StatusBar"]:SetAllPoints(_G[bar])
 
 			local timeMsg = ""

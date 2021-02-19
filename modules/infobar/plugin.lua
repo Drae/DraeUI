@@ -284,8 +284,8 @@ Plugin.New = function(self, name, obj, settings)
 				if (obj["statusbar__" .. name .. "_min_max"]) then
 					_, _, min, max = string.find(obj["statusbar__" .. name .. "_min_max"], "(%d+),(%d+)")
 				else
-					obj["statusbar__" .. name .. "_min_max"] = "0,1"
-					min, max, hide = 0, 1
+					obj["statusbar__" .. name .. "_min_max"] = "0, 1"
+					min, max, hide = 0, 1, false
 				end
 
 				if (obj["statusbar__" .. name .. "_cur"]) then

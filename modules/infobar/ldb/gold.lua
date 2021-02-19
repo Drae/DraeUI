@@ -7,11 +7,7 @@ local T, C, G, P, U, _ = select(2, ...):UnPack()
 local IB = T:GetModule("Infobar")
 local COIN = IB:NewModule("Coin", "AceEvent-3.0", "AceTimer-3.0")
 
-local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeCoin", {
-	type = "draeUI",
-	icon = nil,
-	label = "DraeCoin",
-})
+local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeCoin", {type = "draeUI", icon = nil, label = "DraeCoin"})
 
 --[[
 
@@ -65,7 +61,7 @@ LDB.OnEnter = function(self)
 	GameTooltip:AddLine" "
 
 	local totalGold = 0
-	GameTooltip:AddLine("This RealIB: ")
+	GameTooltip:AddLine("This Realm: ")
 
 	for k, _ in pairs(db[T.playerRealm]) do
 		if (db[T.playerRealm][k]) then
@@ -81,11 +77,14 @@ LDB.OnEnter = function(self)
 	local info
 	for i = 1, MAX_WATCHED_TOKENS do
 		info = C_CurrencyInfo.GetBackpackCurrencyInfo(i)
-		if info.name and i == 1 then
-			GameTooltip:AddLine(" ")
-			GameTooltip:AddLine(CURRENCY)
+		if info ~= nil and info.name then
+			if i == 1 then
+				GameTooltip:AddLine(" ")
+				GameTooltip:AddLine(CURRENCY)
+			end
+
+			if info.quantity then GameTooltip:AddDoubleLine(info.name, info.quantity, 1, 1, 1) end
 		end
-		if info.name and info.quantity then GameTooltip:AddDoubleLine(info.name, info.quantity, 1, 1, 1) end
 	end
 
 	GameTooltip:AddLine(" ")

@@ -14,7 +14,7 @@ local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeAzerite", {
 		azerite = {
 			isStatusBar = true,
 			level = 2,
-			texture = "Interface\\AddOns\\draeUI\\media\\statusbars\\Striped",
+			texture = "Interface\\AddOns\\draeUI\\media\\statusbars\\striped",
 			position = {
 				{
 					anchorat = "TOPLEFT",
