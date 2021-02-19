@@ -10,7 +10,8 @@
 	<Script file="AceHook-3.0\AceHook-3.0.lua" />
 	<Script file="AceConsole-3.0\AceConsole-3.0.lua" />
 	<Script file="LibSharedMedia-3.0\LibSharedMedia-3.0.lua" />
-	<Script file="LibResInfo-1.0\LibResInfo-1.0.lua" />
 	<Script file="LibCutawaySmooth-1.0.lua" />
-	<Script file="LibChatAnims.lua" />
+	<Script file="LibSpellRange-1.0\LibSpellRange-1.0.lua" />
+	<Script file="LibCustomGlow-1.0\LibCustomGlow-1.0.lua" />
+	<Script file="LibGroupInSpecT-1.1\LibGroupInSpecT-1.1.lua" />
 </Ui>
