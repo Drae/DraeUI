@@ -124,10 +124,6 @@ RES.COMBAT_LOG_EVENT_UNFILTERED = function(self, ...)
 	local _, _, event, _, sGuid, name, _, _, tarGuid, tarName = ...
 
 	if (event == "SPELL_RESURRECT") then
-		if spellId == 126393 then -- Eternal Guardian
-			name = getPetOwner(name, sGuid)
-		end
-
 		theDead[tarName] = "br"
 		theRes[tarName] = name
 

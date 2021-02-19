@@ -12,7 +12,7 @@ local ceil, fmod = math.ceil, math.fmod
 
 --
 local knowncolor = { r = 0.1, g = 1.0, b = 0.2 }
-
+local IsBlizzard_AuctionUILoaded = false
 --[[
 
 --]]
@@ -214,7 +214,7 @@ local AuctionFrameAuctions_Update = function()
 end
 
 local HookAuctionframe = function()
-	isBlizzard_AuctionUILoaded = true
+	IsBlizzard_AuctionUILoaded = true
 
 	hooksecurefunc("AuctionFrameBrowse_Update", AuctionFrameBrowse_Update)
 	hooksecurefunc("AuctionFrameBid_Update", AuctionFrameBid_Update)
@@ -222,7 +222,7 @@ local HookAuctionframe = function()
 end
 
 local HookGuildBankFrame = function()
-	isBlizzard_GuildBankUILoaded = true
+	IsBlizzard_AuctionUILoaded = true
 
 	hooksecurefunc("GuildBankFrame_Update", GuildBankFrame_Update)
 end
@@ -235,7 +235,7 @@ M.HookAddons = function(self, event, addonName)
 		HookAuctionframe()
 	end
 
-	if (isBlizzard_GuildBankUILoaded and isBlizzard_AuctionUILoaded) then
+	if (IsBlizzard_AuctionUILoaded and IsBlizzard_AuctionUILoaded) then
 		self:UnregisterEvent("ADDON_LOADED")
 	end
 end

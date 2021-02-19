@@ -9,7 +9,7 @@ local TI = T:NewModule('AutoInvite', 'AceEvent-3.0')
 -- Local copies
 local _G = _G
 local GetNumGroupMembers, UnitIsGroupAssistant, UnitIsGroupLeader, IsInRaid = GetNumGroupMembers, UnitIsGroupAssistant, UnitIsGroupLeader, IsInRaid
-local ConvertToRaid, UnitInRaid, IsInInstance, SendChatMessage, InviteUnit = ConvertToRaid, UnitInRaid, IsInInstance, SendChatMessage, InviteUnit
+local ConvertToRaid, UnitInRaid, IsInInstance, SendChatMessage, InviteUnit = ConvertToRaid, UnitInRaid, IsInInstance, SendChatMessage, C_PartyInfo.InviteUnit
 local BNGetNumFriends, BNGetFriendInfo = BNGetNumFriends, BNGetFriendInfo
 local pairs, tremove, next, wipe = pairs, table.remove, next, wipe
 local BNET_CLIENT_WOW = BNET_CLIENT_WOW
@@ -139,6 +139,6 @@ TI.CHAT_MSG_WHISPER = function(self, event, msg, author)
 end
 
 TI.OnEnable = function(self)
-	self:RegisterEvent("CHAT_MSG_BN_WHISPER")
+--	self:RegisterEvent("CHAT_MSG_BN_WHISPER")
 	self:RegisterEvent("CHAT_MSG_WHISPER")
 end
