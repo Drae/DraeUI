@@ -8,17 +8,16 @@ local oUF = ns.oUF or draeUF
 local T, C, G, P, U, _ = unpack(select(2, ...))
 local UF = T:GetModule("UnitFrames")
 
-local I = UF:NewModule("StatusAggro")
+local Status = UF:NewModule("StatusAggro")
 
 --
-local UnitThreatSituation, GetThreatStatusColor = UnitThreatSituation, GetThreatStatusColor
+local UnitThreatSituation = UnitThreatSituation
 
 --
-local priority = 50
 local color = {
-	[1]	= { r = 1.0, g = 1.0, b = 0.47 },
-	[2]	= { r = 1.0, g = 0.6, b = 0    },
-	[3]	= { r = 1.0, g = 0,   b = 0    }
+	[1]	= { 0.4, 1.0, 0.0 },
+	[2]	= { 1.0, 0.6, 0.0 },
+	[3]	= { 1.0, 0.0, 0.0 }
 }
 
 --[[
@@ -31,21 +30,21 @@ local Update = function(self, event, unit)
 	local status = UnitThreatSituation(unit)
 
 	if (status and status > 0) then
-		self:GainedStatus(unit, "status_aggro", priority, color[status])
+		self:GainedStatus("status_aggro", color[status])
 	else
-		self:LostStatus(unit, "status_aggro")
+		self:LostStatus("status_aggro")
 	end
 end
 
 local Enable = function(self)
-	if (self.statuscache) then
+	if (self.__is_grid) then
 		self:RegisterEvent("UNIT_THREAT_SITUATION_UPDATE", Update)
 		return true
 	end
 end
 
 local Disable = function(self)
-	if (self.statuscache) then
+	if (self.__is_grid) then
 		self:UnregisterEvent("UNIT_THREAT_SITUATION_UPDATE", Update)
 	end
 end

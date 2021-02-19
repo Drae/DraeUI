@@ -8,79 +8,34 @@ local oUF = ns.oUF or draeUF
 local T, C, G, P, U, _ = unpack(select(2, ...))
 local UF = T:GetModule("UnitFrames")
 
-local I = UF:NewModule("StatusAuras")
+local Status = UF:NewModule("StatusAuras")
 
 -- Localise a bunch of functions
-local UnitAura, UnitDebuff, GetSpellInfo, UnitIsVisible, UnitIsDeadOrGhost = UnitAura, UnitDebuff, GetSpellInfo, UnitIsVisible, UnitIsDeadOrGhost
+local UnitAura, UnitIsDeadOrGhost = UnitAura, UnitIsDeadOrGhost
 local pairs = pairs
 
 --
-local buff_names = {}
-local player_buff_names = {}
-local debuff_names = {}
-
-local buff_names_seen = {}
-local player_buff_names_seen = {}
-local debuff_names_seen = {}
-local debuff_types_seen = {}
-
-local buff_names_seen_prev = {}
-local player_buff_names_seen_prev = {}
-local debuff_names_seen_prev = {}
-local debuff_types_seen_prev = {}
-
-local debuff_types = {
-	["Magic"] = "dispel_magic",
-	["Disease"] = "dispel_disease",
-	["Poison"] = "dispel_poison",
-	["Curse"] = "dispel_curse",
-}
+local aura_buffs = {}
+local aura_debuffs = {}
 
 --[[
 
 --]]
-local UpdateAuraList = function()
-	wipe(buff_names)
-	wipe(player_buff_names)
-	wipe(debuff_names)
+local UpdateIndicatorList = function()
+	local auras = T.dbClass["auras"]
+	if (not auras) then return end
 
-	wipe(buff_names_seen)
-	wipe(player_buff_names_seen)
-	wipe(debuff_names_seen)
-	wipe(debuff_types_seen)
+	wipe(aura_buffs)
+	wipe(aura_debuffs)
 
-	wipe(buff_names_seen_prev)
-	wipe(player_buff_names_seen_prev)
-	wipe(debuff_names_seen_prev)
-	wipe(debuff_types_seen_prev)
-
-	if (T.dbClass["auras"]) then
-		for status, settings in pairs(T.dbClass["auras"]) do
-			if (type(settings) == "table" and not settings.disable) then
-				local name = settings.buff or settings.debuff
-
-				if (name and not debuff_types[name]) then
-					local isBuff = not not settings.buff
-
-					if (isBuff) then
-						if (settings.mine) then
-							player_buff_names[name] = status
-							player_buff_names_seen[name] = false
-							player_buff_names_seen_prev[name] = false
-						else
-							buff_names[name] = status
-							buff_names_seen[name] = false
-							buff_names_seen_prev[name] = false
-						end
-					else
-						debuff_names[name] = status
-						debuff_names_seen[name] = false
-						debuff_names_seen_prev[name] = false
-					end
-				elseif (debuff_types[name]) then
-					debuff_types_seen[name] = false
-					debuff_types_seen_prev[name] = false
-				end
+	for status, aura in pairs(auras) do
+		if (not aura.disable) then
+			if (aura.buff) then
+				aura_buffs[aura.buff] = aura
+				aura_buffs[aura.buff]["status"] = status
+			elseif (aura.debuff) then
+				aura_debuffs[aura.debuff] = aura
+				aura_debuffs[aura.debuff]["status"] = status
 			end
 		end
 	end
@@ -89,227 +44,116 @@ end
 --[[
 
 --]]
-local UnitGainedBuff = function(self, unit, name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable)
-	local status = buff_names[name]
-	local settings = status and T.dbClass["auras"][status]
-
-	if (not settings) then return end
-
-	if (not settings.disable) then
-		local start = expirationTime and (expirationTime - duration)
-		local notMine = caster and caster ~= "player" and true or false
-
-		-- unit, status, priority, color, texture, text, value, maxValue, start, duration, stack, notMine, pulse, flash
-		self:GainedStatus(unit, status, settings.pr, settings.color, icon, settings.text, nil, nil, start, duration, count, notMine, settings.pulse, settings.flash)
-	else
-		self:LostStatus(unit, status)
-	end
-end
-
-local UnitLostBuff = function(self, unit, name)
-	local status = buff_names[name]
-
-	if (not T.dbClass["auras"][status]) then return end
-
-	self:LostStatus(unit, status)
-end
-
-local UnitGainedPlayerBuff = function(self, unit, name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable)
-	local status = player_buff_names[name]
-	local settings = T.dbClass["auras"][status]
-
-	if (not settings) then return end
-
-	if (not settings.disable) then
-		local start = expirationTime and (expirationTime - duration)
-
-		-- unit, status, priority, color, texture, text, value, maxValue, start, duration, stack, notMine, pulse, flash
-		self:GainedStatus(unit, status, settings.pr, settings.color, icon, settings.text, nil, nil, start, duration, count, nil, settings.pulse, settings.flash)
-	else
-		self:LostStatus(unit, status)
-	end
-end
-
-local UnitLostPlayerBuff = function(self, unit, name)
-	local status = player_buff_names[name]
-
-	if (not T.dbClass["auras"][status]) then return end
-
-	self:LostStatus(unit, status)
-end
-
-local UnitGainedDebuff = function(self, unit, name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable)
-	local status = debuff_names[name]
-	local settings = T.dbClass["auras"][status]
-
-	if (not settings) then return end
-
-	if (not settings.disable) then
-		local start = expirationTime and (expirationTime - duration)
-
-		-- unit, status, priority, color, texture, text, value, maxValue, start, duration, stack, notMine, pulse, flash
-		self:GainedStatus(unit, status, settings.pr, settings.color, icon, settings.text, nil, nil, start, duration, count, nil, settings.pulse, settings.flash)
-	else
-		self:LostStatus(unit, status)
-	end
-end
-
-local UnitLostDebuff = function(self, unit, name)
-	local status = debuff_names[name]
-
-	if (not T.dbClass["auras"][status]) then return end
-
-	self:LostStatus(unit, status)
-end
-
-local UnitGainedDebuffType = function(self, unit, name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable)
-	local status = debuffType and debuff_types[debuffType]
-	local settings = T.dbClass["auras"][status]
-
-	if (not settings) then return end
-
-	if (not settings.disable and ((UF.dispellClasses[T.playerClass] and UF.dispellClasses[T.playerClass][debuffType]) or not T.db["raidframes"].showOnlyDispellable)) then
-		local start = expirationTime and (expirationTime - duration)
-
-		-- unit, status, priority, color, texture, text, value, maxValue, start, duration, stack, notMine, pulse, flash
-		self:GainedStatus(unit, status, settings.pr, settings.color, icon, nil, nil, nil, start, duration, count, nil, settings.pulse, settings.flash)
-	else
-		self:LostStatus(unit, status)
-	end
-end
-
-local UnitLostDebuffType = function(self, unit, name)
-	local status = name and debuff_types[name]
-
-	if (not T.dbClass["auras"][status]) then return end
-
-	self:LostStatus(unit, status)
-end
-
---[[
-
---]]
-local ScanUnitAuras
+local Update
 do
-	local index, name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable
+	local index, name, texture, stack, duration, expires, caster
 
-	ScanUnitAuras = function(self, event, unit)
+	local player_buffs_seen = {}
+	local buffs_seen = {}
+	local debuffs_seen = {}
+
+	Update = function(self, event, unit)
 		if (unit and self.unit ~= unit) then return end
 		unit = unit or self.unit
 
-		if (UnitIsVisible(unit) and not UnitIsDeadOrGhost(unit)) then
-			-- scan for buffs
-
+		if (not UnitIsDeadOrGhost(unit)) then
+			-- Buffs
 			index = 1
 			while (true) do
-				name, icon, count, debuffType, duration, expirationTime, caster, isStealable = UnitBuff(unit, index, "HELPFUL")
+				name, texture, stack, _, duration, expires, caster = UnitAura(unit, index)
 
 				if (not name) then break end
 
-				for buff_name in pairs(buff_names) do
-					if (buff_name == name) then
-						buff_names_seen[name] = true
-						UnitGainedBuff(self, unit, name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable)
+				if (aura_buffs[name]) then
+					local aura = aura_buffs[name]
+
+					local start = expires and (expires - duration)
+
+					if (aura.mine and caster and caster == "player") then
+						player_buffs_seen[name] = true
+
+						-- status, color, texture, text, value, maxValue, start, duration, stack, notMine, pulse, flash
+						self:GainedStatus(aura.status, aura.color, texture, aura.text, nil, nil, start, duration, stack, nil, aura.pulse, aura.flash)
+					else
+						buffs_seen[name] = true
+
+						local notMine = caster and caster ~= "player" and true or false
+
+						-- status, color, texture, text, value, maxValue, start, duration, stack, notMine, pulse, flash
+						self:GainedStatus(aura.status, aura.color, texture, aura.text, nil, nil, start, duration, stack, notMine, aura.pulse, aura.flash)
 					end
 				end
 
 				index = index + 1
 			end
 
-			-- scan for buffs cast by the player
+			-- Debuffs
 			index = 1
 			while (true) do
-				name, icon, count, debuffType, duration, expirationTime, caster, isStealable = UnitBuff(unit, index, "HELPFUL|PLAYER")
+				name, texture, stack, _, duration, expires, caster = UnitAura(unit, index, "HARMFUL")
 
 				if (not name) then break end
 
-				for buff_name in pairs(player_buff_names) do
-					if (buff_name == name) then
-						player_buff_names_seen[name] = true
-						UnitGainedPlayerBuff(self, unit, name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable)
-					end
-				end
+				local start = expires and (expires - duration)
 
-				index = index + 1
-			end
+				if (aura_debuffs[name]) then
+					local aura = aura_debuffs[name]
 
-			-- scan for debuffs
-			index = 1
-			while (true) do
-				name, icon, count, debuffType, duration, expirationTime, caster, isStealable = UnitDebuff(unit, index)
+					debuffs_seen[name] = true
 
-				if (not name) then break end
-
-				if (debuff_names[name]) then
-					debuff_names_seen[name] = true
-					UnitGainedDebuff(self, unit, name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable)
-				elseif (debuff_types[debuffType]) then
-					debuff_types_seen[debuffType] = true
-					UnitGainedDebuffType(self, unit, name, rank, icon, count, debuffType, duration, expirationTime, caster, isStealable)
+					-- status, color, texture, text, value, maxValue, start, duration, stack, notMine, pulse, flash
+					self:GainedStatus(aura.status, aura.color, texture, aura.text, nil, nil, start, duration, stack, nil, aura.pulse, aura.flash)
 				end
 
 				index = index + 1
 			end
 		end
+
+		-- LostStatus will return if the status doesn't exist so this isn't
+		-- horribly inefficient
 
 		-- handle lost buffs
-		for name in pairs(buff_names_seen_prev) do
-			if (not buff_names_seen[name]) then
-				UnitLostBuff(self, unit, name)
-			else
-				buff_names_seen[name] = false
-				buff_names_seen_prev[name] = true
-			end
-		end
+		for name in pairs(aura_buffs) do
+			if (not player_buffs_seen[name] and not buffs_seen[name]) then
 
-		for name in pairs(player_buff_names_seen_prev) do
-			if (not player_buff_names_seen[name]) then
-				UnitLostPlayerBuff(self, unit, name)
-			else
-				player_buff_names_seen[name] = false
-				player_buff_names_seen_prev[name] = true
+				local status = aura_buffs[name]["status"]
+				self:LostStatus(status)
 			end
 		end
 
 		-- handle lost debuffs
-		for name in pairs(debuff_names_seen_prev) do
-			if (not debuff_names_seen[name]) then
-				UnitLostDebuff(self, unit, name)
-			else
-				debuff_names_seen[name] = false
-				debuff_names_seen_prev[name] = true
+		for name in pairs(aura_debuffs) do
+			if (not debuffs_seen[name]) then
+
+				local status = aura_debuffs[name]["status"]
+				self:LostStatus(status)
 			end
 		end
 
-		for debuffType in pairs(debuff_types_seen_prev) do
-			if (not debuff_types_seen[debuffType]) then
-				UnitLostDebuffType(self, unit, debuffType)
-			else
-				debuff_types_seen[debuffType] = false
-				debuff_types_seen_prev[debuffType] = true
-			end
-		end
+		wipe(player_buffs_seen)
+		wipe(buffs_seen)
+		wipe(debuffs_seen)
 	end
 end
 
 local Enable = function(self)
-	if (self.statuscache) then
-		self:RegisterEvent("UNIT_AURA", ScanUnitAuras)
+	if (self.__is_grid) then
+		self:RegisterEvent("UNIT_AURA", Update)
 		return true
 	end
 end
 
 local Disable = function(self)
-	if (self.statuscache) then
-		self:UnregisterEvent("UNIT_AURA", ScanUnitAuras)
+	if (self.__is_grid) then
+		self:UnregisterEvent("UNIT_AURA", Update)
 	end
 end
 
-oUF:AddElement("StatusAuras", ScanUnitAuras, Enable, Disable)
+oUF:AddElement("StatusAuras", Update, Enable, Disable)
 
 --[[
 
 --]]
-I.OnEnable = function(self)
-	UpdateAuraList()
+Status.OnEnable = function(self)
+	UpdateIndicatorList()
 end

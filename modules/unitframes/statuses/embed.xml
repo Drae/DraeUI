@@ -1,8 +1,12 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file="aggro.lua" />
 	<Script file="auras.lua" />
-	<Script file="dmgreduction.lua" />
+	<Script file="aggro.lua" />
+	<Script file="debuffs.lua" />
+	<Script file="dispells.lua" />
+	<Script file="defensives.lua" />
 	<Script file="healing.lua" />
-	<Script file="raiddebuff.lua" />
+	<Script file="power.lua" />
 	<Script file="res.lua" />
+	<Script file="stagger.lua" />
+	<Script file="summon.lua" />
 </Ui>
