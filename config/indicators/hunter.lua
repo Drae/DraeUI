@@ -7,59 +7,89 @@ local UF = T:GetModule("UnitFrames")
 
 P["HUNTER"] = {
 	auras = {
-		-- Common
-		["dispel_magic"] 		= { debuff = "Magic",	pr = 80, mine = false, color = { r = 0.2, g = 0.6, b = 1.0} },
-		["dispel_disease"] 		= { debuff = "Disease",	pr = 70, mine = false, color = { r = 0.6, g = 0.4, b = 0} },
-		["dispel_poison"] 		= { debuff = "Poison",	pr = 60, mine = false, color = { r = 0,   g = 0.6, b = 1.0} },
-		["dispel_curse"] 		= { debuff = "Curse",	pr = 50, mine = false, color = { r = 0.6, g = 0,   b = 1.0} },
-		["buff_feigndeath"]		= { buff = "Feign Death", pr = 50, mine = false, text = "FEIGN" },
+        -- Common
 
 		-- Specific
-		["buff_misdirection"] 	= { buff = "Misdirection",   pr = 5, mine = false, color = { r = 0, g = 0.4, b = 0.9 } },
+		["buff_misdirection"] 	= { buff = "Misdirection", mine = false, color = { 0.0, 0.4, 0.9 } },
 	},
 
 	statusmap = {
-		["Border"] = {
-			["dispel_magic"] = true,
-			["dispel_disease"] = true,
-			["dispel_poison"] = true,
-			["dispel_curse"] = true,
-			["status_raiddebuff"] = true,
+		["TEXT2"] = {
+			["alert_afk"] 		= 95,
+			["alert_dc"] 		= 95,
+			["alert_ghost"]		= 92,
+			["alert_feign"] 	= 90,
+			["alert_dead"] 		= 90,
+			["alert_charmed"] 	= 85,
+			["unit_vehicle"] 	= 81,
+			["unit_health"] 	= 80,
 		},
 
-		["CENTERICON"] = {
-			["dispel_magic"] = true,
-			["dispel_disease"] = true,
-			["dispel_poison"] = true,
-			["dispel_curse"] = true,
-			["status_raiddebuff"] = true,
-		},
-
-		["TOPLEFT"] = {
-			["status_aggro"] = true,
-		},
-
-		["TOPRIGHT"] = {
-			["status_incheal"] = true,
-		},
-
-		["BOTTOM"] = {
-            ["status_res"] = true,
-		},
-
-		["Text2"] = {
-			["buff_feigndeath"] = true,
-		},
-
-        ["LEFT"] = {
-            ["status_dmgred"] = true,
+        ["BORDER"] = {
+            ["status_raiddebuff_one"] 	= 90,
+            ["status_dispell"] 			= 80,
         },
 
-		["TOP"] = {
-			["buff_misdirection"] = true
+        ["CENTERICON"] = {
+            ["status_raiddebuff_one"] 	= 90,
+            ["status_dispell"] 			= 80,
+        },
+
+        ["BOTTOMICON"] = {
+            ["status_raiddebuff_two"] = 90,
+        },
+
+        ["TOPLEFT"] = {
+        },
+
+        ["TOPRIGHT"] = {
+            ["status_incheal"] = 90,
+        },
+
+		["TOPRIGHTL"] = {
 		},
 
-		["BOTTOMRIGHT"] = {
-		},
-	}
+        ["TOPRIGHTB"] = {
+        },
+
+        ["BOTTOM"] = {
+            ["status_summon"] 	= 70,
+            ["status_res"] 		= 80,
+        },
+
+        ["TOP"] = {
+            ["status_aggro"] = 90,
+        },
+
+        ["TOPL"] = {
+        },
+
+        ["TOPR"] = {
+        },
+
+        ["BOTTOMRIGHT"] = {
+        },
+
+        ["BOTTOMRIGHTL"] = {
+        },
+
+        ["BOTTOMRIGHTT"] = {
+        },
+
+        ["BOTTOMLEFT"] = {
+        },
+
+        ["LEFT"] = {
+        },
+
+        ["LEFTB"] = {
+        },
+
+        ["RIGHT"] = {
+        },
+
+		["RIGHTT"] = {
+			["buff_misdirection"] = 70
+		}
+    }
 }

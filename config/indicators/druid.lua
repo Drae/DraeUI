@@ -7,79 +7,95 @@ local UF = T:GetModule("UnitFrames")
 
 P["DRUID"] = {
 	auras = {
-		-- Common
-		["dispel_magic"] 	= { debuff = "Magic",	pr = 80, mine = false, color = { r = 0.2, g = 0.6, b = 1.0 } },
-		["dispel_disease"] 	= { debuff = "Disease",	pr = 70, mine = false, color = { r = 0.6, g = 0.4, b = 0   } },
-		["dispel_poison"] 	= { debuff = "Poison",	pr = 60, mine = false, color = { r = 0,   g = 0.6, b = 1.0 } },
-		["dispel_curse"] 	= { debuff = "Curse",	pr = 50, mine = false, color = { r = 0.6, g = 0,   b = 1.0 } },
-		["buff_feigndeath"]	= { buff = "Feign Death", pr = 50, mine = false, text = "FEIGN" },
+        -- Common
 
 		-- Specific
-		["buff_rejuvenation"] 	= { buff = "Rejuvenation", 	pr = 7, mine = true,  color = { r = 0.8, g = 0.8, b = 0.8 } },
-		["buff_wildgrowth"] 	= { buff = "Wild Growth", 	pr = 7, mine = true,  color = { r = 0.60, g = 0.20, b = 0.80 } },
-		["buff_lifebloom"] 		= { buff = "Lifebloom", 	pr = 7, mine = true,  color = { [1] = { r = 0.90, g = 0.00, b = 0.00 },
-																							[2] = { r = 0.90, g = 0.75, b = 0.00 },
-																							[3] = { r = 0.00, g = 0.90, b = 0.00 } } },
-		["buff_regrowth"] 		= { buff = "Regrowth", 		pr = 7, mine = true,  color = { r = 0, g = 0.4, b = 0.9 } },
+		["buff_rejuvenation"] 	= { buff = "Rejuvenation", 	mine = true,  color = { 0.8, 0.8, 0.8 } },
+		["buff_wildgrowth"] 	= { buff = "Wild Growth", 	mine = true,  color = { 0.6, 0.2, 0.8 } },
+		["buff_lifebloom"] 		= { buff = "Lifebloom", 	mine = true,  color = { 0.9, 0,   0   } },
+		["buff_regrowth"] 		= { buff = "Regrowth", 		mine = true,  color = { 0,   0.4, 0.9 } },
 	},
 
 	statusmap = {
-		["Border"] = {
-			["dispel_magic"] = true,
-			["dispel_disease"] = true,
-			["dispel_poison"] = true,
-			["dispel_curse"] = true,
-			["status_raiddebuff"] = true,
+		["TEXT2"] = {
+			["alert_afk"] 		= 95,
+			["alert_dc"] 		= 95,
+			["alert_ghost"]		= 92,
+			["alert_feign"] 	= 90,
+			["alert_dead"] 		= 90,
+			["alert_charmed"] 	= 85,
+			["unit_vehicle"] 	= 81,
+			["unit_health"] 	= 80,
 		},
 
-		["CENTERICON"] = {
-			["dispel_magic"] = true,
-			["dispel_disease"] = true,
-			["dispel_poison"] = true,
-			["dispel_curse"] = true,
-			["status_raiddebuff"] = true,
+        ["BORDER"] = {
+            ["status_raiddebuff_one"] 	= 90,
+            ["status_dispell"] 			= 80,
+        },
+
+        ["CENTERICON"] = {
+            ["status_raiddebuff_one"] 	= 90,
+            ["status_dispell"] 			= 80,
+        },
+
+        ["BOTTOMICON"] = {
+            ["status_raiddebuff_two"] = 90,
+        },
+
+        ["TOPLEFT"] = {
+        },
+
+        ["TOPRIGHT"] = {
+            ["status_incheal"] = 90,
+        },
+
+		["TOPRIGHTL"] = {
+			["buff_rejuvenation"] = 80,
 		},
 
-		["TOPLEFT"] = {
-			["status_aggro"] = true,
-		},
+        ["TOPRIGHTB"] = {
+        },
 
-		["TOPRIGHT"] = {
-			["status_incheal"] = true,
-		},
+        ["BOTTOM"] = {
+            ["status_summon"] 	= 70,
+            ["status_res"] 		= 80,
+        },
 
-		["BOTTOM"] = {
-            ["status_res"] = true,
-		},
+        ["TOP"] = {
+            ["status_aggro"] = 90,
+        },
 
-		["Text2"] = {
-			["buff_feigndeath"] = true,
-		},
+        ["TOPL"] = {
+        },
 
-		["BOTTOMRIGHT"] = {
-		},
+        ["TOPR"] = {
+        },
 
-		["BOTTOMRIGHTL"] = {
-		},
+        ["BOTTOMRIGHT"] = {
+        },
 
-		["BOTTOMRIGHTT"] = {
-		},
+        ["BOTTOMRIGHTL"] = {
+        },
 
-		["TOP"] = {
-			["buff_rejuvenation"] = true,
-		},
+        ["BOTTOMRIGHTT"] = {
+        },
 
-		["TOPL"] = {
-			["buff_wildgrowth"] = true,
-		},
+        ["BOTTOMLEFT"] = {
+        },
 
-		["TOPR"] ={
-			["buff_lifebloom"] = true,
-		},
+        ["LEFT"] = {
+        },
 
-		["RIGHT"] = {
-			["buff_regrowth"] = true,
-		},
-	}
+        ["LEFTB"] = {
+        },
+
+        ["RIGHT"] = {
+			["buff_lifebloom"] = 70,
+        },
+
+		["RIGHTT"] = {
+			["buff_regrowth"] = 80,
+		}
+    }
 }
 

@@ -5,14 +5,11 @@
 local T, C, G, P, U, _ = unpack(select(2, ...))
 local UF = T:GetModule("UnitFrames")
 
-P["WARRIOR"] = {
+P["WARLOCK"] = {
 	auras = {
         -- Common
 
 		-- Specific
-		["buff_battleshout"]  	= { buff = "Battle Shout", 	mine = false, color = { 0.0, 0.4, 1.0 } },  -- Attack Power
-		["buff_rallyingcry"] 	= { buff = "Rallying Cry", 	mine = true,  color = { 1.0, 1.0, 1.0 } },
-		["buff_vigilance"]   	= { buff = "Vigilance", 	mine = true,  color = { 1.0, 1.0, 1.0 } },
 	},
 
 	statusmap = {
@@ -49,7 +46,6 @@ P["WARRIOR"] = {
         },
 
 		["TOPRIGHTL"] = {
-			["buff_rallyingcry"] = 80,
 		},
 
         ["TOPRIGHTB"] = {
@@ -89,11 +85,9 @@ P["WARRIOR"] = {
         },
 
         ["RIGHT"] = {
-			["buff_vigilance"] = 80,
         },
 
 		["RIGHTT"] = {
-			["buff_battleshout"] = 80,
 		}
     }
 }
