@@ -7,7 +7,9 @@ local T, C, G, P, U, _ = select(2, ...):UnPack()
 local Roster = T:NewModule("Roster")
 
 --
-local UnitGUID = UnitGUID
+local UnitGUID, UnitName, UnitClass = UnitGUID, UnitName, UnitClass
+local UNKNOWN = UNKNOWN
+local select = select
 
 --
 local frames = {
@@ -16,8 +18,9 @@ local frames = {
 }
 
 local roster = {
-	unit = {},	-- unit to guid
-	guid = {}	-- guid to unit
+	unit 	= {},	-- unit to guid
+	guid 	= {},	-- guid to unit
+	class	= {}	-- unit to UnitClass
 }
 
 --[[
@@ -43,6 +46,10 @@ Roster.GetGuidToUnit = function(self, guid)
 	return roster.guid[guid] and roster.guid[guid] or nil
 end
 
+Roster.GetUnitClass = function(self, unit)
+	return roster.class[unit] and roster.class[unit] or nil
+end
+
 --[[
 	Hooks oUF PreUpdate of each raid header frame, this fires on creation and update,
 	here a bunch of stuff is done specific to this frame inc. storing info about
@@ -51,14 +58,22 @@ end
 --]]
 Roster.UpdateRoster = function(frame, event)
 	if (not frame.unit) then return end
-	local unit = frame.unit
 
 	local guid = UnitGUID(frame.unit)
 	if (not guid) then return end
+
+	local unit = frame.unit
+	local refUnit = unit:gsub("pet", "")
+
+	-- "pet"
+	if (refUnit == "") then
+		refUnit = "player"
+	end
 
 	frames.unit[unit] = frame
 	frames.guid[guid] = frame
 
 	roster.unit[unit] = guid
 	roster.guid[guid] = unit
+	roster.class[unit] = UnitName(refUnit) ~= UNKNOWN and select(2, UnitClass(refUnit))
 end
