@@ -17,6 +17,8 @@ oUF.colors.power["ENERGY"] 				= { 0.65, 0.63, 0.35 }
 oUF.colors.power["RUNES"] 				= { 0.55, 0.57, 0.61 }
 oUF.colors.power["RUNIC_POWER"] 		= { 0,    0.82, 1.0  }
 
+oUF.colors.power[0] = oUF.colors.power["MANA"] -- AdditionalPower
+
 oUF.colors.reaction[2] = { 1.0, 0,   0 }
 oUF.colors.reaction[4] = { 1.0, 1.0, 0 }
 oUF.colors.reaction[5] = { 0,   1.0, 0 }
