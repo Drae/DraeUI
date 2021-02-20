@@ -15,7 +15,7 @@ local CG = LibStub("LibCustomGlow-1.0", true)
 
 --
 local CreateFrame = CreateFrame
-local tsort, tinsert, unpack = table.sort, table.insert, unpack
+local tsort, tinsert, unpack, wipe = table.sort, table.insert, unpack, wipe
 
 -- Default indicator positions
 local indicators = {
