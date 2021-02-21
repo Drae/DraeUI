@@ -25,15 +25,11 @@ local StyleDrae_Pet = function(frame, unit, isSingle)
 	frame.Health.colorClassPet = false
 	frame.Health.colorReaction = false
 
-	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "RIGHT", -2, 0)
+	frame.Health.value = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "RIGHT", 2, 15)
 
 	local info = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "LEFT", -2, 15)
 	info:SetSize(95, 20)
 	frame:Tag(info, "[drae:shortclassification][drae:unitcolour][name]")
-
-	local level = T.CreateFontObject(frame.Health, T.db["general"].fontsize1, T["media"].font, "RIGHT", 2, 15)
-	level:SetSize(40, 20)
-	frame:Tag(level, "[level]")
 
 	-- Auras - just debuffs for target of target
 	UF.AddBuffs(frame, "BOTTOMLEFT", frame.Health, "TOPLEFT", 1, 28, T.db["frames"].auras.maxPetBuff or 2, T.db["frames"].auras.auraTny, 10, "RIGHT", "UP")
