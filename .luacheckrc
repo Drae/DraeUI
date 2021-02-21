@@ -47,8 +47,10 @@ read_globals = {
 	"GetLocale",
 	"GetLootMethod",
 	"GetNumArenaOpponentSpecs",
+	"GetNumGroupMembers",
 	"GetPartyAssignment",
 	"GetPetExperience",
+	"GetRaidRosterInfo",
 	"GetRaidTargetIndex",
 	"GetReadyCheckStatus",
 	"GetRuneCooldown",
@@ -74,6 +76,7 @@ read_globals = {
 	"IsUsableSpell",
 	"IsXPUserDisabled",
 	"LoadAddOn",
+	"SetCVar",
 	"UnitAffectingCombat",
 	"UnitAura",
 	"UnitBattlePetType",
@@ -195,5 +198,6 @@ read_globals = {
 	"MAX_PLAYER_LEVEL",
 	"MAX_RAID_MEMBERS",
 	"MAX_TOTEMS",
+	"NUM_RAID_GROUPS",
 	"STANDARD_TOTEM_PRIORITIES"
 }
