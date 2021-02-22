@@ -19,11 +19,8 @@ init.lua
 config\config.defaults.lua
 
 functions\colours.lua
-functions\fonts.lua
 functions\functions.lua
-functions\maths.lua
 functions\toolkit.lua
-functions\console.lua
 
 # Unitframes
 modules\unitframes\init.lua

@@ -6,37 +6,66 @@ local DraeUI = select(2, ...)
 
 -- Localise a bunch of functions
 local _G = _G
-local pairs, ipairs, format, match, gupper, gsub, floor, abs, type, unpack, mmax, mmin, floor = pairs, ipairs, string.format, string.match, string.upper, string.gsub, math.floor, math.abs, type, unpack, math.max, math.min, math.floor
+local pairs, format, match, gupper, gsub, type, unpack = pairs, string.format, string.match, string.upper, string.gsub, type, unpack
+local mmax, mmin, mfloor, mceil, mabs  = math.max, math.min, math.floor, math.ceil, math.abs
 local UIParent, CreateFrame, ToggleDropDownMenu = UIParent, CreateFrame, ToggleDropDownMenu
+local COPPER_PER_SILVER, SILVER_PER_GOLD = COPPER_PER_SILVER, SILVER_PER_GOLD
 
 --[[
-		General functions
+	Font functions
 --]]
-DraeUI.Print = function(...)
-	print("|cff33ff99draeUI:|r ", ...)
-end
 
--- Output an rgb hex string
-DraeUI.Hex = function (r, g, b, a)
-	if (type(r) == "table") then
-		if (r.r) then
-			r, g, b = r.r, r.g, r.b
-		else
-			r, g, b = unpack(r)
+-- Create and set font
+DraeUI.CreateFontObject = function(parent, size, font, anchorAt, oX, oY, type, anchor, anchorTo)
+	local fo
+	if (parent:IsObjectType("EditBox") or parent:IsObjectType("FontString")) then
+		fo = parent
+	else
+		fo = parent:CreateFontString(nil, "OVERLAY")
+	end
+
+	fo:SetFont(font, size, type or "THINOUTLINE")
+
+	if (anchor) then
+		fo:SetPoint(anchorAt, anchor, anchorTo, oX, oY)
+	else
+		fo:SetJustifyH(anchorAt or "LEFT")
+
+		if (oX or oY) then
+			fo:SetPoint(anchorAt or "LEFT", oX or 0, oY or 0)
 		end
 	end
 
-	return ("|c%02x%02x%02x%02x"):format((a or 1) * 255, r * 255, g * 255, b * 255)
+	return fo
 end
 
--- MB or KB
-DraeUI.MemFormat = function(num)
-	if (num > 1024) then
-		return format("%.2f MB", (num / 1024))
+--[[
+	Math functions
+--]]
+
+-- Reduce to nearest kilo value, e.g. 1,200,00 becomes 1.2M, 1450 becomes 1.45K
+DraeUI.ShortVal = function(value)
+	if (mabs(value) >= 1e6) then
+		return ("%.2fM"):format(value / 1e6):gsub("%.?0+([km])$", "%1")
+	elseif (mabs(value) >= 1e3 or value <= -1e3) then
+		return ("%.1fK"):format(value / 1e3):gsub("%.?0+([km])$", "%1")
 	else
-		return format("%.1f KB", floor(num))
+		return value
 	end
 end
+
+-- Round to nearest integer
+DraeUI.Round = function(num)
+	if (num >= 0) then
+		return mfloor(num + 0.5)
+	else
+		return mceil(num - 0.5)
+	end
+end
+
+--[[
+	String functions
+--]]
 
 -- UTF-8 encoding
 DraeUI.UTF8 = function(str, i, dots)
@@ -69,92 +98,31 @@ DraeUI.UTF8 = function(str, i, dots)
 	end
 end
 
--- Configuration/Alignment grid (stolen from Align!)
-do
-	local grid
-
-	DraeUI.AlignGridShow = function(self, gridSize)
-		if (not grid or (gridSize and grid.gridSize ~= gridSize)) then
-			self:AlignGridCreate(gridSize)
-		end
-
-		grid:Show()
-	end
-
-	DraeUI.AlignGridHide = function(self, gridSize)
-		if (not grid) then return end
-
-		grid:Hide()
-
-		if (gridSize and grid.gridSize ~= gridSize) then
-			self:AlignGridCreate(gridSize)
-		end
-	end
-
-	DraeUI.AlignGridToggle = function(self, gridSize)
-		if (grid and grid:IsVisible()) then
-			self:AlignGridHide(gridSize)
+-- Output an rgb hex string
+DraeUI.Hex = function (r, g, b, a)
+	if (type(r) == "table") then
+		if (r.r) then
+			r, g, b = r.r, r.g, r.b
 		else
-			self:AlignGridShow(gridSize)
+			r, g, b = unpack(r)
 		end
 	end
 
-	DraeUI.AlignGridCreate = function(self, gridSize)
-		if (not grid or (gridSize and grid.gridSize ~= gridSize)) then
-			grid = nil
+	return ("|c%02x%02x%02x%02x"):format((a or 1) * 255, r * 255, g * 255, b * 255)
+end
 
-			grid = CreateFrame("Frame", nil, UIParent)
-			grid:SetAllPoints(UIParent)
-		end
-
-		gridSize = gridSize or 128
-		grid.gridSize = gridSize
-
-		local size = 2
-		local width = DraeUI.screenWidth
-		local ratio = width / DraeUI.screenHeight
-		local height = DraeUI.screenHeight * ratio
-
-		local wStep = width / gridSize
-		local hStep = height / gridSize
-
-		for i = 0, gridSize do
-			local tx = grid:CreateTexture(nil, "BACKGROUND")
-
-			if (i == gridSize / 2 ) then
-				tx:SetColorTexture(1, 0, 0, 0.5)
-			else
-				tx:SetColorTexture(0, 0, 0, 0.5)
-			end
-
-			tx:SetPoint("TOPLEFT", grid, "TOPLEFT", i * wStep - (size / 2), 0)
-			tx:SetPoint("BOTTOMRIGHT", grid, "BOTTOMLEFT", i * wStep + (size / 2), 0)
-		end
-
-		height = DraeUI.screenHeight
-
-		do
-			local tx = grid:CreateTexture(nil, "BACKGROUND")
-			tx:SetColorTexture(1, 0, 0, 0.5)
-			tx:SetPoint("TOPLEFT", grid, "TOPLEFT", 0, -(height / 2) + (size / 2))
-			tx:SetPoint("BOTTOMRIGHT", grid, "TOPRIGHT", 0, -(height / 2 + size / 2))
-		end
-
-		for i = 1, floor((height / 2) / hStep) do
-			local tx = grid:CreateTexture(nil, "BACKGROUND")
-			tx:SetColorTexture(0, 0, 0, 0.5)
-
-			tx:SetPoint("TOPLEFT", grid, "TOPLEFT", 0, -(height / 2 + i * hStep) + (size / 2))
-			tx:SetPoint("BOTTOMRIGHT", grid, "TOPRIGHT", 0, -(height / 2 + i * hStep + size / 2))
-
-			tx = grid:CreateTexture(nil, "BACKGROUND")
-			tx:SetColorTexture(0, 0, 0, 0.5)
-
-			tx:SetPoint("TOPLEFT", grid, "TOPLEFT", 0, -(height / 2 - i * hStep) + (size / 2))
-			tx:SetPoint("BOTTOMRIGHT", grid, "TOPRIGHT", 0, -(height / 2 - i * hStep + size / 2))
-		end
+-- MB or KB
+DraeUI.MemFormat = function(num)
+	if (num > 1024) then
+		return format("%.2f MB", (num / 1024))
+	else
+		return format("%.1f KB", mfloor(num))
 	end
 end
+
+--[[
+	Colour functions
+--]]
 
 -- Smooth colour gradient between two r, g, b value
 DraeUI.ColorGradient = function(perc, ...)
@@ -173,53 +141,14 @@ DraeUI.ColorGradient = function(perc, ...)
 	return r1 + (r2 - r1) * relperc, g1 + (g2 - g1) * relperc, b1 + (b2 - b1) * relperc
 end
 
--- Create and set font
-DraeUI.CreateFontObject = function(parent, size, font, anchorAt, oX, oY, type, anchor, anchorTo)
-	local fo
-	if (parent:IsObjectType("EditBox") or parent:IsObjectType("FontString")) then
-		fo = parent
-	else
-		fo = parent:CreateFontString(nil, "OVERLAY")
-	end
-
-	fo:SetFont(font, size, type or "THINOUTLINE")
-
-	if (anchor) then
-		fo:SetPoint(anchorAt, anchor, anchorTo, oX, oY)
-	else
-		fo:SetJustifyH(anchorAt or "LEFT")
-
-		if (oX or oY) then
-			fo:SetPoint(anchorAt or "LEFT", oX or 0, oY or 0)
-		end
-	end
-
-	return fo
-end
-
--- Print out money in a nicely formatted way
-DraeUI.IntToGold = function(coins, showIcons)
-	local g = floor(coins / (COPPER_PER_SILVER * SILVER_PER_GOLD))
-	local s = floor((coins - (g * COPPER_PER_SILVER * SILVER_PER_GOLD)) / COPPER_PER_SILVER)
-	local c = coins % COPPER_PER_SILVER
-
-	local gText = showIcons and format("\124TInterface\\MoneyFrame\\UI-GoldIcon:%d:%d:1:0\124t", 12, 12) or "|cffffd700g|r"
-	local sText = showIcons and format("\124TInterface\\MoneyFrame\\UI-SilverIcon:%d:%d:1:0\124t", 12, 12) or "|cffc7c7cfs|r"
-	local cText = showIcons and format("\124TInterface\\MoneyFrame\\UI-CopperIcon:%d:%d:1:0\124t", 12, 12) or "|cffeda55fc|r"
-
-	if (g) then
-		return ("%d%s %d%s %d%s"):format(g or 0, gText, s or 0, sText, c or 0, cText)
-	elseif (s) then
-		return ("%d%s %d%s"):format(s or 0, sText, c or 0, cText)
-	else
-		return ("%d%s"):format(c or 0, cText)
-	end
-end
+--[[
+	Table/array functions
+--]]
 
 -- Search object for needle in haystack
 DraeUI.Contains = function(val, table)
 	for i = 1, #table do
-		if table[i] == val then
+		if (table[i] == val) then
 			return true
 		end
 	end
@@ -228,40 +157,46 @@ DraeUI.Contains = function(val, table)
 end
 
 --[[
+		Print/Output
+--]]
 
-]]
+-- Print to ChatFrame1
+DraeUI.Print = function(...)
+	print("|cff33ff99DraeUI:|r ", ...)
+end
+
 DraeUI.Debug = function(self, t)
     local print_r_cache = {}
 
-    local function sub_print_r(t,indent)
+    local function sub_print_r(t, indent)
         if (print_r_cache[tostring(t)]) then
-            print(indent.."*"..tostring(t))
+            print(indent .. "*" .. tostring(t))
         else
             print_r_cache[tostring(t)]=true
-            if (type(t)=="table") then
-                for pos,val in pairs(t) do
-                    if (type(val)=="table") then
-                        print(indent.."["..pos.."] => "..tostring(t).." {")
-                        sub_print_r(val,indent..string.rep(" ",string.len(pos)+8))
-                        print(indent..string.rep(" ",string.len(pos)+6).."}")
-                    elseif (type(val)=="string") then
-                        print(indent.."["..pos..'] => "'..val..'"')
+            if (type(t) == "table") then
+                for pos, val in pairs(t) do
+                    if (type(val) == "table") then
+                        print(indent .. "[" .. pos .. "] => " .. tostring(t) .. " {")
+                        sub_print_r(val,indent .. string.rep(" ", string.len(pos) + 8))
+                        print(indent .. string.rep(" ", string.len(pos) + 6) .. "}")
+                    elseif (type(val) == "string") then
+                        print(indent .. "[" .. pos .. '] => "' .. val .. '"')
                     else
-                        print(indent.."["..pos.."] => "..tostring(val))
+                        print(indent .. "[" .. pos .. "] => " .. tostring(val))
                     end
                 end
             else
-                print(indent..tostring(t))
+                print(indent .. tostring(t))
             end
         end
     end
 
-    if (type(t)=="table") then
+    if (type(t) == "table") then
         print(tostring(t).." {")
-        sub_print_r(t,"  ")
+        sub_print_r(t, "  ")
         print("}")
     else
-        sub_print_r(t,"  ")
+        sub_print_r(t, "  ")
     end
 
     print()
