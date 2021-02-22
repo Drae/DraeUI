@@ -2,7 +2,7 @@
 
 
 --]]
-local DraeUI, db, dbGlobal, dbClass, dbChar = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
 
 --[[
 		Default configuration settings
