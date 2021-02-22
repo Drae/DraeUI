@@ -1,14 +1,11 @@
 --[[
 		Ressurection
 --]]
-local _, ns = ...
-local oUF = ns.oUF or draeUF
+local DraeUI = select(2, ...)
+local oUF = DraeUI.oUF or oUF
 
---
-local T, C, G, P, U, _ = unpack(select(2, ...))
-local UF = T:GetModule("UnitFrames")
-local Roster = T:GetModule("Roster")
-
+local UF = DraeUI:GetModule("UnitFrames")
+local Roster = DraeUI:GetModule("Roster")
 local Status = UF:NewModule("StatusRes", "AceEvent-3.0", "AceTimer-3.0")
 
 --

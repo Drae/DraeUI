@@ -2,9 +2,9 @@
 
 
 --]]
-local T, C, G, P, U, _ = unpack(select(2, ...))
+local DraeUI = select(2, ...)
 
-T.defaults.class["MONK"] = {
+DraeUI.defaults.class["MONK"] = {
 	auras = {
 		["buff_renewingmist"] 	= { buff = "Renewing Mist", 	mine = true, color = { 0.0,  g = 1.0,  b = 0.0  } },
 		["buff_envelopingmist"] = { buff = "Enveloping Mist", 	mine = true, color = { 0.15, g = 0.87, b = 0.64 } },

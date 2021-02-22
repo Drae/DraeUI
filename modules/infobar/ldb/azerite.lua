@@ -2,9 +2,9 @@
 
 
 --]]
-local T, C, G, P, U, _ = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
 
-local IB = T:GetModule("Infobar")
+local IB = DraeUI:GetModule("Infobar")
 local AT = IB:NewModule("Azerite", "AceEvent-3.0")
 
 local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeAzerite", {
@@ -103,7 +103,7 @@ AT.UpdateAzerite = function(self, event, unit)
 	local currentLevel = C_AzeriteItem.GetPowerLevel(azeriteItemLocation)
 
 	local pct = (xp / totalLevelXP * 100) * 100
-	local r1, g1, b1 = T.ColorGradient(pct / 100 - 0.001, 1, 0, 0, 1, 1, 0, 0, 1, 0)
+	local r1, g1, b1 = DraeUI.ColorGradient(pct / 100 - 0.001, 1, 0, 0, 1, 1, 0, 0, 1, 0)
 
 	LDB.text = format('Azerite: %s / |cff%02x%02x%02x%s%%|r (%s) [%s]', ReadableNumber(xp), r1 * 255, g1 * 255, b1 * 255, floor(xp / totalLevelXP * 100), ReadableNumber(xpToNextLevel), currentLevel)
 

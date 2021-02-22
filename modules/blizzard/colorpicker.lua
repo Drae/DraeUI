@@ -2,9 +2,9 @@
 
 
 --]]
-local T, C, G, P, U, _ = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
 
-local B = T:GetModule("Blizzard")
+local B = DraeUI:GetModule("Blizzard")
 
 --
 local format, floor = string.format, math.floor
@@ -256,7 +256,7 @@ function B:EnhanceColorPicker()
 	b:SetScript(
 		"OnClick",
 		function()
-			local color = RAID_CLASS_COLORS[T.playerClass]
+			local color = RAID_CLASS_COLORS[DraeUI.playerClass]
 			ColorPickerFrame:SetColorRGB(color.r, color.g, color.b)
 			ColorSwatch:SetTexture(color.r, color.g, color.b)
 

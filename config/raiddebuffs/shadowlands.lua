@@ -1,6 +1,6 @@
 
-local T, C, G, P, U, _ = unpack(select(2, ...))
-local UF = T:GetModule("UnitFrames")
+local DraeUI = select(2, ...)
+local UF = DraeUI:GetModule("UnitFrames")
 
 -- Highmaul
 UF["raiddebuffs"]["instances"]["Castle Nathria"] = function()

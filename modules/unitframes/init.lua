@@ -2,12 +2,10 @@
 
 
 --]]
-local _, ns = ...
-local oUF = ns.oUF or oUF
+local DraeUI = select(2, ...)
+local oUF = DraeUI.oUF or oUF
 
---
-local T, C, G, P, U, _ = select(2, ...):UnPack()
-local UF = T:NewModule("UnitFrames", "AceEvent-3.0", "AceTimer-3.0")
+local UF = DraeUI:NewModule("UnitFrames", "AceEvent-3.0", "AceTimer-3.0")
 
 --
 local GetSpecialization, GetNumGroupMembers, GetRaidRosterInfo, InCombatLockdown = GetSpecialization, GetNumGroupMembers, GetRaidRosterInfo, InCombatLockdown
@@ -67,8 +65,8 @@ do
 		}
 
 		-- All healer classes can dispell magic
-		if (healerClasses[T.playerClass] and healerClasses[T.playerClass] == spec) then
-			UF.dispellClasses[T.playerClass]["Magic"] = true
+		if (healerClasses[DraeUI.playerClass] and healerClasses[DraeUI.playerClass] == spec) then
+			UF.dispellClasses[DraeUI.playerClass]["Magic"] = true
 		end
 
 		UF.playerSpec = spec
@@ -105,8 +103,8 @@ end
 
 local CreateRaidAnchor = function(header, numSubGroups)
 	for i = numSubGroups, 1, -1 do
-		if (T.db["raidframes"].position[i]) then
-			header:SetPoint(unpack(T.db["raidframes"].position[i]))
+		if (DraeUI.db["raidframes"].position[i]) then
+			header:SetPoint(unpack(DraeUI.db["raidframes"].position[i]))
 			break
 		end
 	end
@@ -169,7 +167,7 @@ UF.OnEnable = function(self)
 	do
 		local inv = {}
 
-		for indicator, statuses in pairs(T.dbClass.statusmap) do
+		for indicator, statuses in pairs(DraeUI.dbClass.statusmap) do
 			for status, priority in pairs(statuses) do
 				if (not inv[status]) then
 					inv[status] = {}
@@ -190,30 +188,30 @@ UF.OnEnable = function(self)
 
 	-- Player
 	oUF:SetActiveStyle("DraePlayer")
-	oUF:Spawn("player", "DraePlayer"):SetPoint("CENTER", UIParent, T.db["frames"].playerXoffset, T.db["frames"].playerYoffset)
+	oUF:Spawn("player", "DraePlayer"):SetPoint("CENTER", UIParent, DraeUI.db["frames"].playerXoffset, DraeUI.db["frames"].playerYoffset)
 
 	-- Target
 	oUF:SetActiveStyle("DraeTarget")
-	oUF:Spawn("target", "DraeTarget"):SetPoint("CENTER", UIParent, T.db["frames"].targetXoffset, T.db["frames"].targetYoffset)
+	oUF:Spawn("target", "DraeTarget"):SetPoint("CENTER", UIParent, DraeUI.db["frames"].targetXoffset, DraeUI.db["frames"].targetYoffset)
 
 	-- Target of target
 	oUF:SetActiveStyle("DraeTargetTarget")
-	oUF:Spawn("targettarget", "DraeTargetTarget"):SetPoint("BOTTOMLEFT", "DraeTarget", "BOTTOMRIGHT", T.db["frames"].totXoffset, T.db["frames"].totYoffset)
+	oUF:Spawn("targettarget", "DraeTargetTarget"):SetPoint("BOTTOMLEFT", "DraeTarget", "BOTTOMRIGHT", DraeUI.db["frames"].totXoffset, DraeUI.db["frames"].totYoffset)
 
 	-- Focus
 	oUF:SetActiveStyle("DraeFocus")
-	oUF:Spawn("focus", "DraeFocus"):SetPoint("BOTTOMRIGHT", "DraeTarget", "TOPRIGHT", T.db["frames"].focusXoffset, T.db["frames"].focusYoffset)
+	oUF:Spawn("focus", "DraeFocus"):SetPoint("BOTTOMRIGHT", "DraeTarget", "TOPRIGHT", DraeUI.db["frames"].focusXoffset, DraeUI.db["frames"].focusYoffset)
 
 	-- Focus target
 	oUF:SetActiveStyle("DraeFocusTarget")
-	oUF:Spawn("focustarget", "DraeFocusTarget"):SetPoint("LEFT", "DraeFocus", "RIGHT", T.db["frames"].focusTargetXoffset, T.db["frames"].focusTargetYoffset)
+	oUF:Spawn("focustarget", "DraeFocusTarget"):SetPoint("LEFT", "DraeFocus", "RIGHT", DraeUI.db["frames"].focusTargetXoffset, DraeUI.db["frames"].focusTargetYoffset)
 
 	-- Pet
 	oUF:SetActiveStyle("DraePet")
-	oUF:Spawn("pet", "DraePet"):SetPoint("BOTTOMRIGHT", "DraePlayer", "TOPRIGHT", T.db["frames"].petXoffset, T.db["frames"].petYoffset)
+	oUF:Spawn("pet", "DraePet"):SetPoint("BOTTOMRIGHT", "DraePlayer", "TOPRIGHT", DraeUI.db["frames"].petXoffset, DraeUI.db["frames"].petYoffset)
 
 	-- Boss frames
-	if (T.db["frames"].showBoss) then
+	if (DraeUI.db["frames"].showBoss) then
 		oUF:SetActiveStyle("DraeBoss")
 
 		local boss = {}
@@ -221,7 +219,7 @@ UF.OnEnable = function(self)
 			local frame = oUF:Spawn("boss" .. i, "DraeBoss" .. i)
 
 			if (i == 1) then
-				frame:SetPoint("LEFT", "DraeTarget", "LEFT", T.db["frames"].bossXoffset, T.db["frames"].bossYoffset)
+				frame:SetPoint("LEFT", "DraeTarget", "LEFT", DraeUI.db["frames"].bossXoffset, DraeUI.db["frames"].bossYoffset)
 			else
 				frame:SetPoint("TOP", boss[i - 1], "BOTTOM", 0, -35)
 			end
@@ -231,7 +229,7 @@ UF.OnEnable = function(self)
 	end
 
 	-- Arena and arena prep frames
-	if (T.db["frames"].showArena) then
+	if (DraeUI.db["frames"].showArena) then
 		oUF:SetActiveStyle("DraeArena")
 
 		local arena = {}
@@ -240,7 +238,7 @@ UF.OnEnable = function(self)
 			local frame = oUF:Spawn("arena" .. i, "DraeArena" .. i)
 
 			if (i == 1) then
-				frame:SetPoint("LEFT", "DraeTarget", "LEFT", T.db["frames"].arenaXoffset, T.db["frames"].arenaYoffset)
+				frame:SetPoint("LEFT", "DraeTarget", "LEFT", DraeUI.db["frames"].arenaXoffset, DraeUI.db["frames"].arenaYoffset)
 			else
 				frame:SetPoint("BOTTOM", arena[i - 1], "TOP", 0, 35)
 			end
@@ -256,30 +254,30 @@ UF.OnEnable = function(self)
 	-- Setup orientation and determine relative points and directions for groups
 	local xOffset, yOffset, point
 
-	if (T.db["raidframes"].gridLayout == "HORIZONTAL") then
-		if (T.db["raidframes"].gridGroupsAnchor == "TOPLEFT" or T.db["raidframes"].gridGroupsAnchor == "BOTTOMLEFT") then
-			xOffset = T.db["raidframes"].padding
+	if (DraeUI.db["raidframes"].gridLayout == "HORIZONTAL") then
+		if (DraeUI.db["raidframes"].gridGroupsAnchor == "TOPLEFT" or DraeUI.db["raidframes"].gridGroupsAnchor == "BOTTOMLEFT") then
+			xOffset = DraeUI.db["raidframes"].padding
 			yOffset = 0
 			point = "LEFT"
 		else
-			xOffset = -T.db["raidframes"].padding
+			xOffset = -DraeUI.db["raidframes"].padding
 			yOffset = 0
 			point = "RIGHT"
 		end
 	else
-		if (T.db["raidframes"].gridGroupsAnchor == "TOPLEFT" or T.db["raidframes"].gridGroupsAnchor == "TOPRIGHT") then
+		if (DraeUI.db["raidframes"].gridGroupsAnchor == "TOPLEFT" or DraeUI.db["raidframes"].gridGroupsAnchor == "TOPRIGHT") then
 			xOffset = 0
-			yOffset = -T.db["raidframes"].padding
+			yOffset = -DraeUI.db["raidframes"].padding
 			point = "TOP"
 		else
 			xOffset = 0
-			yOffset = T.db["raidframes"].padding
+			yOffset = DraeUI.db["raidframes"].padding
 			point = "BOTTOM"
 		end
 	end
 
-	local relPoint, xMult, yMult = getRelativePoint(T.db["raidframes"].gridGroupsAnchor, T.db["raidframes"].gridLayout)
-	local colAnchor = getColumnAnchorPoint(T.db["raidframes"].gridGroupsAnchor, T.db["raidframes"].gridLayout)
+	local relPoint, xMult, yMult = getRelativePoint(DraeUI.db["raidframes"].gridGroupsAnchor, DraeUI.db["raidframes"].gridLayout)
+	local colAnchor = getColumnAnchorPoint(DraeUI.db["raidframes"].gridGroupsAnchor, DraeUI.db["raidframes"].gridLayout)
 
 	self.relPoint = relPoint
 
@@ -298,12 +296,12 @@ UF.OnEnable = function(self)
 			"oUF-initialConfigFunction",([[
 				self:SetWidth(%d)
 				self:SetHeight(%d)
-			]]):format(T.db["raidframes"].width, T.db["raidframes"].height),
+			]]):format(DraeUI.db["raidframes"].width, DraeUI.db["raidframes"].height),
 			"groupBy", "GROUP",
 			"groupFilter", tostring(i),
 			"groupingOrder", "1,2,3,4,5,6,7,8",
-			"initial-width", T.db["raidframes"].width,
-			"initial-height", T.db["raidframes"].height,
+			"initial-width", DraeUI.db["raidframes"].width,
+			"initial-height", DraeUI.db["raidframes"].height,
 			"xOffset", xOffset,
 			"yOffset", yOffset,
 			"point", point, -- RIGHT for growing right to left, LEFT for growing left to right
@@ -319,19 +317,19 @@ UF.OnEnable = function(self)
 
 			CreateRaidAnchor(header, numSubGroups)
 		else
-			if (T.db["raidframes"].gridLayout == "HORIZONTAL") then
+			if (DraeUI.db["raidframes"].gridLayout == "HORIZONTAL") then
 				xMult = 0
 			else
 				yMult = 0
 			end
 
-			header:SetPoint(T.db["raidframes"].gridGroupsAnchor, self.raidHeaders[i - 1], relPoint, T.db["raidframes"].padding * xMult, T.db["raidframes"].padding * yMult)
+			header:SetPoint(DraeUI.db["raidframes"].gridGroupsAnchor, self.raidHeaders[i - 1], relPoint, DraeUI.db["raidframes"].padding * xMult, DraeUI.db["raidframes"].padding * yMult)
 		end
 
 		self.raidHeaders[i] = header
 	end
 
-	if (T.db["raidframes"].showPets) then
+	if (DraeUI.db["raidframes"].showPets) then
 		-- Force display of party and raid pets
 		SetCVar("showPartyPets", 1)
 
@@ -343,9 +341,9 @@ UF.OnEnable = function(self)
 			([[
 				self:SetWidth(%d)
 				self:SetHeight(%d)
-			]]):format(T.db["raidframes"].width, T.db["raidframes"].petHeight),
-			"initial-width", T.db["raidframes"].width,
-			"initial-height", T.db["raidframes"].petHeight,
+			]]):format(DraeUI.db["raidframes"].width, DraeUI.db["raidframes"].petHeight),
+			"initial-width", DraeUI.db["raidframes"].width,
+			"initial-height", DraeUI.db["raidframes"].petHeight,
 			"xOffset", xOffset, -- +ve for right, -ve for left
 			"yOffset", yOffset,
 			"point", point, -- RIGHT for growing right to left, LEFT for growing left to right
@@ -353,7 +351,7 @@ UF.OnEnable = function(self)
 			"sortDir", "ASC", -- DESC for left to right, ASC for right to left
 			"unitsPerColumn", 5,
 			"maxColumns", 8,
-			"columnSpacing", T.db["raidframes"].padding,
+			"columnSpacing", DraeUI.db["raidframes"].padding,
 			"columnAnchorPoint", colAnchor
 		)
 
@@ -383,8 +381,8 @@ UF.UpdateRaidLayout = function(self)
 		CreateRaidAnchor(self.raidHeaders[1], numSubGroups)
 
 		-- This is NOT generic for the config anchorpoint!
-		if (T.db["raidframes"].showPets) then
-			self.raidHeaders["pet"]:SetPoint(T.db["raidframes"].gridGroupsAnchor, self.raidHeaders[numSubGroups], self.relPoint, 0, T.db["raidframes"].petOffset) -- Offset from the raid group
+		if (DraeUI.db["raidframes"].showPets) then
+			self.raidHeaders["pet"]:SetPoint(DraeUI.db["raidframes"].gridGroupsAnchor, self.raidHeaders[numSubGroups], self.relPoint, 0, DraeUI.db["raidframes"].petOffset) -- Offset from the raid group
 		end
 	end
 end

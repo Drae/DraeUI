@@ -1,13 +1,10 @@
 --[[
 		Inspired by Grid, Aptcheka and others
 --]]
-local _, ns = ...
-local oUF = ns.oUF or draeUF
+local DraeUI = select(2, ...)
+local oUF = DraeUI.oUF or oUF
 
---
-local T, C, G, P, U, _ = unpack(select(2, ...))
-local UF = T:GetModule("UnitFrames")
-
+local UF = DraeUI:GetModule("UnitFrames")
 local Status = UF:NewModule("StatusAuras")
 
 -- Localise a bunch of functions
@@ -22,7 +19,7 @@ local aura_debuffs = {}
 
 --]]
 local UpdateIndicatorList = function()
-	local auras = T.dbClass["auras"]
+	local auras = DraeUI.dbClass["auras"]
 	if (not auras) then return end
 
 	wipe(aura_buffs)

@@ -1,13 +1,10 @@
 --[[
 		Summon
 --]]
-local _, ns = ...
-local oUF = ns.oUF or draeUF
+local DraeUI = select(2, ...)
+local oUF = DraeUI.oUF or oUF
 
---
-local T, C, G, P, U, _ = unpack(select(2, ...))
-local UF = T:GetModule("UnitFrames")
-
+local UF = DraeUI:GetModule("UnitFrames")
 local Status = UF:NewModule("StatusSummon")
 
 -- sourced from Blizzard_APIDocumentation/IncomingSummonDocumentation.lua

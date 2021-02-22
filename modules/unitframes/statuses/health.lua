@@ -1,15 +1,12 @@
 --[[
 
 --]]
-local _, ns = ...
-local oUF = ns.oUF or draeUF
+local DraeUI = select(2, ...)
+local oUF = DraeUI.oUF or oUF
 
---
-local T, C, G, P, U, _ = unpack(select(2, ...))
-local UF = T:GetModule("UnitFrames")
-
+local UF = DraeUI:GetModule("UnitFrames")
 local Status = UF:NewModule("StatusHealth")
-local Roster =  T:GetModule("Roster")
+local Roster =  DraeUI:GetModule("Roster")
 
 --
 local UnitName, UnitIsPlayer, UnitIsAFK, UnitIsDead, UnitIsGhost, UnitHasVehicleUI, UnitIsCharmed, UnitIsConnected, UnitIsDeadOrGhost, UnitPlayerControlled, UnitHealth, UnitHealthMax = UnitName, UnitIsPlayer, UnitIsAFK, UnitIsDead, UnitIsGhost, UnitHasVehicleUI, UnitIsCharmed, UnitIsConnected, UnitIsDeadOrGhost, UnitPlayerControlled, UnitHealth, UnitHealthMax
@@ -149,7 +146,7 @@ do
 
 			if (new_state == "INVEHICLE" and self.realUnit and UnitHasVehicleUI(self.realUnit)) then
 				color = colors.health
-				local real_name = T.UTF8((UnitName(SecureButton_GetUnit(self) or self.unit) or "Unknown"), 7, false)
+				local real_name = DraeUI.UTF8((UnitName(SecureButton_GetUnit(self) or self.unit) or "Unknown"), 7, false)
 				self:GainedStatus("unit_vehicle", color, nil, real_name)
 			elseif (new_state == "CHARMED") then
 				color = colors.charmed

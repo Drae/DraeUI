@@ -1,9 +1,9 @@
 --[[
 	Plugins
 ]]
-local T, C, G, P, U, _ = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
 
-local InfoBar = T:GetModule("Infobar")
+local InfoBar = DraeUI:GetModule("Infobar")
 
 local Smoothing = LibStub("LibCutawaySmooth-1.0", true)
 
@@ -271,7 +271,7 @@ Plugin.New = function(self, name, obj, settings)
 	plugin.name = name
 	plugin.obj = obj
 
-	plugin.text = T.CreateFontObject(plugin, T.db["general"].fontsize1, T["media"].font, "LEFT", 0, 0) --
+	plugin.text = DraeUI.CreateFontObject(plugin, DraeUI.db["general"].fontsize1, DraeUI["media"].font, "LEFT", 0, 0) --
 
 	if (statusbar) then
 		plugin.statusbar = {}

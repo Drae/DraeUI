@@ -2,12 +2,10 @@
 		Common event handling, specific events are handled
 		in their local functions
 --]]
-local _, ns = ...
-local oUF = ns.oUF or oUF
+local DraeUI = select(2, ...)
+local oUF = DraeUI.oUF or oUF
 
---
-local T, C, G, P, U, _ = select(2, ...):UnPack()
-local UF = T:GetModule("UnitFrames")
+local UF = DraeUI:GetModule("UnitFrames")
 
 -- Localise a bunch of functions
 local select, min, max = select, math.min, math.max
@@ -133,13 +131,13 @@ UF.PostUpdateHealth = function(health, u, min, max)
 	elseif (UnitIsDead(u)) then
 		health.value:SetText("|cffaaaaaaDead|r")
 		self.__state = "DEAD"
-	elseif (T.db["frames"].numFormatLong) then
+	elseif (DraeUI.db["frames"].numFormatLong) then
 		local left, num, right = string.match(min ~= max and (min - max) or min,'^([^%d]*%d)(%d*)(.-)$')
 
 		local hpvalue = ("|cffffffff%s"):format(left..(num:reverse():gsub('(%d%d%d)','%1,'):reverse())..right)
 		health.value:SetText(hpvalue)
 	else
-		local hpvalue = min ~= max and ("|cffB62220%s|r.%d|cff0090ff%%|r"):format(T.ShortVal(min - max), min / max * 100) or ("|cffffffff%s"):format(T.ShortVal(min))
+		local hpvalue = min ~= max and ("|cffB62220%s|r.%d|cff0090ff%%|r"):format(DraeUI.ShortVal(min - max), min / max * 100) or ("|cffffffff%s"):format(DraeUI.ShortVal(min))
 		health.value:SetText(hpvalue)
 
 		if (self.__state) then
@@ -260,7 +258,7 @@ do
 			elseif (new_state == "AFK") then
 				self:GainedStatus("alert_afk", color_grey, nil, "AFK")
 			elseif (new_state == "INVEHICLE" and self.realUnit and UnitHasVehicleUI(self.realUnit)) then
-				local real_name = T.UTF8((UnitName(SecureButton_GetUnit(self) or self.unit) or "Unknown"), 7, false)
+				local real_name = DraeUI.UTF8((UnitName(SecureButton_GetUnit(self) or self.unit) or "Unknown"), 7, false)
 				self:GainedStatus("unit_vehicle", color, nil, real_name)
 			else
 				self:GainedStatus("unit_health", color)

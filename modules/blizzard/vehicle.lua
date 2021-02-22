@@ -2,9 +2,9 @@
 
 
 --]]
-local T, C, G, P, U, _ = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
 
-local B = T:GetModule("Blizzard")
+local B = DraeUI:GetModule("Blizzard")
 
 --
 local _G = _G

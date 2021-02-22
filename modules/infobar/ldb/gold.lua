@@ -2,9 +2,9 @@
 
 
 --]]
-local T, C, G, P, U, _ = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
 
-local IB = T:GetModule("Infobar")
+local IB = DraeUI:GetModule("Infobar")
 local COIN = IB:NewModule("Coin", "AceEvent-3.0", "AceTimer-3.0")
 
 local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeCoin", {type = "draeUI", icon = nil, label = "DraeCoin"})
@@ -18,12 +18,12 @@ local profit, loss = 0, 0
 
 ]]
 COIN.UpdateCoin = function(self)
-	T.dbGlobal["gold"] = T.dbGlobal["gold"] or {}
-	T.dbGlobal["gold"][T.playerRealm] = T.dbGlobal["gold"][T.playerRealm] or {}
-	local db = T.dbGlobal["gold"]
+	DraeUI.dbGlobal["gold"] = DraeUI.dbGlobal["gold"] or {}
+	DraeUI.dbGlobal["gold"][DraeUI.playerRealm] = DraeUI.dbGlobal["gold"][DraeUI.playerRealm] or {}
+	local db = DraeUI.dbGlobal["gold"]
 
 	local curMoney = GetMoney()
-	local oldMoney = db[T.playerRealm][T.playerName] or curMoney
+	local oldMoney = db[DraeUI.playerRealm][DraeUI.playerName] or curMoney
 	local diffMoney = curMoney - oldMoney
 
 	if (oldMoney > curMoney) then		-- Lost Money
@@ -32,9 +32,9 @@ COIN.UpdateCoin = function(self)
 		profit = profit + diffMoney
 	end
 
-	db[T.playerRealm][T.playerName] = curMoney
+	db[DraeUI.playerRealm][DraeUI.playerName] = curMoney
 
-	LDB.text = T.IntToGold(curMoney, false)
+	LDB.text = DraeUI.IntToGold(curMoney, false)
 end
 
 LDB.OnEnter = function(self)
@@ -43,19 +43,19 @@ LDB.OnEnter = function(self)
 
 	GameTooltip:ClearLines()
 
-	T.dbGlobal["gold"] = T.dbGlobal["gold"] or {}
-	T.dbGlobal["gold"][T.playerRealm] = T.dbGlobal["gold"][T.playerRealm] or {}
-	local db = T.dbGlobal["gold"]
+	DraeUI.dbGlobal["gold"] = DraeUI.dbGlobal["gold"] or {}
+	DraeUI.dbGlobal["gold"][DraeUI.playerRealm] = DraeUI.dbGlobal["gold"][DraeUI.playerRealm] or {}
+	local db = DraeUI.dbGlobal["gold"]
 
 	GameTooltip:AddLine("This session:")
 
-	GameTooltip:AddDoubleLine("Earned:", T.IntToGold(profit, true), 1, 1, 1, 1, 1, 1)
-	GameTooltip:AddDoubleLine("Spent:", T.IntToGold(loss, true), 1, 1, 1, 1, 1, 1)
+	GameTooltip:AddDoubleLine("Earned:", DraeUI.IntToGold(profit, true), 1, 1, 1, 1, 1, 1)
+	GameTooltip:AddDoubleLine("Spent:", DraeUI.IntToGold(loss, true), 1, 1, 1, 1, 1, 1)
 
 	if profit < loss then
-		GameTooltip:AddDoubleLine("Loss:", T.IntToGold(abs(profit - loss), true), 1, 0, 0, 1, 1, 1)
+		GameTooltip:AddDoubleLine("Loss:", DraeUI.IntToGold(abs(profit - loss), true), 1, 0, 0, 1, 1, 1)
 	elseif (profit - loss) > 0 then
-		GameTooltip:AddDoubleLine("Profit:", T.IntToGold(profit - loss, true), 0, 1, 0, 1, 1, 1)
+		GameTooltip:AddDoubleLine("Profit:", DraeUI.IntToGold(profit - loss, true), 0, 1, 0, 1, 1, 1)
 	end
 
 	GameTooltip:AddLine" "
@@ -63,16 +63,16 @@ LDB.OnEnter = function(self)
 	local totalGold = 0
 	GameTooltip:AddLine("This Realm: ")
 
-	for k, _ in pairs(db[T.playerRealm]) do
-		if (db[T.playerRealm][k]) then
-			GameTooltip:AddDoubleLine(k, T.IntToGold(db[T.playerRealm][k], true), 1, 1, 1, 1, 1, 1)
+	for k, _ in pairs(db[DraeUI.playerRealm]) do
+		if (db[DraeUI.playerRealm][k]) then
+			GameTooltip:AddDoubleLine(k, DraeUI.IntToGold(db[DraeUI.playerRealm][k], true), 1, 1, 1, 1, 1, 1)
 
-			totalGold = totalGold + db[T.playerRealm][k]
+			totalGold = totalGold + db[DraeUI.playerRealm][k]
 		end
 	end
 
 	GameTooltip:AddLine(" ")
-	GameTooltip:AddDoubleLine("Total: ", T.IntToGold(totalGold, true), 1, 1, 1, 1, 1, 1)
+	GameTooltip:AddDoubleLine("Total: ", DraeUI.IntToGold(totalGold, true), 1, 1, 1, 1, 1, 1)
 
 	local info
 	for i = 1, MAX_WATCHED_TOKENS do
@@ -103,7 +103,7 @@ LDB.OnClick = function(self, btn)
 		if (btn == "LeftButton") then
 			profit, loss = 0, 0
 		else
-			T.dbGlobal["gold"] = {}
+			DraeUI.dbGlobal["gold"] = {}
 		end
 
 		GameTooltip:Hide()

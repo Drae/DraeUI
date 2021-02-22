@@ -2,9 +2,9 @@
 
 
 --]]
-local T, C, G, P, U, _ = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
 
-local IB = T:GetModule("Infobar")
+local IB = DraeUI:GetModule("Infobar")
 local XP = IB:NewModule("XP", "AceEvent-3.0")
 
 local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeExp", {
@@ -108,7 +108,7 @@ XP.UpdateReputation = function(self)
 	local pct = (value - min) / (max - min) * 100
 	local affix = "[" ..  (friend and friendTextLevel or _G["FACTION_STANDING_LABEL" .. reaction]) .. "]"
 
-	local r1, g1, b1 = T.ColorGradient(pct / 100 - 0.001, 1, 0, 0, 1, 1, 0, 0, 1, 0)
+	local r1, g1, b1 = DraeUI.ColorGradient(pct / 100 - 0.001, 1, 0, 0, 1, 1, 0, 0, 1, 0)
 
 	LDB.text = format("%s: |cff%02x%02x%02x%d|r|cffffffff%%|r %s", name, r1 * 255, g1 * 255, b1 * 255, pct, affix)
 
@@ -183,7 +183,7 @@ XP.UpdateHonor = function(self, event, unit)
 		affix = " [" .. level .. "]"
 	end
 
-	local r1, g1, b1 = T.ColorGradient(pct / 100 - 0.001, 1, 0, 0, 1, 1, 0, 0, 1, 0)
+	local r1, g1, b1 = DraeUI.ColorGradient(pct / 100 - 0.001, 1, 0, 0, 1, 1, 0, 0, 1, 0)
 
 	LDB.text = format("Honor: |cff%02x%02x%02x%d|r|cffffffff%%|r%s", r1 * 255, g1 * 255, b1 * 255, pct, affix)
 end
@@ -261,7 +261,7 @@ XP.UpdateExperience = function(self, event, unit)
 		LDB.statusbar__rested_hide = true
 	end
 
-	local r1, g1, b1 = T.ColorGradient(pct / 100 - 0.001, 1, 0, 0, 1, 1, 0, 0, 1, 0)
+	local r1, g1, b1 = DraeUI.ColorGradient(pct / 100 - 0.001, 1, 0, 0, 1, 1, 0, 0, 1, 0)
 
 	LDB.text = format((IsResting() and (restingIcon .. " ") or "") .. "[|cff00ff00%s|r] |cff%02x%02x%02x%d|r|cffffffff%%|rxp (%d/%d)%s", level, r1 * 255, g1 * 255, b1 * 255, pct, cur, max, (rested and format(" |cff%02x%02x%02x%d|r|cff%02x%02x%02x%%rested|r", 0, 255, 0, rested / max * 100, 255, 255, 255) or ""))
 end

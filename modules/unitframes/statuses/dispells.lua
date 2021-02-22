@@ -1,13 +1,10 @@
 --[[
 
 --]]
-local _, ns = ...
-local oUF = ns.oUF or draeUF
+local DraeUI = select(2, ...)
+local oUF = DraeUI.oUF or oUF
 
---
-local T, C, G, P, U, _ = unpack(select(2, ...))
-local UF = T:GetModule("UnitFrames")
-
+local UF = DraeUI:GetModule("UnitFrames")
 local Status = UF:NewModule("StatusDispells")
 
 -- Localise a bunch of functions
@@ -61,7 +58,7 @@ do
 
 			if (not name) then break end
 
-			if (not blacklist[spell_id] and dtype and (not T.db["raidframes"].showOnlyDispellable or (UF.dispellClasses[T.playerClass] and UF.dispellClasses[T.playerClass][dtype]))) then
+			if (not blacklist[spell_id] and dtype and (not DraeUI.db["raidframes"].showOnlyDispellable or (UF.dispellClasses[DraeUI.playerClass] and UF.dispellClasses[DraeUI.playerClass][dtype]))) then
 				-- no existing highest priority? higher priority? and not a secondary debuff displayed by the debuffs status?
 				if (not currentDispell.priority or currentDispell.priority < dispellPriority[dtype]) then
 					currentDispell.priority = dispellPriority[dtype]

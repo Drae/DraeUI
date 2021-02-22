@@ -2,11 +2,11 @@
 
 
 --]]
-local T, C, G, P, U, _ = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
 
 local random = math.random
 
-function T:SetUpAnimGroup(object, type, ...)
+function DraeUI:SetUpAnimGroup(object, type, ...)
 	if not type then type = 'Flash' end
 
 	if type == 'Flash' then
@@ -55,16 +55,16 @@ function T:SetUpAnimGroup(object, type, ...)
 		object[customName].out2:SetDuration(duration)
 		object[customName].out2:SetOrder(1)
 		object[customName].out2:SetSmoothing("IN")
-		object[customName].in1:SetOffset(T:Scale(x), T:Scale(y))
-		object[customName].in2:SetOffset(T:Scale(-x), T:Scale(-y))
-		object[customName].out2:SetOffset(T:Scale(x), T:Scale(y))
+		object[customName].in1:SetOffset(DraeUI:Scale(x), DraeUI:Scale(y))
+		object[customName].in2:SetOffset(DraeUI:Scale(-x), DraeUI:Scale(-y))
+		object[customName].out2:SetOffset(DraeUI:Scale(x), DraeUI:Scale(y))
 		object[customName].out1:SetScript("OnFinished", function() object:Hide() end)
 	end
 end
 
-function T:Flash(object, duration, loop)
+function DraeUI:Flash(object, duration, loop)
 	if not object.anim then
-		T:SetUpAnimGroup(object, loop and "FlashLoop" or 'Flash')
+		DraeUI:SetUpAnimGroup(object, loop and "FlashLoop" or 'Flash')
 	end
 
 	if not object.anim.playing then
@@ -75,7 +75,7 @@ function T:Flash(object, duration, loop)
 	end
 end
 
-function T:StopFlash(object)
+function DraeUI:StopFlash(object)
 	if object.anim and object.anim.playing then
 		object.anim:Stop()
 		object.anim.playing = nil

@@ -2,9 +2,9 @@
 
 
 --]]
-local T, C, G, P, U, _ = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
 
-local IB = T:GetModule("Infobar")
+local IB = DraeUI:GetModule("Infobar")
 local MEM = IB:NewModule("Mem", "AceEvent-3.0", "AceTimer-3.0")
 
 local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeMem", {
@@ -85,7 +85,7 @@ end
 MEM.UpdateMem = function(self)
 	local total = floor((UpdateAddonMemCPUUse() / 1024) + 0.5)
 
-	local r2, g2, b2 = T.ColorGradient(total / 50 - 0.001, 0, 1, 0, 1, 1, 0, 0, 1, 0)
+	local r2, g2, b2 = DraeUI.ColorGradient(total / 50 - 0.001, 0, 1, 0, 1, 1, 0, 0, 1, 0)
 	LDB.text = format("|cff%02x%02x%02x%d|r|cff%02x%02x%02xMB|r", r2 * 255, g2 * 255, b2 * 255, total, 255, 255, 255)
 end
 
@@ -118,17 +118,17 @@ local TooltipMem = function(self)
 			if (i > maxAddonsToShow or addon.value <= 0) then break end
 
 			if (not watchCpu) then
-				GameTooltip:AddDoubleLine(addon.name, T.MemFormat(addon.value), 1, 1, 1, T.ColorGradient(addon.value / total - 0.001, 0, 1, 0, 1, 1, 0, 1, 0, 0))
+				GameTooltip:AddDoubleLine(addon.name, DraeUI.MemFormat(addon.value), 1, 1, 1, DraeUI.ColorGradient(addon.value / total - 0.001, 0, 1, 0, 1, 1, 0, 1, 0, 0))
 			else
-				GameTooltip:AddDoubleLine(addon.name, FormatMiliseconds(addon.value), 1, 1, 1, T.ColorGradient(addon.value / total - 0.001, 0, 1, 0, 1, 1, 0, 1, 0, 0))
+				GameTooltip:AddDoubleLine(addon.name, FormatMiliseconds(addon.value), 1, 1, 1, DraeUI.ColorGradient(addon.value / total - 0.001, 0, 1, 0, 1, 1, 0, 1, 0, 0))
 			end
 		end
 
 		GameTooltip:AddLine(" ")
 
 		if (not watchCpu) then
-			GameTooltip:AddDoubleLine("UI Memory usage", T.MemFormat(total), 1, 1, 1, T.ColorGradient(total / blizzMem - 0.001, 0, 1, 0, 1, 1, 0, 1, 0, 0))
-			GameTooltip:AddDoubleLine("Total incl. Blizzard", T.MemFormat(blizzMem), 1, 1, 1, T.ColorGradient(blizzMem / (1024 * 100) - 0.001, 0, 1, 0, 1, 1, 0, 1, 0, 0))
+			GameTooltip:AddDoubleLine("UI Memory usage", DraeUI.MemFormat(total), 1, 1, 1, DraeUI.ColorGradient(total / blizzMem - 0.001, 0, 1, 0, 1, 1, 0, 1, 0, 0))
+			GameTooltip:AddDoubleLine("Total incl. Blizzard", DraeUI.MemFormat(blizzMem), 1, 1, 1, DraeUI.ColorGradient(blizzMem / (1024 * 100) - 0.001, 0, 1, 0, 1, 1, 0, 1, 0, 0))
 		else
 			GameTooltip:AddDoubleLine("Total CPU", FormatMiliseconds(total), 1, 1, 1, 1, 1, 1)
 			GameTooltip:AddLine(" ")

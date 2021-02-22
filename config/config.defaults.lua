@@ -2,7 +2,7 @@
 
 
 --]]
-local T, C, G, P, U, _ = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
 
 --[[
 		Default configuration settings
@@ -13,7 +13,7 @@ local T, C, G, P, U, _ = select(2, ...):UnPack()
 		into that new file. You don't need to copy the entire
 		section just the variable/s you want to change.
 --]]
-T.defaults.profile = {
+DraeUI.defaults.profile = {
 	general = {
 		-- Textures
 		statusbar = "striped",

@@ -1,13 +1,10 @@
 --[[
 		External damage cooldowns -or- self-non-buff proc cooldowns
 --]]
-local _, ns = ...
-local oUF = ns.oUF or draeUF
+local DraeUI = select(2, ...)
+local oUF = DraeUI.oUF or oUF
 
---
-local T, C, G, P, U, _ = unpack(select(2, ...))
-local UF = T:GetModule("UnitFrames")
-
+local UF = DraeUI:GetModule("UnitFrames")
 local Status = UF:NewModule("StatusDefensives")
 
 -- Localise a bunch of functions
@@ -67,7 +64,7 @@ local Update = function(self, event, unit)
 
 			if (not name) then break end
 
-			if (T.Contains(spellID, cooldowns)) then
+			if (DraeUI.Contains(spellID, cooldowns)) then
 				local start = expirationTime and (expirationTime - duration)
 
 				self:GainedStatus("status_dmgred", colour, icon, nil, nil, nil, start, duration, count, false, false, true)

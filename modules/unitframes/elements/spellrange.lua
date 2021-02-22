@@ -5,9 +5,9 @@
 local _, ns = ...
 local oUF = ns.oUF or oUF
 
-local T, C, G, P, U, _ = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
 
-local Element = T:NewModule("ElementRange")
+local Element = DraeUI:NewModule("ElementRange")
 local SpellRange = LibStub("SpellRange-1.0", true)
 
 -- Localise a bunch of functions
@@ -200,17 +200,17 @@ local objectRanges = {}
 local UpdateRangeCheckSpells
 do
 	local AddTable = function(tbl)
-		SR[T.playerClass][tbl] = {}
+		SR[DraeUI.playerClass][tbl] = {}
 	end
 
 	local AddSpell = function(tbl, spellID)
-		SR[T.playerClass][tbl][#SR[T.playerClass][tbl] + 1] = spellID
+		SR[DraeUI.playerClass][tbl][#SR[DraeUI.playerClass][tbl] + 1] = spellID
 	end
 
 	UpdateRangeCheckSpells = function()
-		if not SR[T.playerClass] then SR[T.playerClass] = {} end
+		if not SR[DraeUI.playerClass] then SR[DraeUI.playerClass] = {} end
 
-		for tbl, spells in pairs(spellRangeCheck[T.playerClass]) do
+		for tbl, spells in pairs(spellRangeCheck[DraeUI.playerClass]) do
 			AddTable(tbl) --Create the table holding spells, even if it ends up being an empty table
 
 			for spellID in pairs(spells) do
@@ -233,7 +233,7 @@ local FriendlyIsInRange = function(unit)
 	-- within 28 yards (arg2 as 1 is Compare Achievements distance)
 	if CheckInteractDistance(unit, 1) then return true end
 
-	local object = SR[T.playerClass]
+	local object = SR[DraeUI.playerClass]
 
 	if (object) then
 		-- dead with rez spells
@@ -260,7 +260,7 @@ local PetIsInRange = function(unit)
 	-- within 8 yards (arg2 as 2 is Trade distance)
 	if (CheckInteractDistance(unit, 2)) then return true end
 
-	local object = SR[T.playerClass]
+	local object = SR[DraeUI.playerClass]
 
 	if (object) then
 		if (object.friendlySpells and #object.friendlySpells > 0) then -- you have some healy spell
@@ -283,7 +283,7 @@ local EnemyIsInRange = function(unit)
 	-- within 8 yards (arg2 as 2 is Trade distance)
 	if (CheckInteractDistance(unit, 2)) then return true end
 
-	local object = SR[T.playerClass]
+	local object = SR[DraeUI.playerClass]
 
 	if (object and object.enemySpells and #object.enemySpells > 0) then -- you have some damage spell
 		for _, spellID in ipairs(object.enemySpells) do
@@ -295,7 +295,7 @@ local EnemyIsInRange = function(unit)
 end
 
 local EnemyIsInLongRange = function(unit)
-	local object = SR[T.playerClass]
+	local object = SR[DraeUI.playerClass]
 
 	if (object and object.longEnemySpells and #object.longEnemySpells > 0) then -- you have some 30+ range damage spell
 		for _, spellID in ipairs(object.longEnemySpells) do

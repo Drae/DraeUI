@@ -2,9 +2,9 @@
 
 
 --]]
-local T, C, G, P, U, _ = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
 
-local IB = T:GetModule("Infobar")
+local IB = DraeUI:GetModule("Infobar")
 local RES = IB:NewModule("Res", "AceEvent-3.0", "AceTimer-3.0")
 
 local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeRes", {

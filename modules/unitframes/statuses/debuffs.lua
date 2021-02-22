@@ -1,13 +1,10 @@
 --[[
 		Inspired by Grid, Aptcheka and others
 --]]
-local _, ns = ...
-local oUF = ns.oUF or draeUF
+local DraeUI = select(2, ...)
+local oUF = DraeUI.oUF or oUF
 
---
-local T, C, G, P, U, _ = unpack(select(2, ...))
-local UF = T:GetModule("UnitFrames")
-
+local UF = DraeUI:GetModule("UnitFrames")
 local Status = UF:NewModule("StatusRaidDebuffs", "AceEvent-3.0")
 
 --
@@ -33,10 +30,10 @@ end
 
 local LoadPVPDebuffs = function()
 	local flash = {
-		magic 	= UF.dispellClasses[T.playerClass]["Magic"] and true or false,
-		disease = UF.dispellClasses[T.playerClass]["Disease"] and true or false,
-		poison 	= UF.dispellClasses[T.playerClass]["Poison"] and true or false,
-		curse	= UF.dispellClasses[T.playerClass]["Curse"] and true or false,
+		magic 	= UF.dispellClasses[DraeUI.playerClass]["Magic"] and true or false,
+		disease = UF.dispellClasses[DraeUI.playerClass]["Disease"] and true or false,
+		poison 	= UF.dispellClasses[DraeUI.playerClass]["Poison"] and true or false,
+		curse	= UF.dispellClasses[DraeUI.playerClass]["Curse"] and true or false,
 	}
 
 	-- Highest prirority for dangerous effects which should be dispelled (or not)
@@ -164,7 +161,7 @@ local LoadDebuffs = function()
 	end
 
 	if (displayText ~= "") then
-		T.Print("Debuff indicators loaded for |cff00dd00" .. displayText .. "|r")
+		DraeUI.Print("Debuff indicators loaded for |cff00dd00" .. displayText .. "|r")
 	end
 
 	-- TESTING

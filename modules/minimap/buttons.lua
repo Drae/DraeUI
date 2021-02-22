@@ -2,9 +2,9 @@
 		Basically rMinimap customied a bit!
 		zoomscript taken from pminimap by p3lim - http://www.wowinterface.com/downloads/info8389-pTM.html
 --]]
-local T, C, G, P, U, _ = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
 
-local MM = T:GetModule("Minimap")
+local MM = DraeUI:GetModule("Minimap")
 
 --
 local _G = _G

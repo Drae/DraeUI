@@ -2,9 +2,9 @@
 
 
 --]]
-local T, C, G, P, U, _ = unpack(select(2, ...))
+local DraeUI = select(2, ...)
 
-T.defaults.class["HUNTER"] = {
+DraeUI.defaults.class["HUNTER"] = {
 	auras = {
 		["buff_misdirection"] 	= { buff = "Misdirection", mine = false, color = { 0.0, 0.4, 0.9 } },
 	},

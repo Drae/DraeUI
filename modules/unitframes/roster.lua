@@ -2,9 +2,9 @@
 
 
 --]]
-local T, C, G, P, U, _ = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
 
-local Roster = T:NewModule("Roster")
+local Roster = DraeUI:NewModule("Roster")
 
 --
 local UnitGUID, UnitName, UnitClass = UnitGUID, UnitName, UnitClass

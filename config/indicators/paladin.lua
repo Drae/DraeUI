@@ -2,9 +2,9 @@
 
 
 --]]
-local T, C, G, P, U, _ = unpack(select(2, ...))
+local DraeUI = select(2, ...)
 
-T.defaults.class["PALADIN"] = {
+DraeUI.defaults.class["PALADIN"] = {
     auras = {
         ["debuff_forbearance"]            	= { debuff = "Forbearance", 				mine = false, color = { 1.0, 0.0, 0.0 } },
 

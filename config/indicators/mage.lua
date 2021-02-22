@@ -2,9 +2,9 @@
 
 
 --]]
-local T, C, G, P, U, _ = unpack(select(2, ...))
+local DraeUI = select(2, ...)
 
-T.defaults.class["MAGE"] = {
+DraeUI.defaults.class["MAGE"] = {
 	auras = {
 		["buff_arcaneintellect"]  	= { buff = "Arcane Intellect",  mine = false, color = { 0.8, 0.8, 0.8 } },  -- Spell Power + Crit
 		["buff_arcanenbrilliance"] 	= { buff = "Arcane Brilliance", mine = false, color = { 0.8, 0.8, 0.8 } },  -- Spell Power + Crit

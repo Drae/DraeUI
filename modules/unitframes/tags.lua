@@ -2,12 +2,10 @@
 
 
 --]]
-local _, ns = ...
-local oUF = ns.oUF or oUF
+local DraeUI = select(2, ...)
+local oUF = DraeUI.oUF or oUF
 
---
-local T, C, G, P, U, _ = select(2, ...):UnPack()
-local UF = T:GetModule("UnitFrames")
+local UF = DraeUI:GetModule("UnitFrames")
 
 -- Localise a bunch of functions
 local UnitName, UnitIsAFK, UnitIsDND, UnitPowerType = UnitName, UnitIsAFK, UnitIsDND, UnitPowerType
@@ -23,16 +21,16 @@ oUF.Tags.Methods["drae:unitcolour"] = function(u, r)
 	local reaction = UnitReaction(u, "player")
 
 	if (not UnitPlayerControlled(u) and UnitIsTapDenied(u)) then
-		return T.Hex(oUF.colors.tapped)
+		return DraeUI.Hex(oUF.colors.tapped)
 	elseif (not UnitIsConnected(u)) then
-		return T.Hex(oUF.colors.disconnected)
+		return DraeUI.Hex(oUF.colors.disconnected)
 	elseif (UnitIsPlayer(u)) then
 		local _, class = UnitClass(u)
-		return T.Hex(oUF.colors.class[class])
+		return DraeUI.Hex(oUF.colors.class[class])
 	elseif reaction then
-		return T.Hex(oUF.colors.reaction[reaction])
+		return DraeUI.Hex(oUF.colors.reaction[reaction])
 	else
-		return T.Hex(oUF.colors.health)
+		return DraeUI.Hex(oUF.colors.health)
 	end
 end
 oUF.Tags.Events["drae:unitcolour"] = "UNIT_FACTION UNIT_ENTERED_VEHICLE UNIT_EXITED_VEHICLE UNIT_PET"
@@ -48,15 +46,15 @@ oUF.Tags.Events["drae:afk"] = "PLAYER_FLAGS_CHANGED"
 
 oUF.Tags.Methods["drae:power"] = function(u, t)
 	local _, str = UnitPowerType(u)
-	--	return ("%s%s|r"):format(T.Hex(oUF.colors.power[str] or {1, 1, 1}), T.ShortVal(oUF.Tags.Methods["curpp"](u)))
-	return ("|cffffffff%s|r"):format(T.ShortVal(oUF.Tags.Methods["curpp"](u)))
+	--	return ("%s%s|r"):format(DraeUI.Hex(oUF.colors.power[str] or {1, 1, 1}), DraeUI.ShortVal(oUF.Tags.Methods["curpp"](u)))
+	return ("|cffffffff%s|r"):format(DraeUI.ShortVal(oUF.Tags.Methods["curpp"](u)))
 end
 oUF.Tags.Events["drae:power"] = "UNIT_POWER UNIT_MAXPOWER"
 
 oUF.Tags.Methods["draeraid:name"] = function(u, r)
 	local name = UnitName(r or u) or "Unknown"
 
-	return T.UTF8(name, T.db["raidframes"].raidnamelength or 4, false) .. "|r"
+	return DraeUI.UTF8(name, DraeUI.db["raidframes"].raidnamelength or 4, false) .. "|r"
 end
 oUF.Tags.Events["draeraid:name"] = "UNIT_NAME_UPDATE UNIT_ENTERED_VEHICLE UNIT_EXITED_VEHICLE UNIT_PET"
 

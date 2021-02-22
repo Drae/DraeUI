@@ -2,7 +2,7 @@
 
 
 --]]
-local T, C, G, P, U, _ = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
 
 -- Localise a bunch of functions
 local _G = _G
@@ -11,7 +11,7 @@ local format, gsub, floor, abs, unpack = string.format, string.gsub, math.floor,
 --[[
 
 --]]
-T.ShortVal = function(value)
+DraeUI.ShortVal = function(value)
 	if (abs(value) >= 1e6) then
 		return ("%.2fm"):format(value / 1e6):gsub("%.?0+([km])$", "%1")
 	elseif (abs(value) >= 1e3 or value <= -1e3) then
@@ -21,7 +21,7 @@ T.ShortVal = function(value)
 	end
 end
 
-T.Round = function(num)
+DraeUI.Round = function(num)
 	if (num >= 0) then
 		return floor(num + 0.5)
 	else

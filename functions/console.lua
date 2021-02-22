@@ -1,7 +1,7 @@
 --[[
 
 --]]
-local T, C, G, P, U, _ = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
 
 --[[
 
@@ -16,9 +16,9 @@ end
 
 local ConsoleGrid = function(msg)
 	if (msg and type(tonumber(msg)) == "number" and tonumber(msg) <= 256 and tonumber(msg) >= 4) then
-		T:AlignGridToggle(msg)
+		DraeUI:AlignGridToggle(msg)
 	else
-		T:AlignGridToggle()
+		DraeUI:AlignGridToggle()
 	end
 end
 
@@ -36,7 +36,7 @@ local DraeHideUI = function()
 	end
 end
 
-T.InitializeConsoleCommands = function(self)
+DraeUI.InitializeConsoleCommands = function(self)
 	self:RegisterChatCommand("rl", UIReload)
 	self:RegisterChatCommand("rar", ReadyCheck)
 	self:RegisterChatCommand("hideui", DraeHideUI)

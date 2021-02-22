@@ -1,11 +1,8 @@
 --[[
 
 --]]
-local _, ns = ...
-local oUF = ns.oUF or oUF
-
---
-local T, C, G, P, U, _ = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
+local oUF = DraeUI.oUF or oUF
 
 --[[
 

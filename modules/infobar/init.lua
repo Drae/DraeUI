@@ -2,9 +2,9 @@
 
 
 --]]
-local T, C, G, P, U, _ = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
 
-local InfoBar = T:NewModule("Infobar", "AceEvent-3.0", "AceTimer-3.0")
+local InfoBar = DraeUI:NewModule("Infobar", "AceEvent-3.0", "AceTimer-3.0")
 InfoBar.Plugin = {}
 
 -- Localise a bunch of functions
@@ -128,7 +128,7 @@ InfoBar.PlayerEnteringWorld = function(self)
 end
 
 InfoBar.OnInitialize = function(self)
-	self.db = T.db["infobar"]
+	self.db = DraeUI.db["infobar"]
 
 	-- Do things when we enter the world
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", "PlayerEnteringWorld")

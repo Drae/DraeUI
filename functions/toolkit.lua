@@ -1,15 +1,15 @@
 --[[
 		From ElvUI
 --]]
-local T, C, G, P, U, _ = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
 
 --[[
-	
+
 ]]
 local Kill = function(object)
 	if (object.UnregisterAllEvents) then
 		object:UnregisterAllEvents()
-		object:SetParent(T.HiddenFrame)
+		object:SetParent(DraeUI.HiddenFrame)
 	else
 		object.Show = object.Hide
 	end

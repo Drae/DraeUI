@@ -2,12 +2,10 @@
 
 
 --]]
-local _, ns = ...
-local oUF = ns.oUF or oUF
+local DraeUI = select(2, ...)
+local oUF = DraeUI.oUF or oUF
 
---
-local T, C, G, P, U, _ = select(2, ...):UnPack()
-local UF = T:GetModule("UnitFrames")
+local UF = DraeUI:GetModule("UnitFrames")
 
 -- Localise a bunch of functions
 local _G = _G
@@ -142,10 +140,10 @@ UF.CreateCastBar = function(self, width, height, anchor, anchorAt, anchorTo, xOf
 	castbar:SetStatusBarColor(0.5, 0.5, 1, 1)
 
 	--color
-	castbar.CastingColor 			= T.db["castbar"].colorCasting or { 0.5, 0.5, 1.0 }
-	castbar.CompleteColor 			= T.db["castbar"].colorComplete or { 0.5, 1.0, 0 }
-	castbar.FailColor 				= T.db["castbar"].colorFail or { 1.0, 0.05, 0 }
-	castbar.ChannelingColor 		= T.db["castbar"].colorChannel or { 0.5, 0.5, 1.0 }
+	castbar.CastingColor 			= DraeUI.db["castbar"].colorCasting or { 0.5, 0.5, 1.0 }
+	castbar.CompleteColor 			= DraeUI.db["castbar"].colorComplete or { 0.5, 1.0, 0 }
+	castbar.FailColor 				= DraeUI.db["castbar"].colorFail or { 1.0, 0.05, 0 }
+	castbar.ChannelingColor 		= DraeUI.db["castbar"].colorChannel or { 0.5, 0.5, 1.0 }
 
 	castbar.OnUpdate 				 = OnCastbarUpdate
 	castbar.PostCastStart 			 = PostCastStart
@@ -178,10 +176,10 @@ UF.CreateCastBar = function(self, width, height, anchor, anchorAt, anchorTo, xOf
 	castbar.Spark = spark
 
 	-- Cast time
-	castbar.Time = T.CreateFontObject(castbar, T.db["general"].fontsize3, T["media"].font, "RIGHT", 2, height + 6)
+	castbar.Time = DraeUI.CreateFontObject(castbar, DraeUI.db["general"].fontsize3, DraeUI["media"].font, "RIGHT", 2, height + 6)
 
 	-- Spell name
-	castbar.Text = T.CreateFontObject(castbar, T.db["general"].fontsize3, T["media"].font, "LEFT", -2, height + 6)
+	castbar.Text = DraeUI.CreateFontObject(castbar, DraeUI.db["general"].fontsize3, DraeUI["media"].font, "LEFT", -2, height + 6)
 
 	local shield = castbar:CreateTexture(nil, "BACKGROUND", nil, 7)
 	shield:SetTexture("Interface\\TARGETINGFRAME\\PortraitQuestBadge")
@@ -236,8 +234,8 @@ do
 
 			_G[bar]:SetParent(UIParent)
 			_G[bar]:SetScale(1)
-			_G[bar]:SetHeight(T.db["castbar"].player.height)
-			_G[bar]:SetWidth(T.db["castbar"].player.width / 2)
+			_G[bar]:SetHeight(DraeUI.db["castbar"].player.height)
+			_G[bar]:SetWidth(DraeUI.db["castbar"].player.width / 2)
 			if (bar == "MirrorTimer1") then
 				_G[bar]:ClearAllPoints()
 				_G[bar]:SetPoint("RIGHT", self.Castbar, "RIGHT", 0, 30)
@@ -254,10 +252,10 @@ do
 			_G[bar.."Border"]:Hide()
 
 			_G[bar.."Text"]:ClearAllPoints()
-			_G[bar.."Text"]:SetFont(T["media"].font, 10)
+			_G[bar.."Text"]:SetFont(DraeUI["media"].font, 10)
 			_G[bar.."Text"]:SetPoint("LEFT", _G[bar.."StatusBar"], 5, 1)
 
-			_G[bar.."TextTime"] = T.CreateFontObject(_G[bar.."StatusBar"], 10, T["media"].font, "RIGHT", -5, 1, "NONE") -- Our timer
+			_G[bar.."TextTime"] = DraeUI.CreateFontObject(_G[bar.."StatusBar"], 10, DraeUI["media"].font, "RIGHT", -5, 1, "NONE") -- Our timer
 
 			_G[bar.."StatusBar"]:ClearAllPoints()
 			_G[bar.."StatusBar"]:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")

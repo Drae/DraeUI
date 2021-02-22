@@ -2,13 +2,11 @@
 
 
 --]]
-local _, ns = ...
-local oUF = ns.oUF or draeUF
+local DraeUI = select(2, ...)
+local oUF = DraeUI.oUF or oUF
 
---
-local T, C, G, P, U, _ = unpack(select(2, ...))
-local UF = T:GetModule("UnitFrames")
-local Roster = T:GetModule("Roster")
+local UF = DraeUI:GetModule("UnitFrames")
+local Roster = DraeUI:GetModule("Roster")
 
 local Smoothing = LibStub("LibCutawaySmooth-1.0", true)
 local CG = LibStub("LibCustomGlow-1.0", true)
@@ -217,7 +215,7 @@ do
 			})
 
 			local t = ind:CreateTexture(nil, "OVERLAY")
-			t:SetTexCoord(unpack(T.TexCoords))
+			t:SetTexCoord(unpack(DraeUI.TexCoords))
 			t:SetPoint("CENTER", ind, "CENTER")
 			t:SetSize(indicators[indicator].width - 2, indicators[indicator].height - 2)
 			t:SetColorTexture(0, 0, 0, 1)
@@ -297,7 +295,7 @@ do
 
 		if (indicators[indicator].type == "icon") then
 			local count = ind:CreateFontString(nil, "OVERLAY")
-			count:SetFont(T["media"].font, T.db["general"].fontsize2, "OUTLINE")
+			count:SetFont(DraeUI["media"].font, DraeUI.db["general"].fontsize2, "OUTLINE")
 			count:SetPoint("BOTTOMRIGHT", ind, "BOTTOMRIGHT", 5, -4)
 			count:SetTextColor(1, 1, 1)
 			count:SetShadowOffset(1, -1)
@@ -431,7 +429,7 @@ do
 			if (not indicator_cache[indicator]) then
 				indicator_cache[indicator] = {}
 
-				for st, pr in pairs(T.dbClass["statusmap"][indicator]) do
+				for st, pr in pairs(DraeUI.dbClass["statusmap"][indicator]) do
 					-- Create a table ref for this status in the cache since one does
 					-- not yet exist, barely populate enough for sorting purposes
 					if (not status_cache[st]) then
@@ -571,12 +569,12 @@ do
 		hpbg.multiplier = 0.25
 		hp.bg = hpbg
 
-		if (T.db["raidframes"].colorSmooth) then
+		if (DraeUI.db["raidframes"].colorSmooth) then
 			Smoothing:EnableBarAnimation(hp)
 		end
 
-		hp.colorClassPet = T.db["raidframes"].colorPet
-		hp.colorCharmed = T.db["raidframes"].colorCharmed
+		hp.colorClassPet = DraeUI.db["raidframes"].colorPet
+		hp.colorCharmed = DraeUI.db["raidframes"].colorCharmed
 		hp.Override = UF.UpdateRaidHealth -- override the oUF update
 		frame.Health = hp
 
@@ -584,7 +582,7 @@ do
 		if (not frame.__is_pet) then
 			local pp = CreateFrame("StatusBar", nil, frame)
 			pp:SetFrameLevel(baseLevel + 2)
-			pp:SetHeight(T.db["raidframes"].powerHeight)
+			pp:SetHeight(DraeUI.db["raidframes"].powerHeight)
 			pp:SetPoint("BOTTOMLEFT")
 			pp:SetPoint("BOTTOMRIGHT")
 			pp:SetPoint("TOP", hp, "BOTTOM", 0, -1.5) -- Little offset to make it pretty
@@ -597,11 +595,11 @@ do
 			ppbg.multiplier = 0.25
 			pp.bg = ppbg
 
-			if (T.db["raidframes"].colorSmooth) then
+			if (DraeUI.db["raidframes"].colorSmooth) then
 				Smoothing:EnableBarAnimation(pp)
 			end
 
-			pp.__bar_height = T.db["raidframes"].powerHeight
+			pp.__bar_height = DraeUI.db["raidframes"].powerHeight
 			pp.__bar_texture = "Interface\\AddOns\\draeUI\\media\\statusbars\\striped"
 			frame.RaidPower = pp
 		end
@@ -677,7 +675,7 @@ do
 
 		-- Text1 (used for name)
 		local text1 = hp:CreateFontString(nil, "OVERLAY")
-		text1:SetFont(T["media"].font, T.db["general"].fontsize3, "NONE")
+		text1:SetFont(DraeUI["media"].font, DraeUI.db["general"].fontsize3, "NONE")
 		text1:SetPoint("CENTER", hp, "CENTER", 0, frame.__is_pet and 0 or 5)
 		text1:SetShadowOffset(1, -1)
 		frame:Tag(text1, "[draeraid:name]")
@@ -686,7 +684,7 @@ do
 		if (not frame.__is_pet) then
 			-- Text2 (used for general indication)
 			local text2 = hp:CreateFontString(nil, "OVERLAY")
-			text2:SetFont(T["media"].font, T.db["general"].fontsize3, "NONE")
+			text2:SetFont(DraeUI["media"].font, DraeUI.db["general"].fontsize3, "NONE")
 			text2:SetPoint("CENTER", hp, "CENTER", 0, -6)
 			text2:SetShadowOffset(1, -1)
 			text2.SetJob = SetStatus_Text

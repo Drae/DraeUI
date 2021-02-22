@@ -2,9 +2,9 @@
 
 
 --]]
-local T, C, G, P, U, _ = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
 
-local B = T:NewModule("Blizzard", "AceEvent-3.0", "AceHook-3.0")
+local B = DraeUI:NewModule("Blizzard", "AceEvent-3.0", "AceHook-3.0")
 
 --[[
 

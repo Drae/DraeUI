@@ -1,7 +1,7 @@
 --[[
 
 --]]
-local T, C, G, P, U, _ = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
 
 --[[
 
@@ -33,7 +33,7 @@ local ChangeFont = function(obj, font, size, style, r, g, b, sr, sg, sb, sa, sox
 	return fontObjec
 end
 
-T.UpdateBlizzardFonts = function(self)
+DraeUI.UpdateBlizzardFonts = function(self)
 	-- Change fonts
 
 	local FontStandard = self["media"].font

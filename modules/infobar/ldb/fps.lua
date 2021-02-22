@@ -2,9 +2,9 @@
 
 
 --]]
-local T, C, G, P, U, _ = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
 
-local InfoBar = T:GetModule("Infobar")
+local InfoBar = DraeUI:GetModule("Infobar")
 local FPS = InfoBar:NewModule("DraeFPS", "AceEvent-3.0", "AceTimer-3.0")
 
 local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeFPS", {
@@ -40,7 +40,7 @@ FPS.UpdateFPS = function(self)
 		avgFPS = (avgFPS * (timeFPS - 1) + framerate) / timeFPS
 	end
 
-	local r2, g2, b2 = T.ColorGradient(framerate / 60 - 0.001, 1, 0, 0, 1, 1, 0, 0, 1, 0)
+	local r2, g2, b2 = DraeUI.ColorGradient(framerate / 60 - 0.001, 1, 0, 0, 1, 1, 0, 0, 1, 0)
 	LDB.text = format("|cff%02x%02x%02x%d|r|cff%02x%02x%02xfps|r", r2 * 255, g2 * 255, b2 * 255, framerate, 255, 255, 255)
 end
 

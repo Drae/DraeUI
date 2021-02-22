@@ -1,9 +1,9 @@
 --[[
 
 --]]
-local T, C, G, P, U, _ = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
 
-local M = T:NewModule("Misc", "AceEvent-3.0", "AceTimer-3.0")
+local M = DraeUI:NewModule("Misc", "AceEvent-3.0", "AceTimer-3.0")
 
 local UIErrorsFrame = UIErrorsFrame
 local interruptMsg = INTERRUPTED .. " %s's \124cff71d5ff\124Hspell:%d\124h[%s]\124h\124r!"
@@ -25,7 +25,7 @@ do
 
 	local VendorGrays = function(delete, nomsg)
 		if (not MerchantFrame or not MerchantFrame:IsShown()) and not delete then
-			T.Print("You must be at a vendor.")
+			DraeUI.Print("You must be at a vendor.")
 			return
 		end
 
@@ -56,14 +56,14 @@ do
 
 		if (c > 0 and not delete) then
 			local g, s, c = floor(c / 10000) or 0, floor((c % 10000) / 100) or 0, c % 100
-			T.Print("Vendored gray items for: |cffffffff"..g.."g |cffffffff"..s.."s |cffffffff"..c.."c.")
+			DraeUI.Print("Vendored gray items for: |cffffffff"..g.."g |cffffffff"..s.."s |cffffffff"..c.."c.")
 		elseif (not delete and not nomsg) then
-			T.Print("No gray items to sell")
+			DraeUI.Print("No gray items to sell")
 		elseif (count > 0) then
 			local g, s, c = floor(c / 10000) or 0, floor((c % 10000) / 100) or 0, c % 100
-			T.Print(format("Deleted %d gray items. Total Worth: %s", count, " |cffffffff"..g.."g |cffffffff"..s.."s |cffffffff"..c.."c"))
+			DraeUI.Print(format("Deleted %d gray items. Total Worth: %s", count, " |cffffffff"..g.."g |cffffffff"..s.."s |cffffffff"..c.."c"))
 		elseif (not nomsg) then
-			T.Print("No gray items to delete")
+			DraeUI.Print("No gray items to delete")
 		end
 	end
 
@@ -85,12 +85,12 @@ do
 				local c, s, g = cost % 100, floor((cost % 10000) / 100), floor(cost / 10000)
 
 				if (autoRepair == "GUILD") then
-					T.Print("Your items have been repaired using guild bank funds for: "..GetCoinTextureString(cost, 13))
+					DraeUI.Print("Your items have been repaired using guild bank funds for: "..GetCoinTextureString(cost, 13))
 				else
-					T.Print("Your items have been repaired using your own funds for: "..GetCoinTextureString(cost, 13))
+					DraeUI.Print("Your items have been repaired using your own funds for: "..GetCoinTextureString(cost, 13))
 				end
 			else
-				T.Print("You don't have enough money to repair!")
+				DraeUI.Print("You don't have enough money to repair!")
 			end
 		end
 	end

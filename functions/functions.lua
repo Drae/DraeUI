@@ -2,7 +2,7 @@
 
 
 --]]
-local T, C, G, P, U, _ = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
 
 -- Localise a bunch of functions
 local _G = _G
@@ -12,12 +12,12 @@ local UIParent, CreateFrame, ToggleDropDownMenu = UIParent, CreateFrame, ToggleD
 --[[
 		General functions
 --]]
-T.Print = function(...)
+DraeUI.Print = function(...)
 	print("|cff33ff99draeUI:|r ", ...)
 end
 
 -- Output an rgb hex string
-T.Hex = function (r, g, b, a)
+DraeUI.Hex = function (r, g, b, a)
 	if (type(r) == "table") then
 		if (r.r) then
 			r, g, b = r.r, r.g, r.b
@@ -30,7 +30,7 @@ T.Hex = function (r, g, b, a)
 end
 
 -- MB or KB
-T.MemFormat = function(num)
+DraeUI.MemFormat = function(num)
 	if (num > 1024) then
 		return format("%.2f MB", (num / 1024))
 	else
@@ -39,7 +39,7 @@ T.MemFormat = function(num)
 end
 
 -- UTF-8 encoding
-T.UTF8 = function(str, i, dots)
+DraeUI.UTF8 = function(str, i, dots)
 	local bytes = str and str:len() or 0
 
 	if (bytes <= i) then
@@ -73,7 +73,7 @@ end
 do
 	local grid
 
-	T.AlignGridShow = function(self, gridSize)
+	DraeUI.AlignGridShow = function(self, gridSize)
 		if (not grid or (gridSize and grid.gridSize ~= gridSize)) then
 			self:AlignGridCreate(gridSize)
 		end
@@ -81,7 +81,7 @@ do
 		grid:Show()
 	end
 
-	T.AlignGridHide = function(self, gridSize)
+	DraeUI.AlignGridHide = function(self, gridSize)
 		if (not grid) then return end
 
 		grid:Hide()
@@ -91,7 +91,7 @@ do
 		end
 	end
 
-	T.AlignGridToggle = function(self, gridSize)
+	DraeUI.AlignGridToggle = function(self, gridSize)
 		if (grid and grid:IsVisible()) then
 			self:AlignGridHide(gridSize)
 		else
@@ -99,7 +99,7 @@ do
 		end
 	end
 
-	T.AlignGridCreate = function(self, gridSize)
+	DraeUI.AlignGridCreate = function(self, gridSize)
 		if (not grid or (gridSize and grid.gridSize ~= gridSize)) then
 			grid = nil
 
@@ -111,9 +111,9 @@ do
 		grid.gridSize = gridSize
 
 		local size = 2
-		local width = T.screenWidth
-		local ratio = width / T.screenHeight
-		local height = T.screenHeight * ratio
+		local width = DraeUI.screenWidth
+		local ratio = width / DraeUI.screenHeight
+		local height = DraeUI.screenHeight * ratio
 
 		local wStep = width / gridSize
 		local hStep = height / gridSize
@@ -131,7 +131,7 @@ do
 			tx:SetPoint("BOTTOMRIGHT", grid, "BOTTOMLEFT", i * wStep + (size / 2), 0)
 		end
 
-		height = T.screenHeight
+		height = DraeUI.screenHeight
 
 		do
 			local tx = grid:CreateTexture(nil, "BACKGROUND")
@@ -157,7 +157,7 @@ do
 end
 
 -- Smooth colour gradient between two r, g, b value
-T.ColorGradient = function(perc, ...)
+DraeUI.ColorGradient = function(perc, ...)
 	if (perc > 1) then
 		local r, g, b = select(select("#", ...) - 2, ...)
 		return r, g, b
@@ -174,7 +174,7 @@ T.ColorGradient = function(perc, ...)
 end
 
 -- Create and set font
-T.CreateFontObject = function(parent, size, font, anchorAt, oX, oY, type, anchor, anchorTo)
+DraeUI.CreateFontObject = function(parent, size, font, anchorAt, oX, oY, type, anchor, anchorTo)
 	local fo
 	if (parent:IsObjectType("EditBox") or parent:IsObjectType("FontString")) then
 		fo = parent
@@ -198,7 +198,7 @@ T.CreateFontObject = function(parent, size, font, anchorAt, oX, oY, type, anchor
 end
 
 -- Print out money in a nicely formatted way
-T.IntToGold = function(coins, showIcons)
+DraeUI.IntToGold = function(coins, showIcons)
 	local g = floor(coins / (COPPER_PER_SILVER * SILVER_PER_GOLD))
 	local s = floor((coins - (g * COPPER_PER_SILVER * SILVER_PER_GOLD)) / COPPER_PER_SILVER)
 	local c = coins % COPPER_PER_SILVER
@@ -225,7 +225,7 @@ do
 		return frame
 	end
 
-	T.CreateClass = function(self, frameType, prototype)
+	DraeUI.CreateClass = function(self, frameType, prototype)
 		local class = CreateHiddenFrame(frameType)
 		local class_mt = { __index = class }
 
@@ -244,7 +244,7 @@ do
 end
 
 -- Search object for needle in haystack
-T.Contains = function(val, table)
+DraeUI.Contains = function(val, table)
 	for i = 1, #table do
 		if table[i] == val then
 			return true
@@ -257,7 +257,7 @@ end
 --[[
 
 ]]
-T.Debug = function(self, t)
+DraeUI.Debug = function(self, t)
     local print_r_cache = {}
 
     local function sub_print_r(t,indent)

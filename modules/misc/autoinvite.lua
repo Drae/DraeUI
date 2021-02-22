@@ -2,9 +2,9 @@
 		Largely copied from oRA3
 
 --]]
-local T, C, G, P, U, _ = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
 
-local TI = T:NewModule('AutoInvite', 'AceEvent-3.0')
+local TI = DraeUI:NewModule('AutoInvite', 'AceEvent-3.0')
 
 -- Local copies
 local _G = _G

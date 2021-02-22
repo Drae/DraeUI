@@ -1,5 +1,5 @@
-local T, C, G, P, U, _ = unpack(select(2, ...))
-local UF = T:GetModule("UnitFrames")
+local DraeUI = select(2, ...)
+local UF = DraeUI:GetModule("UnitFrames")
 
 -- Highmaul
 UF["raiddebuffs"]["instances"]["Highmaul"] = function()
@@ -59,7 +59,7 @@ UF["raiddebuffs"]["instances"]["Highmaul"] = function()
 	UF:AddRaidDebuff(true, 157349, 5) 		-- FORCENOVA  157349 164232 164235 164240
 	UF:AddRaidDebuff(true, 158609, 4) 		-- MARKOFCHAOS  158605 164176 164178 164191
 	UF:AddRaidDebuff(true, 156238, 5, true) -- Arcane Wrath
-    
+
 	UF:AddRaidDebuff(true, 157763, 4) 		-- FIXATE
 	UF:AddRaidDebuff(true, 158553, 6, true) -- CRUSHARMOR
 end
@@ -109,7 +109,7 @@ UF["raiddebuffs"]["instances"]["Blackrock Foundry"] = function()
 	UF:AddRaidDebuff(true, 155196, 6, true) -- FIXATE
 	UF:AddRaidDebuff(true, 155225, 5) -- MELT
     UF:AddRaidDebuff(true, 158247, 6, true) -- Hot blooded
-	
+
 	--Hans'gar and Franzok
 	UF:AddRaidDebuff(true, 157139, 6) -- SHATTEREDVERTEBRAE
 	UF:AddRaidDebuff(true, 161570, 5) -- SEARINGPLATES

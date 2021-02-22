@@ -5,8 +5,8 @@
 local _, ns = ...
 local oUF = ns.oUF or oUF
 
-local T, C, G, P, U, _ = select(2, ...):UnPack()
-local UF = T:GetModule("UnitFrames")
+local DraeUI = select(2, ...)
+local UF = DraeUI:GetModule("UnitFrames")
 
 --
 local GameTooltip, CreateFrame = GameTooltip, CreateRaidAnchor

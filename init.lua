@@ -4,49 +4,26 @@
 --]]
 local addon, DraeUI = ...
 
-DraeUI[1] = {}
-DraeUI[2] = {}
-DraeUI[3] = {}
-DraeUI[4] = {}
-DraeUI[5] = {}
+LibStub("AceAddon-3.0"):NewAddon(DraeUI, addon, "AceEvent-3.0", "AceConsole-3.0")
 
-LibStub("AceAddon-3.0"):NewAddon(DraeUI[1], addon, "AceEvent-3.0", "AceConsole-3.0")
-
---[[
-
---]]
-DraeUI.UnPack = function(self)
-	return self[1], self[2], self[3], self[4], self[5]
-end
+local LSM = LibStub("LibSharedMedia-3.0")
 
 --
-DraeUI[1].defaults = {
+DraeUI.TexCoords = {.1, .9, .1, .9}
+DraeUI.defaults = {
 	profile = {},
 	global = {},
 	class = {},
 	char = {}
 }
+DraeUI.media = {}
+DraeUI.HiddenFrame = CreateFrame("Frame")
+DraeUI.HiddenFrame:Hide()
 
 --[[
 
 --]]
-local  T, C, G, P, U, _ = select(2, ...):UnPack()
-
-local LSM = LibStub("LibSharedMedia-3.0")
-
---
-T.TexCoords = {.1, .9, .1, .9}
-
---
-T.media = {}
-
-T.HiddenFrame = CreateFrame("Frame")
-T.HiddenFrame:Hide()
-
---[[
-
---]]
-T.OnInitialize = function(self)
+DraeUI.OnInitialize = function(self)
 	--[[
 		C == config/.db.profile -> data stored under "name-realm" tables and available to all chars on this account
 		G == global/.db.global -> data stored under single table available to all chars on this account
@@ -70,14 +47,14 @@ local HideCommandBar = function()
 	OrderHallCommandBar.Show = OrderHallCommandBar.Hide
 end
 
-T.ADDON_LOADED = function(self)
+DraeUI.ADDON_LOADED = function(self)
 	if (IsAddOnLoaded("Blizzard_OrderHallUI") and OrderHallCommandBar ~= nil) then
 		self:UnregisterEvent("ADDON_LOADED", "HookAddons")
 		HideCommandBar()
 	end
 
 	-- Hide ArenaUI
-	if (IsAddOnLoaded("Blizzard_ArenaUI") and T.db["frames"].showArena) then
+	if (IsAddOnLoaded("Blizzard_ArenaUI") and DraeUI.db["frames"].showArena) then
 		Arena_LoadUI = function() end
 		SetCVar('showArenaEnemyFrames', '0', 'SHOW_ARENA_ENEMY_FRAMES_TEXT')
 
@@ -91,15 +68,15 @@ T.ADDON_LOADED = function(self)
 	end
 end
 
-T.OnEnable = function(self)
+DraeUI.OnEnable = function(self)
 	self:UpdateBlizzardFonts()
 	self:InitializeConsoleCommands()
 
 	self:RegisterEvent("ADDON_LOADED", "ADDON_LOADED")
-	T:ADDON_LOADED()
+	DraeUI:ADDON_LOADED()
 end
 
-T.UpdateMedia = function(self)
+DraeUI.UpdateMedia = function(self)
 	if (not self.db["general"]) then return end
 
 	self["media"].font 		= LSM:Fetch("font", self.db["general"].font)

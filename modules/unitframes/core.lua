@@ -2,12 +2,10 @@
 		Common event handling, specific events are handled
 		in their local functions
 --]]
-local _, ns = ...
-local oUF = ns.oUF or oUF
+local DraeUI = select(2, ...)
+local oUF = DraeUI.oUF or oUF
 
---
-local T, C, G, P, U, _ = select(2, ...):UnPack()
-local UF = T:GetModule("UnitFrames")
+local UF = DraeUI:GetModule("UnitFrames")
 
 local Smoothing = LibStub("LibCutawaySmooth-1.0", true)
 
@@ -230,13 +228,13 @@ do
 	end
 
 	UF.CreateTotemBar = function(self, point, anchor, relpoint, xOffset, yOffset)
-		if (T.playerClass == "WARRIOR" or T.playerClass == "ROGUE" or T.playerClass == "PRIEST" or T.playerClass == "HUNTER") then return end
+		if (DraeUI.playerClass == "WARRIOR" or DraeUI.playerClass == "ROGUE" or DraeUI.playerClass == "PRIEST" or DraeUI.playerClass == "HUNTER") then return end
 
 		local totem = CreateFrame("Frame", nil, self)
 		totem:SetPoint(point, anchor, relpoint, xOffset, yOffset)
 		totem:SetFrameLevel(12)
 
-		local width, height	= T.db["frames"].auras.auraLrg or 24, T.db["frames"].auras.auraLrg or 24
+		local width, height	= DraeUI.db["frames"].auras.auraLrg or 24, DraeUI.db["frames"].auras.auraLrg or 24
 
 		for i = 1, MAX_TOTEMS do
 			local t = CreateFrame("Button", nil, self)
@@ -257,7 +255,7 @@ do
 
 			local icon = t:CreateTexture(nil, "BACKGROUND")
 			icon:SetAllPoints(t)
-			icon:SetTexCoord(unpack(T.TexCoords))
+			icon:SetTexCoord(unpack(DraeUI.TexCoords))
 			t.Icon = icon
 
 			local cd = CreateFrame("Cooldown", nil, t)
@@ -323,7 +321,7 @@ do
 				color = FACTION_BAR_COLORS[UnitReaction(self.caster, "player")]
 			end
 
-			GameTooltip:AddLine(("Cast by %s%s|r"):format(T.Hex(color.r, color.g, color.b), UnitName(self.caster)))
+			GameTooltip:AddLine(("Cast by %s%s|r"):format(DraeUI.Hex(color.r, color.g, color.b), UnitName(self.caster)))
 		end
 
 		GameTooltip:Show()
@@ -354,7 +352,7 @@ do
 		button.border = border
 
 		local icon = button:CreateTexture(nil, "BACKGROUND")
-		icon:SetTexCoord(unpack(T.TexCoords))
+		icon:SetTexCoord(unpack(DraeUI.TexCoords))
 		icon:SetAllPoints(button)
 		button.icon = icon
 
@@ -367,7 +365,7 @@ do
 		button.cd = cd
 
 		local count = button:CreateFontString(nil)
-		count:SetFont(T["media"].font, T.db["general"].fontsize3, "THINOUTLINE")
+		count:SetFont(DraeUI["media"].font, DraeUI.db["general"].fontsize3, "THINOUTLINE")
 		count:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 7, -6)
 		button.count = count
 
@@ -433,7 +431,7 @@ do
 		button.caster = caster
 		button.dtype = dtype
 
-		if (T.db["frames"].auras.blacklistAuraFilter[name]) then
+		if (DraeUI.db["frames"].auras.blacklistAuraFilter[name]) then
 			return false
 		end
 
@@ -447,7 +445,7 @@ do
 		if (button.filter == "HELPFUL") then
 			if (unit ~= "player" and unit ~= "pet" and unit ~= "vehicle") then
 				return true
-			elseif (T.db["frames"].auras.showBuffsOnMe and duration > 0 and duration <= 600) then
+			elseif (DraeUI.db["frames"].auras.showBuffsOnMe and duration > 0 and duration <= 600) then
 				return true
 			end
 		end
@@ -460,20 +458,20 @@ do
 		if (button.filter == "HARMFUL") then
 			if (unit ~= "player" and unit ~= "pet" and unit ~= "vehicle") then
 				return true
-			elseif (T.db["frames"].auras.showDebuffsOnMe) then
+			elseif (DraeUI.db["frames"].auras.showDebuffsOnMe) then
 				return true
 			end
 		end
 
 		-- Filtered buffs/debuffs
-		if (T.db["frames"].auras.filterType == "WHITELIST") then
-			if (T.db["frames"].auras.whiteListFilter[element.filter == "HELPFUL" and "BUFF" or "DEBUFF"][name]) then
+		if (DraeUI.db["frames"].auras.filterType == "WHITELIST") then
+			if (DraeUI.db["frames"].auras.whiteListFilter[element.filter == "HELPFUL" and "BUFF" or "DEBUFF"][name]) then
 				return true
 			end
 
 			return false
 		else
-			if (T.db["frames"].auras.blackListFilter[element.filter == "HELPFUL" and "BUFF" or "DEBUFF"][name]) then
+			if (DraeUI.db["frames"].auras.blackListFilter[element.filter == "HELPFUL" and "BUFF" or "DEBUFF"][name]) then
 				return false
 			end
 
@@ -489,7 +487,7 @@ do
 		button.caster = caster
 		button.dtype = dtype
 
-		if (T.db["frames"].auras.blacklistAuraFilter[name]) then
+		if (DraeUI.db["frames"].auras.blacklistAuraFilter[name]) then
 			return false
 		end
 
@@ -503,7 +501,7 @@ do
 	end
 
 	UF.AddDebuffs = function(self, point, relativeFrame, relativePoint, ofsx, ofsy, num, size, spacing, growthx, growthy)
-		local debuffsPerRow = T.db["frames"].auras.debuffs_per_row[self.unit] or T.db["frames"].auras.debuffs_per_row["other"]
+		local debuffsPerRow = DraeUI.db["frames"].auras.debuffs_per_row[self.unit] or DraeUI.db["frames"].auras.debuffs_per_row["other"]
 
 		local width = (spacing * debuffsPerRow) + (size * debuffsPerRow)
 		local height = (spacing * (num / debuffsPerRow)) + (size * (num / debuffsPerRow))
@@ -529,7 +527,7 @@ do
 	end
 
 	UF.AddBuffs = function(self, point, relativeFrame, relativePoint, ofsx, ofsy, num, size, spacing, growthx, growthy)
-		local buffsPerRow = T.db["frames"].auras.buffs_per_row[self.unit] or T.db["frames"].auras.buffs_per_row["other"]
+		local buffsPerRow = DraeUI.db["frames"].auras.buffs_per_row[self.unit] or DraeUI.db["frames"].auras.buffs_per_row["other"]
 
 		local width = (spacing * buffsPerRow) + (size * buffsPerRow)
 		local height = (spacing * (num / buffsPerRow)) + (size * (num / buffsPerRow))
@@ -546,7 +544,7 @@ do
 		buffs["growth-y"] = growthy
 		buffs.filter = "HELPFUL" -- Explicitly set the filter or the first customFilter call won"t work
 		buffs.showBuffType = true
-		buffs.showStealableBuffs = T.playerClass == "MAGE" and T.db["frames"].showStealableBuffs or false
+		buffs.showStealableBuffs = DraeUI.playerClass == "MAGE" and DraeUI.db["frames"].showStealableBuffs or false
 
 		buffs.CustomFilter = filter or CustomFilter
 		buffs.CreateIcon = CreateAuraIcon

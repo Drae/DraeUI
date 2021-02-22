@@ -2,9 +2,9 @@
 
 
 --]]
-local T, C, G, P, U, _ = unpack(select(2, ...))
+local DraeUI = select(2, ...)
 
-T.defaults.class["DRUID"] = {
+DraeUI.defaults.class["DRUID"] = {
 	auras = {
 		["buff_rejuvenation"] 	= { buff = "Rejuvenation", 	mine = true,  color = { 0.8, 0.8, 0.8 } },
 		["buff_wildgrowth"] 	= { buff = "Wild Growth", 	mine = true,  color = { 0.6, 0.2, 0.8 } },

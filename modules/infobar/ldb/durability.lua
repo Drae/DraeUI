@@ -2,9 +2,9 @@
 
 
 --]]
-local T, C, G, P, U, _ = select(2, ...):UnPack()
+local DraeUI = select(2, ...)
 
-local IB = T:GetModule("Infobar")
+local IB = DraeUI:GetModule("Infobar")
 local DUR = IB:NewModule("Durability", "AceEvent-3.0", "AceTimer-3.0")
 
 local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeDurability", {
@@ -64,7 +64,7 @@ DUR.UpdateDurability = function(self)
 		end
 	end
 
-	local r1, g1, b1 = T.ColorGradient(minDurability / 100 - 0.001, 1, 0, 0, 1, 1, 0, 0, 1, 0)
+	local r1, g1, b1 = DraeUI.ColorGradient(minDurability / 100 - 0.001, 1, 0, 0, 1, 1, 0, 0, 1, 0)
 
 	LDB.text = format("|cff%02x%02x%02x%d|r|cff%02x%02x%02x%%dur|r", r1 * 255, g1 * 255, b1 * 255, minDurability, 255, 255, 255)
 end
@@ -83,7 +83,7 @@ LDB.OnEnter = function(self)
 		local name = slotName[slot]
 
 		if (pctDurability) then
-			GameTooltip:AddDoubleLine(name, format("%d%%", pctDurability), 1, 1, 1, T.ColorGradient(pctDurability / 100 - 0.001, 1, 0, 0, 1, 1, 0, 0, 1, 0))
+			GameTooltip:AddDoubleLine(name, format("%d%%", pctDurability), 1, 1, 1, DraeUI.ColorGradient(pctDurability / 100 - 0.001, 1, 0, 0, 1, 1, 0, 0, 1, 0))
 		end
 	end
 
