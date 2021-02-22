@@ -25,10 +25,10 @@ DraeUI.HiddenFrame:Hide()
 --]]
 DraeUI.OnInitialize = function(self)
 	--[[
-		C == config/.db.profile -> data stored under "name-realm" tables and available to all chars on this account
-		G == global/.db.global -> data stored under single table available to all chars on this account
-		P == config/.db.class -->data stored under class name
-		U == .dbChar.profile -> data stored under "name-realm" tables and accessible to only this char
+		.db 		-> (profile) -> data stored under "name-realm" tables and available to all chars on this account
+		.dbGlobal 	-> (global)	 ->	data stored under single table available to all chars on this account
+		.dbClass 	-> (class)	 ->	data stored under class name
+		.dbChar		-> (profile) ->	data stored under "name-realm" tables and accessible to only this char
 	--]]
 	local db = LibStub("AceDB-3.0"):New("draeUIDB", self.defaults)	-- Default to our defaults (C. setup)
 
@@ -39,6 +39,9 @@ DraeUI.OnInitialize = function(self)
 	self.dbChar = LibStub("AceDB-3.0"):New("draeUICharDB")["profile"]	-- Pull the profile specifically
 
 	self:UpdateMedia()
+end
+
+DraeUI.OnEnable = function(self)
 end
 
 local HideCommandBar = function()
@@ -73,12 +76,14 @@ DraeUI.OnEnable = function(self)
 	self:InitializeConsoleCommands()
 
 	self:RegisterEvent("ADDON_LOADED", "ADDON_LOADED")
-	DraeUI:ADDON_LOADED()
+	self:ADDON_LOADED()
 end
 
 DraeUI.UpdateMedia = function(self)
-	if (not self.db["general"]) then return end
+	if (not self.db.general) then return end
 
-	self["media"].font 		= LSM:Fetch("font", self.db["general"].font)
-	self["media"].statusbar = LSM:Fetch("statusbar", self.db["general"].statusbar)
+	self.media = {
+		font = LSM:Fetch("font", self.db.general.font),
+		statusbar = LSM:Fetch("statusbar", self.db.general.statusbar)
+	}
 end
