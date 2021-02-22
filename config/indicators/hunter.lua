@@ -3,13 +3,9 @@
 
 --]]
 local T, C, G, P, U, _ = unpack(select(2, ...))
-local UF = T:GetModule("UnitFrames")
 
-P["HUNTER"] = {
+T.defaults.class["HUNTER"] = {
 	auras = {
-        -- Common
-
-		-- Specific
 		["buff_misdirection"] 	= { buff = "Misdirection", mine = false, color = { 0.0, 0.4, 0.9 } },
 	},
 

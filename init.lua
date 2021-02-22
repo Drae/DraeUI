@@ -2,30 +2,30 @@
 
 
 --]]
-local addon, ns = ...
+local addon, DraeUI = ...
 
--- Saved Variables
-local AddonDraeUI = LibStub("AceAddon-3.0"):NewAddon(addon, "AceEvent-3.0", "AceConsole-3.0")
+DraeUI[1] = {}
+DraeUI[2] = {}
+DraeUI[3] = {}
+DraeUI[4] = {}
+DraeUI[5] = {}
 
-AddonDraeUI.VC= {}
-AddonDraeUI.VC["profile"] = {}
-AddonDraeUI.VC["global"] = {}
-AddonDraeUI.VC["class"] = {}
-AddonDraeUI.VC["char"] = {}
+LibStub("AceAddon-3.0"):NewAddon(DraeUI[1], addon, "AceEvent-3.0", "AceConsole-3.0")
 
--- Define common elements for our namespace T, C, G, P, U
-ns[1] = AddonDraeUI
-ns[2] = AddonDraeUI.VC["profile"]
-ns[3] = AddonDraeUI.VC["global"]
-ns[4] = AddonDraeUI.VC["class"]
-ns[5] = AddonDraeUI.VC["char"]
+--[[
 
-ns.UnPack = function(self)
+--]]
+DraeUI.UnPack = function(self)
 	return self[1], self[2], self[3], self[4], self[5]
 end
 
--- Add this addon into the global space
-_G.draeUI = ns
+--
+DraeUI[1].defaults = {
+	profile = {},
+	global = {},
+	class = {},
+	char = {}
+}
 
 --[[
 
@@ -53,11 +53,10 @@ T.OnInitialize = function(self)
 		P == config/.db.class -->data stored under class name
 		U == .dbChar.profile -> data stored under "name-realm" tables and accessible to only this char
 	--]]
-	local db = LibStub("AceDB-3.0"):New("draeUIDB", self.VC)			-- Default to our defaults (C. setup)
-	self.dbObj = db
+	local db = LibStub("AceDB-3.0"):New("draeUIDB", self.defaults)	-- Default to our defaults (C. setup)
 
 	self.db = db.profile
-	self.dbClass = db.class[ns[1].playerClass]
+	self.dbClass = db.class[self.playerClass]
 	self.dbGlobal = db.global
 
 	self.dbChar = LibStub("AceDB-3.0"):New("draeUICharDB")["profile"]	-- Pull the profile specifically

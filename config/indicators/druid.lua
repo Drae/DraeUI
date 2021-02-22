@@ -3,13 +3,9 @@
 
 --]]
 local T, C, G, P, U, _ = unpack(select(2, ...))
-local UF = T:GetModule("UnitFrames")
 
-P["DRUID"] = {
+T.defaults.class["DRUID"] = {
 	auras = {
-        -- Common
-
-		-- Specific
 		["buff_rejuvenation"] 	= { buff = "Rejuvenation", 	mine = true,  color = { 0.8, 0.8, 0.8 } },
 		["buff_wildgrowth"] 	= { buff = "Wild Growth", 	mine = true,  color = { 0.6, 0.2, 0.8 } },
 		["buff_lifebloom"] 		= { buff = "Lifebloom", 	mine = true,  color = { 0.9, 0,   0   } },

@@ -3,13 +3,9 @@
 
 --]]
 local T, C, G, P, U, _ = unpack(select(2, ...))
-local UF = T:GetModule("UnitFrames")
 
-P["WARLOCK"] = {
+T.defaults.class["WARLOCK"] = {
 	auras = {
-        -- Common
-
-		-- Specific
 	},
 
 	statusmap = {

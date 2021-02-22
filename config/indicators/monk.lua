@@ -3,13 +3,9 @@
 
 --]]
 local T, C, G, P, U, _ = unpack(select(2, ...))
-local UF = T:GetModule("UnitFrames")
 
-P["MONK"] = {
+T.defaults.class["MONK"] = {
 	auras = {
-        -- Common
-
-		-- Specific
 		["buff_renewingmist"] 	= { buff = "Renewing Mist", 	mine = true, color = { 0.0,  g = 1.0,  b = 0.0  } },
 		["buff_envelopingmist"] = { buff = "Enveloping Mist", 	mine = true, color = { 0.15, g = 0.87, b = 0.64 } },
 		["buff_essencefont"] 	= { buff = "Essence Font", 		mine = true, color = { 0.15, g = 0.57, b = 0.84 } },

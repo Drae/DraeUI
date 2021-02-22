@@ -3,15 +3,9 @@
 
 --]]
 local T, C, G, P, U, _ = unpack(select(2, ...))
-local UF = T:GetModule("UnitFrames")
 
-P["PALADIN"] = {
+T.defaults.class["PALADIN"] = {
     auras = {
-		-- debuff = "name", mine = "show only my spells|true,false", color="r,g,b(,a)"
-
-        -- Common
-
-		-- Specific
         ["debuff_forbearance"]            	= { debuff = "Forbearance", 				mine = false, color = { 1.0, 0.0, 0.0 } },
 
         ["buff_concentrationaura"]     		= { buff = "Concentration Aura",     		mine = true,  color = { 0.8, 0.2, 0.0 } },

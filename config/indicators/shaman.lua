@@ -3,13 +3,9 @@
 
 --]]
 local T, C, G, P, U, _ = unpack(select(2, ...))
-local UF = T:GetModule("UnitFrames")
 
-P["SHAMAN"] = {
+T.defaults.class["SHAMAN"] = {
     auras = {
-        -- Common
-
-		-- Specific
         ["buff_riptide"]     			= { buff = "Riptide", 				mine = true, color = { 0.0, 1.0, 0.7 } },
         ["buff_earthshield"]   			= { buff = "Earth Shield", 			mine = true, color = { 1.0, 0.6, 0.0 } },
         ["buff_lightningshield"]		= { buff = "Lightning Shield", 		mine = true, color = { 0.0, 0.6, 1.0 } },

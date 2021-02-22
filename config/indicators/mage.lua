@@ -3,13 +3,9 @@
 
 --]]
 local T, C, G, P, U, _ = unpack(select(2, ...))
-local UF = T:GetModule("UnitFrames")
 
-P["MAGE"] = {
+T.defaults.class["MAGE"] = {
 	auras = {
-        -- Common
-
-		-- Specific
 		["buff_arcaneintellect"]  	= { buff = "Arcane Intellect",  mine = false, color = { 0.8, 0.8, 0.8 } },  -- Spell Power + Crit
 		["buff_arcanenbrilliance"] 	= { buff = "Arcane Brilliance", mine = false, color = { 0.8, 0.8, 0.8 } },  -- Spell Power + Crit
 	},

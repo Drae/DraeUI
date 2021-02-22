@@ -3,12 +3,9 @@
 
 --]]
 local T, C, G, P, U, _ = unpack(select(2, ...))
-local UF = T:GetModule("UnitFrames")
 
-P["WARRIOR"] = {
+T.defaults.class["WARRIOR"] = {
 	auras = {
-        -- Common
-
 		-- Specific
 		["buff_battleshout"]  	= { buff = "Battle Shout", 	mine = false, color = { 0.0, 0.4, 1.0 } },  -- Attack Power
 		["buff_rallyingcry"] 	= { buff = "Rallying Cry", 	mine = true,  color = { 1.0, 1.0, 1.0 } },
