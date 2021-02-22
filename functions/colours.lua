@@ -24,13 +24,6 @@ oUF.colors.charmed 		= { 1.0, 0,   0.4 }
 oUF.colors.disconnected = { 0.9, 0.9, 0.9 }
 oUF.colors.tapped 		= { 0.6, 0.6, 0.6 }
 
-oUF.colors.runes = {
-	{ 0.77, 0.12, 0.23 };
-	{ 0.40, 0.80, 0.10 };
-	{ 0.00, 0.40, 0.70 };
-	{ 0.80, 0.10, 1.00 };
-}
-
 oUF.colors.debuffTypes = {
 	["Magic"]	= { 0.2, 0.6, 1.0 },
 	["Curse"]	= { 0.6, 0.0, 1.0 },
