@@ -216,33 +216,6 @@ DraeUI.IntToGold = function(coins, showIcons)
 	end
 end
 
-do
-	local CreateHiddenFrame = function(...)
-		local frame = CreateFrame(...)
-
-		frame:Hide()
-
-		return frame
-	end
-
-	DraeUI.CreateClass = function(self, frameType, prototype)
-		local class = CreateHiddenFrame(frameType)
-		local class_mt = { __index = class }
-
-		class.Bind = function(self, obj)
-			return setmetatable(obj, class_mt)
-		end
-
-		if prototype then
-			class.proto = prototype
-
-			return setmetatable(class, {__index = prototype})
-		end
-
-		return class
-	end
-end
-
 -- Search object for needle in haystack
 DraeUI.Contains = function(val, table)
 	for i = 1, #table do

@@ -18,14 +18,12 @@ init.lua
 
 config\config.defaults.lua
 
-functions\variables.lua
 functions\colours.lua
 functions\fonts.lua
 functions\functions.lua
 functions\maths.lua
 functions\toolkit.lua
 functions\console.lua
-functions\animation.lua
 
 # Unitframes
 modules\unitframes\init.lua

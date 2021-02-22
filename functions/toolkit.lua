@@ -3,25 +3,34 @@
 --]]
 local DraeUI = select(2, ...)
 
+--
+local EnumerateFrames, CreateFrame = EnumerateFrames, CreateFrame
+
 --[[
 
 ]]
-local Kill = function(object)
-	if (object.UnregisterAllEvents) then
-		object:UnregisterAllEvents()
-		object:SetParent(DraeUI.HiddenFrame)
-	else
-		object.Show = object.Hide
-	end
+local Kill
+do
+	local hiddenFrame = CreateFrame("Frame")
+	hiddenFrame:Hide()
 
-	object:Hide()
+	Kill = function(object)
+		if (object.UnregisterAllEvents) then
+			object:UnregisterAllEvents()
+			object:SetParent(hiddenFrame)
+		else
+			object.Show = object.Hide
+		end
+
+		object:Hide()
+	end
 end
 
 local StripTextures = function(object, kill)
 	for i = 1, object:GetNumRegions() do
 		local region = select(i, object:GetRegions())
 
-	if region and region:GetObjectType() == "Texture" then
+		if region and region:GetObjectType() == "Texture" then
 			if (kill and type(kill) == "boolean") then
 				region:Kill()
 			elseif (region:GetDrawLayer() == kill) then
@@ -42,8 +51,15 @@ local addapi = function(object)
 	if not object.StripTextures then mt.StripTextures = StripTextures end
 end
 
-local handled = {["Frame"] = true}
+--[[
+
+--]]
 local object = CreateFrame("Frame")
+
+local handled = {
+	["Frame"] = true
+}
+
 addapi(object)
 addapi(object:CreateTexture())
 addapi(object:CreateFontString())

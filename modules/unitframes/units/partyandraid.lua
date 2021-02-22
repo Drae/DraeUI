@@ -215,7 +215,7 @@ do
 			})
 
 			local t = ind:CreateTexture(nil, "OVERLAY")
-			t:SetTexCoord(unpack(DraeUI.TexCoords))
+			t:SetTexCoord(unpack(DraeUI.db.general.texcoords))
 			t:SetPoint("CENTER", ind, "CENTER")
 			t:SetSize(indicators[indicator].width - 2, indicators[indicator].height - 2)
 			t:SetColorTexture(0, 0, 0, 1)

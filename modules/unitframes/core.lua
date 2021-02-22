@@ -111,9 +111,9 @@ UF.CreateHealthBar = function(frame, width, x, y, height)
 	local hp = CreateFrame("StatusBar", nil, frame)
 	hp:SetFrameStrata(frame:GetFrameStrata())
 	hp:SetFrameLevel(frame:GetFrameLevel())
-	hp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped") --Q
+	hp:SetStatusBarTexture(DraeUI.media.statusbar) --Q
 	hp:SetSize(width, height or 7)
-	hp:SetPoint(point and "TOPRIGHT" or "TOPLEFT", frame, point and "TOPRIGHT" or "TOPLEFT", x, y)
+	hp:SetPoint("TOPLEFT", frame, "TOPLEFT", x, y)
 
 	hp.colorClass = true
 	hp.colorClassPet = false
@@ -178,7 +178,7 @@ UF.CreatePowerBar = function(frame, width, height)
 	local pp = CreateFrame("StatusBar", nil, frame)
 	pp:SetFrameStrata(frame:GetFrameStrata())
 	pp:SetFrameLevel(frame:GetFrameLevel())
-	pp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
+	pp:SetStatusBarTexture(DraeUI.media.statusbar)
 	pp:SetSize(width, height or 3)
 	pp:SetPoint("TOPLEFT", frame.Health, "BOTTOMLEFT", 0, -2.5)
 
@@ -187,7 +187,7 @@ UF.CreatePowerBar = function(frame, width, height)
 	pp.colorDisconnected = true
 	pp.colorPower = true
 
-	pp.__bar_texture = "Interface\\AddOns\\draeUI\\media\\statusbars\\striped"
+	pp.__bar_texture = DraeUI.media.statusbar
 
 	Smoothing:EnableBarAnimation(pp)
 
@@ -198,7 +198,7 @@ UF.CreateAdditionalPower = function(frame, width, height)
 	local ap = CreateFrame("StatusBar", nil, frame)
 	ap:SetFrameStrata(frame:GetFrameStrata())
 	ap:SetFrameLevel(frame:GetFrameLevel())
-	ap:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
+	ap:SetStatusBarTexture(DraeUI.media.statusbar)
 	ap:SetSize(width, height or 3)
 	ap:SetPoint("TOPLEFT", frame.Power, "BOTTOMLEFT", 0, -2.5)
 
@@ -255,7 +255,7 @@ do
 
 			local icon = t:CreateTexture(nil, "BACKGROUND")
 			icon:SetAllPoints(t)
-			icon:SetTexCoord(unpack(DraeUI.TexCoords))
+			icon:SetTexCoord(unpack(DraeUI.db.general.texcoords))
 			t.Icon = icon
 
 			local cd = CreateFrame("Cooldown", nil, t)
@@ -352,7 +352,7 @@ do
 		button.border = border
 
 		local icon = button:CreateTexture(nil, "BACKGROUND")
-		icon:SetTexCoord(unpack(DraeUI.TexCoords))
+		icon:SetTexCoord(unpack(DraeUI.db.general.texcoords))
 		icon:SetAllPoints(button)
 		button.icon = icon
 
@@ -365,7 +365,7 @@ do
 		button.cd = cd
 
 		local count = button:CreateFontString(nil)
-		count:SetFont(DraeUI["media"].font, DraeUI.db["general"].fontsize3, "THINOUTLINE")
+		count:SetFont(DraeUI.media.font, DraeUI.db.general.fontsize3, "THINOUTLINE")
 		count:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 7, -6)
 		button.count = count
 

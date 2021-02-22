@@ -285,7 +285,7 @@ UF.OnEnable = function(self)
 
 	local numSubGroups = GetNumSubGroupsinRaid()
 
-	local visibility = "raid,party"
+	local visibility = "raid,party,solo"
 
 	-- Create raid headers
 	for i = 1, NUM_RAID_GROUPS do
@@ -293,6 +293,7 @@ UF.OnEnable = function(self)
 			oUF:SpawnHeader("DraeRaid" .. i, nil, visibility,
 			"showPlayer", true,
 			"showRaid",	true,
+"showSolo", true,
 			"oUF-initialConfigFunction",([[
 				self:SetWidth(%d)
 				self:SetHeight(%d)

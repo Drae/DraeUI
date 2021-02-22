@@ -2,16 +2,10 @@
 
 
 --]]
-local DraeUI = select(2, ...)
+local DraeUI, db, dbGlobal, dbClass, dbChar = select(2, ...):UnPack()
 
 --[[
 		Default configuration settings
-
-		Try not to change settings in this file, instead create
-		a new file in this folder called config.lua. Then copy
-		the section/s containing the variables you want to alter
-		into that new file. You don't need to copy the entire
-		section just the variable/s you want to change.
 --]]
 DraeUI.defaults.profile = {
 	general = {
@@ -22,7 +16,8 @@ DraeUI.defaults.profile = {
 		fontsize1 = 13,
 		fontsize2 = 12,
 		fontsize3 = 10,
-		fontsize4 = 9
+		fontsize4 = 9,
+		texcoords = {0.1, 0.9, 0.1, 0.9}
 	},
 
 	-- Unit Frame settings
