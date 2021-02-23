@@ -4,7 +4,7 @@
 --]]
 local DraeUI = select(2, ...)
 
-local M = DraeUI:NewModule("Alreadyknown", "AceEvent-3.0", "AceHook-3.0")
+local M = DraeUI:NewModule("Alreadyknown", "AceEvent-3.0")
 
 --
 local _G = _G

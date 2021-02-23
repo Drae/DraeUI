@@ -30,29 +30,32 @@ B.PostAlertMove = function()
     GroupLootContainer:ClearAllPoints()
     GroupLootContainer:SetPoint(POSITION, AlertFrameHolder, ANCHOR_POINT, 0, YOFFSET)
 
-    if GroupLootContainer:IsShown() then
+    if (GroupLootContainer:IsShown()) then
         B.GroupLootContainer_Update(GroupLootContainer)
     end
 end
 
 B.GroupLootContainer_Update = function(self)
-	local lastIdx = nil
+	local lastIdx
 
-	for i=1, self.maxIndex do
+	for i = 1, self.maxIndex do
 		local frame = self.rollFrames[i]
 		local prevFrame = self.rollFrames[i-1]
-		if ( frame ) then
+
+		if (frame) then
 			frame:ClearAllPoints()
-			if prevFrame and not (prevFrame == frame) then
+
+			if (prevFrame and not (prevFrame == frame)) then
 				frame:SetPoint(POSITION, prevFrame, ANCHOR_POINT, 0, YOFFSET)
 			else
 				frame:SetPoint(POSITION, self, POSITION, 0, 0)
 			end
+
 			lastIdx = i
 		end
 	end
 
-	if ( lastIdx ) then
+	if (lastIdx) then
 		self:SetHeight(self.reservedSize * lastIdx)
 		self:Show()
 	else
@@ -61,7 +64,7 @@ B.GroupLootContainer_Update = function(self)
 end
 
 B.AdjustAnchors = function(self, relativeAlert)
-	if self.alertFrame:IsShown() then
+	if (self.alertFrame:IsShown()) then
 		self.alertFrame:ClearAllPoints()
 		self.alertFrame:SetPoint(POSITION, relativeAlert, ANCHOR_POINT, 0, YOFFSET)
 
@@ -86,14 +89,16 @@ B.AlertMovers = function(self)
 
 	--Replace AdjustAnchors functions to allow alerts to grow down if needed.
 	--We will need to keep an eye on this in case it taints. It shouldn't, but you never know.
-	for i, alertFrameSubSystem in ipairs(AlertFrame.alertFrameSubSystems) do
-		if alertFrameSubSystem.alertFramePool then --queued alert system
+	for _, alertFrameSubSystem in ipairs(AlertFrame.alertFrameSubSystems) do
+		if (alertFrameSubSystem.alertFramePool) then
+			-- Queued alert system
 			alertFrameSubSystem.AdjustAnchors = B.AdjustQueuedAnchors
-		elseif not alertFrameSubSystem.anchorFrame then --simple alert system
+		elseif (not alertFrameSubSystem.anchorFrame) then
+			-- Simple alert system
 			alertFrameSubSystem.AdjustAnchors = B.AdjustAnchors
 		end
 	end
 
-	self:SecureHook(AlertFrame, "UpdateAnchors", B.PostAlertMove)
+	hooksecurefunc(AlertFrame, "UpdateAnchors", B.PostAlertMove)
 	hooksecurefunc("GroupLootContainer_Update", B.GroupLootContainer_Update)
 end

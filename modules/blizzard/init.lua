@@ -4,7 +4,7 @@
 --]]
 local DraeUI = select(2, ...)
 
-local B = DraeUI:NewModule("Blizzard", "AceEvent-3.0", "AceHook-3.0")
+local B = DraeUI:NewModule("Blizzard")
 
 --[[
 
@@ -17,10 +17,4 @@ B.OnEnable = function(self)
 	self:PositionVehicleFrame()
 	self:MoveWatchFrame()
 	self:PositionTalkingHead()
-
-	CreateFrame("Frame"):SetScript("OnUpdate", function(self, elapsed)
-		if (LFRBrowseFrame.timeToClear) then
-			LFRBrowseFrame.timeToClear = nil
-		end
-	end)
 end
