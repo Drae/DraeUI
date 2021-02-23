@@ -5,20 +5,16 @@
 local DraeUI = select(2, ...)
 
 local IB = DraeUI:GetModule("Infobar")
-local MEM = IB:NewModule("Mem", "AceEvent-3.0", "AceTimer-3.0")
+local MEM = IB:NewModule("Mem", "AceEvent-3.0")
 
-local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeMem", {
-	type = "draeUI",
-	icon = nil,
-	label = "DraeMem"
-})
+local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeUIMem", { type = "draeUI", icon = nil, label = "DraeMem" })
 
-local pairs, ipairs, format, gupper, gsub, floor, ceil, abs, mmin, type, unpack = pairs, ipairs, string.format, string.upper, string.gsub, math.floor, math.ceil, math.abs, math.min, type, unpack
-local tinsert = table.insert
+--
+local GetNumAddOns, GetAddOnCPUUsage, GetAddOnMemoryUsage, IsShiftKeyDown, ResetCPUUsage, GetAddOnInfo, GetCVar = GetNumAddOns, GetAddOnCPUUsage, GetAddOnMemoryUsage, IsShiftKeyDown, ResetCPUUsage, GetAddOnInfo, GetCVar
+local ipairs, format, gupper, gsub, mfloor, mceil, mabs, mmin, type, unpack = ipairs, string.format, string.upper, string.gsub, math.floor, math.ceil, math.abs, math.min, type, unpack
+local tinsert, tsort = table.insert, table.sort
 
---[[
-
-]]
+--
 local NUM_ADDONS_TO_DISPLAY = 25
 local topAddOns = {}
 local blizzMem
@@ -26,16 +22,9 @@ local blizzMem
 local cpuProfiling = GetCVar("scriptProfile") == "1"
 local maxAddonsToShow = mmin(GetNumAddOns(), NUM_ADDONS_TO_DISPLAY)
 
-for i = 1, GetNumAddOns() do
-	topAddOns[i] = {
-		name = "",
-		value = 0
-	}
-end
-
 --[[
 
-]]
+--]]
 local FormatMiliseconds = function(value)
 	if (value < 1000) then
 		return format("%dms", value)
@@ -45,9 +34,9 @@ local FormatMiliseconds = function(value)
 		if (value >= 1 and value < 60) then
 			return format("%.2fs", value)
 		elseif (value >= 60 and value < 3600) then
-			return format("%dm%s", floor(value / 60) % 60, value % 60)
+			return format("%dm%s", mfloor(value / 60) % 60, value % 60)
 		elseif (value >= 3600 and value < 86400) then
-			return format("%dh%dm%ds", floor(value / 3600), floor(value / 60) % 60, value % 60)
+			return format("%dh%dm%ds", mfloor(value / 3600), mfloor(value / 60) % 60, value % 60)
 		else
 			return "OMFG"
 		end
@@ -82,8 +71,8 @@ local UpdateAddonMemCPUUse = function(watchCpu)
 	return total
 end
 
-MEM.UpdateMem = function(self)
-	local total = floor((UpdateAddonMemCPUUse() / 1024) + 0.5)
+local UpdateMem = function()
+	local total = mfloor((UpdateAddonMemCPUUse() / 1024) + 0.5)
 
 	local r2, g2, b2 = DraeUI.ColorGradient(total / 50 - 0.001, 0, 1, 0, 1, 1, 0, 0, 1, 0)
 	LDB.text = format("|cff%02x%02x%02x%d|r|cff%02x%02x%02xMB|r", r2 * 255, g2 * 255, b2 * 255, total, 255, 255, 255)
@@ -98,7 +87,7 @@ local TooltipMem = function(self)
 
 	local total = UpdateAddonMemCPUUse()
 
-	table.sort(topAddOns, AddonCompare)
+	tsort(topAddOns, AddonCompare)
 
 	if (total > 0) then
 		GameTooltip:SetOwner(self, "ANCHOR_NONE")
@@ -134,21 +123,23 @@ local TooltipMem = function(self)
 			GameTooltip:AddLine(" ")
 			GameTooltip:AddLine("Hold Shift for Mem Use")
 		end
-
-		GameTooltip:Show()
 	end
 end
 
 do
-	local tooltipRenew
+	local tooltipUpdate
 
 	LDB.OnEnter = function(self)
 		TooltipMem(self)
-		tooltipRenew = MEM:ScheduleRepeatingTimer(TooltipMem, 1.0, self)
+		GameTooltip:Show()
+
+		tooltipUpdate = C_Timer.NewTicker(1, function()
+			TooltipMem(self)
+		end)
 	end
 
 	LDB.OnLeave = function(self)
-		MEM:CancelTimer(tooltipRenew)
+		tooltipUpdate:Cancel()
 		GameTooltip:Hide()
 	end
 
@@ -161,8 +152,12 @@ do
 end
 
 MEM.OnInitialize = function(self)
-	-- FPS handling
-	self.timerMEM = self:ScheduleRepeatingTimer("UpdateMem", 10.0)
+	for i = 1, GetNumAddOns() do
+		topAddOns[i] = {
+			name = "",
+			value = 0
+		}
+	end
 
-	self:UpdateMem()
+	C_Timer.NewTicker(1, UpdateMem)
 end

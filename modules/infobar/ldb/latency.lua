@@ -5,20 +5,18 @@
 local DraeUI = select(2, ...)
 
 local IB = DraeUI:GetModule("Infobar")
-local PING = IB:NewModule("Latency", "AceEvent-3.0", "AceTimer-3.0")
+local PING = IB:NewModule("Latency", "AceEvent-3.0")
 
-local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeLatency", {
-	type = "draeUI",
-	icon = nil,
-	label = "DraeLatency",
-})
+local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeUILatency", { type = "draeUI", icon = nil, label = "DraeLatency" })
 
-local GetNetStats, format = GetNetStats, string.format
+--
+local GetNetStats  = GetNetStats
+local format = string.format
 
 --[[
 
-]]
-PING.UpdateLatency = function(self)
+--]]
+local UpdateLatency = function()
 	local _, _, homeLatency, worldLatency = GetNetStats()
 
 	local r2, g2, b2 = DraeUI.ColorGradient(homeLatency / 500 - 0.001, 0, 1, 0, 1, 1, 0, 0, 1, 0)
@@ -45,26 +43,26 @@ local TooltipLatency = function(self)
 
 	GameTooltip:AddDoubleLine("Bandwidth - In", format("%.2f kB/s", bandwidthIn), 1, 1, 1)
 	GameTooltip:AddDoubleLine("Bandwidth - Out", format("%.2f kB/s", bandwidthOut), 1, 1, 1)
-
-	GameTooltip:Show()
 end
 
 do
-	local tooltipRenew
+	local tooltipUpdate
 
 	LDB.OnEnter = function(self)
 		TooltipLatency(self)
-		tooltipRenew = PING:ScheduleRepeatingTimer(TooltipLatency, 1.0, self)
+		GameTooltip:Show()
+
+		tooltipUpdate = C_timer.NewTicker(1, function()
+			TooltipLatency(self)
+		end)
 	end
 
 	LDB.OnLeave = function(self)
-		PING:CancelTimer(tooltipRenew)
+		tooltipUpdate:Cancel()
 		GameTooltip:Hide()
 	end
 end
 
 PING.OnInitialize = function(self)
-	self.timerPING = self:ScheduleRepeatingTimer("UpdateLatency", 1.0)
-
-	self:UpdateLatency()
+	C_Timer.NewTicker(1, UpdateLatency)
 end

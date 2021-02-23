@@ -6,7 +6,7 @@ local oUF = DraeUI.oUF or oUF
 
 local UF = DraeUI:GetModule("UnitFrames")
 local Roster = DraeUI:GetModule("Roster")
-local Status = UF:NewModule("StatusRes", "AceEvent-3.0", "AceTimer-3.0")
+local Status = UF:NewModule("StatusRes", "AceEvent-3.0")
 
 --
 local UnitGUID, UnitIsDeadOrGhost, UnitIsConnected, UnitCastingInfo, UnitHasIncomingResurrection, CombatLogGetCurrentEventInfo = UnitGUID, UnitIsDeadOrGhost, UnitIsConnected, UnitCastingInfo, UnitHasIncomingResurrection, CombatLogGetCurrentEventInfo
@@ -487,7 +487,7 @@ do
 
 	local PendingRes = function(self, ...)
 		if (not next(has_pending)) then
-			Status:CancelTimer(pending_timer)
+			pending_timer:Cancel()
 			pending_timer = nil
 		end
 
@@ -518,7 +518,7 @@ do
 		has_pending[dest_guid] = end_time
 
 		if (not pending_timer) then
-			pending_timer = Status:ScheduleRepeatingTimer(PendingRes, 0.5)
+			pending_timer = C_Timer.NewTicker(1, PendingRes)
 		end
 
 		local frame = Roster:GetUnitToFrame(dest_unit) -- oUF.frames.unit[dest_unit]

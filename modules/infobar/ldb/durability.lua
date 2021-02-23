@@ -7,25 +7,17 @@ local DraeUI = select(2, ...)
 local IB = DraeUI:GetModule("Infobar")
 local DUR = IB:NewModule("Durability", "AceEvent-3.0", "AceTimer-3.0")
 
-local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeDurability", {
-	type = "draeUI",
-	icon = nil,
-	label = "DraeDurability",
-})
+local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeDurability", { type = "draeUI", icon = nil, label = "DraeDurability" })
 
---[[
-
-]]
+--
+local GetInventoryItemDurability, GetInventorySlotInfo, ToggleCharacter = GetInventoryItemDurability, GetInventorySlotInfo, ToggleCharacter
 local pairs, ipairs, format, gupper, gsub, floor, ceil, abs, mmin, type, unpack = pairs, ipairs, string.format, string.upper, string.gsub, math.floor, math.ceil, math.abs, math.min, type, unpack
 local tinsert = table.insert
 
---[[
-
-]]
+--
+local SLOTS = {}
 local slotDurability = {}
-
 local slots = {"HeadSlot", "ShoulderSlot", "ChestSlot", "WristSlot", "HandsSlot", "WaistSlot", "LegsSlot", "FeetSlot", "MainHandSlot", "SecondaryHandSlot"}
-
 local slotName = {
 	["SecondaryHandSlot"] 	= "Offhand",
 	["MainHandSlot"] 		= "Main Hand",
@@ -39,14 +31,9 @@ local slotName = {
 	["HeadSlot"] 			= "Helm",
 }
 
-local SLOTS = {}
-for _, slot in pairs(slots) do
-	SLOTS[slot] = GetInventorySlotInfo(slot)
-end
-
 --[[
 
-]]
+--]]
 DUR.UpdateDurability = function(self)
 	local minDurability = 100
 
@@ -99,6 +86,10 @@ LDB.OnClick = function(self, btn)
 end
 
 DUR.OnInitialize = function(self)
+	for _, slot in pairs(slots) do
+		SLOTS[slot] = GetInventorySlotInfo(slot)
+	end
+
 	self:RegisterEvent("MERCHANT_SHOW", "UpdateDurability")
 	self:RegisterEvent("UPDATE_INVENTORY_DURABILITY", "UpdateDurability")
 end

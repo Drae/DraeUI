@@ -4,7 +4,7 @@
 --]]
 local DraeUI = select(2, ...)
 
-local InfoBar = DraeUI:NewModule("Infobar", "AceEvent-3.0", "AceTimer-3.0")
+local InfoBar = DraeUI:NewModule("Infobar", "AceEvent-3.0")
 InfoBar.Plugin = {}
 
 -- Localise a bunch of functions

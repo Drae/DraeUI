@@ -61,8 +61,13 @@ local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeAzerite", {
 	label = "DraeAzerite"
 })
 
-local format = string.format
+--
+local C_AzeriteEmpoweredItem, C_AzeriteItem, Item = C_AzeriteEmpoweredItem, C_AzeriteItem, Item
+local mfloor, format = math.floor, string.format
 
+--[[
+
+]]
 local ReadableNumber = function(num, places)
     local ret
     local placeValue = ("%%.%df"):format(places or 2)
@@ -82,9 +87,6 @@ local ReadableNumber = function(num, places)
     return ret
 end
 
---[[
-
-]]
 AT.UpdateAzerite = function(self, event, unit)
 	if event == "UNIT_INVENTORY_CHANGED" and unit ~= 'player' then return end
 
@@ -105,7 +107,7 @@ AT.UpdateAzerite = function(self, event, unit)
 	local pct = (xp / totalLevelXP * 100) * 100
 	local r1, g1, b1 = DraeUI.ColorGradient(pct / 100 - 0.001, 1, 0, 0, 1, 1, 0, 0, 1, 0)
 
-	LDB.text = format('Azerite: %s / |cff%02x%02x%02x%s%%|r (%s) [%s]', ReadableNumber(xp), r1 * 255, g1 * 255, b1 * 255, floor(xp / totalLevelXP * 100), ReadableNumber(xpToNextLevel), currentLevel)
+	LDB.text = format('Azerite: %s / |cff%02x%02x%02x%s%%|r (%s) [%s]', ReadableNumber(xp), r1 * 255, g1 * 255, b1 * 255, mfloor(xp / totalLevelXP * 100), ReadableNumber(xpToNextLevel), currentLevel)
 
 	LDB.statusbar__azerite_min_max = "0," .. totalLevelXP
 	LDB.statusbar__azerite_cur = xp
@@ -141,12 +143,7 @@ LDB.OnLeave = function(self)
 end
 
 LDB.OnClick = function(self)
---[[	ArtifactFrame_LoadUI()
-	if ( ArtifactFrame:IsVisible() ) then
-		HideUIPanel(ArtifactFrame)
-	else
-		SocketInventoryItem(16);
-	end]]
+	return
 end
 
 AT.PlayerEnteringWorld = function(self)
