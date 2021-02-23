@@ -7,7 +7,7 @@ local DraeUI = select(2, ...)
 local IB = DraeUI:GetModule("Infobar")
 local MEM = IB:NewModule("Mem", "AceEvent-3.0")
 
-local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeUIMem", { type = "draeUI", icon = nil, label = "DraeMem" })
+local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeUIMem", { type = "DraeUI", icon = nil, label = "DraeUIMem" })
 
 --
 local GetNumAddOns, GetAddOnCPUUsage, GetAddOnMemoryUsage, IsShiftKeyDown, ResetCPUUsage, GetAddOnInfo, GetCVar = GetNumAddOns, GetAddOnCPUUsage, GetAddOnMemoryUsage, IsShiftKeyDown, ResetCPUUsage, GetAddOnInfo, GetCVar
@@ -159,5 +159,6 @@ MEM.OnInitialize = function(self)
 		}
 	end
 
-	C_Timer.NewTicker(1, UpdateMem)
+	C_Timer.NewTicker(30, UpdateMem)
+	UpdateMem()
 end

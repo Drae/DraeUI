@@ -7,8 +7,8 @@ local DraeUI = select(2, ...)
 local IB = DraeUI:GetModule("Infobar")
 local XP = IB:NewModule("XP", "AceEvent-3.0")
 
-local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeExp", {
-	type = "draeUI",
+local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeUIExp", {
+	type = "DraeUI",
 	icon = nil,
 	statusbar = {
 		xp = {
@@ -81,7 +81,7 @@ local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeExp", {
 			}
 		}
 	},
-	label = "DraeExp"
+	label = "DraeUIExp"
 })
 
 --[[

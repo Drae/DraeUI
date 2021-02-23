@@ -7,7 +7,7 @@ local DraeUI = select(2, ...)
 local IB = DraeUI:GetModule("Infobar")
 local COIN = IB:NewModule("Coin", "AceEvent-3.0")
 
-local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeCoin", {type = "draeUI", icon = nil, label = "DraeCoin"})
+local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeUICoin", {type = "DraeUI", icon = nil, label = "DraeUICoin"})
 
 --
 local mfloor, format, pairs = math.floor, string.format, pairs

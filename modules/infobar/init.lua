@@ -26,7 +26,7 @@ local infoBarPlugins = {}
 	Plugin handling for the bar
 ]]
 do
-	local initOrder = {"DraeFPS", "DraeMem", "DraeLatency", "DraeDurability", "DraeCoin", "DraeExp", "DraeArtifact", "DraeAzerite", "DraeRes"}
+	local initOrder = {"DraeUIFPS", "DraeUIMem", "DraeUILatency", "DraeUIDurability", "DraeUICoin", "DraeUIExp", "DraeUIArtifact", "DraeUIAzerite", "DraeUIRes"}
 
 	InfoBar.RepositionPlugins = function(self)
 		local startLeft = 10
@@ -89,7 +89,7 @@ end
 InfoBar.LibDataBroker_DataObjectCreated = function(self, event, name, obj, noupdate)
 	local type = obj.type
 
-	if (type == "draeUI") then
+	if (type == "DraeUI") then
 --		if db.objSettings[name].enabled then
 			self:EnableDataObject(name, obj, noupdate)
 --		end

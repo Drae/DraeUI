@@ -8,7 +8,7 @@ local IB = DraeUI:GetModule("Infobar")
 local AT = IB:NewModule("Azerite", "AceEvent-3.0")
 
 local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeAzerite", {
-	type = "draeUI",
+	type = "DraeUI",
 	icon = nil,
 	statusbar = {
 		azerite = {
@@ -58,7 +58,7 @@ local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeAzerite", {
 			}
 		}
 	},
-	label = "DraeAzerite"
+	label = "DraeUIAzerite"
 })
 
 --

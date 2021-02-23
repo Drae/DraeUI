@@ -7,7 +7,7 @@ local DraeUI = select(2, ...)
 local IB = DraeUI:GetModule("Infobar")
 local PING = IB:NewModule("Latency", "AceEvent-3.0")
 
-local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeUILatency", { type = "draeUI", icon = nil, label = "DraeLatency" })
+local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeUILatency", { type = "DraeUI", icon = nil, label = "DraeUILatency" })
 
 --
 local GetNetStats  = GetNetStats
