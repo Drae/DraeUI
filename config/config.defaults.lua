@@ -12,6 +12,7 @@ DraeUI.defaults.profile = {
 		-- Textures
 		statusbar = "striped",
 		font = "Proza",
+		fontTitles = "Proza",
 		fontsize0 = 16,
 		fontsize1 = 13,
 		fontsize2 = 12,

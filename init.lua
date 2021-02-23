@@ -24,14 +24,44 @@ DraeUI.defaults = {
 }
 
 --[[
-
+		OnInitialize fires after ADDON_LOADED
+		OnEnabled fires after PLAYER_LOGIN
 --]]
+DraeUI.OnInitialize = function(self)
+	self.playerClass = select(2, UnitClass("player"))
+	self.playerName = UnitName("player")
+	self.playerRealm = GetRealmName()
+	self.playerGuid = UnitGUID("player")
+
+	--[[
+		.db 		-> (profile) -> data stored under "name-realm" tables and available to all chars on this account
+		.dbGlobal 	-> (global)	 ->	data stored under single table available to all chars on this account
+		.dbClass 	-> (class)	 ->	data stored under class name
+		.dbChar		-> (profile) ->	data stored under "name-realm" tables and accessible to only this char
+	--]]
+	local db = LibStub("AceDB-3.0"):New("draeUIDB", self.defaults)	-- Default to our defaults (C. setup)
+
+	self.db = db.profile
+	self.dbClass = db.class[self.playerClass]
+	self.dbGlobal = db.global
+
+	self.dbChar = LibStub("AceDB-3.0"):New("draeUICharDB")["profile"]	-- Pull the profile specifically
+
+	self.media = {
+		font = LSM:Fetch("font", self.db.general.font) or "Interface\\AddOns\\draeUI\\media\\fonts\\Proza",
+		fontTitles = LSM:Fetch("font", self.db.general.fontTitles) or "Interface\\AddOns\\draeUI\\media\\fonts\\Proza",
+		statusbar = LSM:Fetch("statusbar", self.db.general.statusbar) or "Interface\\AddOns\\draeUI\\media\\statusbars\\striped"
+	}
+end
+
 DraeUI.OnEnable = function(self)
-	self.screenHeight = mfloor(GetScreenHeight()*100+.5)/100
-	self.screenWidth = mfloor(GetScreenWidth()*100+.5)/100
+	self.screenHeight = mfloor(GetScreenHeight() * 100 + .5) / 100
+	self.screenWidth = mfloor(GetScreenWidth() * 100 + .5) / 100
 	self.uiScale = tonumber(GetCVar("uiScale"))
 
+	self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdateFonts")
 	self:RegisterEvent("ADDON_LOADED", "ADDON_LOADED")
+
 	self:ADDON_LOADED()
 end
 
@@ -63,36 +93,17 @@ do
 		return obj
 	end
 
-	DraeUI.OnInitialize = function(self)
-		self.playerClass = select(2, UnitClass("player"))
-		self.playerName = UnitName("player")
-		self.playerRealm = GetRealmName()
-		self.playerGuid = UnitGUID("player")
+	local UpdateChatFontSizes = function()
+		CHAT_FONT_HEIGHTS = { 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20 }
+	end
 
-		--[[
-			.db 		-> (profile) -> data stored under "name-realm" tables and available to all chars on this account
-			.dbGlobal 	-> (global)	 ->	data stored under single table available to all chars on this account
-			.dbClass 	-> (class)	 ->	data stored under class name
-			.dbChar		-> (profile) ->	data stored under "name-realm" tables and accessible to only this char
-		--]]
-		local db = LibStub("AceDB-3.0"):New("draeUIDB", self.defaults)	-- Default to our defaults (C. setup)
+	hooksecurefunc("FCF_ResetChatWindows", UpdateChatFontSizes)
 
-		self.db = db.profile
-		self.dbClass = db.class[self.playerClass]
-		self.dbGlobal = db.global
-
-		self.dbChar = LibStub("AceDB-3.0"):New("draeUICharDB")["profile"]	-- Pull the profile specifically
-
-		self.media = {
-			font = LSM:Fetch("font", self.db.general.font) or "Interface\\AddOns\\draeUI\\media\\fonts\\Proza",
-			fontFancy = LSM:Fetch("font", self.db.general.fontFancy) or "Interface\\AddOns\\draeUI\\media\\fonts\\Proza",
-			statusbar = LSM:Fetch("statusbar", self.db.general.statusbar) or "Interface\\AddOns\\draeUI\\media\\statusbars\\striped"
-		}
-
+	DraeUI.UpdateFonts = function(self)
 		-- Change fonts
 		local FontStandard = self.media.font
 		local FontSmall = self.media.font
-		local FontFancy = self.media.fontFancy
+		local FontTitles = self.media.fontTitles
 
 		local SizeSmall    = 10
 		local SizeMedium   = 12
@@ -103,53 +114,74 @@ do
 		-- Game engine fonts
 		STANDARD_TEXT_FONT = FontStandard
 		NAMEPLATE_FONT = FontStandard
-		DAMAGE_TEXT_FONT = FontBold
 
 		UIDROPDOWNMENU_DEFAULT_TEXT_HEIGHT = 14
-		CHAT_FONT_HEIGHTS = { 12, 13, 14, 15, 16, 18, 20, 22 }
 
 		-- Base fonts
-		ChangeFont(SystemFont_Tiny                   , FontSmall   , SizeSmall , nil)
-		ChangeFont(SystemFont_Small                  , FontSmall   , SizeSmall , nil)
-		ChangeFont(SystemFont_Outline_Small          , FontSmall   , SizeSmall , "THINOUTLINE")
-		ChangeFont(SystemFont_Shadow_Small           , FontSmall   , SizeSmall , nil)
-		ChangeFont(SystemFont_InverseShadow_Small    , FontSmall   , SizeSmall , nil)
-		ChangeFont(SystemFont_Med1                   , FontStandard, SizeMedium, nil)
-		ChangeFont(SystemFont_Shadow_Med1            , FontStandard, SizeMedium, nil)
-		ChangeFont(SystemFont_Med2                   , FontStandard, SizeMedium, nil)
-		ChangeFont(SystemFont_Med3                   , FontStandard, SizeMedium, nil)
-		ChangeFont(SystemFont_Shadow_Med3            , FontStandard, SizeMedium, nil)
-		ChangeFont(SystemFont_Large                  , FontStandard, SizeLarge , nil)
-		ChangeFont(SystemFont_Shadow_Large           , FontStandard, SizeLarge , nil)
-		ChangeFont(SystemFont_Shadow_Huge1           , FontStandard, SizeHuge  , nil)
-		ChangeFont(SystemFont_OutlineThick_Huge2     , FontStandard, SizeHuge  , "THICKOUTLINE")
-		ChangeFont(SystemFont_Shadow_Outline_Huge2   , FontStandard, SizeHuge  , "THICKOUTLINE")
-		ChangeFont(SystemFont_Shadow_Huge3           , FontStandard, SizeHuge  , nil)
-		ChangeFont(SystemFont_OutlineThick_Huge4     , FontStandard, SizeHuge  , "THICKOUTLINE")
-		ChangeFont(SystemFont_OutlineThick_WTF       , FontStandard, SizeInsane, "THICKOUTLINE")
+		ChangeFont(SystemFont_Tiny                   	, FontSmall   	, SizeSmall 	, nil)
+		ChangeFont(SystemFont_Small                  	, FontSmall   	, SizeSmall 	, nil)
+		ChangeFont(SystemFont_Outline_Small          	, FontSmall   	, SizeSmall 	, "THINOUTLINE")
+		ChangeFont(SystemFont_Shadow_Small           	, FontSmall   	, SizeSmall 	, nil)
+		ChangeFont(SystemFont_InverseShadow_Small    	, FontSmall   	, SizeSmall 	, nil)
+		ChangeFont(SystemFont_Med1                   	, FontStandard	, SizeMedium	, nil)
+		ChangeFont(SystemFont_Shadow_Med1            	, FontStandard	, SizeMedium	, nil)
+		ChangeFont(SystemFont_Med2                   	, FontStandard	, SizeMedium	, nil)
+		ChangeFont(SystemFont_Med3                   	, FontStandard	, SizeMedium	, nil)
+		ChangeFont(SystemFont_Shadow_Med3            	, FontStandard	, SizeMedium	, nil)
+		ChangeFont(SystemFont_Large                  	, FontStandard	, SizeLarge 	, nil)
+		ChangeFont(SystemFont_Shadow_Large           	, FontStandard	, SizeLarge 	, nil)
+		ChangeFont(SystemFont_Shadow_Huge1           	, FontStandard	, SizeHuge  	, nil)
+		ChangeFont(SystemFont_Shadow_Outline_Large   	, FontStandard	, SizeHuge  	, "THICKOUTLINE")
+		ChangeFont(SystemFont_OutlineThick_Huge2     	, FontStandard	, SizeHuge  	, "THICKOUTLINE")
+		ChangeFont(SystemFont_Shadow_Huge3           	, FontStandard	, SizeHuge  	, nil)
+		ChangeFont(SystemFont_Shadow_Outline_Huge2   	, FontStandard	, SizeHuge  	, "THICKOUTLINE")
+		ChangeFont(SystemFont_OutlineThick_Huge4     	, FontStandard	, SizeHuge  	, "THICKOUTLINE")
+		ChangeFont(SystemFont_OutlineThick_WTF       	, FontStandard	, SizeInsane	, "THICKOUTLINE")
 
-		ChangeFont(NumberFont_Shadow_Small           , FontSmall   , SizeSmall , nil)
-		ChangeFont(NumberFont_OutlineThick_Mono_Small, FontStandard, SizeMedium, "OUTLINE")
-		ChangeFont(NumberFont_Shadow_Med             , FontStandard, SizeMedium, nil)
-		ChangeFont(NumberFont_Outline_Med            , FontStandard, SizeMedium, "THINOUTLINE")
-		ChangeFont(NumberFont_Outline_Large          , FontStandard, SizeLarge , "THINOUTLINE")
-		ChangeFont(NumberFont_Outline_Huge           , FontStandard, SizeHuge  , "THINOUTLINE")
+		ChangeFont(GameFontNormal						, FontStandard	, SizeMedium	, nil)
+		ChangeFont(GameFontWhite						, FontStandard	, SizeMedium	, nil)
+		ChangeFont(GameFontWhiteSmall					, FontSmall		, SizeSmall		, nil)
+		ChangeFont(GameFontBlack						, FontStandard	, SizeMedium	, nil)
+		ChangeFont(GameFontBlackSmall					, FontStandard	, SizeSmall		, nil)
+		ChangeFont(GameFontNormalMed2					, FontStandard	, SizeMedium	, nil)
+		ChangeFont(GameFontNormalLarge					, FontStandard	, SizeLarge		, nil)
+		ChangeFont(GameFontNormalLargeOutline			, FontStandard	, SizeLarge		, "THINOUTLINE")
+		ChangeFont(GameFontHighlightSmall				, FontStandard	, SizeSmall		, nil)
+		ChangeFont(GameFontHighlight					, FontStandard	, SizeMedium	, nil)
+		ChangeFont(GameFontHighlightLeft				, FontStandard	, SizeMedium	, nil)
+		ChangeFont(GameFontHighlightRight				, FontStandard	, SizeMedium	, nil)
+		ChangeFont(GameFontHighlightLarge2				, FontStandard	, SizeMedium	, nil)
+		ChangeFont(GameFont_Gigantic					, FontStandard	, SizeHuge		, nil)
+		ChangeFont(GameFontNormalSmall					, FontStandard	, SizeSmall		, nil)
+		ChangeFont(GameFontNormalSmall2					, FontStandard	, SizeSmall		, nil)
+		ChangeFont(GameTooltipHeader					, FontTitles	, SizeMedium	, nil)
 
-		ChangeFont(QuestFont_Large                   , FontFancy   , SizeMedium, nil)
-		ChangeFont(QuestFont_Shadow_Huge             , FontFancy   , SizeHuge  , nil)
-		ChangeFont(GameTooltipHeader                 , FontStandard, SizeMedium, nil)
-		ChangeFont(MailFont_Large                    , FontFancy   , SizeMedium, nil)
-		ChangeFont(SpellFont_Small                   , FontSmall   , SizeSmall , nil)
-		ChangeFont(InvoiceFont_Med                   , FontStandard, SizeMedium, nil)
-		ChangeFont(InvoiceFont_Small                 , FontSmall   , SizeSmall , nil)
-		ChangeFont(Tooltip_Med                       , FontStandard, SizeMedium, nil)
-		ChangeFont(Tooltip_Small                     , FontSmall   , SizeSmall , nil)
-		ChangeFont(AchievementFont_Small             , FontSmall   , SizeSmall , nil)
-		ChangeFont(ReputationDetailFont              , FontSmall   , SizeSmall , nil)
-		ChangeFont(FriendsFont_UserText              , FontSmall   , SizeSmall , nil)
-		ChangeFont(FriendsFont_Normal                , FontStandard, SizeMedium, nil)
-		ChangeFont(FriendsFont_Small                 , FontSmall   , SizeSmall , nil)
-		ChangeFont(FriendsFont_Large                 , FontStandard, SizeLarge , nil)
+		ChangeFont(NumberFont_Shadow_Small           	, FontSmall   	, SizeSmall 	, nil)
+		ChangeFont(NumberFont_OutlineThick_Mono_Small	, FontStandard	, SizeMedium	, "OUTLINE")
+		ChangeFont(NumberFont_Shadow_Med             	, FontStandard	, SizeMedium	, nil)
+		ChangeFont(NumberFont_Outline_Med            	, FontStandard	, SizeMedium	, "THINOUTLINE")
+		ChangeFont(NumberFont_Outline_Large          	, FontStandard	, SizeLarge 	, "THINOUTLINE")
+		ChangeFont(NumberFont_Outline_Huge           	, FontStandard	, SizeHuge  	, "THINOUTLINE")
+
+		ChangeFont(QuestFont_Large                   	, FontTitles   , SizeMedium		, nil)
+		ChangeFont(QuestFont_Shadow_Huge             	, FontTitles   , SizeHuge  		, nil)
+
+		ChangeFont(GameTooltipHeader                 	, FontStandard	, SizeMedium	, nil)
+		ChangeFont(MailFont_Large                    	, FontTitles   , SizeMedium		, nil)
+		ChangeFont(SpellFont_Small                   	, FontSmall   	, SizeSmall 	, nil)
+		ChangeFont(InvoiceFont_Med                   	, FontStandard	, SizeMedium	, nil)
+		ChangeFont(InvoiceFont_Small                 	, FontSmall   	, SizeSmall 	, nil)
+		ChangeFont(Tooltip_Med                       	, FontStandard	, SizeMedium	, nil)
+		ChangeFont(Tooltip_Small                     	, FontSmall   	, SizeSmall 	, nil)
+		ChangeFont(AchievementFont_Small             	, FontSmall   	, SizeSmall 	, nil)
+		ChangeFont(ReputationDetailFont              	, FontSmall   	, SizeSmall 	, nil)
+
+		ChangeFont(FriendsFont_UserText              	, FontSmall   	, SizeSmall 	, nil)
+		ChangeFont(FriendsFont_Normal                	, FontStandard	, SizeMedium	, nil)
+		ChangeFont(FriendsFont_Small                 	, FontSmall   	, SizeSmall 	, nil)
+		ChangeFont(FriendsFont_Large                 	, FontStandard	, SizeLarge 	, nil)
+
+		UpdateChatFontSizes()
 	end
 end
 
