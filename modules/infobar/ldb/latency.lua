@@ -52,7 +52,7 @@ do
 		TooltipLatency(self)
 		GameTooltip:Show()
 
-		tooltipUpdate = C_timer.NewTicker(1, function()
+		tooltipUpdate = C_Timer.NewTicker(1, function()
 			TooltipLatency(self)
 		end)
 	end
