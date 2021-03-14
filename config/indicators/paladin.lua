@@ -14,6 +14,7 @@ DraeUI.defaults.class["PALADIN"] = {
         ["buff_retributionaura"]     		= { buff = "Retribution Aura",     			mine = true,  color = { 0.8, 0.5, 0.0 } },
         ["buff_blessingofprotection"]      	= { buff = "Blessing of Protection",   	    mine = false, color = { 0.0, 0.2, 0.9 } },
         ["buff_blessingofspellwarding"]     = { buff = "Blessing of Spellwarding",      mine = false, color = { 0.0, 0.2, 0.7 } },
+        ["buff_blessingofsanctuary"]     	= { buff = "Blessing of Sanctuary", 	    mine = false, color = { 0.7, 0.0, 0.3 } },
         ["buff_blessingoffreedom"]          = { buff = "Blessing of Freedom",   	    mine = false, color = { 0.7, 0.7, 0.7 } },
         ["buff_blessingofsacrifice"]        = { buff = "Blessing of Sacrifice",   	    mine = false, color = { 1.0, 0.0, 1.0 } },
         ["buff_bestowfaith"]                = { buff = "Bestow Faith", 				    mine = true,  color = { 1.0, 0.8, 0.0 } },
@@ -91,6 +92,10 @@ DraeUI.defaults.class["PALADIN"] = {
         ["BOTTOMRIGHTT"] = {
             ["buff_blessingofsacrifice"] = 80,
         },
+
+		["BOTTOMRIGHTTL"] = {
+            ["buff_blessingofsanctuary"] = 80,
+		},
 
         ["BOTTOMLEFT"] = {
             ["debuff_forbearance"] = 90,
