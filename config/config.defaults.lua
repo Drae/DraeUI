@@ -12,13 +12,15 @@ DraeUI.defaults.profile = {
 		-- Textures
 		statusbar = "striped",
 		font = "Proza",
-		fontTitles = "Proza",
+		fontSmall = "LiberationSans",
+		fontTitles = "Vollkorn",
 		fontsize0 = 16,
 		fontsize1 = 13,
 		fontsize2 = 12,
 		fontsize3 = 10,
 		fontsize4 = 9,
-		texcoords = {0.1, 0.9, 0.1, 0.9}
+		texcoords = {0.1, 0.9, 0.1, 0.9},
+		sound1 = "heart", -- notification sound
 	},
 
 	-- Unit Frame settings
@@ -212,6 +214,20 @@ DraeUI.defaults.profile = {
 			anchorat = "RIGHT",
 			anchorto = "LEFT"
 		}
+	},
+
+	chat = {
+		saveHistory = true,
+		saveHistoryLines = 100,		-- Number of lines to save, FIFO
+		saveEditHistory = true,
+		saveEditHistoryLines = 20,
+		editBox = {
+			attach = "TOP",			-- TOP or BOTTOM
+		},
+		stickyEdit = true,			-- Use last send type when entering messages
+		hideVoiceButtons = false,	-- Hide the voice/social buttons
+		pinVoiceButtons = true,		-- Pin said buttons to the chat frame, if not then place them in a separate frame
+		psst_channel = "Master",	-- sound channel to use for /w sound notification, e.g. Master, Dialog, Music, etc.
 	},
 
 	infobar = {

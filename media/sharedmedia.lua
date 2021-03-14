@@ -8,3 +8,5 @@ LSM:Register("font",		"Vollkorn",			"Interface\\AddOns\\draeUI\\media\\fonts\\vo
 LSM:Register("font",		"LiberationSans",	"Interface\\AddOns\\draeUI\\media\\fonts\\liberationsans.ttf")
 
 LSM:Register("statusbar",	"striped",			"Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
+
+LSM:Register("sound", 		"heart", 			"Interface\\Addons\\draeUI\\media\\sounds\\heart.ogg")
