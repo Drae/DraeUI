@@ -75,21 +75,20 @@ local LoadPVPDebuffs = function()
 	-- Knockbacks
 
 	-- Slows [undispellable - not daze type]
-	UF:AddRaidDebuff(true, 15407, 	6, true)	-- Mind Flay
-	UF:AddRaidDebuff(true, 26679, 	6, true)	-- Deadly Throw
-	UF:AddRaidDebuff(true, 12323, 	6, true)	-- Piercing Howl
-	UF:AddRaidDebuff(true, 1715, 	6, true)	-- Hamstring
-	UF:AddRaidDebuff(true, 45524, 	6, true)	-- Chains of Ice
+	UF:AddRaidDebuff(true, 15407, 	6, true) -- Mind Flay
+	UF:AddRaidDebuff(true, 26679, 	6, true) -- Deadly Throw
+	UF:AddRaidDebuff(true, 12323, 	6, true) -- Piercing Howl
+	UF:AddRaidDebuff(true, 1715, 	6, true) -- Hamstring
+	UF:AddRaidDebuff(true, 45524, 	6, true) -- Chains of Ice
 
 	-- Healing reductions
---[[	UF:AddRaidDebuff(true, 8679, prDefault, true) 	-- Wound Poison [rogue - ass]
-	UF:AddRaidDebuff(true, 12294, prDefault, true) 	-- Mortal Strike [warrior]
-	UF:AddRaidDebuff(true, 30213, prDefault, true) 	-- Legion Strike [warlock - felguard]
-	UF:AddRaidDebuff(true, 73975, prDefault, true) 	-- Necrotic Strike [deathknight]
-	UF:AddRaidDebuff(true, 107428, prDefault, true) -- Rising Sun Kick [monk]
-	UF:AddRaidDebuff(true, 115804, prDefault, true) -- Mortal Wounds [hunter - pet]
-	UF:AddRaidDebuff(true, 195452, prDefault, true) -- Nightblade [rogue - sub]
---]]
+	UF:AddRaidDebuff(true, 8679, 	5, true) -- Wound Poison [rogue - ass]
+	UF:AddRaidDebuff(true, 12294, 	5, true) -- Mortal Strike [warrior]
+	UF:AddRaidDebuff(true, 30213, 	5, true) -- Legion Strike [warlock - felguard]
+	UF:AddRaidDebuff(true, 73975, 	5, true) -- Necrotic Strike [deathknight]
+	UF:AddRaidDebuff(true, 107428, 	5, true) -- Rising Sun Kick [monk]
+	UF:AddRaidDebuff(true, 115804, 	5, true) -- Mortal Wounds [hunter - pet]
+	UF:AddRaidDebuff(true, 195452, 	5, true) -- Nightblade [rogue - sub]
 end
 
 --[[
