@@ -35,9 +35,9 @@ local indicators = {
 	["TOPRIGHTB"] 		= {type = "color", width = 7, height = 7,  at = "TOPRIGHT", 	to = "TOPRIGHT", 	offsetX = 2,  offsetY = -4},
 	["TOPRIGHTL"] 		= {type = "color", width = 7, height = 7,  at = "TOPRIGHT", 	to = "TOPRIGHT", 	offsetX = -4, offsetY = 2},
 
-	["BOTTOM"] 			= {type = "color", width = 7, height = 7,  at = "BOTTOM", 		to = "BOTTOM", 		offsetX = 0,  offsetY = -2},
-	["BOTTOML"] 		= {type = "color", width = 7, height = 7,  at = "BOTTOM", 		to = "BOTTOM", 		offsetX = -6, offsetY = -2},
-	["BOTTOMR"] 		= {type = "color", width = 7, height = 7,  at = "BOTTOM", 		to = "BOTTOM", 		offsetX = 6,  offsetY = -2},
+	["BOTTOM"] 			= {type = "color", width = 7, height = 7,  at = "BOTTOM", 		to = "BOTTOM", 		offsetX = 0,  offsetY = -1},
+	["BOTTOML"] 		= {type = "color", width = 7, height = 7,  at = "BOTTOM", 		to = "BOTTOM", 		offsetX = -6, offsetY = -1},
+	["BOTTOMR"] 		= {type = "color", width = 7, height = 7,  at = "BOTTOM", 		to = "BOTTOM", 		offsetX = 6,  offsetY = -1},
 
 	["BOTTOMLEFT"] 		= {type = "color", width = 7, height = 7,  at = "BOTTOMLEFT",	to = "BOTTOMLEFT", 	offsetX = -1, offsetY = -1},
 	["BOTTOMLEFTT"] 	= {type = "color", width = 7, height = 7,  at = "BOTTOMLEFT", 	to = "BOTTOMLEFT", 	offsetX = -1, offsetY = 5},
@@ -278,7 +278,7 @@ do
 		if (indicators[indicator].type ~= "icon") then
 			local notMine = ind:CreateTexture(nil, "ARTWORK")
 			notMine:SetPoint("BOTTOMLEFT", ind, "BOTTOMLEFT", 0, 0)
-			notMine:SetSize(indicators[indicator].width / 3, indicators[indicator].height / 3)
+			notMine:SetSize(indicators[indicator].width / 2, indicators[indicator].height / 2)
 			notMine:SetTexture("Interface\\BUTTONS\\WHITE8X8")
 			notMine:SetVertexColor(0, 0, 0, 1)
 			notMine:Hide()
@@ -405,6 +405,24 @@ local UpdateIndicator
 do
 	local status_to_indicator, top_status, current_top_status
 
+	-- Invert the statusmap table so we have a list of statuses and the indicators
+	-- to which they map
+	local InvertStatusMap = function()
+		local inv = {}
+
+		for indicator, statuses in pairs(DraeUI.dbClass.statusmap) do
+			for status, priority in pairs(statuses) do
+				if (not inv[status]) then
+					inv[status] = {}
+				end
+
+				inv[status][indicator] = priority
+			end
+		end
+
+		return inv
+	end
+
 	-- Sort priority | state (true/false) > priority > start_time
 	local sort_statuses = function(t1, t2)
 		if (t1[1].state == t2[1].state) then
@@ -419,24 +437,20 @@ do
 		local status_cache = frame.__cache_statuses
 
 		-- Get the list of indicators displaying this status
-		status_to_indicator = UF.inverted_statusmap[status]
-		if (not status_to_indicator) then return end
+		if (not status_to_indicator) then
+			status_to_indicator = InvertStatusMap()
+		end
+
+		if (not status_to_indicator[status]) then return end
 
 		-- Loop through the indicators for this status
-		for indicator in pairs(status_to_indicator) do
-
+		for indicator, pr in pairs(status_to_indicator[status]) do
 			-- Setup indicator cache for this indicator
 			if (not indicator_cache[indicator]) then
 				indicator_cache[indicator] = {}
 
-				for st, pr in pairs(DraeUI.dbClass["statusmap"][indicator]) do
-					-- Create a table ref for this status in the cache since one does
-					-- not yet exist, barely populate enough for sorting purposes
-					if (not status_cache[st]) then
-						status_cache[st] = {state = false, start = 0}
-					end
-
-					tinsert(indicator_cache[indicator], {status = st, priority = pr, status_cache[st]})
+				for st, pr in pairs(DraeUI.dbClass.statusmap[indicator]) do
+					tinsert(indicator_cache[indicator], { status = st, priority = pr, status_cache[st] })
 				end
 			end
 
@@ -456,7 +470,6 @@ do
 			else
 				frame:ClearIndicator(indicator)
 			end
-
 		end
 	end
 end
@@ -491,6 +504,12 @@ do
 	local range = {insideAlpha = 1.0, outsideAlpha = 0.25}
 	local border_insets = {left = 2, right = 2, top = 2, bottom = 2}
 
+	-- Default basis status
+	local mt_statuses = {__index = function(t, k)
+		rawset(t, k, { state = false, start = 0 })
+		return rawget(t, k)
+	end}
+
 	StyleDrae_Raid = function(frame, unit)
 		-- Store some data related to this frame, associated unit, etc.
 		frame.PreUpdate = Roster.UpdateRoster
@@ -509,7 +528,7 @@ do
 		end
 
 		if (not frame.__cache_statuses) then
-			frame.__cache_statuses = {}
+			frame.__cache_statuses = setmetatable({}, mt_statuses)
 		else
 			wipe(frame.__cache_statuses)
 		end
@@ -695,7 +714,7 @@ do
 		-- Leader Icon
 		local leaderFrame = CreateFrame("Frame", nil, hp)
 		leaderFrame:SetSize(14, 14)
-		leaderFrame:SetPoint("TOPLEFT", frame, -7, 8)
+		leaderFrame:SetPoint("TOPLEFT", frame, -8, 9)
 		leaderFrame:SetFrameLevel(baseLevel + 4)
 		local leader = leaderFrame:CreateTexture(nil, "OVERLAY")
 		leader:SetAllPoints(leaderFrame)
