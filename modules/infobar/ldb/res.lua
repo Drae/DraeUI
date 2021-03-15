@@ -5,17 +5,13 @@
 local DraeUI = select(2, ...)
 
 local IB = DraeUI:GetModule("Infobar")
-local RES = IB:NewModule("Res", "AceEvent-3.0", "AceTimer-3.0")
+local RES = IB:NewModule("Res", "AceEvent-3.0")
 
 local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeUIRes", { type = "DraeUI", icon = nil, label = "DraeUIRes" })
 
 --
 local C_Timer, GetSpellInfo, GetSpellCharges, GetInstanceInfo, GetDifficultyInfo, GetTime = C_Timer, GetSpellInfo, GetSpellCharges, GetInstanceInfo, GetDifficultyInfo, GetTime
-local mfloor, mmod, format = math.floor, math.mod, string.format
-
---
-local is_raid, is_mythic_plus, timer_running
-local resses_available = 0
+local mfloor, mmod, format = math.floor, mod, string.format
 
 --[[
 
@@ -34,35 +30,39 @@ local UpdateTimer = function()
 	end
 end
 
-RES.CheckEnableTimer = function(self, event)
-	if (is_raid) then
-		if (event == "ENCOUNTER_START") then
-			LDB.ShowPlugin = true
-			timer_running = C_Timer.NewTicker(1.0, UpdateTimer)
-		elseif (event == "ENCOUNTER_END") then
-			LDB.ShowPlugin = false
-			if (timer_running) then
-				timer_running:Cancel()
+do
+	local is_raid, is_mythic_plus, timer_running
+
+	RES.CheckEnableTimer = function(self, event)
+		if (is_raid) then
+			if (event == "ENCOUNTER_START") then
+				LDB.ShowPlugin = true
+				timer_running = C_Timer.NewTicker(1.0, UpdateTimer)
+			elseif (event == "ENCOUNTER_END") then
+				LDB.ShowPlugin = false
+				if (timer_running) then
+					timer_running:Cancel()
+				end
 			end
-		end
-	else
-		local _, instanceType, difficulty, _, maxPlayers, playerDifficulty, isDynamicInstance, _, instanceGroupSize = GetInstanceInfo()
-		local _, _, isHeroic, isChallengeMode, displayHeroic, displayMythic = GetDifficultyInfo(difficulty)
-
-		if (instanceType == "raid") then
-			is_raid = true
-		elseif (isChallengeMode) then
-			is_mythic_plus = true
-
-			LDB.ShowPlugin = true
-			timer_running = C_Timer.NewTicker(1.0, UpdateTimer)
 		else
-			is_mythic_plus = nil
-			is_raid = nil
+			local _, instanceType, difficulty = GetInstanceInfo()
+			local isChallengeMode = select(4, GetDifficultyInfo(difficulty))
 
-			LDB.ShowPlugin = false
-			if (timer_running) then
-				timer_running:Cancel()
+			if (instanceType == "raid") then
+				is_raid = true
+			elseif (isChallengeMode) then
+				is_mythic_plus = true
+
+				LDB.ShowPlugin = true
+				timer_running = C_Timer.NewTicker(1.0, UpdateTimer)
+			else
+				is_mythic_plus = nil
+				is_raid = nil
+
+				LDB.ShowPlugin = false
+				if (timer_running) then
+					timer_running:Cancel()
+				end
 			end
 		end
 	end
