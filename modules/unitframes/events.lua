@@ -173,7 +173,7 @@ do
 				return "DEAD"
 			elseif (UnitIsGhost(unit)) then
 				return "GHOST"
-			elseif (UnitHasVehicleUI(unit)) then
+			elseif (self.realUnit and UnitHasVehicleUI(self.realUnit)) then
 				return "INVEHICLE"
 			elseif (UnitIsCharmed(unit)) then
 				return "CHARMED"
@@ -215,7 +215,7 @@ do
 			elseif (new_state == "INVEHICLE") then
 				color = colors.health
 			elseif (UnitIsPlayer(unit) or (hp.colorClassPet and UnitPlayerControlled(unit) and not UnitIsPlayer(unit))) then
-				color = colors.class[class]
+				color = colors.class[class] or colors.health
 			else
 				color = colors.health
 			end
@@ -257,8 +257,8 @@ do
 				self:GainedStatus("alert_dead", color_grey, nil, "Dead")
 			elseif (new_state == "AFK") then
 				self:GainedStatus("alert_afk", color_grey, nil, "AFK")
-			elseif (new_state == "INVEHICLE" and self.realUnit and UnitHasVehicleUI(self.realUnit)) then
-				local real_name = DraeUI.UTF8((UnitName(SecureButton_GetUnit(self) or self.unit) or "Unknown"), 7, false)
+			elseif (new_state == "INVEHICLE") then
+				local real_name = DraeUI.UTF8(UnitName(SecureButton_GetUnit(self) or self.unit) or "Unknown", 7, false)
 				self:GainedStatus("unit_vehicle", color, nil, real_name)
 			else
 				self:GainedStatus("unit_health", color)
