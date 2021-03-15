@@ -14,6 +14,7 @@ local UnitClass, UnitName, GetRealmName, UnitGUID, GetScreenHeight, GetScreenWid
 local select, mfloor, tonumber, smatch = select, math.floor, tonumber, string.match
 local OrderHallCommandBar, ArenaPrepFrames, ArenaEnemyFrames = OrderHallCommandBar, ArenaPrepFrames, ArenaEnemyFrames
 local ReloadUI, DoReadyCheck = ReloadUI, DoReadyCheck
+local CHAT_FONT_HEIGHTS = CHAT_FONT_HEIGHTS
 
 --
 DraeUI.defaults = {
@@ -39,18 +40,22 @@ DraeUI.OnInitialize = function(self)
 		.dbClass 	-> (class)	 ->	data stored under class name
 		.dbChar		-> (profile) ->	data stored under "name-realm" tables and accessible to only this char
 	--]]
-	local db = LibStub("AceDB-3.0"):New("draeUIDB", self.defaults)	-- Default to our defaults (C. setup)
+	local db = LibStub("AceDB-3.0"):New("draeUIDB", { profile = self.defaults.profile, class = self.defaults.class[self.playerClass] })	-- Default to our defaults (C. setup)
 
 	self.db = db.profile
-	self.dbClass = db.class[self.playerClass]
+	self.dbClass = db.class
 	self.dbGlobal = db.global
 
 	self.dbChar = LibStub("AceDB-3.0"):New("draeUICharDB")["profile"]	-- Pull the profile specifically
 
 	self.media = {
-		font = LSM:Fetch("font", self.db.general.font) or "Interface\\AddOns\\draeUI\\media\\fonts\\Proza",
-		fontTitles = LSM:Fetch("font", self.db.general.fontTitles) or "Interface\\AddOns\\draeUI\\media\\fonts\\Proza",
-		statusbar = LSM:Fetch("statusbar", self.db.general.statusbar) or "Interface\\AddOns\\draeUI\\media\\statusbars\\striped"
+		font = LSM:Fetch("font", self.db.general.font) or "Interface\\AddOns\\draeUI\\media\\fonts\\prozaregular-regular.ttf",
+		fontSmall = LSM:Fetch("font", self.db.general.fontSmall) or "Interface\\AddOns\\draeUI\\media\\fonts\\liberationsans.ttf",
+		fontTitles = LSM:Fetch("font", self.db.general.fontTitles) or "Interface\\AddOns\\draeUI\\media\\fonts\\vollkorn-medium.ttf",
+
+		statusbar = LSM:Fetch("statusbar", self.db.general.statusbar) or "Interface\\AddOns\\draeUI\\media\\statusbars\\striped",
+
+		sound1 = LSM:Fetch("sound", self.db.general.sound1) or "Interface\\AddOns\\draeUI\\media\\sounds\\heart.ogg"
 	}
 end
 
@@ -59,8 +64,8 @@ DraeUI.OnEnable = function(self)
 	self.screenWidth = mfloor(GetScreenWidth() * 100 + .5) / 100
 	self.uiScale = tonumber(GetCVar("uiScale"))
 
-	self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdateFonts")
 	self:RegisterEvent("ADDON_LOADED", "ADDON_LOADED")
+	self:RegisterEvent("PLAYER_ENTERING_WORLD", "UpdateFonts")
 
 	self:ADDON_LOADED()
 end
@@ -97,19 +102,17 @@ do
 		CHAT_FONT_HEIGHTS = { 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20 }
 	end
 
-	hooksecurefunc("FCF_ResetChatWindows", UpdateChatFontSizes)
-
 	DraeUI.UpdateFonts = function(self)
 		-- Change fonts
 		local FontStandard = self.media.font
-		local FontSmall = self.media.font
+		local FontSmall = self.media.fontSmall
 		local FontTitles = self.media.fontTitles
 
-		local SizeSmall    = 10
-		local SizeMedium   = 12
-		local SizeLarge    = 16
-		local SizeHuge     = 18
-		local SizeInsane   = 26
+		local SizeSmall    = 10.5
+		local SizeMedium   = 12.5
+		local SizeLarge    = 16.5
+		local SizeHuge     = 18.5
+		local SizeInsane   = 22.5
 
 		-- Game engine fonts
 		STANDARD_TEXT_FONT = FontStandard
@@ -142,8 +145,8 @@ do
 		ChangeFont(GameFontWhite						, FontStandard	, SizeMedium	, nil)
 		ChangeFont(GameFontWhiteSmall					, FontSmall		, SizeSmall		, nil)
 		ChangeFont(GameFontBlack						, FontStandard	, SizeMedium	, nil)
-		ChangeFont(GameFontBlackSmall					, FontStandard	, SizeSmall		, nil)
-		ChangeFont(GameFontNormalMed2					, FontStandard	, SizeMedium	, nil)
+		ChangeFont(GameFontBlackSmall					, FontSmall		, SizeSmall		, nil)
+		ChangeFont(GameFontNormalMed2					, FontTitles	, SizeMedium	, nil)
 		ChangeFont(GameFontNormalLarge					, FontStandard	, SizeLarge		, nil)
 		ChangeFont(GameFontNormalLargeOutline			, FontStandard	, SizeLarge		, "THINOUTLINE")
 		ChangeFont(GameFontHighlightSmall				, FontStandard	, SizeSmall		, nil)
@@ -152,8 +155,8 @@ do
 		ChangeFont(GameFontHighlightRight				, FontStandard	, SizeMedium	, nil)
 		ChangeFont(GameFontHighlightLarge2				, FontStandard	, SizeMedium	, nil)
 		ChangeFont(GameFont_Gigantic					, FontStandard	, SizeHuge		, nil)
-		ChangeFont(GameFontNormalSmall					, FontStandard	, SizeSmall		, nil)
-		ChangeFont(GameFontNormalSmall2					, FontStandard	, SizeSmall		, nil)
+		ChangeFont(GameFontNormalSmall					, FontSmall		, SizeSmall		, nil)
+		ChangeFont(GameFontNormalSmall2					, FontSmall		, SizeSmall		, nil)
 		ChangeFont(GameTooltipHeader					, FontTitles	, SizeMedium	, nil)
 
 		ChangeFont(NumberFont_Shadow_Small           	, FontSmall   	, SizeSmall 	, nil)
@@ -163,11 +166,19 @@ do
 		ChangeFont(NumberFont_Outline_Large          	, FontStandard	, SizeLarge 	, "THINOUTLINE")
 		ChangeFont(NumberFont_Outline_Huge           	, FontStandard	, SizeHuge  	, "THINOUTLINE")
 
-		ChangeFont(QuestFont_Large                   	, FontTitles   , SizeMedium		, nil)
-		ChangeFont(QuestFont_Shadow_Huge             	, FontTitles   , SizeHuge  		, nil)
+		ChangeFont(WhiteNormalNumberFont           		, FontStandard	, SizeMedium  	, "THINOUTLINE")
+
+		ChangeFont(QuestFont		                   	, FontStandard	, SizeMedium	, nil)
+		ChangeFont(QuestFont_Large                   	, FontTitles  	, SizeLarge		, nil)
+		ChangeFont(QuestFont_Huge	        	     	, FontTitles  	, SizeHuge 		, nil)
+		ChangeFont(QuestFont_Super_Huge	             	, FontTitles  	, SizeHuge 		, nil)
+		ChangeFont(QuestFont_Shadow_Huge	           	, FontTitles  	, SizeHuge 		, nil)
+		ChangeFont(QuestFont_Enormous	             	, FontTitles  	, SizeInsane	, nil)
+
+		ChangeFont(ObjectiveFont 	                  	, FontStandard 	, SizeMedium	, nil)
 
 		ChangeFont(GameTooltipHeader                 	, FontStandard	, SizeMedium	, nil)
-		ChangeFont(MailFont_Large                    	, FontTitles   , SizeMedium		, nil)
+		ChangeFont(MailFont_Large                    	, FontTitles  	, SizeMedium	, nil)
 		ChangeFont(SpellFont_Small                   	, FontSmall   	, SizeSmall 	, nil)
 		ChangeFont(InvoiceFont_Med                   	, FontStandard	, SizeMedium	, nil)
 		ChangeFont(InvoiceFont_Small                 	, FontSmall   	, SizeSmall 	, nil)
@@ -182,6 +193,8 @@ do
 		ChangeFont(FriendsFont_Large                 	, FontStandard	, SizeLarge 	, nil)
 
 		UpdateChatFontSizes()
+
+		hooksecurefunc("FCF_ResetChatWindows", UpdateChatFontSizes)
 	end
 end
 
