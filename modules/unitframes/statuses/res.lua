@@ -134,7 +134,8 @@ local Update = function(self, event, unit)
 
 		local caster = Roster:GetGuidToUnit(casterUnit) --oUF.frames.guid[casterUnit].unit
 
-		_, _, _, start_time = UnitCastingInfo(caster)
+		start_time = select(4, UnitCastingInfo(caster))
+
 		-- ignore instant casts
 		if (not start_time) then
 			return self:LostStatus("status_res")

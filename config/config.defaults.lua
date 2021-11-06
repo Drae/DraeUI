@@ -31,9 +31,9 @@ DraeUI.defaults.profile = {
 		showArena = false,
 		-- Player and Target are positioned relative to center of screen,
 		-- all other frames are positioned relative to those
-		playerXoffset = -360,
+		playerXoffset = -390,
 		playerYoffset = -250,
-		targetXoffset = 360,
+		targetXoffset = 390,
 		targetYoffset = -250,
 		totXoffset = 30, -- Relative to right of target
 		totYoffset = 0,
@@ -52,7 +52,7 @@ DraeUI.defaults.profile = {
 		smallScale = 1.0,
 		-- Dimension of frames, large applies to player/target, small everything else
 		-- don't change these, change the scale
-		largeWidth = 260,
+		largeWidth = 270,
 		largeHeight = 20,
 		mediumWidth = 180,
 		mediumHeight = 20,
@@ -140,7 +140,7 @@ DraeUI.defaults.profile = {
 		-- specify a position for a total number of groups the position of the last highest
 		-- will be used
 		position = {
-			[1] = {"BOTTOMRIGHT", UIParent, "CENTER", -228, -150}, --275
+			[1] = {"BOTTOMRIGHT", UIParent, "CENTER", -260, -150}, --275
 			[6] = {"BOTTOMLEFT", UIParent, "LEFT", 50, -150}
 		},
 		scale = {

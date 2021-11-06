@@ -7,9 +7,6 @@ local DraeUI = select(2, ...)
 local MM = DraeUI:GetModule("Minimap")
 
 --
-local _G = _G
-
---
 MM.buttons = {}
 local BT = MM.buttons
 
@@ -18,35 +15,15 @@ local animFrames = {}
 
 -- For the rare addons that don't use LibDBIcon for some reason :(
 local addonButtons = {
-	EnxMiniMapIcon = "Enchantrix",
-	["FuBarPluginBig BrotherFrameMinimapButton"] = "Big Brother",
-	RA_MinimapButton = "RaidAchievement",
 	DBMMinimapButton = "DBM (Deadly Boss Mods)",
-	XPerl_MinimapButton_Frame = "X-Perl",
-	WIM3MinimapButton = "WIM (WoW Instant Messenger)",
 	VuhDoMinimapButton = "VuhDo",
-	AltoholicMinimapButton = "Altoholic",
 	DominosMinimapButton = "Dominos",
 	Gatherer_MinimapOptionsButton = "Gatherer",
-	DroodFocusMinimapButton = "Drood Focus",
-	["FuBarPluginElkano's BuffBarsFrameMinimapButton"] = "EBB (Elkano's Buff Bars)",
-	D32MiniMapButton = "Mistra's Diablo Orbs",
-	DKPBidderMapIcon = "DKP-Bidder",
-	HealiumMiniMap = "Healium",
-	HealBot_MMButton = "HealBot",
-	IonMinimapButton = "Ion",
-	OutfitterMinimapButton = "Outfitter",
-	FlightMapEnhancedMinimapButton = "Flight Map Enhanced",
-	NXMiniMapBut = "Carbonite",
-	RaidTrackerAceMMI = "Raid Tracker",
-	TellTrackAceMMI = "Tell Track",
 }
 
 --[[
 
 --]]
-local noop = function() end
-
 local GetPosition = function(angle, radius)
 	if (angle < 0) then
 		angle = 360 + angle

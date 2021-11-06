@@ -12,6 +12,6 @@ local MM = DraeUI:NewModule("Minimap", "AceEvent-3.0")
 MM.OnInitialize = function(self)
 	DraeUI.dbGlobal.minimap = DraeUI.dbGlobal.minimap or {}
 
-	self.db = DraeUI.dbGlobal["minimap"]
+	self.db = DraeUI.dbGlobal.minimap
 	self.db.dragPositions = self.db.dragPositions or {}
 end

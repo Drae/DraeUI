@@ -9,74 +9,76 @@ local DraeUI = select(2, ...)
 local MM = DraeUI:GetModule("Minimap")
 
 --
-local _G = _G
-local Minimap, MinimapCluster, MinimapBackdrop, MinimapPing = _G["Minimap"], _G["MinimapCluster"], _G["MinimapBackdrop"], _G["MinimapPing"]
+local Minimap, MinimapCluster, MinimapBackdrop, MinimapPing = Minimap, MinimapCluster, MinimapBackdrop, MinimapPing
 
 --
 MM.frame = CreateFrame("Frame") -- Animation frame
 local pingFrame
 
---[[
-		This is the right click menu
---]]
 local menuFrame = CreateFrame("Frame", "MinimapRightClickMenu", UIParent, "UIDropDownMenuTemplate")
+
 local menuList = {
-	{text = CHARACTER_BUTTON,
-	func = function() ToggleCharacter("PaperDollFrame") end},
-	{text = SPELLBOOK_ABILITIES_BUTTON,
-	func = function() if not SpellBookFrame:IsShown() then ShowUIPanel(SpellBookFrame) else HideUIPanel(SpellBookFrame) end end},
-	{text = TALENTS_BUTTON,
-	func = function()
+	{text = CHARACTER_BUTTON, func = function() ToggleCharacter('PaperDollFrame') end},
+	{text = SPELLBOOK_ABILITIES_BUTTON, func = function()
+		if not SpellBookFrame:IsShown() then
+			ShowUIPanel(SpellBookFrame)
+		else
+			HideUIPanel(SpellBookFrame)
+		end
+	end},
+	{text = TALENTS_BUTTON,	func = function()
 		if not PlayerTalentFrame then
 			TalentFrame_LoadUI()
 		end
 
-		if not GlyphFrame then
-			GlyphFrame_LoadUI()
-		end
-
+		local PlayerTalentFrame = PlayerTalentFrame
 		if not PlayerTalentFrame:IsShown() then
 			ShowUIPanel(PlayerTalentFrame)
 		else
 			HideUIPanel(PlayerTalentFrame)
 		end
 	end},
-	{text = MOUNTS,
-	func = function()
-		TogglePetJournal(1);
-	end},
-	{text = TIMEMANAGER_TITLE,
-	func = function() ToggleFrame(TimeManagerFrame) end},
-	{text = ACHIEVEMENT_BUTTON,
-	func = function() ToggleAchievementFrame() end},
-	{text = SOCIAL_BUTTON,
-	func = function() ToggleFriendsFrame() end},
-	{text = "Calendar",
-	func = function() GameTimeFrame:Click() end},
-	{text = GARRISON_LANDING_PAGE_TITLE,
-	func = function() GarrisonLandingPageMinimapButton_OnClick() end},
-	{text = ACHIEVEMENTS_GUILD_TAB,
-	func = function()
-		if IsInGuild() then
-			if not GuildFrame then GuildFrame_LoadUI() end
-			GuildFrame_Toggle()
-		else
-			if not LookingForGuildFrame then LookingForGuildFrame_LoadUI() end
-			if not LookingForGuildFrame then return end
-			LookingForGuildFrame_Toggle()
+	{text = COLLECTIONS, func = ToggleCollectionsJournal},
+	{text = CHAT_CHANNELS, func = ToggleChannelFrame},
+	{text = TIMEMANAGER_TITLE, func = function() ToggleFrame(TimeManagerFrame) end},
+	{text = ACHIEVEMENT_BUTTON, func = ToggleAchievementFrame},
+	{text = SOCIAL_BUTTON, func = ToggleFriendsFrame},
+	{text = "Calendar", func = function() GameTimeFrame:Click() end},
+	{text = GARRISON_TYPE_8_0_LANDING_PAGE_TITLE, func = function() GarrisonLandingPageMinimapButton_OnClick(GarrisonLandingPageMinimapButton) end},
+	{text = ACHIEVEMENTS_GUILD_TAB, func = ToggleGuildFrame},
+	{text = LFG_TITLE, func = ToggleLFDParentFrame},
+	{text = ENCOUNTER_JOURNAL, func = function()
+		if not IsAddOnLoaded('Blizzard_EncounterJournal') then
+			EncounterJournal_LoadUI()
 		end
+
+		ToggleFrame(EncounterJournal)
 	end},
-	{text = LFG_TITLE,
-	func = function() PVEFrame_ToggleFrame(); end},
-	{text = ENCOUNTER_JOURNAL,
-	func = function() if not IsAddOnLoaded('Blizzard_EncounterJournal') then EncounterJournal_LoadUI(); end ToggleFrame(EncounterJournal) end}
+	{text = MAINMENU_BUTTON, func = function()
+		if not GameMenuFrame:IsShown() then
+			if VideoOptionsFrame:IsShown() then
+				VideoOptionsFrameCancel:Click()
+			elseif AudioOptionsFrame:IsShown() then
+				AudioOptionsFrameCancel:Click()
+			elseif InterfaceOptionsFrame:IsShown() then
+				InterfaceOptionsFrameCancel:Click()
+			end
+
+			CloseMenus()
+			CloseAllWindows()
+			PlaySound(850) --IG_MAINMENU_OPEN
+			ShowUIPanel(GameMenuFrame)
+		else
+			PlaySound(854) --IG_MAINMENU_QUIT
+			HideUIPanel(GameMenuFrame)
+			MainMenuMicroButton_SetNormal()
+		end
+	end}
 }
 
 --[[
 
 --]]
-local noop = function() end
-
 do
 	local alreadyGrabbed = {}
 
@@ -203,4 +205,3 @@ MM.OnEnable = function(self)
 	-- Grab all the buttons and stuffs
 	self:StartFrameGrab()
 end
-
