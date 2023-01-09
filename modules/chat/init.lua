@@ -259,7 +259,10 @@ do
 
 	Chat.HandleChatFrameButtons = function(self, parent)
 		for _, button in pairs(channelButtons) do
+			button.Show = button.Hide
 			button:SetParent(parent)
+			button:Hide()
+			button.SetPoint = function() end
 		end
 	end
 
@@ -267,12 +270,17 @@ do
 		_G.GeneralDockManagerOverflowButtonList:SetFrameStrata("LOW")
 		_G.GeneralDockManagerOverflowButtonList:SetFrameLevel(5)
 		_G.GeneralDockManagerOverflowButton:ClearAllPoints()
-
+		_G.GeneralDockManagerOverflowButton:Hide()
+		_G.GeneralDockManagerOverflowButton.Show = _G.GeneralDockManagerOverflowButton.Hide
+--[[
 		if (self.db.chat.pinVoiceButtons and not self.db.chat.hideVoiceButtons) then
 			_G.GeneralDockManagerOverflowButton:SetPoint("RIGHT", channelButtons[(channelButtons[3]:IsShown() and 3) or 1], "LEFT", -4, 0)
 		else
 			_G.GeneralDockManagerOverflowButton:SetPoint("RIGHT", _G.GeneralDockManager, "RIGHT", -4, 0)
 		end
+
+		_G.GeneralDockManagerOverflowButton.SetPoint = function() end
+]]
 	end
 
 	Chat.HandleChatVoiceIcons = function(self)
@@ -376,7 +384,7 @@ do
 			-- Editbox
 			local editBoxName = chatName.."EditBox"
 			local editBox = _G[editBoxName]
-		    local editBoxHeader = _G[editBoxName .. "Header"]
+			local editBoxHeader = _G[editBoxName .. "Header"]
 
 			editBox:Hide()
 
@@ -385,7 +393,7 @@ do
 
 			-- Tabs
 			local tabName = chatName.."Tab"
-			local tabText = _G[chatName.."TabText"]
+			local tabText = _G[tabName].Text
 			local tab = _G[tabName]
 			tab:StripTextures()
 

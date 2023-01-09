@@ -5,6 +5,7 @@
 	<Script file="AceAddon-3.0\AceAddon-3.0.lua" />
 	<Script file="AceDB-3.0\AceDB-3.0.lua" />
 	<Script file="AceEvent-3.0\AceEvent-3.0.lua" />
+	<Script file="AceTimer-3.0\AceTimer-3.0.lua" />
 	<Script file="LibCustomGlow-1.0\LibCustomGlow-1.0.lua" />
 	<Script file="LibCutawaySmooth-1.0.lua" />
 	<Script file="LibDataBroker-1.1.lua" />

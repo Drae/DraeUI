@@ -22,10 +22,8 @@ local LoadDungeonDebuffs = function()
 	-- enable, spell, priority, secondary, pulse, flash,  glow
 
 	-- Mythic+
-	UF:AddRaidDebuff(true, 209858, 9, true) -- Necrotic Rot
 	UF:AddRaidDebuff(true, 240443, 10) -- Bursting
 	UF:AddRaidDebuff(true, 240449, 9, true) -- Grievous
-	UF:AddRaidDebuff(true, 340880, 5, true) -- Prideful (SL - Season 1)
 end
 
 local LoadPVPDebuffs = function()

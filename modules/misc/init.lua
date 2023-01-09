@@ -5,8 +5,8 @@ local DraeUI = select(2, ...)
 
 local M = DraeUI:NewModule("Misc", "AceEvent-3.0", "AceTimer-3.0")
 
-local UIErrorsFrame = UIErrorsFrame
-local interruptMsg = INTERRUPTED .. " %s's \124cff71d5ff\124Hspell:%d\124h[%s]\124h\124r!"
+local UIErrorsFrame = _G.UIErrorsFrame
+local interruptMsg = _G.INTERRUPTED .. " %s's \124cff71d5ff\124Hspell:%d\124h[%s]\124h\124r!"
 local floor, format = math.floor, string.format
 
 --[[
@@ -21,55 +21,9 @@ M.ErrorFrameToggle = function(self, event)
 end
 
 do
-	local autoRepair = "GUILD"
+	local autoRepair = "PLAYER"
 
-	local VendorGrays = function(delete, nomsg)
-		if (not MerchantFrame or not MerchantFrame:IsShown()) and not delete then
-			DraeUI.Print("You must be at a vendor.")
-			return
-		end
-
-		local c, count = 0, 0
-		for b = 0, 4 do
-			for s = 1, GetContainerNumSlots(b) do
-				local l = GetContainerItemLink(b, s)
-				if (l and select(11, GetItemInfo(l))) then
-					local p = select(11, GetItemInfo(l)) * select(2, GetContainerItemInfo(b, s))
-
-					if (delete) then
-						if (find(l, "ff9d9d9d")) then
-							PickupContainerItem(b, s)
-							DeleteCursorItem()
-							c = c + p
-							count = count + 1
-						end
-					else
-						if (select(3, GetItemInfo(l)) == 0 and p > 0) then
-							UseContainerItem(b, s)
-							PickupMerchantItem()
-							c = c + p
-						end
-					end
-				end
-			end
-		end
-
-		if (c > 0 and not delete) then
-			local g, s, c = floor(c / 10000) or 0, floor((c % 10000) / 100) or 0, c % 100
-			DraeUI.Print("Vendored gray items for: |cffffffff"..g.."g |cffffffff"..s.."s |cffffffff"..c.."c.")
-		elseif (not delete and not nomsg) then
-			DraeUI.Print("No gray items to sell")
-		elseif (count > 0) then
-			local g, s, c = floor(c / 10000) or 0, floor((c % 10000) / 100) or 0, c % 100
-			DraeUI.Print(format("Deleted %d gray items. Total Worth: %s", count, " |cffffffff"..g.."g |cffffffff"..s.."s |cffffffff"..c.."c"))
-		elseif (not nomsg) then
-			DraeUI.Print("No gray items to delete")
-		end
-	end
-
-	M.MERCHANT_SHOW = function(self)
-		VendorGrays(nil, true)
-
+	M.MERCHANT_SHOW = function()
 		if (IsShiftKeyDown() or not CanMerchantRepair()) then return end
 
 		local cost, possible = GetRepairAllCost()

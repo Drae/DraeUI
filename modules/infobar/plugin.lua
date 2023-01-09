@@ -194,10 +194,10 @@ local OnClick = function(self, ...)
 	end
 end
 
-local OnDragStart = function(self)
+local OnDragStart = function()
 end
 
-local OnDragStop = function(self)
+local OnDragStop = function()
 end
 
 local CreateStatusBar = function(self, name, settings)
@@ -241,7 +241,10 @@ local CreateStatusBar = function(self, name, settings)
 		bar:SetBackdrop {
 			bgFile = settings.bg.texture
 		}
-		bar:SetBackdropColor(settings.bg.color)
+
+		if (settings.bg.color and type(settings.bg.color) == "table") then
+			bar:SetBackdropColor(unpack(settings.bg.color))
+		end
 	end
 
 	if (settings.spark) then

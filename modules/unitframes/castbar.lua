@@ -13,145 +13,39 @@ local unpack, pairs, format = unpack, pairs, string.format
 local UnitChannelInfo = UnitChannelInfo
 
 
+-- color
+local CastingColor 		= { 0.3, 0.3, 1.0 }
+local ChannelingColor 	= { 1.0, 0.3, 0.3 }
+local FailColor 		= { 0.3, 0.3, 0.3 }
+
 --[[
 		Castbar functions
 --]]
-local OnCastbarUpdate = function(self, elapsed)
-	if (self.casting or self.channeling) then
-		local parent = self:GetParent()
-		local duration = self.casting and self.duration + elapsed or self.duration - elapsed
-
-		if ((self.casting and duration >= self.max) or (self.channeling and duration <= 0)) then
-			self.casting = nil
-			self.channeling = nil
-			return
-		end
-
-		if (self.Time) then
-			if (parent.unit == "player") then
-				if (self.delay ~= 0) then
-					self.Time:SetFormattedText("%.1f | |cffff0000%.1f|r", duration, self.casting and self.max + self.delay or self.max - self.delay)
-				else
-					self.Time:SetFormattedText("%.1f | %.1f", duration, self.max)
-				end
-			else
-				self.Time:SetFormattedText("%.1f | %.1f", duration, self.casting and self.max + self.delay or self.max - self.delay)
-			end
-		end
-
-		self.duration = duration
-		self:SetValue(duration)
-
-		if(self.Spark) then
-			self.Spark:SetPoint("CENTER", self, "LEFT", (duration / self.max) * self:GetWidth(), 0)
-		end
-	else
-		self.unitName = nil
-		self.casting = nil
-		self.castid = nil
-		self.channeling = nil
-
-		self.Spark:Hide()
-		local alpha = self:GetAlpha() - 0.02
-
-		if (alpha > 0) then
-			self:SetAlpha(alpha)
-		else
-			self.fadeOut = nil
-			self:Hide()
-		end
-	end
+local PostCastStart = function(self, unit)
+	self:SetStatusBarColor(unpack(self.channeling and ChannelingColor or CastingColor))
 end
 
-local PostCastStart = function(self, unit, name, rank, text)
-	self:SetStatusBarColor(unpack(self.casting and self.CastingColor or self.ChannelingColor))
-	self.border:SetBackdropBorderColor(0, 0, 0)
-
-	-- Hidden by onupdate at cast end/stop/fail
-	self:SetAlpha(1.0)
-	self.Spark:Show()
-
-	if (unit == "player") then
-		if (self.casting) then
-			if (self.mergingTradeSkill) then
-				self.duration = self.duration + self.max * self.countCurrent
-				self.max = self.max * self.countTotal
-				self:SetMinMaxValues(0, self.max)
-				self:SetValue(self.duration)
-				self.countCurrent = self.countCurrent + 1
-
-				if (self.countCurrent == self.countTotal) then
-					self.mergingTradeSkill = nil
-				end
-			end
-		end
-	end
-end
-
-local PostCastStop = function(self, unit, name, rank, castid)
-	if (self.mergingTradeSkill) then
-		self.duration = self.max * self.countCurrent / self.countTotal
-		self:SetValue(self.duration)
-		self:SetStatusBarColor(unpack(self.CastingColor))
-		self.fadeOut = nil
-
-		local sparkPosition = (self.duration / self.max) * self:GetWidth()
-		self.Spark:SetPoint("CENTER", self, "LEFT", sparkPosition, 2)
-		self.Spark:Show()
-	else
-		if (not self.fadeOut) then
-			self:SetStatusBarColor(unpack(self.CompleteColor))
-			self.fadeOut = true
-		end
-
-		self:SetValue(self.max)
-		self:Show()
-	end
-end
-
-local PostChannelStop = function(self, unit, name, rank)
-	self.fadeOut = true
-	self.mergingTradeSkill = nil
-	self:SetValue(0)
-	self:Show()
-end
-
-local PostCastFailed = function(self, event, unit, name, rank, castid)
-	self:SetStatusBarColor(unpack(self.FailColor))
+local PostCastFail = function(self, unit, spellId)
+	self:SetStatusBarColor(unpack(FailColor))
 	self:SetValue(self.max)
-
-	if (not self.fadeOut) then
-		self.fadeOut = true
-	end
-
-	self.mergingTradeSkill = nil
-	self.duration = 0
-	self:Show()
 end
 
 --[[
 		Create a castbar
 --]]
-UF.CreateCastBar = function(self, width, height, anchor, anchorAt, anchorTo, xOffset, yOffset, reverse)
+UF.CreateCastBar = function(self, width, height, anchor, anchorAt, anchorTo, xOffset, yOffset)
 	local castbar = CreateFrame("StatusBar", nil, self, BackdropTemplateMixin and "BackdropTemplate")
 	castbar:SetSize(width, height)
-	castbar:SetPoint(anchorAt, anchor, anchorTo, xOffset, yOffset)
+	castbar:SetPoint(anchorAt, anchor or self, anchorTo, xOffset, yOffset)
 	castbar:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
 	castbar:SetStatusBarColor(0.5, 0.5, 1, 1)
 
-	--color
-	castbar.CastingColor 			= DraeUI.db["castbar"].colorCasting or { 0.5, 0.5, 1.0 }
-	castbar.CompleteColor 			= DraeUI.db["castbar"].colorComplete or { 0.5, 1.0, 0 }
-	castbar.FailColor 				= DraeUI.db["castbar"].colorFail or { 1.0, 0.05, 0 }
-	castbar.ChannelingColor 		= DraeUI.db["castbar"].colorChannel or { 0.5, 0.5, 1.0 }
+	-- hold time
+	castbar.timeToHold = 1.0
 
-	castbar.OnUpdate 				 = OnCastbarUpdate
-	castbar.PostCastStart 			 = PostCastStart
-	castbar.PostChannelStart 		 = PostCastStart
-	castbar.PostCastStop 			 = PostCastStop
-	castbar.PostChannelStop 		 = PostChannelStop
-	castbar.PostCastFailed 			 = PostCastFailed
-	castbar.PostCastInterrupted 	 = PostCastFailed
+	-- Colour the castbar appropriately
+	castbar.PostCastStart = PostCastStart
+	castbar.PostCastFail = PostCastFail
 
 	-- Border
 	local border = CreateFrame("Frame", nil, castbar, BackdropTemplateMixin and "BackdropTemplate")
@@ -173,26 +67,29 @@ UF.CreateCastBar = function(self, width, height, anchor, anchorAt, anchorTo, xOf
 	spark:SetBlendMode("ADD")
 	spark:SetAlpha(0.75)
 	spark:SetHeight(castbar:GetHeight() * 2.75)
+    spark:SetPoint("CENTER", castbar:GetStatusBarTexture(), "RIGHT", 0, 0)
 	castbar.Spark = spark
+
+	-- Uniterruptable show shield
+	local shield = castbar:CreateTexture(nil, "OVERLAY")
+	shield:SetTexture("Interface\\TARGETINGFRAME\\PortraitQuestBadge")
+    shield:SetPoint("CENTER", castbar)
+	shield:SetSize(30, 30)
+	castbar.Shield = shield
+
+	-- Latency safe-zone
+	if (self.unit and self.unit == "player") then
+		local safezone = castbar:CreateTexture(nil, "OVERLAY")
+		safezone:SetTexture("Interface\\Buttons\\White8x8")
+		safezone:SetVertexColor(1.0, 0, 0, 0.75)
+		castbar.SafeZone = safezone
+	end
 
 	-- Cast time
 	castbar.Time = DraeUI.CreateFontObject(castbar, DraeUI.db["general"].fontsize3, DraeUI["media"].font, "RIGHT", 2, height + 6)
 
 	-- Spell name
 	castbar.Text = DraeUI.CreateFontObject(castbar, DraeUI.db["general"].fontsize3, DraeUI["media"].font, "LEFT", -2, height + 6)
-
-	local shield = castbar:CreateTexture(nil, "BACKGROUND", nil, 7)
-	shield:SetTexture("Interface\\TARGETINGFRAME\\PortraitQuestBadge")
-	shield:SetPoint(reverse and "RIGHT" or "LEFT", castbar, reverse and "RIGHT" or "LEFT", reverse and 15 or -15, 0)
-	shield:SetSize(30, 30)
-	castbar.Shield = shield
-
-	if (self.unit and self.unit == "player") then
-		local safezone = castbar:CreateTexture(nil, 'OVERLAY')
-		safezone:SetTexture("Interface\\Buttons\\White8x8")
-		safezone:SetVertexColor(1.0, 0, 0, 0.75)
-		castbar.SafeZone = safezone
-	end
 
 	self.Castbar = castbar
 end
@@ -244,7 +141,7 @@ do
 				_G[bar]:SetPoint("BOTTOM", _G["MirrorTimer"..(barId - 1)], "TOP", 0, 5)
 			end
 
-			_G[bar.."Background"] = _G[bar]:CreateTexture(bar.."Background", "BACKGROUND", _G[bar])
+			_G[bar.."Background"] = _G[bar]:CreateTexture(bar.."Background", "BACKGROUND", _G[bar], 1)
 			_G[bar.."Background"]:SetTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
 			_G[bar.."Background"]:SetAllPoints(bar)
 			_G[bar.."Background"]:SetVertexColor(0, 0, 0, 0)

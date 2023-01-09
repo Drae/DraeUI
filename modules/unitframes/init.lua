@@ -78,7 +78,7 @@ UF.OnEnable = function(self)
 
 	-- Disable certain blizzard frames
 	BuffFrame:Kill()
-	TemporaryEnchantFrame:Kill()
+	DebuffFrame:Kill()
 	CompactRaidFrameContainer:Kill()
 	CompactRaidFrameManager:Kill()
 
@@ -292,6 +292,7 @@ UF.OnEnable = function(self)
 			local header =
 				oUF:SpawnHeader("DraeRaid" .. i, nil, visibility,
 				"showPlayer", true,
+				"showParty", true,
 				"showRaid",	true,
 				"oUF-initialConfigFunction",([[
 					self:SetWidth(%d)
@@ -313,8 +314,6 @@ UF.OnEnable = function(self)
 			)
 
 			if (i == 1) then
-				header:SetAttribute("showParty", true)
-
 				CreateRaidAnchor(header, numSubGroups)
 			else
 				if (self.db.raidframes.gridLayout == "HORIZONTAL") then
@@ -336,6 +335,7 @@ UF.OnEnable = function(self)
 			local headerPet =
 				oUF:SpawnHeader("DraeRaidPet", "SecureGroupPetHeaderTemplate", visibility,
 				"showPlayer", true,
+				"showParty", true,
 				"showRaid",	true,
 				"oUF-initialConfigFunction",
 				([[

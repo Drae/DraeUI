@@ -36,19 +36,18 @@ local StyleDrae_Player = function(frame, unit, isSingle)
 
 	UF.FlagIcons(frame.Health)
 
+	-- Totem bar
+	UF.CreateTotemBar(frame, "RIGHT", frame, "LEFT", -12, 0)
+
 	-- Auras
-	UF.AddLongBuffs(frame, "BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -20, 20)
-	UF.AddWeaponEnchants(frame, -24, 0) -- Anchored to Long Buffs
 	UF.AddBuffs(frame, "TOPLEFT", frame.Power, "BOTTOMLEFT", 0, -12, DraeUI.db["frames"].auras.maxPlayerBuff or 8, DraeUI.db["frames"].auras.auraSml, 8, "RIGHT",	"DOWN")
 	UF.AddDebuffs(frame, "TOPRIGHT", frame.Power, "BOTTOMRIGHT", 0, -12, DraeUI.db["frames"].auras.maxPlayerDebuff or 6, DraeUI.db["frames"].auras.auraLrg, 8, "LEFT", "DOWN")
 
-	UF.CreateTotemBar(frame, "RIGHT", frame, "LEFT", -12, 0)
+	UF.AddLongBuffs("BOTTOMRIGHT", _G.UIParent, "BOTTOMRIGHT", -20, 20)
 
 	-- Castbars
 	local cbp = DraeUI.db["castbar"].player
-	UF.CreateCastBar(frame, cbp.width, cbp.height, cbp.anchor, cbp.anchorat, cbp.anchorto, cbp.xOffset, cbp.yOffset, DraeUI.db["castbar"].showLatency, false)
-
-	UF.CreateMirrorCastbars(frame)
+	UF.CreateCastBar(frame, cbp.width, cbp.height, cbp.anchor, cbp.anchorat, cbp.anchorto, cbp.xOffset, cbp.yOffset, DraeUI.db["castbar"].showLatency)
 
 	-- The number here is the size of the raid icon
 	UF.CommonPostInit(frame, 30)

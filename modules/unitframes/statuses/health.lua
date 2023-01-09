@@ -207,7 +207,7 @@ local Enable = function(self)
 		self:RegisterEvent("PLAYER_FLAGS_CHANGED", ColorPath, true) -- AFK status changes
 		self:RegisterEvent("PLAYER_CONTROL_LOST", ColorPath, true) -- Mind control, fear, taxi, etc.
 
-		if(element:IsObjectType('StatusBar') and not (element:GetStatusBarTexture() or element:GetStatusBarAtlas())) then
+		if(element:IsObjectType('StatusBar') and not (element:GetStatusBarTexture())) then
 			element:SetStatusBarTexture([[Interface\TargetingFrame\UI-StatusBar]])
 		end
 

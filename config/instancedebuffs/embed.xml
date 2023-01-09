@@ -1,7 +1,9 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<!-- Expacs -->
+	<Include file="mistsofpandaria\embed.xml" />
 	<Include file="warlordsofdraenor\embed.xml" />
 	<Include file="legion\embed.xml" />
 	<Include file="bfa\embed.xml" />
 	<Include file="shadowlands\embed.xml" />
+	<Include file="dragonflight\embed.xml" />
 </Ui>

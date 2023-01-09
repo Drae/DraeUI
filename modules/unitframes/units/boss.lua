@@ -31,7 +31,7 @@ local StyleDrae_Boss = function(frame, unit, isSingle)
 
 	-- Castbar
 	local cb = DraeUI.db["castbar"].boss
-	UF.CreateCastBar(frame, cb.width, cb.height, self, cb.anchorat, cb.anchorto, cb.xOffset, cb.yOffset, true)
+	UF.CreateCastBar(frame, cb.width, cb.height, nil, cb.anchorat, cb.anchorto, cb.xOffset, cb.yOffset)
 
 	-- Auras - just debuffs for target of target
 	UF.AddDebuffs(frame, "TOPRIGHT", frame.Power, "BOTTOMRIGHT", 0, -12, 2, DraeUI.db["frames"].auras.auraSml, 8, "LEFT", "DOWN")

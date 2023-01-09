@@ -52,7 +52,7 @@ local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeUIExp", {
 				}
 			},
 			height = 5,
-			color = { 0.5, 0.5, 0, 0.5 },
+			color = { 0.5, 0.5, 0.5, 0.75 },
 			spark = false,
 			smooth = true
 		},
@@ -76,7 +76,7 @@ local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeUIExp", {
 			height = 5,
 			spark = false,
 			bg = {
-				texture = "Interface\\Buttons\\White8x8",
+				texture = "Interface\\Buttons\\WHITE8x8",
 				color = { 0, 0, 0, 1 }
 			}
 		}
@@ -94,7 +94,7 @@ local restingIcon = "|TInterface\\AddOns\\draeUI\\media\\textures\\resting-icon:
 ]]
 XP.UpdateReputation = function(self)
 	local name, reaction, min, max, value, faction = GetWatchedFactionInfo()
-	local friend, _, _, _, _, _, friendTextLevel = GetFriendshipReputation(faction)
+	local friend, _, _, _, _, _, friendTextLevel = C_GossipInfo.GetFriendshipReputation(faction)
 	local numFactions = GetNumFactions()
 
 	if (not name) then
@@ -125,7 +125,7 @@ do
 		GameTooltip:ClearLines()
 
 		local name, reaction, min, max, value, faction = GetWatchedFactionInfo()
-		local friend, _, _, _, _, _, friendTextLevel = GetFriendshipReputation(faction)
+		local friend, _, _, _, _, _, friendTextLevel = C_GossipInfo.GetFriendshipReputation(faction)
 
 		if name then
 			GameTooltip:AddLine(name)

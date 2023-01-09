@@ -12,11 +12,18 @@ DraeUI.defaults.class["PALADIN"] = {
         ["buff_devotionaura"]     			= { buff = "Devotion Aura",     			mine = true,  color = { 0.8, 0.3, 0.0 } },
         ["buff_crusaderaura"]     			= { buff = "Crusader Aura",     			mine = true,  color = { 0.8, 0.4, 0.0 } },
         ["buff_retributionaura"]     		= { buff = "Retribution Aura",     			mine = true,  color = { 0.8, 0.5, 0.0 } },
+
         ["buff_blessingofprotection"]      	= { buff = "Blessing of Protection",   	    mine = false, color = { 0.0, 0.2, 0.9 } },
         ["buff_blessingofspellwarding"]     = { buff = "Blessing of Spellwarding",      mine = false, color = { 0.0, 0.2, 0.7 } },
         ["buff_blessingofsanctuary"]     	= { buff = "Blessing of Sanctuary", 	    mine = false, color = { 0.7, 0.0, 0.3 } },
         ["buff_blessingoffreedom"]          = { buff = "Blessing of Freedom",   	    mine = false, color = { 0.7, 0.7, 0.7 } },
         ["buff_blessingofsacrifice"]        = { buff = "Blessing of Sacrifice",   	    mine = false, color = { 1.0, 0.0, 1.0 } },
+
+		["buff_blessingofsummer"]        	= { buff = "Blessing of Summer", 			mine = false, color = { 0.0, 1.0, 0.5 } },
+		["buff_blessingofspring"]        	= { buff = "Blessing of Spring", 			mine = false, color = { 0.0, 0.9, 0.7 } },
+		["buff_blessingofautumn"]        	= { buff = "Blessing of Autumn", 			mine = false, color = { 0.0, 0.8, 0.8 } },
+		["buff_blessingofwinter"]        	= { buff = "Blessing of Winter", 			mine = false, color = { 0.0, 0.7, 1.0 } },
+
         ["buff_bestowfaith"]                = { buff = "Bestow Faith", 				    mine = true,  color = { 1.0, 0.8, 0.0 } },
         ["buff_beaconoflight"]           	= { buff = "Beacon of Light",   			mine = true,  color = { 1.0, 0.7, 0.0 } },
         ["buff_beaconoffaith"]           	= { buff = "Beacon of Faith",   			mine = true,  color = { 1.0, 0.6, 0.0 } },
@@ -113,6 +120,13 @@ DraeUI.defaults.class["PALADIN"] = {
             ["buff_beaconoffaith"] 	= 60,
             ["buff_beaconofvirtue"] = 60,
         },
+
+		["RIGHTB"] = {
+            ["buff_blessingofsummer"] 	= 60,
+            ["buff_blessingofspring"] 	= 60,
+            ["buff_blessingofautumn"] 	= 60,
+            ["buff_blessingofwinter"] 	= 60,
+		},
 
 		["RIGHTT"] = {
             ["buff_retributionaura"] 	= 60,

@@ -1,4 +1,4 @@
-## Interface: 90001
+## Interface: 100002
 ## Author: Drae
 ## Title: draeUI
 ## Version: 9.0.1
@@ -8,7 +8,7 @@
 ## X-Embeds: LibSharedMedia-3.0
 ## X-oUF: draeUF
 
-TaintLess.xml
+#TaintLess.xml
 
 libs\libs.xml
 media\media.xml
@@ -26,6 +26,7 @@ functions\toolkit.lua
 modules\chat\init.lua
 
 # Unitframes
+modules\unitframes\auras.xml
 modules\unitframes\init.lua
 modules\unitframes\core.lua
 modules\unitframes\roster.lua
@@ -68,14 +69,3 @@ modules\infobar\ldb\azerite.lua
 modules\misc\init.lua
 modules\misc\alreadyknown.lua
 modules\misc\autoinvite.lua
-
-# Blizzard
-modules\blizzard\init.lua
-modules\blizzard\alertframe.lua
-modules\blizzard\colorpicker.lua
-modules\blizzard\durability.lua
-modules\blizzard\gm.lua
-modules\blizzard\vehicle.lua
-modules\blizzard\watchframe.lua
-modules\blizzard\talkinghead.lua
-

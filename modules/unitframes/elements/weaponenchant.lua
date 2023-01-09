@@ -155,7 +155,7 @@ do
 					end
 
 					if (button.icon) then button.icon:SetTexture(GetInventoryItemTexture("player", 16 + index - 1)) end
-					if (button.count) then button.count:SetText(data.charges > 1 and data.charges) end
+					--if (button.count) then button.count:SetText(data.charges > 1 and data.charges) end
 
 					local size = enchants.size or 16
 					button:SetSize(size, size)

@@ -85,11 +85,13 @@ do
 	local grabFrames = function(...)
 		for i=1, select("#", ...) do
 			local f = select(i, ...)
-			local n = f:GetName()
+			if (f) then
+				local n = f:GetName()
 
-			if n and not alreadyGrabbed[n] then
-				alreadyGrabbed[n] = true
-				MM.buttons:NewFrame(f)
+				if n and not alreadyGrabbed[n] then
+					alreadyGrabbed[n] = true
+					MM.buttons:NewFrame(f)
+				end
 			end
 		end
 	end
@@ -114,20 +116,6 @@ do
 end
 
 MM.OnEnable = function(self)
-	Minimap:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", -30, -30)
-
-	MinimapBackdrop:ClearAllPoints()
-	MinimapBackdrop:SetParent(Minimap)
-	MinimapBackdrop:SetPoint("CENTER", Minimap, "CENTER", -8, -24)
-
-	-- Change some basic textures
-	MinimapBorder:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\UI-Minimap-Border")
-	MinimapNorthTag:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\CompassNorthTag")
-	MinimapCompassTexture:SetTexture("Interface\\AddOns\\draeUI\\media\textures\\CompassRing")
-	MiniMapTrackingButtonBorder:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\MiniMap-TrackingBorder")
-	QueueStatusMinimapButtonBorder:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\MiniMap-TrackingBorder")
-	MiniMapMailBorder:SetTexture("Interface\\AddOns\\draeUI\\media\\textures\\MiniMap-TrackingBorder")
-
 	-- The Pinger
 	pingFrame = CreateFrame("Frame", nil, Minimap, BackdropTemplateMixin and "BackdropTemplate")
 	pingFrame:SetBackdrop({
@@ -168,7 +156,7 @@ MM.OnEnable = function(self)
 		animGroup:Play()
 	end)
 	pingFrame:RegisterEvent("MINIMAP_PING")
-
+--[[
 	-- Clock
 	if (TimeManagerClockButton) then
 		local timerframe = _G["TimeManagerClockButton"]
@@ -184,7 +172,7 @@ MM.OnEnable = function(self)
 	MinimapBorderTop:Hide()
 	MiniMapWorldMapButton:Hide()
 	MiniMapWorldMapButton:Hide()
-
+]]
 	Minimap:EnableMouseWheel()
 	Minimap:SetScript("OnMouseWheel", function(self, direction)
 		if (direction > 0) then

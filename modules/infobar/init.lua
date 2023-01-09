@@ -135,10 +135,12 @@ InfoBar.OnInitialize = function(self)
 end
 
 InfoBar.OnEnable = function(self)
+	local microBarButtonWidth = _G["MicroButtonAndBagsBar"]:GetWidth()
+
 	-- Parent bar
 	local infoBar = CreateFrame("Frame", nil, UIParent)
 	infoBar:SetFrameStrata("LOW")
-	infoBar:SetPoint("TOPLEFT", 20, -20)
+	infoBar:SetPoint("TOPLEFT", microBarButtonWidth + 30, -20)
 	infoBar:SetPoint("TOPRIGHT", _G["MinimapCluster"], "TOPLEFT", -20, 0)
 	infoBar:SetHeight(30)
 

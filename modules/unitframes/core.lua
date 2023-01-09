@@ -11,19 +11,20 @@ local Smoothing = LibStub("LibCutawaySmooth-1.0", true)
 
 -- Local copies
 local CreateFrame  = CreateFrame
-local UnitName, UnitIsPlayer, UnitClass, UnitExists = UnitName, UnitIsPlayer, UnitClass, UnitExists
+local UnitName, UnitIsPlayer, UnitClass, UnitExists, UnitIsOwnerOrControllerOfUnit = UnitName, UnitIsPlayer, UnitClass, UnitExists, UnitIsOwnerOrControllerOfUnit
 local GameTooltip, InCombatLockdown = GameTooltip, InCombatLockdown
 local CancelUnitBuff, DebuffTypeColor = CancelUnitBuff, DebuffTypeColor
 local UnitFrame_OnEnter, UnitFrame_OnLeave = UnitFrame_OnEnter, UnitFrame_OnLeave
-local RAID_CLASS_COLORS, FACTION_BAR_COLORS = RAID_CLASS_COLORS, FACTION_BAR_COLORS
-local select, upper, mhuge = select, upper, math.huge
+local RAID_CLASS_COLORS, FACTION_BAR_COLORS = _G["RAID_CLASS_COLORS"], _G["FACTION_BAR_COLORS"]
+local ToggleDropDownMenu = _G["ToggleDropDownMenu"]
+local select, upper, mhuge = select, string.upper, math.huge
 
 --[[
 		Local functions
 --]]
 local Menu = function(self)
 	local cUnit = self.unit:gsub("(.)", upper, 1)
-
+print("",cUnit)
 	if (_G[cUnit .. "FrameDropDown"]) then
 		ToggleDropDownMenu(1, nil, _G[cUnit .. "FrameDropDown"], "cursor", 0, 0)
 	end
@@ -32,7 +33,7 @@ end
 --[[
 		General frame related functions
 --]]
-UF.CommonInit = function(self, noBg)
+UF.CommonInit = function(self)
 	self.menu = Menu -- Enable the menus
 
 	-- Register for mouse clicks, for menu
@@ -221,7 +222,7 @@ do
 
 			if (totem:IsShown()) then
 				totem:ClearAllPoints()
-				totem:SetPoint('RIGHT', shown[#shown] or element.__owner, 'LEFT', -8, 0)
+				totem:SetPoint("RIGHT", shown[#shown] or element.__owner, "LEFT", -8, 0)
 				table.insert(shown, totem)
 			end
 		end
@@ -302,13 +303,16 @@ end
 -- Aura handling
 do
 	local AuraOnEnter = function(self)
-		if (not self:IsVisible()) then
+		if (GameTooltip:IsForbidden() or not self:IsVisible()) then
 			return
 		end
 
-		-- Add aura owner to tooltip if available - colour by class/reaction because it looks nice!
-		GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT")
-		GameTooltip:SetUnitAura(self.parent:GetParent().unit, self:GetID(), self.filter)
+		GameTooltip_SetDefaultAnchor(GameTooltip, self)
+
+		-- Avoid parenting GameTooltip to frames with anchoring restrictions,
+		-- otherwise it"ll inherit said restrictions which will cause issues with
+		-- its further positioning, clamping, etc
+--		GameTooltip:SetOwner(self, self:GetParent().__restricted and "ANCHOR_CURSOR" or self:GetParent().tooltipAnchor)
 
 		if (self.caster and UnitExists(self.caster)) then
 			local color
@@ -324,6 +328,12 @@ do
 			GameTooltip:AddLine(("Cast by %s%s|r"):format(DraeUI.Hex(color.r, color.g, color.b), UnitName(self.caster)))
 		end
 
+		if(self.isHarmful) then
+			GameTooltip:SetUnitDebuffByAuraInstanceID(self:GetParent().__owner.unit, self.auraInstanceID)
+		else
+			GameTooltip:SetUnitBuffByAuraInstanceID(self:GetParent().__owner.unit, self.auraInstanceID)
+		end
+
 		GameTooltip:Show()
 	end
 
@@ -331,51 +341,51 @@ do
 		GameTooltip:Hide()
 	end
 
-	local CreateAuraIconCore = function(icons, index)
-		local button = CreateFrame("Button", icons:GetDebugName() .. "Button" .. index, icons)
+	local CreateAuraIconCore = function(element, index)
+		local button = CreateFrame("Button", element:GetDebugName() .. "Button" .. index, element)
 
 		button:EnableMouse(true)
 
-		button:SetWidth(icons.size or 16)
-		button:SetHeight(icons.size or 16)
+		button:SetWidth(element.size or 16)
+		button:SetHeight(element.size or 16)
 
-		local border = CreateFrame("Frame", icons:GetDebugName() .. "ButtonFrame" .. index, button, BackdropTemplateMixin and "BackdropTemplate")
+		local border = CreateFrame("Frame", element:GetDebugName() .. "ButtonFrame" .. index, button, BackdropTemplateMixin and "BackdropTemplate")
 		border:SetPoint("TOPLEFT", button, -2, 2)
 		border:SetPoint("BOTTOMRIGHT", button, 2, -2)
 		border:SetFrameStrata("BACKGROUND")
 		border:SetBackdrop {
-			edgeFile = "Interface\\Buttons\\White8x8",
+			edgeFile = "Interface\\Buttons\\WHITE8x8",
 			tile = false,
 			edgeSize = 2
 		}
 		border:SetBackdropBorderColor(0, 0, 0)
-		button.border = border
+		button.Border = border
 
 		local icon = button:CreateTexture(nil, "BACKGROUND")
 		icon:SetTexCoord(unpack(DraeUI.db.general.texcoords))
 		icon:SetAllPoints(button)
-		button.icon = icon
+		button.Icon = icon
 
 		local overlay = button:CreateTexture(nil, "OVERLAY")
-		button.overlay = overlay
+		button.Overlay = overlay
 
-		local cd = CreateFrame("Cooldown", icons:GetDebugName() .. "ButtonCooldown" .. index, button, "CooldownFrameTemplate")
+		local cd = CreateFrame("Cooldown", element:GetDebugName() .. "ButtonCooldown" .. index, button, "CooldownFrameTemplate")
 		cd:SetReverse(true)
 		cd:SetAllPoints(button)
-		button.cd = cd
+		button.Cooldown = cd
 
 		local count = button:CreateFontString(nil)
 		count:SetFont(DraeUI.media.font, DraeUI.db.general.fontsize3, "THINOUTLINE")
 		count:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 7, -6)
-		button.count = count
+		button.Count = count
 
-		button.parent = icons
+		button.parent = element
 
 		return button
 	end
 
-	local CreateAuraIcon = function(icons, index)
-		local button = CreateAuraIconCore(icons,  index)
+	local CreateButton = function(element, index)
+		local button = CreateAuraIconCore(element,  index)
 
 		button:RegisterForClicks("RightButtonUp")
 
@@ -384,68 +394,55 @@ do
 		stealable:SetPoint("TOPLEFT", button, "TOPLEFT")
 		stealable:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT")
 		stealable:SetBlendMode("ADD")
-		button.stealable = stealable
-
-		button.parent = icons
+		button.Stealable = stealable
 
 		button:SetScript("OnEnter", AuraOnEnter)
 		button:SetScript("OnLeave", AuraOnLeave)
 
-		local unit = icons:GetParent().unit
-
-		if (unit == "player") then
-			button:SetScript(
-				"OnClick",
-				function(self)
-					if (InCombatLockdown()) then
-						return
-					end
-
-					CancelUnitBuff(self.parent:GetParent().unit, self:GetID(), self.filter)
-				end
-			)
-		end
-
 		return button
 	end
 
-	local PostUpdateIcon = function(self, unit, icon, index)
-		local color = DebuffTypeColor[icon.dtype]
+	local PostUpdateButton = function(self, button, unit, data, position)
+		local color = DebuffTypeColor[data.dispellName]
 
 		if (color) then
-			icon.border:SetBackdropBorderColor(color.r, color.g, color.b)
+			button.Border:SetBackdropBorderColor(color.r, color.g, color.b)
 		else
-			icon.border:SetBackdropBorderColor(0, 0, 0)
+			button.Border:SetBackdropBorderColor(0, 0, 0)
 		end
 
-		if (icon.debuff and icon.isEnemy and not icon.isPlayer) then
-			icon.icon:SetDesaturated(true)
+		if (button.debuff and button.isEnemy and not button.isPlayerAura) then
+			button.Icon:SetDesaturated(true)
 		else
-			icon.icon:SetDesaturated(false)
+			button.Icon:SetDesaturated(false)
 		end
 	end
 
-	local CustomFilter = function(element, unit, button, name, _, _, dtype, duration, _, caster, _, _, spellid, _, isBossDebuff)
-		button.isPlayer = (caster == "player" or caster == "vehicle" or caster == "pet")
-		button.duration = (duration == 0) and mhuge or duration
-		button.caster = caster
-		button.dtype = dtype
+	--[[
+		Defines a custom filter that controls if the aura button should be shown.
 
-		if (DraeUI.db["frames"].auras.blacklistAuraFilter[name]) then
+		* self - the widget holding the aura buttons
+		* unit - the unit on which the aura is cast (string)
+		* data - [UnitAuraInfo](https://wowpedia.fandom.com/wiki/Struct_UnitAuraInfo) object (table)
+
+		## Returns
+
+		* show - indicates whether the aura button should be shown (boolean)
+	--]]
+	local CustomFilter = function(auras, unit, data)
+		if (DraeUI.db["frames"].auras.blacklistAuraFilter[data.name]) then
 			return false
 		end
-
-		--local hasCustom, alwaysShowMine, showForMySpec = SpellGetVisibilityInfo(spellid, "ENEMY_TARGET")
 
 		--[[
 				* All non-zero duration buffs on friendly targets (pre-filter affects this)
 				* All buffs on enemy targets (pre-filter affects this)
 				* Short term buffs on player/pet
 		--]]
-		if (button.filter == "HELPFUL") then
+		if (auras.filter == "HELPFUL") then
 			if (unit ~= "player" and unit ~= "pet" and unit ~= "vehicle") then
 				return true
-			elseif (DraeUI.db["frames"].auras.showBuffsOnMe and duration > 0 and duration <= 600) then
+			elseif (DraeUI.db["frames"].auras.showBuffsOnMe and data.duration > 0 and data.duration <= 600) then
 				return true
 			end
 		end
@@ -455,7 +452,7 @@ do
 				* My debuffs on enemy targets
 				* All debuffs on player/pet (pre-filter affects this)
 		--]]
-		if (button.filter == "HARMFUL") then
+		if (auras.filter == "HARMFUL") then
 			if (unit ~= "player" and unit ~= "pet" and unit ~= "vehicle") then
 				return true
 			elseif (DraeUI.db["frames"].auras.showDebuffsOnMe) then
@@ -465,34 +462,27 @@ do
 
 		-- Filtered buffs/debuffs
 		if (DraeUI.db["frames"].auras.filterType == "WHITELIST") then
-			if (DraeUI.db["frames"].auras.whiteListFilter[element.filter == "HELPFUL" and "BUFF" or "DEBUFF"][name]) then
+			if (DraeUI.db["frames"].auras.whiteListFilter[auras.filter == "HELPFUL" and "BUFF" or "DEBUFF"][data.name]) then
 				return true
 			end
 
 			return false
 		else
-			if (DraeUI.db["frames"].auras.blackListFilter[element.filter == "HELPFUL" and "BUFF" or "DEBUFF"][name]) then
+			if (DraeUI.db["frames"].auras.blackListFilter[auras.filter == "HELPFUL" and "BUFF" or "DEBUFF"][data.name]) then
 				return false
 			end
 
 			return true
 		end
-
-		return false
 	end
 
-	local CustomFilterLongBuffs = function(element, unit, button, name, _, _, dtype, duration, _, caster, _, _, spellid, _, isBossDebuff)
-		button.isPlayer = (caster == "player" or caster == "vehicle" or caster == "pet")
-		button.duration = (duration == 0) and mhuge or duration
-		button.caster = caster
-		button.dtype = dtype
-
-		if (DraeUI.db["frames"].auras.blacklistAuraFilter[name]) then
+	local CustomFilterLongBuffs = function(auras, unit, data)
+		if (DraeUI.db["frames"].auras.blacklistAuraFilter[data.name]) then
 			return false
 		end
 
-		if (button.filter == "HELPFUL") then
-			if ((unit == "player" or unit == "vehicle") and (duration == 0 or duration > 600)) then
+		if (auras.filter == "HELPFUL") then
+			if ((unit == "player" or unit == "vehicle") and (data.duration == 0 or data.duration > 600)) then
 				return true
 			end
 		end
@@ -519,9 +509,9 @@ do
 		debuffs.filter = "HARMFUL" -- Explicitly set the filter or the first customFilter call won"t work
 		debuffs.showDebuffType = true
 
-		debuffs.CustomFilter = CustomFilter
-		debuffs.CreateIcon = CreateAuraIcon
-		debuffs.PostUpdateIcon = PostUpdateIcon
+		debuffs.FilterAura = CustomFilter
+		debuffs.CreateButton = CreateButton
+		debuffs.PostUpdateButton = PostUpdateButton
 
 		self.Debuffs = debuffs
 	end
@@ -546,12 +536,37 @@ do
 		buffs.showBuffType = true
 		buffs.showStealableBuffs = DraeUI.playerClass == "MAGE" and DraeUI.db["frames"].showStealableBuffs or false
 
-		buffs.CustomFilter = filter or CustomFilter
-		buffs.CreateIcon = CreateAuraIcon
-		buffs.PostUpdateIcon = PostUpdateIcon
+		buffs.FilterAura = CustomFilter
+		buffs.CreateButton = CreateButton
+		buffs.PostUpdateButton = PostUpdateButton
 
 		self.Buffs = buffs
 	end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	do
 		local PostUpdateWeaponEnchants = function(auras, unit)
@@ -564,86 +579,332 @@ do
 			enchants:SetPoint("BOTTOMRIGHT", relativeFrame, "BOTTOMLEFT", enchants["offset-x"], enchants["offset-y"])
 		end
 
-		UF.AddLongBuffs = function(self, point, relativeFrame, relativePoint, ofsx, ofsy)
+
+		local SetTooltip = function(button)
+			if button:GetAttribute('index') then
+				GameTooltip:SetUnitAura(button.header:GetAttribute('unit'), button:GetID(), button.filter)
+			elseif button:GetAttribute('target-slot') then
+				GameTooltip:SetInventoryItem('player', button:GetID())
+			end
+		end
+
+		local Button_OnLeave = function()
+			GameTooltip_Hide()
+		end
+
+		local Button_OnEnter = function(button)
+			if (GameTooltip:IsForbidden() or not button:IsVisible()) then
+				return
+			end
+
+			GameTooltip_SetDefaultAnchor(GameTooltip, button)
+
+			-- Avoid parenting GameTooltip to frames with anchoring restrictions,
+			-- otherwise it"ll inherit said restrictions which will cause issues with
+			-- its further positioning, clamping, etc
+			GameTooltip:SetOwner(button, button:GetParent().__restricted and "ANCHOR_CURSOR" or button:GetParent().tooltipAnchor)
+
+			if button:GetAttribute('index') then
+				GameTooltip:SetUnitAura(button.header:GetAttribute('unit'), button:GetID(), button.filter)
+			elseif button:GetAttribute('target-slot') then
+				GameTooltip:SetInventoryItem('player', button:GetID())
+			end
+
+			button.elapsed = 1 -- let the tooltip update next frame
+		end
+
+		local Button_OnShow = function(self)
+			if self.enchantIndex then
+				self.header.enchants[self.enchantIndex] = self
+				self.header.elapsedEnchants = 1 -- let the enchant update next frame
+			end
+		end
+
+		local Button_OnHide = function(self)
+			if self.enchantIndex then
+				self.header.enchants[self.enchantIndex] = nil
+			else
+				self.instant = true
+			end
+		end
+
+		local UpdateIcon = function(child)
+			child:SetSize(22, 22)
+		end
+
+
+		local ClearAuraTime = function(button)
+			button.expiration = nil
+			button.endTime = nil
+			button.duration = nil
+			button.modRate = nil
+			button.timeLeft = nil
+
+			button.Text:SetText("")
+		end
+
+		local UpdateTime = function(button, expiration, modRate)
+			button.timeLeft = (expiration - GetTime()) / (modRate or 1)
+
+			if button.timeLeft < 0.1 then
+				ClearAuraTime(button, true)
+			end
+		end
+
+		local SetAuraTime = function(button, expiration, duration, modRate)
+			local oldEnd = button.endTime
+
+			button.expiration = expiration
+			button.endTime = expiration
+			button.duration = duration
+			button.modRate = modRate
+
+			if oldEnd ~= button.endTime then
+				button.nextUpdate = 0
+			end
+
+			UpdateTime(button, expiration, modRate)
+			button.elapsed = 0 -- reset the timer for UpdateTime
+		end
+
+		local UpdateAura = function(button, index)
+			local name, icon, count, debuffType, duration, expiration, _, _, _, _, _, _, _, _, modRate = UnitAura(button.header:GetAttribute("unit"), index, button.filter)
+			if not name then return end
+
+			button.Text:SetShown(true)
+			button.Count:SetText(not count or count <= 1 and "" or count)
+			button.Icon:SetTexture(icon)
+
+			local dtype = debuffType or "none"
+
+			if button.debuffType ~= dtype then
+				local color = (button.filter == "HARMFUL" and _G.DebuffTypeColor[dtype])
+				button:SetBackdropBorderColor(color.r, color.g, color.b)
+				button.statusBar.backdrop:SetBackdropBorderColor(color.r, color.g, color.b)
+				button.debuffType = dtype
+			end
+
+			if duration > 0 and expiration then
+				SetAuraTime(button, expiration, duration, modRate)
+			else
+				ClearAuraTime(button)
+			end
+		end
+
+		local UpdateTempEnchant = function(button, index, expiration)
+			button.Text:SetShown(true)
+
+			if expiration then
+				button.Icon:SetTexture(GetInventoryItemTexture("player", index))
+
+				local r, g, b
+				local quality =  GetInventoryItemQuality("player", index)
+
+				if quality and quality > 1 then
+					r, g, b = GetItemQualityColor(quality)
+				else
+					r, g, b = 0, 0, 0
+				end
+
+				button:SetBackdropBorderColor(r, g, b)
+
+				local remaining = (expiration * 0.001) or 0
+
+				SetAuraTime(button, remaining + GetTime(), (remaining <= 3600 and remaining > 1800) and 3600 or (remaining <= 1800 and remaining > 600) and 1800 or 600)
+			else
+				ClearAuraTime(button)
+			end
+		end
+
+		local Header_OnUpdate = function(header, elapsed)
+			if header.elapsedSpells and header.elapsedSpells > 0.1 then
+				local button, value = next(header.spells)
+
+				while button do
+					UpdateAura(button, value)
+
+					header.spells[button] = nil
+					button, value = next(header.spells)
+				end
+
+				header.elapsedSpells = 0
+			else
+				header.elapsedSpells = (header.elapsedSpells or 0) + elapsed
+			end
+
+			if header.elapsedEnchants and header.elapsedEnchants > 0.5 then
+				local index, enchant = next(header.enchants)
+
+				if index then
+					local _, main, _, _, _, offhand, _, _, _, ranged = GetWeaponEnchantInfo()
+
+					while enchant do
+						UpdateTempEnchant(enchant, enchant:GetID(), (index == 1 and main) or (index == 2 and offhand) or (index == 3 and ranged))
+
+						header.enchants[index] = nil
+						index, enchant = next(header.enchants)
+					end
+				end
+
+				header.elapsedEnchants = 0
+			else
+				header.elapsedEnchants = (header.elapsedEnchants or 0) + elapsed
+			end
+		end
+
+		local CreateAuraButton = function(button)
+			button.header = button:GetParent()
+
+			local border = CreateFrame("Frame", nil, button, BackdropTemplateMixin and "BackdropTemplate")
+			border:SetPoint("TOPLEFT", button, -2, 2)
+			border:SetPoint("BOTTOMRIGHT", button, 2, -2)
+			border:SetFrameStrata("BACKGROUND")
+			border:SetBackdrop {
+				edgeFile = "Interface\\Buttons\\WHITE8x8",
+				tile = false,
+				edgeSize = 2
+			}
+			border:SetBackdropBorderColor(0, 0, 0)
+			button.Border = border
+
+			local icon = button:CreateTexture(nil, "BACKGROUND")
+			icon:SetTexCoord(unpack(DraeUI.db.general.texcoords))
+			icon:SetAllPoints(button)
+			button.Icon = icon
+
+			local overlay = button:CreateTexture(nil, "OVERLAY")
+			button.Overlay = overlay
+
+			local cd = CreateFrame("Cooldown", nil, button, "CooldownFrameTemplate")
+			cd:SetReverse(true)
+			cd:SetAllPoints(button)
+			button.Cooldown = cd
+
+			local count = button:CreateFontString(nil)
+			count:SetFont(DraeUI.media.font, DraeUI.db.general.fontsize3, "THINOUTLINE")
+			count:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 7, -6)
+			button.Count = count
+
+			button:SetScript("OnEnter", Button_OnEnter)
+			button:SetScript("OnLeave", Button_OnLeave)
+
+			UpdateIcon(button)
+		end
+
+		local UpdateAuraIcon = function(header)
+			for i = 1, 40 do
+				local child = header:GetAttribute("child" .. i);  -- gets the i'th automatically created button
+
+				if (not child or not child:IsShown()) then
+					return;  -- the player has fewer than 40 buffs
+				end
+
+				-- the 2nd parameter should accomodate the secure header"s sortMethod and sortDirection attributes, by using GetID()
+				-- the 3rd parameter should match the secure header"s filter attribute, by using the same string
+				local name, icon, count, dispelType, duration, expirationTime, source, isStealable, nameplateShowPersonal,
+spellId, canApplyAura, isBossDebuff, castByPlayer, nameplateShowAll, timeMod = UnitAura("player", child:GetID(), "HELPFUL");
+
+				if (not child.Icon) then
+					CreateAuraButton(child)
+				end
+
+				if (name) then
+					child.Icon:SetTexture(icon);
+					child.Icon:Show();
+
+					if(duration > 0) then
+						child.Cooldown:SetCooldown(expirationTime - duration, duration, timeMod)
+						child.Cooldown:Show()
+					else
+						child.Cooldown:Hide()
+					end
+
+					if(child.Count) then child.Count:SetText(count > 1 and count or '') end
+				else
+					child.Icon:Hide();
+				end
+			end
+		end
+
+		-- Totally stolen from ElvUI because I"m lazy ... well, with some changes based on oUF
+		UF.AddLongBuffs = function(point, relativeFrame, relativePoint, ofsx, ofsy)
+			local name = "DraeUIPlayerLongBuffs"
 			-- 16 per row, 2 rows, 24px size, 6px spacing
 			local width = 400
 			local height = 70
 
-			local buffs = CreateFrame("Frame", nil, self)
-			buffs:SetPoint(point, relativeFrame, relativePoint, ofsx, ofsy)
-			buffs:SetSize(width, height)
+			local header = CreateFrame("Frame", name, _G.UIParent, "SecureAuraHeaderTemplate")
 
-			buffs.numDebuffs = 0
+			header:SetPoint(point, relativeFrame, relativePoint, ofsx, ofsy)
 
-			buffs.numBuffs = 32
-			buffs.size = 24
-			buffs.spacing = 6
-			buffs.initialAnchor = point
-			buffs["growth-x"] = "LEFT"
-			buffs["growth-y"] = "UP"
-			buffs.filter = "HELPFUL" -- Explicitly set the filter or the first customFilter call won"t work
-			buffs.showBuffType = true
+			header:SetClampedToScreen(true)
+			header:UnregisterEvent("UNIT_AURA")
+			-- we only need to watch player and vehicle
+			header:RegisterUnitEvent("UNIT_AURA", "player", "vehicle")
 
-			buffs.CustomFilter = CustomFilterLongBuffs
-			buffs.CreateIcon = CreateAuraIcon
-			buffs.PostUpdateIcon = PostUpdateIcon
-			buffs.PostUpdate = PostUpdateWeaponEnchants
+			header:SetAttribute("template", "DraeUIPlayerLongAuraTemplate")
+			header:SetAttribute("unit", "player")
+			header:SetAttribute("filter", "HELPFUL")
+			header:SetAttribute("consolidateDuration", -1)
+			header:SetAttribute("includeWeapons", 1)
+			header:SetAttribute("separateOwn", 1)
+			header:SetAttribute("sortMethod", "TIME")
+			header:SetAttribute("sortDirection", "+")
+			header:SetAttribute("maxWraps", 2)
+			header:SetAttribute("wrapAfter", 16)
+			header:SetAttribute("point", "BOTTOMRIGHT")
+			header:SetAttribute("minWidth", 30)
+			header:SetAttribute("minHeight", 30)
+			header:SetAttribute("xOffset", -30) -- (24 + 6) * -1
+			header:SetAttribute("yOffset", 0)
+			header:SetAttribute("wrapXOffset", 0)
+			header:SetAttribute("wrapYOffset", 30) -- (24 + 6) * 1
 
-			self.Auras = buffs
-		end
+			header.auraType = "buffs"
+			header.filter = "HELPFUL"
+			header.name = name
+			header.enchants = {}
+			header.spells = {}
 
-		-- Weapon enchants
-		do
-			local UpdateTooltip = function(self)
-				if(GameTooltip:IsForbidden()) then return end
+			header.visibility = CreateFrame("Frame", nil, _G.UIParent, "SecureHandlerStateTemplate")
+--			header.visibility:SetScript("OnUpdate", Header_OnUpdate) -- dont put this on the main frame
+			header.visibility.frame = header
 
-				GameTooltip:SetInventoryItem("player", self:GetID())
+			-- use custom script that will only call hide when it needs to, this prevents spam to `SecureAuraHeader_Update`
+			header.visibility:SetAttribute("_onstate-customVisibility", [[
+				local header = self:GetFrameRef("AuraHeader")
+				local hide, shown = newstate == 0, header:IsShown()
+				if hide and shown then header:Hide() elseif not hide and not shown then header:Show() end
+			]])
+
+			RegisterAttributeDriver(header, "unit", "[vehicleui] vehicle; player")
+			SecureHandlerSetFrameRef(header.visibility, "AuraHeader", header)
+			RegisterStateDriver(header.visibility, "customVisibility", "[petbattle] 0;1")
+
+			header:HookScript("OnEvent", UpdateAuraIcon)
+
+			local index = 1
+			local child = select(index, header:GetChildren())
+
+			while child do
+				child.auraType = header.auraType -- used to update cooldown text
+
+				UpdateIcon(child)
+
+				-- Blizzard bug fix, icons arent being hidden when you reduce the amount of maximum buttons
+				-- maxWraps * wrapAfter
+				if index > 16 and child:IsShown() then
+					child:Hide()
+				end
+
+				index = index + 1
+				child = select(index, header:GetChildren())
 			end
 
-			local OnEnter = function(self)
-				if(GameTooltip:IsForbidden() or not self:IsVisible()) then return end
+--			if MasqueGroupBuffs and E.private.auras.buffsHeader and E.private.auras.masque.buffs then MasqueGroupBuffs:ReSkin() end
+--			if MasqueGroupDebuffs and E.private.auras.debuffsHeader and E.private.auras.masque.debuffs then MasqueGroupDebuffs:ReSkin() end
 
-				GameTooltip:SetOwner(self, self:GetParent().__restricted and 'ANCHOR_CURSOR' or self:GetParent().tooltipAnchor)
-				self:UpdateTooltip()
-			end
-
-			local OnLeave = function()
-				if(GameTooltip:IsForbidden()) then return end
-
-				GameTooltip:Hide()
-			end
-
-			local CreateWeaponEnchantIcon = function(icons, index)
-				local button = CreateAuraIconCore(icons, index)
-
-				button:SetScript('OnEnter', OnEnter)
-				button:SetScript('OnLeave', OnLeave)
-
-				button.UpdateTooltip = UpdateTooltip
-
-				return button
-			end
-
-			UF.AddWeaponEnchants = function(self, ofsx, ofsy)
-				-- 2 per row, 2 rows, 24px size, 6px spacing + space
-				local width = 80
-				local height = 70
-
-				local enchants = CreateFrame("Frame", nil, self, BackdropTemplateMixin and "BackdropTemplate")
-				enchants:SetSize(width, height)
-
-				enchants.size = 24
-				enchants.spacing = 6
-				enchants.initialAnchor = "BOTTOMRIGHT"
-				enchants["growth-x"] = "LEFT"
-				enchants["growth-y"] = "UP"
-				enchants["offset-x"] = ofsx	-- offset from long buff auras
-				enchants["offset-y"] = ofsy	-- offset from long buff auras
-
-				enchants.CreateIcon = CreateWeaponEnchantIcon
-
-				self.WeaponEnchant = enchants
-			end
+			header:Show()
 		end
 	end
 end

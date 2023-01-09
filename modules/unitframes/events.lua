@@ -57,47 +57,41 @@ UF.OverridePower = function(self, event, unit)
 
 	local r, g, b, t
 
-	if (info and info.atlas) then
-		power:SetStatusBarAtlas(info.atlas)
-		power:GetStatusBarTexture():SetDesaturated(disconnected)
-		power:SetStatusBarColor(1, 1, 1)
-	else
-		power:SetStatusBarTexture(power.__bar_texture)
+	power:SetStatusBarTexture(power.__bar_texture)
 
-		local colors = oUF.colors
+	local colors = oUF.colors
 
-		if (power.colorClass and arenaPrep) then
-			local _, _, _, _, _, _, class = GetSpecializationInfoByID(GetArenaOpponentSpec(self.id))
-			t = colors.class[class]
-		elseif (power.colorDisconnected and disconnected) then
-			t = colors.disconnected
-		elseif (displayType == ALTERNATE_POWER_INDEX and power.altPowerColor) then
-			t = power.altPowerColor
-		elseif (power.colorPower) then
-			t = colors.power[ptoken]
-			if (not t) then
-				if (power.GetAlternativeColor) then
-					r, g, b = power:GetAlternativeColor(unit, ptype, ptoken, altR, altG, altB)
-				elseif (altR) then
-					r, g, b = altR, altG, altB
-				else
-					t = colors.power[ptype]
-				end
+	if (power.colorClass and arenaPrep) then
+		local _, _, _, _, _, _, class = GetSpecializationInfoByID(GetArenaOpponentSpec(self.id))
+		t = colors.class[class]
+	elseif (power.colorDisconnected and disconnected) then
+		t = colors.disconnected
+	elseif (displayType == ALTERNATE_POWER_INDEX and power.altPowerColor) then
+		t = power.altPowerColor
+	elseif (power.colorPower) then
+		t = colors.power[powerToken]
+		if (not t) then
+			if (power.GetAlternativeColor) then
+				r, g, b = power:GetAlternativeColor(unit, displayType, powerToken, altR, altG, altB)
+			elseif (altR) then
+				r, g, b = altR, altG, altB
+			else
+				t = colors.power[displayType]
 			end
-		elseif (power.colorClass and UnitIsPlayer(unit)) or
-			(power.colorClassNPC and not UnitIsPlayer(unit)) or
-			(power.colorClassPet and UnitPlayerControlled(unit) and not UnitIsPlayer(unit)) then
-			local _, class = UnitClass(unit)
-			t = colors.class[class]
-		elseif (power.colorReaction and UnitReaction(unit, 'player') and (not UnitPlayerControlled(unit) and not UnitIsTapDenied(unit))) then
-			t = colors.reaction[UnitReaction(unit, "player")]
-		elseif (power.colorTapping and not UnitPlayerControlled(unit) and
-			UnitIsTapDenied(unit)) then
-			t = colors.tapped
-		elseif (power.colorSmooth) then
-			local adjust = 0 - (min or 0)
-			r, g, b = self.ColorGradient(cur + adjust, max + adjust, unpack(power.smoothGradient or colors.smooth))
 		end
+	elseif (power.colorClass and UnitIsPlayer(unit)) or
+		(power.colorClassNPC and not UnitIsPlayer(unit)) or
+		(power.colorClassPet and UnitPlayerControlled(unit) and not UnitIsPlayer(unit)) then
+		local _, class = UnitClass(unit)
+		t = colors.class[class]
+	elseif (power.colorReaction and UnitReaction(unit, 'player') and (not UnitPlayerControlled(unit) and not UnitIsTapDenied(unit))) then
+		t = colors.reaction[UnitReaction(unit, "player")]
+	elseif (power.colorTapping and not UnitPlayerControlled(unit) and
+		UnitIsTapDenied(unit)) then
+		t = colors.tapped
+	elseif (power.colorSmooth) then
+		local adjust = 0 - (min or 0)
+		r, g, b = self.ColorGradient(pcur + adjust, max + adjust, unpack(power.smoothGradient or colors.smooth))
 	end
 
 	if (t) then

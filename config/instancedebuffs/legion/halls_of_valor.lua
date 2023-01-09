@@ -3,30 +3,24 @@ local UF = DraeUI:GetModule("UnitFrames")
 
 -- Auchindoun
 
-UF["raiddebuffs"]["instances"]["Auchindoun"] = function()
-	-- Trash
-	UF:AddRaidDebuff(true, 157168, 6, true) -- Fixate (Abyssal)
+UF["raiddebuffs"]["instances"]["Halls of Valor"] = function()
+	UF:AddRaidDebuff(true, 199050, 6) --Mortal Hew
+	UF:AddRaidDebuff(true, 199652, 6) --Sever
+	UF:AddRaidDebuff(true, 198944, 6) --Breach Armor
+	UF:AddRaidDebuff(true, 215430, 6) --Thunderstrike
+	UF:AddRaidDebuff(true, 199674, 6) --Wicked Dagger
+	UF:AddRaidDebuff(true, 199818, 6) --Crackle
+	UF:AddRaidDebuff(true, 198959, 6) --Etch
+	UF:AddRaidDebuff(true, 193702, 6) --Infernal Flames
 
-	-- Vigilant Kaathar
-	UF:AddRaidDebuff(true, 152954, 6) -- Sanctified Strike
+	--Hymdall
+	UF:AddRaidDebuff(true, 193092, 6) --Bloodletting Sweep
 
-	-- Nyami
-	UF:AddRaidDebuff(true, 155327, 6, true) -- Soul Vessel
-	UF:AddRaidDebuff(true, 154477, 6) -- Shadow Word: Pain
-	UF:AddRaidDebuff(true, 154218, 6) -- Arbiter's Hammer
-	UF:AddRaidDebuff(true, 176931, 6) -- Crusader Strike
+	--Fenryr
+	UF:AddRaidDebuff(true, 196497, 6) --Ravenous Leap
 
-	-- Azzakel
-	UF:AddRaidDebuff(true, 153727, 6) -- Fel Lash
-	UF:AddRaidDebuff(true, 153392, 6) -- Curtain of Flame
-	UF:AddRaidDebuff(true, 154018, 6) -- Conflagration
-	UF:AddRaidDebuff(true, 153500, 6) -- Fel Pool
+	--God-King Skovald
+	UF:AddRaidDebuff(true, 193660, 6) --Felblaze Rush
 
-	-- Terongor
-	UF:AddRaidDebuff(true, 156921, 6, true) -- Seed of Malevonence
-	UF:AddRaidDebuff(true, 156921, 6) -- Drain Life
-	UF:AddRaidDebuff(true, 156842, 6) -- Corruption
-	UF:AddRaidDebuff(true, 156964, 6) -- Immolate
-	UF:AddRaidDebuff(true, 156857, 6) -- Rain of Fire
-	UF:AddRaidDebuff(true, 164841, 6) -- Curse of Exhaustion
+	--Odyn
 end
