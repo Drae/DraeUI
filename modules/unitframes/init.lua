@@ -180,12 +180,13 @@ UF.OnEnable = function(self)
 		end
 
 		local CreateRaidAnchor = function(header, numSubGroups)
-			for i = numSubGroups, 1, -1 do
-				if (self.db.raidframes.position[i]) then
+--			for i = numSubGroups, 1, -1 do
+				local i = 1
+--				if (self.db.raidframes.position[i]) then
 					header:SetPoint(unpack(self.db.raidframes.position[i]))
-					break
-				end
-			end
+--					break
+--				end
+--			end
 		end
 
 		local getRelativePoint = function(point, horizontal)

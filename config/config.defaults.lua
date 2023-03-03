@@ -31,9 +31,9 @@ DraeUI.defaults.profile = {
 		showArena = false,
 		-- Player and Target are positioned relative to center of screen,
 		-- all other frames are positioned relative to those
-		playerXoffset = -390,
+		playerXoffset = -420,
 		playerYoffset = -250,
-		targetXoffset = 390,
+		targetXoffset = 420,
 		targetYoffset = -250,
 		totXoffset = 30, -- Relative to right of target
 		totYoffset = 0,
@@ -53,9 +53,7 @@ DraeUI.defaults.profile = {
 		-- Dimension of frames, large applies to player/target, small everything else
 		-- don't change these, change the scale
 		largeWidth = 270,
-		largeHeight = 20,
-		mediumWidth = 180,
-		mediumHeight = 20,
+		largeHeight = 270,
 		smallWidth = 120,
 		smallHeight = 20,
 		-- Aura settings
@@ -127,7 +125,7 @@ DraeUI.defaults.profile = {
 		gridLayout = "HORIZONTAL", -- groups are arranged horizontally - one above (or below) the other,
 		-- VERTICAL would have groups appear to the right (or left) of each other
 		gridGroupsAnchor = "BOTTOMRIGHT", -- This is the anchor point for each group - groups will grow from this point
-		padding = 10, -- Distance between frames - the highlight border is 3px, so keep it >3
+		padding = 14, -- Distance between frames - the highlight border is 3px, so keep it >3
 		petOffset = 16, -- Offset from player frames for pet/vehicle frames
 		showPets = true, -- Pets will be shown as seperate units, vehicles will appear as pets if enabled
 		powerHeight = 4,	-- Height of power bar (shown only for healers)
@@ -140,12 +138,12 @@ DraeUI.defaults.profile = {
 		-- specify a position for a total number of groups the position of the last highest
 		-- will be used
 		position = {
-			[1] = {"BOTTOMRIGHT", UIParent, "CENTER", -260, -150}, --275
-			[6] = {"BOTTOMLEFT", UIParent, "LEFT", 50, -150}
+			[1] = {"BOTTOMRIGHT", UIParent, "CENTER", -295, -150} --275
+--			[6] = {"BOTTOMLEFT", UIParent, "LEFT", 50, -150}
 		},
 		scale = {
-			[1] = 1,
-			[6] = 0.8
+			[1] = 1
+--			[6] = 0.8
 		},
 		-- Button parameters
 		raidnamelength = 4,

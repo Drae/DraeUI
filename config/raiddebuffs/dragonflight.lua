@@ -2,7 +2,7 @@ local DraeUI = select(2, ...)
 local UF = DraeUI:GetModule("UnitFrames")
 
 -- Highmaul
-UF["raiddebuffs"]["instances"]["Vault of the Incarnates"] = function()
+UF["raiddebuffs"]["instances"]["Vault of the Incarnate"] = function()
 	-- enable, spell, priority, secondary, pulse, flash
 
 	-- "Eranog"
@@ -101,14 +101,14 @@ UF["raiddebuffs"]["instances"]["Vault of the Incarnates"] = function()
 	UF:AddRaidDebuff(true, 375716, 5) -- Ice Barrage
 
 	-- "Raszageth the Storm-Eater"
-	UF:AddRaidDebuff(true, 381615, 5) -- static-charge
+	UF:AddRaidDebuff(true, 381615, 5, true) -- static-charge
 	UF:AddRaidDebuff(true, 377594, 5) -- lightning-breath
 	UF:AddRaidDebuff(true, 381249, 5) -- electrifying-presence
 	UF:AddRaidDebuff(true, 395906, 5) -- Electrified Jaws
 	UF:AddRaidDebuff(true, 391285, 6) -- Thunderstruck Armor
 	UF:AddRaidDebuff(true, 388115, 5) -- Lightning Devastation
-	UF:AddRaidDebuff(true, 394576, 5) -- Positive Charge
-	UF:AddRaidDebuff(true, 394579, 5) -- Negative Charge
+	UF:AddRaidDebuff(true, 394576, 5, true) -- Positive Charge
+	UF:AddRaidDebuff(true, 394579, 10) -- Negative Charge
 	UF:AddRaidDebuff(true, 394582, 5) -- Focused Charge
 	UF:AddRaidDebuff(true, 394583, 6) -- Scattered Charge
 	UF:AddRaidDebuff(true, 377467, 5) -- Fulminating Charge

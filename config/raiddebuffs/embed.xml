@@ -4,4 +4,5 @@
 	<Include file="legion.lua" />
 	<Include file="battleforazeroth.lua" />
 	<Include file="shadowlands.lua" />
+	<Include file="dragonflight.lua" />
 </Ui>

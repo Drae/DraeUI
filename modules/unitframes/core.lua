@@ -113,7 +113,7 @@ UF.CreateHealthBar = function(frame, width, x, y, height)
 	hp:SetFrameStrata(frame:GetFrameStrata())
 	hp:SetFrameLevel(frame:GetFrameLevel())
 	hp:SetStatusBarTexture(DraeUI.media.statusbar) --Q
-	hp:SetSize(width, height or 7)
+	hp:SetSize(width, height or 10)
 	hp:SetPoint("TOPLEFT", frame, "TOPLEFT", x, y)
 
 	hp.colorClass = true

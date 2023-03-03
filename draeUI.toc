@@ -22,9 +22,6 @@ functions\colours.lua
 functions\functions.lua
 functions\toolkit.lua
 
-# Chat
-modules\chat\init.lua
-
 # Unitframes
 modules\unitframes\auras.xml
 modules\unitframes\init.lua
@@ -67,5 +64,4 @@ modules\infobar\ldb\azerite.lua
 
 # Misc
 modules\misc\init.lua
-modules\misc\alreadyknown.lua
 modules\misc\autoinvite.lua

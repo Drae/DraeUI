@@ -95,6 +95,10 @@ end
 UF.AddRaidDebuff = function(self, enable, spell, priority, secondary, pulse, flash, glow)
 	local name, _, icon = GetSpellInfo(spell)
 
+	if (not name) then
+		DraeUI.Print("Spell does not exist for |cff00dd00" .. spell .. "|r")
+	end
+
 	debuffList[name] = {
 		enable 		= enable or false, -- NOTE: By setting this to false you effectively blacklist that debuff
 		icon 		= icon or nil,
