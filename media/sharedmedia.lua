@@ -5,7 +5,5 @@ LSM:Register("font",		"Bignoodle",		"Interface\\AddOns\\draeUI\\media\\fonts\\bi
 LSM:Register("font",		"Proza",			"Interface\\AddOns\\draeUI\\media\\fonts\\prozaregular-regular.ttf")
 LSM:Register("font",		"Vollkorn",			"Interface\\AddOns\\draeUI\\media\\fonts\\vollkorn-medium.ttf")
 LSM:Register("font",		"LiberationSans",	"Interface\\AddOns\\draeUI\\media\\fonts\\liberationsans.ttf")
-
 LSM:Register("statusbar",	"striped",			"Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
-
-LSM:Register("sound", 		"heart", 			"Interface\\Addons\\draeUI\\media\\sounds\\heart.ogg")
+LSM:Register("statusbar",	"hgrad",			"Interface\\AddOns\\draeUI\\media\\statusbars\\bar19")

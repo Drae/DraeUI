@@ -274,7 +274,7 @@ Plugin.New = function(self, name, obj, settings)
 	plugin.name = name
 	plugin.obj = obj
 
-	plugin.text = DraeUI.CreateFontObject(plugin, DraeUI.db["general"].fontsize1, DraeUI["media"].font, "LEFT", 0, 0) --
+	plugin.text = DraeUI.CreateFontObject(plugin, DraeUI.config["general"].fontsize1, DraeUI.media.font, "LEFT", 0, 0) --
 
 	if (statusbar) then
 		plugin.statusbar = {}

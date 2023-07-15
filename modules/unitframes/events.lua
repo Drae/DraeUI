@@ -125,7 +125,7 @@ UF.PostUpdateHealth = function(health, u, min, max)
 	elseif (UnitIsDead(u)) then
 		health.value:SetText("|cffaaaaaaDead|r")
 		self.__state = "DEAD"
-	elseif (DraeUI.db["frames"].numFormatLong) then
+	elseif (DraeUI.config["frames"].numFormatLong) then
 		local left, num, right = string.match(min ~= max and (min - max) or min,'^([^%d]*%d)(%d*)(.-)$')
 
 		local hpvalue = ("|cffffffff%s"):format(left..(num:reverse():gsub('(%d%d%d)','%1,'):reverse())..right)

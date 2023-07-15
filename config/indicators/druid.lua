@@ -4,7 +4,7 @@
 --]]
 local DraeUI = select(2, ...)
 
-DraeUI.defaults.class["DRUID"] = {
+DraeUI.class["DRUID"] = {
 	auras = {
 		["buff_rejuvenation"] 	= { buff = "Rejuvenation", 	mine = true,  color = { 0.8, 0.8, 0.8 } },
 		["buff_wildgrowth"] 	= { buff = "Wild Growth", 	mine = true,  color = { 0.6, 0.2, 0.8 } },

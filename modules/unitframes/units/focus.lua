@@ -19,19 +19,19 @@ local StyleDrae_Focus = function(frame, unit, isSingle)
 	UF.CreateUnitFrameBackground(frame)
 	UF.CreateUnitFrameHighlight(frame)
 
-	frame.Health.value = DraeUI.CreateFontObject(frame.Health, DraeUI.db["general"].fontsize1, DraeUI["media"].font, "LEFT", -2, 15)
+	frame.Health.value = DraeUI.CreateFontObject(frame.Health, DraeUI.config["general"].fontsize1, DraeUI["media"].font, "LEFT", -2, 15)
 
-	local info = DraeUI.CreateFontObject(frame.Health, DraeUI.db["general"].fontsize1, DraeUI["media"].font, "RIGHT", 2, 15)
+	local info = DraeUI.CreateFontObject(frame.Health, DraeUI.config["general"].fontsize1, DraeUI["media"].font, "RIGHT", 2, 15)
 	info:SetSize(110, 20)
 	frame:Tag(info, "[drae:shortclassification][drae:unitcolour][name]|r | [level]")
 
 	-- Castbar
-	local cb = DraeUI.db["castbar"].focus
-	UF.CreateCastBar(frame, cb.width, cb.height, cb.anchor, cb.anchorat, cb.anchorto, cb.xOffset, cb.yOffset)
+--	local cb = DraeUI.config["castbar"].focus
+--	UF.CreateCastBar(frame, cb.width, cb.height, cb.anchor, cb.anchorat, cb.anchorto, cb.xOffset, cb.yOffset)
 
 	-- Auras - just debuffs for target of target
-	UF.AddDebuffs(frame, "TOPRIGHT", frame.Power, "BOTTOMRIGHT", 0, -12, DraeUI.db["frames"].auras.maxFocusDebuff or 15, DraeUI.db["frames"].auras.auraSml, 8, "LEFT", "DOWN")
-	UF.AddBuffs(frame, "TOPLEFT", frame.Power, "BOTTOMLEFT", 0, -12, DraeUI.db["frames"].auras.maxFocusBuff or 15, DraeUI.db["frames"].auras.auraSml, 8, "RIGHT", "DOWN")
+	UF.AddDebuffs(frame, "TOPRIGHT", frame.Power, "BOTTOMRIGHT", 0, -12, DraeUI.config["frames"].auras.maxFocusDebuff or 15, DraeUI.config["frames"].auras.auraSml, 8, "LEFT", "DOWN")
+	UF.AddBuffs(frame, "TOPLEFT", frame.Power, "BOTTOMLEFT", 0, -12, DraeUI.config["frames"].auras.maxFocusBuff or 15, DraeUI.config["frames"].auras.auraSml, 8, "RIGHT", "DOWN")
 
 	-- The number here is the size of the raid icon
 	UF.CommonPostInit(frame, 30)

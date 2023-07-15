@@ -4,14 +4,14 @@
 --]]
 local DraeUI = select(2, ...)
 
-DraeUI.defaults.class["PALADIN"] = {
+DraeUI.class["PALADIN"] = {
     auras = {
         ["debuff_forbearance"]            	= { debuff = "Forbearance", 				mine = false, color = { 1.0, 0.0, 0.0 } },
 
-        ["buff_concentrationaura"]     		= { buff = "Concentration Aura",     		mine = true,  color = { 0.8, 0.2, 0.0 } },
+        ["buff_concentrationaura"]     		= { buff = "Concentration Aura",     		mine = true,  color = { 0.8, 0.3, 0.0 } },
         ["buff_devotionaura"]     			= { buff = "Devotion Aura",     			mine = true,  color = { 0.8, 0.3, 0.0 } },
-        ["buff_crusaderaura"]     			= { buff = "Crusader Aura",     			mine = true,  color = { 0.8, 0.4, 0.0 } },
-        ["buff_retributionaura"]     		= { buff = "Retribution Aura",     			mine = true,  color = { 0.8, 0.5, 0.0 } },
+        ["buff_crusaderaura"]     			= { buff = "Crusader Aura",     			mine = true,  color = { 0.8, 0.3, 0.0 } },
+        ["buff_retributionaura"]     		= { buff = "Retribution Aura",     			mine = true,  color = { 0.8, 0.3, 0.0 } },
 
         ["buff_blessingofprotection"]      	= { buff = "Blessing of Protection",   	    mine = false, color = { 0.0, 0.2, 0.9 } },
         ["buff_blessingofspellwarding"]     = { buff = "Blessing of Spellwarding",      mine = false, color = { 0.0, 0.2, 0.7 } },
@@ -19,16 +19,17 @@ DraeUI.defaults.class["PALADIN"] = {
         ["buff_blessingoffreedom"]          = { buff = "Blessing of Freedom",   	    mine = false, color = { 0.7, 0.7, 0.7 } },
         ["buff_blessingofsacrifice"]        = { buff = "Blessing of Sacrifice",   	    mine = false, color = { 1.0, 0.0, 1.0 } },
 
-		["buff_blessingofsummer"]        	= { buff = "Blessing of Summer", 			mine = false, color = { 0.0, 1.0, 0.5 } },
-		["buff_blessingofspring"]        	= { buff = "Blessing of Spring", 			mine = false, color = { 0.0, 0.9, 0.7 } },
-		["buff_blessingofautumn"]        	= { buff = "Blessing of Autumn", 			mine = false, color = { 0.0, 0.8, 0.8 } },
-		["buff_blessingofwinter"]        	= { buff = "Blessing of Winter", 			mine = false, color = { 0.0, 0.7, 1.0 } },
+		["buff_blessingofsummer"]        	= { buff = "Blessing of Summer", 			mine = true, color = { 0.0, 1.0, 0.5 } },
+		["buff_blessingofspring"]        	= { buff = "Blessing of Spring", 			mine = true, color = { 0.0, 1.0, 0.5 } },
+		["buff_blessingofautumn"]        	= { buff = "Blessing of Autumn", 			mine = true, color = { 0.0, 1.0, 0.5 } },
+		["buff_blessingofwinter"]        	= { buff = "Blessing of Winter", 			mine = true, color = { 0.0, 1.0, 0.5 } },
 
-        ["buff_bestowfaith"]                = { buff = "Bestow Faith", 				    mine = true,  color = { 1.0, 0.8, 0.0 } },
+        ["buff_glimmeroflight"]             = { buff = "Glimmer of Light",     	        mine = true,  color = { 1.0, 0.6, 0.0 } },
+        ["buff_tyrsdeliverance"]            = { buff = "Tyr's Deliverance", 	    	mine = true,  color = { 1.0, 0.0, 0.8 } },
+
         ["buff_beaconoflight"]           	= { buff = "Beacon of Light",   			mine = true,  color = { 1.0, 0.7, 0.0 } },
         ["buff_beaconoffaith"]           	= { buff = "Beacon of Faith",   			mine = true,  color = { 1.0, 0.6, 0.0 } },
         ["buff_beaconofvirtue"]          	= { buff = "Beacon of Virtue",   			mine = true,  color = { 1.0, 0.4, 0.0 } },
-        ["buff_glimmeroflight"]             = { buff = "Glimmer of Light",     	        mine = true,  color = { 0.0, 1.0, 0.5 } }
     },
 
     statusmap = {
@@ -69,7 +70,7 @@ DraeUI.defaults.class["PALADIN"] = {
 		},
 
         ["TOPRIGHTB"] = {
-            ["buff_bestowfaith"] = 80,
+            ["buff_tyrsdeliverance"] = 80,
         },
 
         ["BOTTOM"] = {
@@ -112,7 +113,6 @@ DraeUI.defaults.class["PALADIN"] = {
         },
 
         ["LEFTB"] = {
-			["status_stagger"] = 80,
         },
 
         ["RIGHT"] = {

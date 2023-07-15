@@ -54,6 +54,20 @@ local spellRangeCheck = {
 		},
 		petSpells = {}
 	},
+	EVOKER = {
+		enemySpells = {
+			[369819] = true -- Disintegrate (25yds, all specs)
+		},
+		longEnemySpells = {},
+		friendlySpells = {
+			[361469] = true, -- Living Flame (25yds, all specs)
+			[360823] = true -- Naturalize (30yds, preservation)
+		},
+		resSpells = {
+			[361227] = true -- Return (40yds, all specs)
+		},
+		petSpells = {}
+	},
 	HUNTER = {
 		enemySpells = {
 			[75] = true -- Auto Shot (40 yards)

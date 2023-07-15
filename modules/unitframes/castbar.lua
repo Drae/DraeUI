@@ -86,10 +86,10 @@ UF.CreateCastBar = function(self, width, height, anchor, anchorAt, anchorTo, xOf
 	end
 
 	-- Cast time
-	castbar.Time = DraeUI.CreateFontObject(castbar, DraeUI.db["general"].fontsize3, DraeUI["media"].font, "RIGHT", 2, height + 6)
+	castbar.Time = DraeUI.CreateFontObject(castbar, DraeUI.config["general"].fontsize3, DraeUI["media"].font, "RIGHT", 2, height + 6)
 
 	-- Spell name
-	castbar.Text = DraeUI.CreateFontObject(castbar, DraeUI.db["general"].fontsize3, DraeUI["media"].font, "LEFT", -2, height + 6)
+	castbar.Text = DraeUI.CreateFontObject(castbar, DraeUI.config["general"].fontsize3, DraeUI["media"].font, "LEFT", -2, height + 6)
 
 	self.Castbar = castbar
 end
@@ -131,8 +131,8 @@ do
 
 			_G[bar]:SetParent(UIParent)
 			_G[bar]:SetScale(1)
-			_G[bar]:SetHeight(DraeUI.db["castbar"].player.height)
-			_G[bar]:SetWidth(DraeUI.db["castbar"].player.width / 2)
+			_G[bar]:SetHeight(DraeUI.config["castbar"].player.height)
+			_G[bar]:SetWidth(DraeUI.config["castbar"].player.width / 2)
 			if (bar == "MirrorTimer1") then
 				_G[bar]:ClearAllPoints()
 				_G[bar]:SetPoint("RIGHT", self.Castbar, "RIGHT", 0, 30)

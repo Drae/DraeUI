@@ -4,7 +4,7 @@
 --]]
 local DraeUI = select(2, ...)
 
-DraeUI.defaults.class["HUNTER"] = {
+DraeUI.class["HUNTER"] = {
 	auras = {
 		["buff_misdirection"] 	= { buff = "Misdirection", mine = false, color = { 0.0, 0.4, 0.9 } },
 	},

@@ -112,7 +112,7 @@ UF.CreateHealthBar = function(frame, width, x, y, height)
 	local hp = CreateFrame("StatusBar", nil, frame)
 	hp:SetFrameStrata(frame:GetFrameStrata())
 	hp:SetFrameLevel(frame:GetFrameLevel())
-	hp:SetStatusBarTexture(DraeUI.media.statusbar) --Q
+	hp:SetStatusBarTexture(DraeUI.media.statusbar)
 	hp:SetSize(width, height or 10)
 	hp:SetPoint("TOPLEFT", frame, "TOPLEFT", x, y)
 
@@ -179,7 +179,7 @@ UF.CreatePowerBar = function(frame, width, height)
 	local pp = CreateFrame("StatusBar", nil, frame)
 	pp:SetFrameStrata(frame:GetFrameStrata())
 	pp:SetFrameLevel(frame:GetFrameLevel())
-	pp:SetStatusBarTexture(DraeUI.media.statusbar)
+	pp:SetStatusBarTexture(DraeUI.media.statusbar_power)
 	pp:SetSize(width, height or 3)
 	pp:SetPoint("TOPLEFT", frame.Health, "BOTTOMLEFT", 0, -2.5)
 
@@ -188,7 +188,7 @@ UF.CreatePowerBar = function(frame, width, height)
 	pp.colorDisconnected = true
 	pp.colorPower = true
 
-	pp.__bar_texture = DraeUI.media.statusbar
+	pp.__bar_texture = DraeUI.media.statusbar_power
 
 	Smoothing:EnableBarAnimation(pp)
 
@@ -199,7 +199,7 @@ UF.CreateAdditionalPower = function(frame, width, height)
 	local ap = CreateFrame("StatusBar", nil, frame)
 	ap:SetFrameStrata(frame:GetFrameStrata())
 	ap:SetFrameLevel(frame:GetFrameLevel())
-	ap:SetStatusBarTexture(DraeUI.media.statusbar)
+	ap:SetStatusBarTexture(DraeUI.media.statusbar_power)
 	ap:SetSize(width, height or 3)
 	ap:SetPoint("TOPLEFT", frame.Power, "BOTTOMLEFT", 0, -2.5)
 
@@ -235,7 +235,7 @@ do
 		totem:SetPoint(point, anchor, relpoint, xOffset, yOffset)
 		totem:SetFrameLevel(12)
 
-		local width, height	= DraeUI.db["frames"].auras.auraLrg or 24, DraeUI.db["frames"].auras.auraLrg or 24
+		local width, height	= DraeUI.config["frames"].auras.auraLrg or 24, DraeUI.config["frames"].auras.auraLrg or 24
 
 		for i = 1, MAX_TOTEMS do
 			local t = CreateFrame("Button", nil, self)
@@ -256,7 +256,7 @@ do
 
 			local icon = t:CreateTexture(nil, "BACKGROUND")
 			icon:SetAllPoints(t)
-			icon:SetTexCoord(unpack(DraeUI.db.general.texcoords))
+			icon:SetTexCoord(unpack(DraeUI.config["general"].texcoords))
 			t.Icon = icon
 
 			local cd = CreateFrame("Cooldown", nil, t)
@@ -362,7 +362,7 @@ do
 		button.Border = border
 
 		local icon = button:CreateTexture(nil, "BACKGROUND")
-		icon:SetTexCoord(unpack(DraeUI.db.general.texcoords))
+		icon:SetTexCoord(unpack(DraeUI.config["general"].texcoords))
 		icon:SetAllPoints(button)
 		button.Icon = icon
 
@@ -375,7 +375,7 @@ do
 		button.Cooldown = cd
 
 		local count = button:CreateFontString(nil)
-		count:SetFont(DraeUI.media.font, DraeUI.db.general.fontsize3, "THINOUTLINE")
+		count:SetFont(DraeUI.media.font, DraeUI.config["general"].fontsize3, "THINOUTLINE")
 		count:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 7, -6)
 		button.Count = count
 
@@ -430,7 +430,7 @@ do
 		* show - indicates whether the aura button should be shown (boolean)
 	--]]
 	local CustomFilter = function(auras, unit, data)
-		if (DraeUI.db["frames"].auras.blacklistAuraFilter[data.name]) then
+		if (DraeUI.config["frames"].auras.blacklistAuraFilter[data.name]) then
 			return false
 		end
 
@@ -442,7 +442,7 @@ do
 		if (auras.filter == "HELPFUL") then
 			if (unit ~= "player" and unit ~= "pet" and unit ~= "vehicle") then
 				return true
-			elseif (DraeUI.db["frames"].auras.showBuffsOnMe and data.duration > 0 and data.duration <= 600) then
+			elseif (DraeUI.config["frames"].auras.showBuffsOnMe and data.duration > 0 and data.duration <= 600) then
 				return true
 			end
 		end
@@ -455,20 +455,20 @@ do
 		if (auras.filter == "HARMFUL") then
 			if (unit ~= "player" and unit ~= "pet" and unit ~= "vehicle") then
 				return true
-			elseif (DraeUI.db["frames"].auras.showDebuffsOnMe) then
+			elseif (DraeUI.config["frames"].auras.showDebuffsOnMe) then
 				return true
 			end
 		end
 
 		-- Filtered buffs/debuffs
-		if (DraeUI.db["frames"].auras.filterType == "WHITELIST") then
-			if (DraeUI.db["frames"].auras.whiteListFilter[auras.filter == "HELPFUL" and "BUFF" or "DEBUFF"][data.name]) then
+		if (DraeUI.config["frames"].auras.filterType == "WHITELIST") then
+			if (DraeUI.config["frames"].auras.whiteListFilter[auras.filter == "HELPFUL" and "BUFF" or "DEBUFF"][data.name]) then
 				return true
 			end
 
 			return false
 		else
-			if (DraeUI.db["frames"].auras.blackListFilter[auras.filter == "HELPFUL" and "BUFF" or "DEBUFF"][data.name]) then
+			if (DraeUI.config["frames"].auras.blackListFilter[auras.filter == "HELPFUL" and "BUFF" or "DEBUFF"][data.name]) then
 				return false
 			end
 
@@ -477,7 +477,7 @@ do
 	end
 
 	local CustomFilterLongBuffs = function(auras, unit, data)
-		if (DraeUI.db["frames"].auras.blacklistAuraFilter[data.name]) then
+		if (DraeUI.config["frames"].auras.blacklistAuraFilter[data.name]) then
 			return false
 		end
 
@@ -491,7 +491,7 @@ do
 	end
 
 	UF.AddDebuffs = function(self, point, relativeFrame, relativePoint, ofsx, ofsy, num, size, spacing, growthx, growthy)
-		local debuffsPerRow = DraeUI.db["frames"].auras.debuffs_per_row[self.unit] or DraeUI.db["frames"].auras.debuffs_per_row["other"]
+		local debuffsPerRow = DraeUI.config["frames"].auras.debuffs_per_row[self.unit] or DraeUI.config["frames"].auras.debuffs_per_row["other"]
 
 		local width = (spacing * debuffsPerRow) + (size * debuffsPerRow)
 		local height = (spacing * (num / debuffsPerRow)) + (size * (num / debuffsPerRow))
@@ -517,7 +517,7 @@ do
 	end
 
 	UF.AddBuffs = function(self, point, relativeFrame, relativePoint, ofsx, ofsy, num, size, spacing, growthx, growthy)
-		local buffsPerRow = DraeUI.db["frames"].auras.buffs_per_row[self.unit] or DraeUI.db["frames"].auras.buffs_per_row["other"]
+		local buffsPerRow = DraeUI.config["frames"].auras.buffs_per_row[self.unit] or DraeUI.config["frames"].auras.buffs_per_row["other"]
 
 		local width = (spacing * buffsPerRow) + (size * buffsPerRow)
 		local height = (spacing * (num / buffsPerRow)) + (size * (num / buffsPerRow))
@@ -534,7 +534,7 @@ do
 		buffs["growth-y"] = growthy
 		buffs.filter = "HELPFUL" -- Explicitly set the filter or the first customFilter call won"t work
 		buffs.showBuffType = true
-		buffs.showStealableBuffs = DraeUI.playerClass == "MAGE" and DraeUI.db["frames"].showStealableBuffs or false
+		buffs.showStealableBuffs = DraeUI.playerClass == "MAGE" and DraeUI.config["frames"].showStealableBuffs or false
 
 		buffs.FilterAura = CustomFilter
 		buffs.CreateButton = CreateButton
@@ -768,7 +768,7 @@ do
 			button.Border = border
 
 			local icon = button:CreateTexture(nil, "BACKGROUND")
-			icon:SetTexCoord(unpack(DraeUI.db.general.texcoords))
+			icon:SetTexCoord(unpack(DraeUI.config["general"].texcoords))
 			icon:SetAllPoints(button)
 			button.Icon = icon
 
@@ -781,7 +781,7 @@ do
 			button.Cooldown = cd
 
 			local count = button:CreateFontString(nil)
-			count:SetFont(DraeUI.media.font, DraeUI.db.general.fontsize3, "THINOUTLINE")
+			count:SetFont(DraeUI.media.font, DraeUI.config["general"].fontsize3, "THINOUTLINE")
 			count:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", 7, -6)
 			button.Count = count
 

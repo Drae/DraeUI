@@ -18,10 +18,7 @@ local CHAT_FONT_HEIGHTS = CHAT_FONT_HEIGHTS
 
 --
 DraeUI.defaults = {
-	profile = {},
 	global = {},
-	class = {},
-	char = {}
 }
 
 --[[
@@ -40,22 +37,22 @@ DraeUI.OnInitialize = function(self)
 		.dbClass 	-> (class)	 ->	data stored under class name
 		.dbChar		-> (profile) ->	data stored under "name-realm" tables and accessible to only this char
 	--]]
-	local db = LibStub("AceDB-3.0"):New("draeUIDB", { profile = self.defaults.profile, class = self.defaults.class[self.playerClass] })	-- Default to our defaults (C. setup)
+	--]]
+	local db = LibStub("AceDB-3.0"):New("draeUIDB")	-- Default to our defaults (C. setup)
 
-	self.db = db.profile
-	self.dbClass = db.class
 	self.dbGlobal = db.global
 
-	self.dbChar = LibStub("AceDB-3.0"):New("draeUICharDB")["profile"]	-- Pull the profile specifically
-
 	self.media = {
-		font = LSM:Fetch("font", self.db.general.font) or "Interface\\AddOns\\draeUI\\media\\fonts\\prozaregular-regular.ttf",
-		fontSmall = LSM:Fetch("font", self.db.general.fontSmall) or "Interface\\AddOns\\draeUI\\media\\fonts\\liberationsans.ttf",
-		fontTitles = LSM:Fetch("font", self.db.general.fontTitles) or "Interface\\AddOns\\draeUI\\media\\fonts\\vollkorn-medium.ttf",
+		font = LSM:Fetch("font", self.config["general"].font) or "Interface\\AddOns\\draeUI\\media\\fonts\\prozaregular-regular.ttf",
+		fontSmall = LSM:Fetch("font", self.config["general"].fontSmall) or "Interface\\AddOns\\draeUI\\media\\fonts\\liberationsans.ttf",
+		fontTitles = LSM:Fetch("font", self.config["general"].fontTitles) or "Interface\\AddOns\\draeUI\\media\\fonts\\vollkorn-medium.ttf",
 
-		statusbar = LSM:Fetch("statusbar", self.db.general.statusbar) or "Interface\\AddOns\\draeUI\\media\\statusbars\\striped",
+		statusbar = LSM:Fetch("statusbar", self.config["general"].statusbar) or "Interface\\AddOns\\draeUI\\media\\statusbars\\striped",
+		statusbar_power = LSM:Fetch("statusbar", self.config["general"].statusbar_power) or "Interface\\AddOns\\draeUI\\media\\statusbars\\striped",
+		statusbar_raid = LSM:Fetch("statusbar", self.config["general"].statusbar_raid) or "Interface\\AddOns\\draeUI\\media\\statusbars\\hgrad",
+		statusbar_raid_power = LSM:Fetch("statusbar", self.config["general"].statusbar_raid_power) or "Interface\\AddOns\\draeUI\\media\\statusbars\\hgrad",
 
-		sound1 = LSM:Fetch("sound", self.db.general.sound1) or "Interface\\AddOns\\draeUI\\media\\sounds\\heart.ogg"
+		sound1 = LSM:Fetch("sound", self.config["general"].sound1) or "Interface\\AddOns\\draeUI\\media\\sounds\\heart.ogg"
 	}
 end
 

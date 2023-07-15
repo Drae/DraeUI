@@ -54,7 +54,7 @@ oUF.Tags.Events["drae:power"] = "UNIT_POWER UNIT_MAXPOWER"
 oUF.Tags.Methods["draeraid:name"] = function(u, r)
 	local name = UnitName(r or u) or "Unknown"
 
-	return DraeUI.UTF8(name, DraeUI.db["raidframes"].raidnamelength or 4, false) .. "|r"
+	return DraeUI.UTF8(name, DraeUI.config["raidframes"].raidnamelength or 4, false) .. "|r"
 end
 oUF.Tags.Events["draeraid:name"] = "UNIT_NAME_UPDATE UNIT_ENTERED_VEHICLE UNIT_EXITED_VEHICLE UNIT_PET"
 

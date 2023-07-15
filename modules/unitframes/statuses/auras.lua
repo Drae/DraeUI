@@ -19,7 +19,7 @@ local aura_debuffs = {}
 
 --]]
 local UpdateIndicatorList = function()
-	local auras = DraeUI.dbClass.auras
+	local auras = DraeUI.class[DraeUI.playerClass].auras
 	if (not auras) then return end
 
 	wipe(aura_buffs)

@@ -3,10 +3,8 @@
 	<Script file="aggro.lua" />
 	<Script file="debuffs.lua" />
 	<Script file="dispells.lua" />
-	<Script file="defensives.lua" />
 	<Script file="healing.lua" />
 	<Script file="power.lua" />
 	<Script file="res.lua" />
-	<Script file="stagger.lua" />
 	<Script file="summon.lua" />
 </Ui>

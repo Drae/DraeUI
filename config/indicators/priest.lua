@@ -4,7 +4,7 @@
 --]]
 local DraeUI = select(2, ...)
 
-DraeUI.defaults.class["PRIEST"] = {
+DraeUI.class["PRIEST"] = {
 	auras = {
 	},
 

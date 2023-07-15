@@ -58,7 +58,7 @@ do
 
 			if (not name) then break end
 
-			if (not blacklist[spell_id] and dtype and (not DraeUI.db["raidframes"].showOnlyDispellable or (UF.dispellClasses[DraeUI.playerClass] and UF.dispellClasses[DraeUI.playerClass][dtype]))) then
+			if (not blacklist[spell_id] and dtype and (not DraeUI.config["raidframes"].showOnlyDispellable or (UF.dispellClasses[DraeUI.playerClass] and UF.dispellClasses[DraeUI.playerClass][dtype]))) then
 				-- no existing highest priority? higher priority? and not a secondary debuff displayed by the debuffs status?
 				if (not currentDispell.priority or currentDispell.priority < dispellPriority[dtype]) then
 					currentDispell.priority = dispellPriority[dtype]

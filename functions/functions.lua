@@ -165,7 +165,7 @@ DraeUI.Print = function(...)
 	print("|cff33ff99DraeUI:|r ", ...)
 end
 
-DraeUI.Debug = function(self, t)
+DraeUI.Debug = function(t)
     local print_r_cache = {}
 
     local function sub_print_r(t, indent)

@@ -74,6 +74,7 @@ read_globals = {
 	"HasLFGRestrictions",
 	"InCombatLockdown",
 	"IsAddOnLoaded",
+	"IsEncounterInProgress",
 	"IsEveryoneAssistant",
 	"IsInInstance",
 	"IsPlayerSpell",

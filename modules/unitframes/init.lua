@@ -16,6 +16,8 @@ UF.raiddebuffs = {
 	instances = {}
 }
 
+DraeUI.class = {}
+
 local CheckSpec
 do
 	local healerClasses = {
@@ -33,27 +35,30 @@ do
 		-- Base dispel capabilities for each class regardless of spec
 		UF.dispellClasses = {}
 		UF.dispellClasses = {
+			["DRUID"] = {
+				["Curse"] = true,
+				["Poison"] = true
+			},
+			["EVOKER"] = {
+				["Poison"] = true
+			},
+			["MAGE"] = {
+				["Curse"] = true
+			},
+			["MONK"] = {
+				["Disease"] = true,
+				["Poison"] = true
+			},
+			["PALADIN"] = {
+				["Poison"] = true,
+				["Disease"] = true
+			},
 			["PRIEST"] = {
 				["Disease"] = true,
 				["Magic"] = true
 			},
 			["SHAMAN"] = {
 				["Curse"] = true
-			},
-			["PALADIN"] = {
-				["Poison"] = true,
-				["Disease"] = true
-			},
-			["MAGE"] = {
-				["Curse"] = true
-			},
-			["DRUID"] = {
-				["Curse"] = true,
-				["Poison"] = true
-			},
-			["MONK"] = {
-				["Disease"] = true,
-				["Poison"] = true
 			}
 		}
 
@@ -70,10 +75,6 @@ end
 		Spawn the frames
 --]]
 UF.OnEnable = function(self)
-
-	self.db = DraeUI.db
-	self.dbClass = DraeUI.dbClass
-
 	CheckSpec()
 
 	-- Disable certain blizzard frames
@@ -84,30 +85,30 @@ UF.OnEnable = function(self)
 
 	-- Player
 	oUF:SetActiveStyle("DraePlayer")
-	oUF:Spawn("player", "DraePlayer"):SetPoint("CENTER", UIParent, self.db.frames.playerXoffset, self.db.frames.playerYoffset)
+	oUF:Spawn("player", "DraePlayer"):SetPoint("CENTER", UIParent, DraeUI.config["frames"].playerXoffset, DraeUI.config["frames"].playerYoffset)
 
 	-- Target
 	oUF:SetActiveStyle("DraeTarget")
-	oUF:Spawn("target", "DraeTarget"):SetPoint("CENTER", UIParent, self.db.frames.targetXoffset, self.db.frames.targetYoffset)
+	oUF:Spawn("target", "DraeTarget"):SetPoint("CENTER", UIParent, DraeUI.config["frames"].targetXoffset, DraeUI.config["frames"].targetYoffset)
 
 	-- Target of target
 	oUF:SetActiveStyle("DraeTargetTarget")
-	oUF:Spawn("targettarget", "DraeTargetTarget"):SetPoint("BOTTOMLEFT", "DraeTarget", "BOTTOMRIGHT", self.db.frames.totXoffset, self.db.frames.totYoffset)
+	oUF:Spawn("targettarget", "DraeTargetTarget"):SetPoint("BOTTOMLEFT", "DraeTarget", "BOTTOMRIGHT", DraeUI.config["frames"].totXoffset, DraeUI.config["frames"].totYoffset)
 
 	-- Focus
 	oUF:SetActiveStyle("DraeFocus")
-	oUF:Spawn("focus", "DraeFocus"):SetPoint("BOTTOMRIGHT", "DraeTarget", "TOPRIGHT", self.db.frames.focusXoffset, self.db.frames.focusYoffset)
+	oUF:Spawn("focus", "DraeFocus"):SetPoint("BOTTOMRIGHT", "DraeTarget", "TOPRIGHT", DraeUI.config["frames"].focusXoffset, DraeUI.config["frames"].focusYoffset)
 
 	-- Focus target
 	oUF:SetActiveStyle("DraeFocusTarget")
-	oUF:Spawn("focustarget", "DraeFocusTarget"):SetPoint("LEFT", "DraeFocus", "RIGHT", self.db.frames.focusTargetXoffset, self.db.frames.focusTargetYoffset)
+	oUF:Spawn("focustarget", "DraeFocusTarget"):SetPoint("LEFT", "DraeFocus", "RIGHT", DraeUI.config["frames"].focusTargetXoffset, DraeUI.config["frames"].focusTargetYoffset)
 
 	-- Pet
 	oUF:SetActiveStyle("DraePet")
-	oUF:Spawn("pet", "DraePet"):SetPoint("BOTTOMRIGHT", "DraePlayer", "TOPRIGHT", self.db.frames.petXoffset, self.db.frames.petYoffset)
+	oUF:Spawn("pet", "DraePet"):SetPoint("BOTTOMRIGHT", "DraePlayer", "TOPRIGHT", DraeUI.config["frames"].petXoffset, DraeUI.config["frames"].petYoffset)
 
 	-- Boss frames
-	if (self.db.frames.showBoss) then
+	if (DraeUI.config["frames"].showBoss) then
 		oUF:SetActiveStyle("DraeBoss")
 
 		local boss = {}
@@ -115,31 +116,12 @@ UF.OnEnable = function(self)
 			local frame = oUF:Spawn("boss" .. i, "DraeBoss" .. i)
 
 			if (i == 1) then
-				frame:SetPoint("LEFT", "DraeTarget", "LEFT", self.db.frames.bossXoffset, self.db.frames.bossYoffset)
+				frame:SetPoint("LEFT", "DraeTarget", "LEFT", DraeUI.config["frames"].bossXoffset, DraeUI.config["frames"].bossYoffset)
 			else
 				frame:SetPoint("TOP", boss[i - 1], "BOTTOM", 0, -35)
 			end
 
 			boss[i] = frame
-		end
-	end
-
-	-- Arena and arena prep frames
-	if (self.db.frames.showArena) then
-		oUF:SetActiveStyle("DraeArena")
-
-		local arena = {}
-
-		for i = 1, 5 do
-			local frame = oUF:Spawn("arena" .. i, "DraeArena" .. i)
-
-			if (i == 1) then
-				frame:SetPoint("LEFT", "DraeTarget", "LEFT", self.db.frames.arenaXoffset, self.db.frames.arenaYoffset)
-			else
-				frame:SetPoint("BOTTOM", arena[i - 1], "TOP", 0, 35)
-			end
-
-			arena[i] = frame
 		end
 	end
 
@@ -180,13 +162,13 @@ UF.OnEnable = function(self)
 		end
 
 		local CreateRaidAnchor = function(header, numSubGroups)
---			for i = numSubGroups, 1, -1 do
-				local i = 1
---				if (self.db.raidframes.position[i]) then
-					header:SetPoint(unpack(self.db.raidframes.position[i]))
---					break
---				end
---			end
+			for i = numSubGroups, 1, -1 do
+				if (type(DraeUI.config["raidframes"].position[i]) == "table") then
+					header:ClearAllPoints()
+					header:SetPoint(unpack(DraeUI.config["raidframes"].position[i]))
+					break
+				end
+			end
 		end
 
 		local getRelativePoint = function(point, horizontal)
@@ -248,8 +230,20 @@ UF.OnEnable = function(self)
 				CreateRaidAnchor(raidHeaders[1], numSubGroups)
 
 					-- This is NOT generic for the config anchorpoint!
-				if (self.db.raidframes.showPets) then
-					raidHeaders["pet"]:SetPoint(self.db.raidframes.gridGroupsAnchor, raidHeaders[numSubGroups], relPoint, 0, self.db.raidframes.petOffset) -- Offset from the raid group
+				if (DraeUI.config["raidframes"].showPets) then
+					raidHeaders["pet"]:SetPoint(DraeUI.config["raidframes"].gridGroupsAnchor, raidHeaders[numSubGroups], relPoint, 0, DraeUI.config["raidframes"].petOffset) -- Offset from the raid group
+				end
+
+				-- Set Scale
+				for i = numSubGroups, 1, -1 do
+					if (DraeUI.config["raidframes"].scale[i] ~= nil) then
+						scale = DraeUI.config["raidframes"].scale[i]
+						break
+					end
+				end
+
+				for i = 1, numSubGroups do
+					raidHeaders[i]:SetScale(scale)
 				end
 
 				raidHeaders.__subgroups = numSubGroups
@@ -257,30 +251,30 @@ UF.OnEnable = function(self)
 		end
 
 		-- Setup orientation and determine relative points and directions for groups
-		if (self.db.raidframes.gridLayout == "HORIZONTAL") then
-			if (self.db.raidframes.gridGroupsAnchor == "TOPLEFT" or self.db.raidframes.gridGroupsAnchor == "BOTTOMLEFT") then
-				xOffset = self.db.raidframes.padding
+		if (DraeUI.config["raidframes"].gridLayout == "HORIZONTAL") then
+			if (DraeUI.config["raidframes"].gridGroupsAnchor == "TOPLEFT" or DraeUI.config["raidframes"].gridGroupsAnchor == "BOTTOMLEFT") then
+				xOffset = DraeUI.config["raidframes"].padding
 				yOffset = 0
 				point = "LEFT"
 			else
-				xOffset = -self.db.raidframes.padding
+				xOffset = -DraeUI.config["raidframes"].padding
 				yOffset = 0
 				point = "RIGHT"
 			end
 		else
-			if (self.db.raidframes.gridGroupsAnchor == "TOPLEFT" or self.db.raidframes.gridGroupsAnchor == "TOPRIGHT") then
+			if (DraeUI.config["raidframes"].gridGroupsAnchor == "TOPLEFT" or DraeUI.config["raidframes"].gridGroupsAnchor == "TOPRIGHT") then
 				xOffset = 0
-				yOffset = -self.db.raidframes.padding
+				yOffset = -DraeUI.config["raidframes"].padding
 				point = "TOP"
 			else
 				xOffset = 0
-				yOffset = self.db.raidframes.padding
+				yOffset = DraeUI.config["raidframes"].padding
 				point = "BOTTOM"
 			end
 		end
 
-		relPoint, xMult, yMult = getRelativePoint(self.db.raidframes.gridGroupsAnchor, self.db.raidframes.gridLayout)
-		colAnchor = getColumnAnchorPoint(self.db.raidframes.gridGroupsAnchor, self.db.raidframes.gridLayout)
+		relPoint, xMult, yMult = getRelativePoint(DraeUI.config["raidframes"].gridGroupsAnchor, DraeUI.config["raidframes"].gridLayout)
+		colAnchor = getColumnAnchorPoint(DraeUI.config["raidframes"].gridGroupsAnchor, DraeUI.config["raidframes"].gridLayout)
 
 		local numSubGroups = GetNumSubGroupsinRaid()
 
@@ -298,12 +292,12 @@ UF.OnEnable = function(self)
 				"oUF-initialConfigFunction",([[
 					self:SetWidth(%d)
 					self:SetHeight(%d)
-				]]):format(self.db.raidframes.width, self.db.raidframes.height),
+				]]):format(DraeUI.config["raidframes"].width, DraeUI.config["raidframes"].height),
 				"groupBy", "GROUP",
 				"groupFilter", tostring(i),
 				"groupingOrder", "1,2,3,4,5,6,7,8",
-				"initial-width", self.db.raidframes.width,
-				"initial-height", self.db.raidframes.height,
+				"initial-width", DraeUI.config["raidframes"].width,
+				"initial-height", DraeUI.config["raidframes"].height,
 				"xOffset", xOffset,
 				"yOffset", yOffset,
 				"point", point, -- RIGHT for growing right to left, LEFT for growing left to right
@@ -317,19 +311,19 @@ UF.OnEnable = function(self)
 			if (i == 1) then
 				CreateRaidAnchor(header, numSubGroups)
 			else
-				if (self.db.raidframes.gridLayout == "HORIZONTAL") then
+				if (DraeUI.config["raidframes"].gridLayout == "HORIZONTAL") then
 					xMult = 0
 				else
 					yMult = 0
 				end
 
-				header:SetPoint(self.db.raidframes.gridGroupsAnchor, raidHeaders[i - 1], relPoint, self.db.raidframes.padding * xMult, self.db.raidframes.padding * yMult)
+				header:SetPoint(DraeUI.config["raidframes"].gridGroupsAnchor, raidHeaders[i - 1], relPoint, DraeUI.config["raidframes"].padding * xMult, DraeUI.config["raidframes"].padding * yMult)
 			end
 
 			raidHeaders[i] = header
 		end
 
-		if (self.db.raidframes.showPets) then
+		if (DraeUI.config["raidframes"].showPets) then
 			-- Force display of party and raid pets
 			SetCVar("showPartyPets", 1)
 
@@ -342,9 +336,9 @@ UF.OnEnable = function(self)
 				([[
 					self:SetWidth(%d)
 					self:SetHeight(%d)
-				]]):format(self.db.raidframes.width, self.db.raidframes.petHeight),
-				"initial-width", self.db.raidframes.width,
-				"initial-height", self.db.raidframes.petHeight,
+				]]):format(DraeUI.config["raidframes"].width, DraeUI.config["raidframes"].petHeight),
+				"initial-width", DraeUI.config["raidframes"].width,
+				"initial-height", DraeUI.config["raidframes"].petHeight,
 				"xOffset", xOffset, -- +ve for right, -ve for left
 				"yOffset", yOffset,
 				"point", point, -- RIGHT for growing right to left, LEFT for growing left to right
@@ -352,7 +346,7 @@ UF.OnEnable = function(self)
 				"sortDir", "ASC", -- DESC for left to right, ASC for right to left
 				"unitsPerColumn", 5,
 				"maxColumns", 8,
-				"columnSpacing", self.db.raidframes.padding,
+				"columnSpacing", DraeUI.config["raidframes"].padding,
 				"columnAnchorPoint", colAnchor
 			)
 

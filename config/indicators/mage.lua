@@ -4,7 +4,7 @@
 --]]
 local DraeUI = select(2, ...)
 
-DraeUI.defaults.class["MAGE"] = {
+DraeUI.class["MAGE"] = {
 	auras = {
 		["buff_arcaneintellect"]  	= { buff = "Arcane Intellect",  mine = false, color = { 0.8, 0.8, 0.8 } },  -- Spell Power + Crit
 		["buff_arcanenbrilliance"] 	= { buff = "Arcane Brilliance", mine = false, color = { 0.8, 0.8, 0.8 } },  -- Spell Power + Crit

@@ -37,12 +37,14 @@ local RELEASE_PENDING_TIME = 360
 
 local spells_singleres = {
 	-- Class Abilities
-	[2008]   = GetSpellInfo(2008),   -- Ancestral Spirit (Shaman)
-	[7328]   = GetSpellInfo(7328),   -- Redemption (Paladin)
-	[2006]   = GetSpellInfo(2006),   -- Resurrection (Priest)
     [20484]  = GetSpellInfo(20484),  -- Rebirth (Druid)
 	[50769]  = GetSpellInfo(50769),  -- Revive (Druid)
+	[361227] = GetSpellInfo(361227), -- Return (Evoker)
 	[115178] = GetSpellInfo(115178), -- Resuscitate (Monk)
+	[7328]   = GetSpellInfo(7328),   -- Redemption (Paladin)
+	[391054] = GetSpellInfo(391054), -- Intercession (Paladin)
+	[2006]   = GetSpellInfo(2006),   -- Resurrection (Priest)
+	[2008]   = GetSpellInfo(2008),   -- Ancestral Spirit (Shaman)
 
 	-- Items
 	[8342]   = GetSpellInfo(8342),   -- Defibrillate (Goblin Jumper Cables)
@@ -52,14 +54,16 @@ local spells_singleres = {
 	[187777] = GetSpellInfo(187777), -- Reawaken (Brazier of Awakening)
     [265116] = GetSpellInfo(265116), -- Defibrillate (Unstable Temporal Time Shifter)
 	[348477] = GetSpellInfo(348477), -- Disposable Spectrophasic Reanimator
+	[393795] = GetSpellInfo(393795), -- Arc Light Vital Correctors (DF bracer tinker)
 }
 
 local spells_massres = {
-	[212036] = GetSpellInfo(212036), -- Mass Resurrection (Discipline/Holy Priest)
 	[212040] = GetSpellInfo(212040), -- Revitalize (Restoration Druid)
-	[212048] = GetSpellInfo(212048), -- Ancestral Vision (Restoration Shaman)
+	[361178] = GetSpellInfo(361178), -- Mass Return (Preservation Evoker)
 	[212051] = GetSpellInfo(212051), -- Reawaken (Mistweaver Monk)
 	[212056] = GetSpellInfo(212056), -- Absolution (Holy Paladin)
+	[212036] = GetSpellInfo(212036), -- Mass Resurrection (Discipline/Holy Priest)
+	[212048] = GetSpellInfo(212048), -- Ancestral Vision (Restoration Shaman)
 }
 
 --[[

@@ -128,19 +128,18 @@ InfoBar.PlayerEnteringWorld = function(self)
 end
 
 InfoBar.OnInitialize = function(self)
-	self.db = DraeUI.db["infobar"]
-
 	-- Do things when we enter the world
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", "PlayerEnteringWorld")
 end
 
 InfoBar.OnEnable = function(self)
 	local microBarButtonWidth = _G["MicroButtonAndBagsBar"]:GetWidth()
+	local microBarPosition = select(4, _G["MicroMenuContainer"]:GetPoint())
 
 	-- Parent bar
 	local infoBar = CreateFrame("Frame", nil, UIParent)
 	infoBar:SetFrameStrata("LOW")
-	infoBar:SetPoint("TOPLEFT", microBarButtonWidth + 30, -20)
+	infoBar:SetPoint("TOPLEFT", microBarPosition + microBarButtonWidth + 30, -20)
 	infoBar:SetPoint("TOPRIGHT", _G["MinimapCluster"], "TOPLEFT", -20, 0)
 	infoBar:SetHeight(30)
 

@@ -8,8 +8,6 @@
 ## X-Embeds: LibSharedMedia-3.0
 ## X-oUF: draeUF
 
-#TaintLess.xml
-
 libs\libs.xml
 media\media.xml
 oUF\oUF.xml
@@ -27,7 +25,7 @@ modules\unitframes\auras.xml
 modules\unitframes\init.lua
 modules\unitframes\core.lua
 modules\unitframes\roster.lua
-modules\unitframes\castbar.lua
+#modules\unitframes\castbar.lua
 modules\unitframes\events.lua
 modules\unitframes\tags.lua
 modules\unitframes\units\player.lua
@@ -38,17 +36,11 @@ modules\unitframes\units\focus.lua
 modules\unitframes\units\focustarget.lua
 modules\unitframes\units\partyandraid.lua
 modules\unitframes\units\boss.lua
-modules\unitframes\units\arena.lua
 modules\unitframes\statuses\embed.xml
 modules\unitframes\elements\embed.xml
 config\indicators\embed.xml
 config\raiddebuffs\embed.xml
 config\instancedebuffs\embed.xml
-
-# Minimap
-modules\minimap\init.lua
-modules\minimap\minimap.lua
-modules\minimap\buttons.lua
 
 # Infobar
 modules\infobar\init.lua

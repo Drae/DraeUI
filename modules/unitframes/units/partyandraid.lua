@@ -18,43 +18,43 @@ local tsort, tinsert, unpack, wipe = table.sort, table.insert, unpack, wipe
 -- Default indicator positions
 local indicators = {
 	-- Icons
-	["CENTERICON"] 		= {type = "icon", width = 22, height = 22, at = "CENTER", 		to = "CENTER", 		offsetX = 0,  offsetY = 0, frame = "parent"},
+	["CENTERICON"] 		= {type = "icon", width = 25, height = 25, at = "CENTER", 		to = "CENTER", 		offsetX = 0,  offsetY = 0, frame = "parent"},
 	["BOTTOMICON"] 		= {type = "icon", width = 18, height = 18, at = "CENTER", 		to = "BOTTOM", 		offsetX = 0,  offsetY = -3, frame = "parent"},
 	["TOPICON"] 		= {type = "icon", width = 18, height = 18, at = "CENTER", 		to = "TOP", 		offsetX = 0,  offsetY = 3, frame = "parent"},
 
 	-- Colour only indicators
-	["TOP"] 			= {type = "color", width = 7, height = 7,  at = "TOP", 			to = "TOP", 		offsetX = 0,  offsetY = 2},
-	["TOPL"] 			= {type = "color", width = 7, height = 7,  at = "TOP", 			to = "TOP", 		offsetX = 6,  offsetY = 2},
-	["TOPR"] 			= {type = "color", width = 7, height = 7,  at = "TOP", 			to = "TOP", 		offsetX = -6, offsetY = 2},
+	["TOP"] 			= {type = "color", width = 8, height = 8,  at = "TOP", 			to = "TOP", 		offsetX = 0,  offsetY = 1},
+	["TOPL"] 			= {type = "color", width = 8, height = 8,  at = "TOP", 			to = "TOP", 		offsetX = 7,  offsetY = 1},
+	["TOPR"] 			= {type = "color", width = 8, height = 8,  at = "TOP", 			to = "TOP", 		offsetX = -7, offsetY = 1},
 
-	["TOPLEFT"] 		= {type = "color", width = 7, height = 7,  at = "TOPLEFT", 		to = "TOPLEFT", 	offsetX = 0,  offsetY = 2},
-	["TOPLEFTB"] 		= {type = "color", width = 7, height = 7,  at = "TOPLEFT", 		to = "TOPLEFT", 	offsetX = 0,  offsetY = -6},
-	["TOPLEFTR"] 		= {type = "color", width = 7, height = 7,  at = "TOPLEFT", 		to = "TOPLEFT", 	offsetX = 6,  offsetY = 2},
+	["TOPLEFT"] 		= {type = "color", width = 8, height = 8,  at = "TOPLEFT", 		to = "TOPLEFT", 	offsetX = -1,  offsetY = 1},
+	["TOPLEFTB"] 		= {type = "color", width = 8, height = 8,  at = "TOPLEFT", 		to = "TOPLEFT", 	offsetX = -1,  offsetY = -7},
+	["TOPLEFTR"] 		= {type = "color", width = 8, height = 8,  at = "TOPLEFT", 		to = "TOPLEFT", 	offsetX = 7,  offsetY = 1},
 
-	["TOPRIGHT"] 		= {type = "color", width = 7, height = 7,  at = "TOPRIGHT", 	to = "TOPRIGHT", 	offsetX = 1.5,  offsetY = 2},
-	["TOPRIGHTB"] 		= {type = "color", width = 7, height = 7,  at = "TOPRIGHT", 	to = "TOPRIGHT", 	offsetX = 2,  offsetY = -4},
-	["TOPRIGHTL"] 		= {type = "color", width = 7, height = 7,  at = "TOPRIGHT", 	to = "TOPRIGHT", 	offsetX = -4, offsetY = 2},
+	["TOPRIGHT"] 		= {type = "color", width = 8, height = 8,  at = "TOPRIGHT", 	to = "TOPRIGHT", 	offsetX = 1,  offsetY = 1},
+	["TOPRIGHTB"] 		= {type = "color", width = 8, height = 8,  at = "TOPRIGHT", 	to = "TOPRIGHT", 	offsetX = 1,  offsetY = -7},
+	["TOPRIGHTL"] 		= {type = "color", width = 8, height = 8,  at = "TOPRIGHT", 	to = "TOPRIGHT", 	offsetX = -7, offsetY = 1},
 
-	["BOTTOM"] 			= {type = "color", width = 7, height = 7,  at = "BOTTOM", 		to = "BOTTOM", 		offsetX = 0,  offsetY = -1},
-	["BOTTOML"] 		= {type = "color", width = 7, height = 7,  at = "BOTTOM", 		to = "BOTTOM", 		offsetX = -6, offsetY = -1},
-	["BOTTOMR"] 		= {type = "color", width = 7, height = 7,  at = "BOTTOM", 		to = "BOTTOM", 		offsetX = 6,  offsetY = -1},
+	["BOTTOM"] 			= {type = "color", width = 8, height = 8,  at = "BOTTOM", 		to = "BOTTOM", 		offsetX = 0,  offsetY = -1},
+	["BOTTOML"] 		= {type = "color", width = 8, height = 8,  at = "BOTTOM", 		to = "BOTTOM", 		offsetX = -7, offsetY = -1},
+	["BOTTOMR"] 		= {type = "color", width = 8, height = 8,  at = "BOTTOM", 		to = "BOTTOM", 		offsetX = 7,  offsetY = -1},
 
-	["BOTTOMLEFT"] 		= {type = "color", width = 7, height = 7,  at = "BOTTOMLEFT",	to = "BOTTOMLEFT", 	offsetX = -1, offsetY = -1},
-	["BOTTOMLEFTT"] 	= {type = "color", width = 7, height = 7,  at = "BOTTOMLEFT", 	to = "BOTTOMLEFT", 	offsetX = -1, offsetY = 5},
-	["BOTTOMLEFTR"] 	= {type = "color", width = 7, height = 7,  at = "BOTTOMLEFT", 	to = "BOTTOMLEFT", 	offsetX = 6,  offsetY = -1},
+	["BOTTOMLEFT"] 		= {type = "color", width = 8, height = 8,  at = "BOTTOMLEFT",	to = "BOTTOMLEFT", 	offsetX = -1, offsetY = -1},
+	["BOTTOMLEFTT"] 	= {type = "color", width = 8, height = 8,  at = "BOTTOMLEFT", 	to = "BOTTOMLEFT", 	offsetX = -1, offsetY = 7},
+	["BOTTOMLEFTR"] 	= {type = "color", width = 8, height = 8,  at = "BOTTOMLEFT", 	to = "BOTTOMLEFT", 	offsetX = 7,  offsetY = -1},
 
 	["BOTTOMRIGHT"] 	= {type = "color", width = 6, height = 6,  at = "BOTTOMRIGHT", 	to = "BOTTOMRIGHT", offsetX = 1,  offsetY = -1},
 	["BOTTOMRIGHTT"] 	= {type = "color", width = 6, height = 6,  at = "BOTTOMRIGHT", 	to = "BOTTOMRIGHT", offsetX = 1,  offsetY = 5},
 	["BOTTOMRIGHTL"] 	= {type = "color", width = 6, height = 6,  at = "BOTTOMRIGHT", 	to = "BOTTOMRIGHT", offsetX = -5, offsetY = -1},
 	["BOTTOMRIGHTTL"] 	= {type = "color", width = 6, height = 6,  at = "BOTTOMRIGHT", 	to = "BOTTOMRIGHT", offsetX = -5, offsetY = -5},
 
-	["LEFT"] 			= {type = "color", width = 7, height = 7,  at = "LEFT", 		to = "LEFT", 		offsetX = -2, offsetY = 0},
-	["LEFTT"] 			= {type = "color", width = 7, height = 7,  at = "LEFT", 		to = "LEFT", 		offsetX = -2, offsetY = -6},
-	["LEFTB"] 			= {type = "color", width = 7, height = 7,  at = "LEFT", 		to = "LEFT", 		offsetX = -2, offsetY = 6},
+	["LEFT"] 			= {type = "color", width = 8, height = 8,  at = "LEFT", 		to = "LEFT", 		offsetX = -1, offsetY = 0},
+	["LEFTT"] 			= {type = "color", width = 8, height = 8,  at = "LEFT", 		to = "LEFT", 		offsetX = -1, offsetY = -7},
+	["LEFTB"] 			= {type = "color", width = 8, height = 8,  at = "LEFT", 		to = "LEFT", 		offsetX = -1, offsetY = 7},
 
-	["RIGHT"] 			= {type = "color", width = 7, height = 7,  at = "RIGHT", 		to = "RIGHT", 		offsetX = 2,  offsetY = 0},
-	["RIGHTT"] 			= {type = "color", width = 7, height = 7,  at = "RIGHT", 		to = "RIGHT", 		offsetX = 2,  offsetY = 6},
-	["RIGHTB"] 			= {type = "color", width = 7, height = 7,  at = "RIGHT", 		to = "RIGHT", 		offsetX = 2,  offsetY = -6},
+	["RIGHT"] 			= {type = "color", width = 8, height = 8,  at = "RIGHT", 		to = "RIGHT", 		offsetX = 1,  offsetY = 0},
+	["RIGHTT"] 			= {type = "color", width = 8, height = 8,  at = "RIGHT", 		to = "RIGHT", 		offsetX = 1,  offsetY = 7},
+	["RIGHTB"] 			= {type = "color", width = 8, height = 8,  at = "RIGHT", 		to = "RIGHT", 		offsetX = 1,  offsetY = -7},
 
 	-- Additional indicators are:
 	-- BORDER
@@ -197,7 +197,7 @@ do
 			ind:SetBackdrop({
 				bgFile = "Interface\\BUTTONS\\WHITE8X8",
 				tile = true,
-				tileSize = 8,
+				tileSize = 9,
 				edgeFile = "Interface\\BUTTONS\\WHITE8X8",
 				edgeSize = 1.5,
 				insets = backdrop_insets
@@ -210,12 +210,12 @@ do
 			ind:SetBackdrop({
 				bgFile = "Interface\\BUTTONS\\WHITE8X8",
 				tile = true,
-				tileSize = 8,
+				tileSize = 9,
 				edgeSize = 2,
 			})
 
 			local t = ind:CreateTexture(nil, "OVERLAY")
-			t:SetTexCoord(unpack(DraeUI.db.general.texcoords))
+			t:SetTexCoord(unpack(DraeUI.config["general"].texcoords))
 			t:SetPoint("CENTER", ind, "CENTER")
 			t:SetSize(indicators[indicator].width - 2, indicators[indicator].height - 2)
 			t:SetColorTexture(0, 0, 0, 1)
@@ -295,7 +295,7 @@ do
 
 		if (indicators[indicator].type == "icon") then
 			local count = ind:CreateFontString(nil, "OVERLAY")
-			count:SetFont(DraeUI["media"].font, DraeUI.db["general"].fontsize2, "OUTLINE")
+			count:SetFont(DraeUI["media"].font, DraeUI.config["general"].fontsize2, "OUTLINE")
 			count:SetPoint("BOTTOMRIGHT", ind, "BOTTOMRIGHT", 5, -4)
 			count:SetTextColor(1, 1, 1)
 			count:SetShadowOffset(1, -1)
@@ -410,7 +410,7 @@ do
 	local InvertStatusMap = function()
 		local inv = {}
 
-		for indicator, statuses in pairs(DraeUI.dbClass.statusmap) do
+		for indicator, statuses in pairs(DraeUI.class[DraeUI.playerClass].statusmap) do
 			for status, priority in pairs(statuses) do
 				if (not inv[status]) then
 					inv[status] = {}
@@ -449,7 +449,7 @@ do
 			if (not indicator_cache[indicator]) then
 				indicator_cache[indicator] = {}
 
-				for st, pr in pairs(DraeUI.dbClass.statusmap[indicator]) do
+				for st, pr in pairs(DraeUI.class[DraeUI.playerClass].statusmap[indicator]) do
 					tinsert(indicator_cache[indicator], { status = st, priority = pr, status_cache[st] })
 				end
 			end
@@ -577,23 +577,23 @@ do
 		-- Health
 		local hp = CreateFrame("StatusBar", nil, frame)
 		hp:SetFrameLevel(baseLevel + 2)
-		hp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
+		hp:SetStatusBarTexture(DraeUI.media.statusbar_raid)
 		hp:SetOrientation("VERTICAL")
 		hp:SetPoint("TOPLEFT", frame, "TOPLEFT")
 		hp:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT")
 
 		local hpbg = hp:CreateTexture(nil, 'BACKGROUND')
 		hpbg:SetAllPoints(hp)
-		hpbg:SetTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
+		hpbg:SetTexture(DraeUI.media.statusbar_raid)
 		hpbg.multiplier = 0.25
 		hp.bg = hpbg
 
-		if (DraeUI.db["raidframes"].colorSmooth) then
+		if (DraeUI.config["raidframes"].colorSmooth) then
 			Smoothing:EnableBarAnimation(hp)
 		end
 
-		hp.colorClassPet = DraeUI.db["raidframes"].colorPet
-		hp.colorCharmed = DraeUI.db["raidframes"].colorCharmed
+		hp.colorClassPet = DraeUI.config["raidframes"].colorPet
+		hp.colorCharmed = DraeUI.config["raidframes"].colorCharmed
 		hp.Override = UF.UpdateRaidHealth -- override the oUF update
 		frame.Health = hp
 
@@ -601,31 +601,31 @@ do
 		if (not frame.__is_pet) then
 			local pp = CreateFrame("StatusBar", nil, frame)
 			pp:SetFrameLevel(baseLevel + 2)
-			pp:SetHeight(DraeUI.db["raidframes"].powerHeight)
+			pp:SetHeight(DraeUI.config["raidframes"].powerHeight)
 			pp:SetPoint("BOTTOMLEFT")
 			pp:SetPoint("BOTTOMRIGHT")
 			pp:SetPoint("TOP", hp, "BOTTOM", 0, -1.5) -- Little offset to make it pretty
-			pp:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
+			pp:SetStatusBarTexture(DraeUI.media.statusbar)
 			pp:Hide()
 
 			local ppbg = pp:CreateTexture(nil, 'BACKGROUND')
 			ppbg:SetAllPoints(pp)
-			ppbg:SetTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
+			ppbg:SetTexture(DraeUI.media.statusbar_raid_power)
 			ppbg.multiplier = 0.25
 			pp.bg = ppbg
 
-			if (DraeUI.db["raidframes"].colorSmooth) then
+			if (DraeUI.config["raidframes"].colorSmooth) then
 				Smoothing:EnableBarAnimation(pp)
 			end
 
-			pp.__bar_height = DraeUI.db["raidframes"].powerHeight
-			pp.__bar_texture = "Interface\\AddOns\\draeUI\\media\\statusbars\\striped"
+			pp.__bar_height = DraeUI.config["raidframes"].powerHeight
+			pp.__bar_texture = DraeUI.media.statusbar
 			frame.RaidPower = pp
 		end
 
 		-- My incoming heals
 		local myBar = CreateFrame("StatusBar", nil, hp)
-		myBar:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
+		myBar:SetStatusBarTexture(DraeUI.media.statusbar_raid)
 		myBar:SetOrientation("VERTICAL")
 		myBar:SetStatusBarColor(0, 1, 0, 0.6)
 		myBar:SetPoint("LEFT")
@@ -634,7 +634,7 @@ do
 
 		-- Other incoming heals
 		local otherBar = CreateFrame("StatusBar", nil, hp)
-		otherBar:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
+		otherBar:SetStatusBarTexture(DraeUI.media.statusbar_raid)
 		otherBar:SetOrientation("VERTICAL")
 		otherBar:SetStatusBarColor(0.5, 0, 1, 0.6)
 		otherBar:SetPoint("LEFT")
@@ -643,7 +643,7 @@ do
 
 		-- Total absorb/shields on target
 		local absorbBar = CreateFrame("StatusBar", nil, hp)
-		absorbBar:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
+		absorbBar:SetStatusBarTexture(DraeUI.media.statusbar_raid)
 		absorbBar:SetOrientation("VERTICAL")
 		absorbBar:SetStatusBarColor(1.0, 1.0, 1.0, 0.33)
 		absorbBar:SetPoint("LEFT")
@@ -652,7 +652,7 @@ do
 
 		-- Total healing required to increase units health due to a heal absorb debuff/effect
 		local healAbsorbBar = CreateFrame("StatusBar", nil, hp)
-		healAbsorbBar:SetStatusBarTexture("Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
+		healAbsorbBar:SetStatusBarTexture(DraeUI.media.statusbar_raid)
 		healAbsorbBar:SetOrientation("VERTICAL")
 		healAbsorbBar:SetReverseFill(true)
 		healAbsorbBar:SetStatusBarColor(1.0, 0, 0, 0.5)
@@ -694,8 +694,8 @@ do
 
 		-- Text1 (used for name)
 		local text1 = hp:CreateFontString(nil, "OVERLAY")
-		text1:SetFont(DraeUI["media"].font, DraeUI.db["general"].fontsize3, "NONE")
-		text1:SetPoint("CENTER", hp, "CENTER", 0, frame.__is_pet and 0 or 5)
+		text1:SetFont(DraeUI["media"].font, DraeUI.config["general"].fontsize3, "NONE")
+		text1:SetPoint("CENTER", hp, "CENTER", 0, frame.__is_pet and 0 or 7)
 		text1:SetShadowOffset(1, -1)
 		frame:Tag(text1, "[draeraid:name]")
 		frame.Text1 = text1
@@ -703,8 +703,8 @@ do
 		if (not frame.__is_pet) then
 			-- Text2 (used for general indication)
 			local text2 = hp:CreateFontString(nil, "OVERLAY")
-			text2:SetFont(DraeUI["media"].font, DraeUI.db["general"].fontsize3, "NONE")
-			text2:SetPoint("CENTER", hp, "CENTER", 0, -6)
+			text2:SetFont(DraeUI["media"].font, DraeUI.config["general"].fontsize3, "NONE")
+			text2:SetPoint("CENTER", hp, "CENTER", 0, -7)
 			text2:SetShadowOffset(1, -1)
 			text2.SetJob = SetStatus_Text
 			text2.ClearJob = ClearStatus_Text
@@ -736,7 +736,7 @@ do
 
 		-- Raid Icon - unit and target of unit
 		local raidIconFrame = CreateFrame("Frame", nil, hp)
-		raidIconFrame:SetSize(14, 14)
+		raidIconFrame:SetSize(18, 18)
 		raidIconFrame:SetPoint("CENTER", frame, "TOP", 0, 0)
 		raidIconFrame:SetFrameLevel(baseLevel + 4)
 		local raidIcon = raidIconFrame:CreateTexture(nil, "OVERLAY")
@@ -748,7 +748,7 @@ do
 
 		-- Readycheck
 		local readyCheck = hp:CreateTexture(nil, "OVERLAY")
-		readyCheck:SetSize(22, 22)
+		readyCheck:SetSize(26, 26)
 		readyCheck:SetPoint("CENTER", frame, "CENTER", 0, 0)
 		frame.ReadyCheckIndicator = readyCheck
 

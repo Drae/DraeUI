@@ -4,7 +4,7 @@
 --]]
 local DraeUI = select(2, ...)
 
-DraeUI.defaults.class["WARRIOR"] = {
+DraeUI.class["WARRIOR"] = {
 	auras = {
 		-- Specific
 		["buff_battleshout"]  	= { buff = "Battle Shout", 	mine = false, color = { 0.0, 0.4, 1.0 } },  -- Attack Power

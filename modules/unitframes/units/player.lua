@@ -20,9 +20,9 @@ local StyleDrae_Player = function(frame, unit, isSingle)
 	UF.CreateUnitFrameBackground(frame)
 	UF.CreateUnitFrameHighlight(frame)
 
-	frame.Health.value = DraeUI.CreateFontObject(frame.Health, DraeUI.db["general"].fontsize1, DraeUI["media"].font, "RIGHT", 2, 15)
+	frame.Health.value = DraeUI.CreateFontObject(frame.Health, DraeUI.config["general"].fontsize1, DraeUI["media"].font, "RIGHT", 2, 15)
 
-	local level = DraeUI.CreateFontObject(frame.Health, DraeUI.db["general"].fontsize1, DraeUI["media"].font, "LEFT", -2, 15)
+	local level = DraeUI.CreateFontObject(frame.Health, DraeUI.config["general"].fontsize1, DraeUI["media"].font, "LEFT", -2, 15)
 	level:SetSize(40, 20)
 	frame:Tag(level, "[level]")
 
@@ -40,14 +40,14 @@ local StyleDrae_Player = function(frame, unit, isSingle)
 	UF.CreateTotemBar(frame, "RIGHT", frame, "LEFT", -12, 0)
 
 	-- Auras
-	UF.AddBuffs(frame, "TOPLEFT", frame.Power, "BOTTOMLEFT", 0, -12, DraeUI.db["frames"].auras.maxPlayerBuff or 8, DraeUI.db["frames"].auras.auraSml, 8, "RIGHT",	"DOWN")
-	UF.AddDebuffs(frame, "TOPRIGHT", frame.Power, "BOTTOMRIGHT", 0, -12, DraeUI.db["frames"].auras.maxPlayerDebuff or 6, DraeUI.db["frames"].auras.auraLrg, 8, "LEFT", "DOWN")
+	UF.AddBuffs(frame, "TOPLEFT", frame.Power, "BOTTOMLEFT", 0, -12, DraeUI.config["frames"].auras.maxPlayerBuff or 8, DraeUI.config["frames"].auras.auraSml, 8, "RIGHT",	"DOWN")
+	UF.AddDebuffs(frame, "TOPRIGHT", frame.Power, "BOTTOMRIGHT", 0, -12, DraeUI.config["frames"].auras.maxPlayerDebuff or 6, DraeUI.config["frames"].auras.auraLrg, 8, "LEFT", "DOWN")
 
 	UF.AddLongBuffs("BOTTOMRIGHT", _G.UIParent, "BOTTOMRIGHT", -20, 20)
 
 	-- Castbars
-	local cbp = DraeUI.db["castbar"].player
-	UF.CreateCastBar(frame, cbp.width, cbp.height, cbp.anchor, cbp.anchorat, cbp.anchorto, cbp.xOffset, cbp.yOffset, DraeUI.db["castbar"].showLatency)
+--	local cbp = DraeUI.config["castbar"].player
+--	UF.CreateCastBar(frame, cbp.width, cbp.height, cbp.anchor, cbp.anchorat, cbp.anchorto, cbp.xOffset, cbp.yOffset, DraeUI.config["castbar"].showLatency)
 
 	-- The number here is the size of the raid icon
 	UF.CommonPostInit(frame, 30)
