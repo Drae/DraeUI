@@ -14,7 +14,7 @@ DraeUI.config = {
 		-- Textures
 		statusbar = "striped",
 		statusbar_power = "striped",
-		statusbar_raid = "hgrad",
+		statusbar_raid = "striped",
 		statusbar_raid_power = "striped",
 
 		font = "Proza",
@@ -39,9 +39,9 @@ DraeUI.config = {
 		-- Player and Target are positioned relative to center of screen,
 		-- all other frames are positioned relative to those
 		playerXoffset = -450,
-		playerYoffset = -150,
+		playerYoffset = -130,
 		targetXoffset = 450,
-		targetYoffset = -150,
+		targetYoffset = -130,
 		totXoffset = 30, -- Relative to right of target
 		totYoffset = 0,
 		focusXoffset = 0, -- Relative to left of target
@@ -145,7 +145,7 @@ DraeUI.config = {
 		-- will be used
 		position = {
 			[1] = {"CENTER", UIParent, "CENTER", 0, -275},
-			[2] = {"BOTTOMLEFT", UIParent, "LEFT", 540, -100}
+			[2] = {"BOTTOMLEFT", UIParent, "LEFT", 540, -80}
 		},
 		scale = {
 			[1] = 1.0,
