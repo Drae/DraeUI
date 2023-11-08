@@ -145,11 +145,11 @@ DraeUI.config = {
 		-- will be used
 		position = {
 			[1] = {"CENTER", UIParent, "CENTER", 0, -275},
-			[2] = {"BOTTOMLEFT", UIParent, "LEFT", 540, -80}
+			[2] = {"BOTTOMLEFT", UIParent, "LEFT", 500, -80}
 		},
 		scale = {
 			[1] = 1.0,
-			[2] = 0.9
+			[2] = 0.85
 		},
 		-- Button parameters
 		raidnamelength = 4,

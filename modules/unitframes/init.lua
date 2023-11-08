@@ -229,10 +229,7 @@ UF.OnEnable = function(self)
 			if (curSubGroups ~= numSubGroups) then
 				CreateRaidAnchor(raidHeaders[1], numSubGroups)
 
-					-- This is NOT generic for the config anchorpoint!
-				if (DraeUI.config["raidframes"].showPets) then
-					raidHeaders["pet"]:SetPoint(DraeUI.config["raidframes"].gridGroupsAnchor, raidHeaders[numSubGroups], relPoint, 0, DraeUI.config["raidframes"].petOffset) -- Offset from the raid group
-				end
+				local scale = 1.0
 
 				-- Set Scale
 				for i = numSubGroups, 1, -1 do
@@ -244,6 +241,12 @@ UF.OnEnable = function(self)
 
 				for i = 1, numSubGroups do
 					raidHeaders[i]:SetScale(scale)
+				end
+
+				-- This is NOT generic for the config anchorpoint!
+				if (DraeUI.config["raidframes"].showPets) then
+					raidHeaders["pet"]:SetPoint(DraeUI.config["raidframes"].gridGroupsAnchor, raidHeaders[numSubGroups], relPoint, 0, DraeUI.config["raidframes"].petOffset)-- Offset from the raid group
+					raidHeaders["pet"]:SetScale(scale)
 				end
 
 				raidHeaders.__subgroups = numSubGroups

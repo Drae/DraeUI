@@ -22,12 +22,10 @@ read_globals = {
 	table = {fields = {'removemulti', 'wipe'}},
 
 	-- FrameXML
-	'ArenaEnemyFramesContainer',
-	'ArenaEnemyMatchFramesContainer',
-	'ArenaEnemyPrepFramesContainer',
 	'BossTargetFrameContainer',
 	'ColorMixin',
 	'ComboFrame',
+	'CompactArenaFrame',
 	'CreateColor',
 	'Enum',
 	'FocusFrame',
@@ -39,6 +37,7 @@ read_globals = {
 	'PartyFrame',
 	'PetCastingBarFrame',
 	'PetFrame',
+	'PingableType_UnitFrameMixin',
 	'PlayerCastingBarFrame',
 	'PlayerFrame',
 	'PlayerPowerBarAlt',
@@ -49,6 +48,7 @@ read_globals = {
 	'UIParent',
 
 	-- namespaces
+	'C_AddOns',
 	'C_IncomingSummon',
 	'C_NamePlate',
 	'C_PvP',
@@ -57,7 +57,6 @@ read_globals = {
 	-- API
 	'CopyTable',
 	'CreateFrame',
-	'GetAddOnMetadata',
 	'GetArenaOpponentSpec',
 	'GetNetStats',
 	'GetNumArenaOpponentSpecs',
