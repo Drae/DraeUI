@@ -46,7 +46,7 @@ config\instancedebuffs\embed.xml
 modules\infobar\init.lua
 modules\infobar\plugin.lua
 modules\infobar\ldb\fps.lua
-#modules\infobar\ldb\mem.lua
+modules\infobar\ldb\mem.lua
 modules\infobar\ldb\xp.lua
 modules\infobar\ldb\latency.lua
 modules\infobar\ldb\gold.lua

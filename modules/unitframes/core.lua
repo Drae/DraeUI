@@ -24,7 +24,7 @@ local select, upper, mhuge = select, string.upper, math.huge
 --]]
 local Menu = function(self)
 	local cUnit = self.unit:gsub("(.)", upper, 1)
-print("",cUnit)
+
 	if (_G[cUnit .. "FrameDropDown"]) then
 		ToggleDropDownMenu(1, nil, _G[cUnit .. "FrameDropDown"], "cursor", 0, 0)
 	end
@@ -569,6 +569,8 @@ do
 
 
 	do
+		local UpdateAuraIcon
+
 		local PostUpdateWeaponEnchants = function(auras, unit)
 			if (unit ~= "player") then return end
 
@@ -791,7 +793,12 @@ do
 			UpdateIcon(button)
 		end
 
-		local UpdateAuraIcon = function(header)
+		UpdateAuraIcon = function(header)
+			if (InCombatLockdown()) then
+				return header:RegisterEvent("PLAYER_REGEN_ENABLED", UpdateAuraIcon)
+			end
+			header:UnregisterEvent("PLAYER_REGEN_ENABLED", UpdateAuraIcon)
+
 			for i = 1, 40 do
 				local child = header:GetAttribute("child" .. i);  -- gets the i'th automatically created button
 
