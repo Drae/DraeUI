@@ -147,7 +147,7 @@ do
 		collectgarbage("collect")
 		ResetCPUUsage()
 
-		MEM:UpdateMem()
+		UpdateMem()
 	end
 end
 
