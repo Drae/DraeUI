@@ -501,7 +501,7 @@ end
 --]]
 local StyleDrae_Raid
 do
-	local range = {insideAlpha = 1.0, outsideAlpha = 0.25}
+	local range = {insideAlpha = 1.0, outsideAlpha = 0.33}
 	local border_insets = {left = 2, right = 2, top = 2, bottom = 2}
 
 	-- Default basis status
@@ -536,7 +536,7 @@ do
 		frame:SetScript("OnEnter", FrameOnEnter)
 		frame:SetScript("OnLeave", FrameOnLeave)
 
-		frame.Range = range
+		frame.SpellRange = range
 
 		local baseLevel = frame:GetFrameLevel()
 

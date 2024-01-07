@@ -55,8 +55,8 @@ UF.CommonPostInit = function(self, size, noRaidIcons)
 	end
 
 	self.SpellRange = {
-		insideAlpha = 1.00,
-		outsideAlpha = 0.5
+		insideAlpha = 1.0,
+		outsideAlpha = 0.33
 	}
 end
 
