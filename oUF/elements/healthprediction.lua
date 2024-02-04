@@ -96,10 +96,11 @@ local function Update(self, event, unit)
 		element:PreUpdate(unit)
 	end
 
+	local GUID = UnitGUID(unit)
 	local myIncomingHeal = UnitGetIncomingHeals(unit, 'player') or 0
 	local allIncomingHeal = UnitGetIncomingHeals(unit) or 0
-	local absorb = UnitGetTotalAbsorbs(unit) or 0
-	local healAbsorb = UnitGetTotalHealAbsorbs(unit) or 0
+	local absorb = oUF.isRetail and UnitGetTotalAbsorbs(unit) or 0
+	local healAbsorb = oUF.isRetail and UnitGetTotalHealAbsorbs(unit) or 0
 	local health, maxHealth = UnitHealth(unit), UnitHealthMax(unit)
 	local otherIncomingHeal = 0
 	local hasOverHealAbsorb = false
@@ -111,13 +112,12 @@ local function Update(self, event, unit)
 
 		if(health < healAbsorb) then
 			hasOverHealAbsorb = true
-			healAbsorb = health
 		end
 	else
 		allIncomingHeal = allIncomingHeal - healAbsorb
 		healAbsorb = 0
 
-		if(health + allIncomingHeal > maxHealth * element.maxOverflow) then
+		if(health + allIncomingHeal >= maxHealth * element.maxOverflow) then
 			allIncomingHeal = maxHealth * element.maxOverflow - health
 		end
 
@@ -129,12 +129,13 @@ local function Update(self, event, unit)
 	end
 
 	local hasOverAbsorb = false
-	if(health + allIncomingHeal + absorb >= maxHealth) then
-		if(absorb > 0) then
-			hasOverAbsorb = true
-		end
 
-		absorb = math.max(0, maxHealth - health - allIncomingHeal)
+	if(health + allIncomingHeal + absorb >= maxHealth) and (absorb > 0) then
+		hasOverAbsorb = true
+	end
+
+	if(health + allIncomingHeal + absorb >= maxHealth * element.maxOverflow) then
+		absorb = maxHealth * element.maxOverflow - health - allIncomingHeal
 	end
 
 	if(element.myBar) then
@@ -190,7 +191,7 @@ local function Update(self, event, unit)
 	* hasOverHealAbsorb - indicates if the amount of heal absorb is higher than the unit's current health (boolean)
 	--]]
 	if(element.PostUpdate) then
-		return element:PostUpdate(unit, myIncomingHeal, otherIncomingHeal, absorb, healAbsorb, hasOverAbsorb, hasOverHealAbsorb)
+		return element:PostUpdate(unit, myIncomingHeal, otherIncomingHeal, absorb, healAbsorb, hasOverAbsorb, hasOverHealAbsorb, health, maxHealth)
 	end
 end
 
@@ -209,19 +210,39 @@ local function ForceUpdate(element)
 	return Path(element.__owner, 'ForceUpdate', element.__owner.unit)
 end
 
+local function HealComm_Check(self, element, ...)
+	if element and self:IsVisible() then
+		for i = 1, select('#', ...) do
+			if self.unit and UnitGUID(self.unit) == select(i, ...) then
+				Path(self, nil, self.unit)
+			end
+		end
+	end
+end
+
 local function Enable(self)
 	local element = self.HealthPrediction
 	if(element) then
 		element.__owner = self
 		element.ForceUpdate = ForceUpdate
 
-		self:RegisterEvent('UNIT_HEALTH', Path)
-		self:RegisterEvent('UNIT_MAXHEALTH', Path)
-		self:RegisterEvent('UNIT_HEAL_PREDICTION', Path)
-		self:RegisterEvent('UNIT_ABSORB_AMOUNT_CHANGED', Path)
-		self:RegisterEvent('UNIT_HEAL_ABSORB_AMOUNT_CHANGED', Path)
+		oUF:RegisterEvent(self, 'UNIT_MAXHEALTH', Path)
+		oUF:RegisterEvent(self, 'UNIT_HEAL_PREDICTION', Path)
 
-		if(not element.maxOverflow) then
+		if oUF.isClassic then
+			oUF:RegisterEvent(self, 'UNIT_HEALTH_FREQUENT', Path)
+		else
+			oUF:RegisterEvent(self, 'UNIT_HEALTH', Path)
+		end
+
+		if oUF.isRetail then
+			oUF:RegisterEvent(self, 'UNIT_ABSORB_AMOUNT_CHANGED', Path)
+			oUF:RegisterEvent(self, 'UNIT_HEAL_ABSORB_AMOUNT_CHANGED', Path)
+		else
+			element:SetUseHealComm(true)
+		end
+
+		if (not element.maxOverflow) then
 			element.maxOverflow = 1.05
 		end
 
@@ -294,11 +315,21 @@ local function Disable(self)
 			element.overHealAbsorb:Hide()
 		end
 
-		self:UnregisterEvent('UNIT_HEALTH', Path)
-		self:UnregisterEvent('UNIT_MAXHEALTH', Path)
-		self:UnregisterEvent('UNIT_HEAL_PREDICTION', Path)
-		self:UnregisterEvent('UNIT_ABSORB_AMOUNT_CHANGED', Path)
-		self:UnregisterEvent('UNIT_HEAL_ABSORB_AMOUNT_CHANGED', Path)
+		oUF:UnregisterEvent(self, 'UNIT_MAXHEALTH', Path)
+		oUF:UnregisterEvent(self, 'UNIT_HEAL_PREDICTION', Path)
+
+		if oUF.isClassic then
+			oUF:UnregisterEvent(self, 'UNIT_HEALTH_FREQUENT', Path)
+		else
+			oUF:UnregisterEvent(self, 'UNIT_HEALTH', Path)
+		end
+
+		if oUF.isRetail then
+			oUF:UnregisterEvent(self, 'UNIT_ABSORB_AMOUNT_CHANGED', Path)
+			oUF:UnregisterEvent(self, 'UNIT_HEAL_ABSORB_AMOUNT_CHANGED', Path)
+		else
+			element:SetUseHealComm(false)
+		end
 	end
 end
 

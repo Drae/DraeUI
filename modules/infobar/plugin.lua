@@ -5,7 +5,7 @@ local DraeUI = select(2, ...)
 
 local InfoBar = DraeUI:GetModule("Infobar")
 
-local Smoothing = LibStub("LibCutawaySmooth-1.0", true)
+--local Smoothing = LibStub("LibCutawaySmooth-1.0", true)
 
 --[[
 
@@ -258,7 +258,7 @@ local CreateStatusBar = function(self, name, settings)
 	end
 
 	if (settings.smooth) then
-		Smoothing:EnableBarAnimation(bar)
+--		Smoothing:EnableBarAnimation(bar)
 	end
 
 	return bar

@@ -8,21 +8,19 @@ local oUF = DraeUI.oUF or oUF
 local UF = DraeUI:GetModule("UnitFrames")
 
 -- Player frame
-local StyleDrae_Player = function(frame, unit, isSingle)
+local StyleDrae_Player = function(frame)
 	frame:SetSize(260, 14)
 	frame:SetFrameStrata("LOW")
 
 	UF.CommonInit(frame)
 
 	UF.CreateHealthBar(frame, 260, 0, 0)
-	UF.CreatePowerBar(frame, 260)
-	UF.CreateAdditionalPower(frame, 260)
 	UF.CreateUnitFrameBackground(frame)
 	UF.CreateUnitFrameHighlight(frame)
 
-	frame.Health.value = DraeUI.CreateFontObject(frame.Health, DraeUI.config["general"].fontsize1, DraeUI["media"].font, "RIGHT", 2, 15)
+	frame.Health.value = DraeUI.CreateFontObject(frame.Health, DraeUI.config["general"].fontsize1, DraeUI["media"].font, "RIGHT", -5, 10)
 
-	local level = DraeUI.CreateFontObject(frame.Health, DraeUI.config["general"].fontsize1, DraeUI["media"].font, "LEFT", -2, 15)
+	local level = DraeUI.CreateFontObject(frame.Health, DraeUI.config["general"].fontsize1, DraeUI["media"].font, "LEFT", 5, 10)
 	level:SetSize(40, 20)
 	frame:Tag(level, "[level]")
 
@@ -36,18 +34,8 @@ local StyleDrae_Player = function(frame, unit, isSingle)
 
 	UF.FlagIcons(frame.Health)
 
-	-- Totem bar
-	UF.CreateTotemBar(frame, "RIGHT", frame, "LEFT", -12, 0)
-
 	-- Auras
-	UF.AddBuffs(frame, "TOPLEFT", frame.Power, "BOTTOMLEFT", 0, -12, DraeUI.config["frames"].auras.maxPlayerBuff or 8, DraeUI.config["frames"].auras.auraSml, 8, "RIGHT",	"DOWN")
-	UF.AddDebuffs(frame, "TOPRIGHT", frame.Power, "BOTTOMRIGHT", 0, -12, DraeUI.config["frames"].auras.maxPlayerDebuff or 6, DraeUI.config["frames"].auras.auraLrg, 8, "LEFT", "DOWN")
-
-	UF.AddLongBuffs("BOTTOMRIGHT", _G.UIParent, "BOTTOMRIGHT", -20, 20)
-
-	-- Castbars
---	local cbp = DraeUI.config["castbar"].player
---	UF.CreateCastBar(frame, cbp.width, cbp.height, cbp.anchor, cbp.anchorat, cbp.anchorto, cbp.xOffset, cbp.yOffset, DraeUI.config["castbar"].showLatency)
+	UF.AddDebuffs(frame, "TOPRIGHT", frame.Health, "BOTTOMRIGHT", 0, -22, DraeUI.config["frames"].auras.maxPlayerDebuff or 6, DraeUI.config["frames"].auras.auraLrg, 8, "LEFT", "DOWN")
 
 	-- The number here is the size of the raid icon
 	UF.CommonPostInit(frame, 30)

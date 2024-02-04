@@ -10,14 +10,14 @@ local UF = DraeUI:GetModule("UnitFrames")
 -- Localise a bunch of functions
 local UnitName, UnitIsAFK, UnitIsDND, UnitPowerType = UnitName, UnitIsAFK, UnitIsDND, UnitPowerType
 local UnitPlayerControlled, UnitIsTapDenied = UnitPlayerControlled, UnitIsTapDenied
-local UnitIsPlayer, UnitPlayerControlled, UnitReaction = UnitIsPlayer, UnitPlayerControlled, UnitReaction
+local UnitIsPlayer, UnitReaction = UnitIsPlayer, UnitReaction
 local UnitIsConnected, UnitClass = UnitIsConnected, UnitClass
 local format = string.format
 
 --[[
 		Unit frame tags
 --]]
-oUF.Tags.Methods["drae:unitcolour"] = function(u, r)
+oUF.Tags.Methods["drae:unitcolour"] = function(u)
 	local reaction = UnitReaction(u, "player")
 
 	if (not UnitPlayerControlled(u) and UnitIsTapDenied(u)) then
@@ -44,7 +44,7 @@ oUF.Tags.Methods["drae:afk"] = function(u)
 end
 oUF.Tags.Events["drae:afk"] = "PLAYER_FLAGS_CHANGED"
 
-oUF.Tags.Methods["drae:power"] = function(u, t)
+oUF.Tags.Methods["drae:power"] = function(u)
 	local _, str = UnitPowerType(u)
 	--	return ("%s%s|r"):format(DraeUI.Hex(oUF.colors.power[str] or {1, 1, 1}), DraeUI.ShortVal(oUF.Tags.Methods["curpp"](u)))
 	return ("|cffffffff%s|r"):format(DraeUI.ShortVal(oUF.Tags.Methods["curpp"](u)))

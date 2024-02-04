@@ -23,10 +23,8 @@ functions\toolkit.lua
 # Unitframes
 modules\unitframes\auras.xml
 modules\unitframes\init.lua
-modules\unitframes\core.lua
-modules\unitframes\roster.lua
+modules\unitframes\common.lua
 #modules\unitframes\castbar.lua
-modules\unitframes\events.lua
 modules\unitframes\tags.lua
 modules\unitframes\units\player.lua
 modules\unitframes\units\pet.lua
@@ -34,13 +32,8 @@ modules\unitframes\units\target.lua
 modules\unitframes\units\targettarget.lua
 modules\unitframes\units\focus.lua
 modules\unitframes\units\focustarget.lua
-modules\unitframes\units\partyandraid.lua
 modules\unitframes\units\boss.lua
-modules\unitframes\statuses\embed.xml
 modules\unitframes\elements\embed.xml
-config\indicators\embed.xml
-config\raiddebuffs\embed.xml
-config\instancedebuffs\embed.xml
 
 # Infobar
 modules\infobar\init.lua
@@ -53,7 +46,3 @@ modules\infobar\ldb\gold.lua
 modules\infobar\ldb\durability.lua
 modules\infobar\ldb\res.lua
 modules\infobar\ldb\azerite.lua
-
-# Misc
-modules\misc\init.lua
-modules\misc\autoinvite.lua

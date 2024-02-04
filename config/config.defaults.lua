@@ -8,8 +8,6 @@ local DraeUI = select(2, ...)
 		Default configuration settings
 --]]
 DraeUI.config = {
-	class = {}, -- Used for class indicators, etc. - DO NOT DELETE
-
 	general = {
 		-- Textures
 		statusbar = "striped",
@@ -22,12 +20,48 @@ DraeUI.config = {
 		fontTitles = "Vollkorn",
 
 		fontsize0 = 16,
-		fontsize1 = 15,
-		fontsize2 = 14,
-		fontsize3 = 13,
-		fontsize4 = 11,
+		fontsize1 = 14,
+		fontsize2 = 12,
+		fontsize3 = 10,
 
-		texcoords = {0.1, 0.9, 0.1, 0.9}
+		texcoords = { 0.1, 0.9, 0.1, 0.9 }
+	},
+
+	colors = {
+		power = {
+			ENERGY	    = { 1, 	  0.96, 0.41 },
+			FOCUS 		= { 1, 	  0.50, 0.25 },
+			FURY 		= { 0.79, 0.26, 0.99,  atlas = '_DemonHunter-DemonicFuryBar' },
+			INSANITY 	= { 0.4,  0,    0.8,   atlas = '_Priest-InsanityBar' },
+			LUNAR_POWER = { 0.3,  0.52, 0.9,   atlas = '_Druid-LunarBar' },
+			MAELSTROM 	= { 0, 	  0.5,  1,     atlas = '_Shaman-MaelstromBar' },
+			MANA 		= { 0, 	  0.56, 1.0 },
+			PAIN 		= { 1, 	  0.61, 0,     atlas = '_DemonHunter-DemonicPainBar' },
+			RAGE 		= { 0.78, 0.25, 0.25 },
+			RUNIC_POWER = { 0, 	  0.82, 1 },
+			ALT_POWER 	= { 0.2,  0.4,  0.8 },
+		},
+		reaction = {
+			BAD 	= { 1, 0, 0 },
+			NEUTRAL = { 1, 1, 0 },
+			GOOD 	= { 0, 1, 0 },
+		},
+		charmed = { 1.0, 0, 0.4 },
+		disconnected = { 0.9, 0.9, 0.9 },
+		tapped = { 0.6, 0.6, 0.6 },
+		debuffTypes = {
+			["Magic"]	= { 0.2, 0.6, 1.0 },
+			["Curse"]	= { 0.6, 0.0, 1.0 },
+			["Disease"]	= { 0.6, 0.4, 0.0 },
+			["Poison"]	= { 0.0, 0.6, 0.0 },
+		},
+	},
+
+	infobar = {
+		xp = {
+			enable = true,
+			altxp = "reputation"
+		}
 	},
 
 	-- Unit Frame settings
@@ -35,23 +69,22 @@ DraeUI.config = {
 		numFormatLong = false,
 		-- Display or hide frames
 		showBoss = true, -- Boss frames
-		showArena = false,
 		-- Player and Target are positioned relative to center of screen,
 		-- all other frames are positioned relative to those
-		playerXoffset = -450,
-		playerYoffset = -130,
-		targetXoffset = 450,
-		targetYoffset = -130,
+		playerXoffset = -430,
+		playerYoffset = -205,
+		targetXoffset = 430,
+		targetYoffset = -205,
 		totXoffset = 30, -- Relative to right of target
 		totYoffset = 0,
 		focusXoffset = 0, -- Relative to left of target
-		focusYoffset = -140,
+		focusYoffset = -150,
 		focusTargetXoffset = 30, -- Relative to right of focus target
 		focusTargetYoffset = 0,
 		petXoffset = 0, --62, 	-- Relative to left of player
-		petYoffset = -140, ---100,
+		petYoffset = -150, ---100,
 		bossXoffset = 0, -- Relative to left of target
-		bossYoffset = 300,
+		bossYoffset = 200,
 		arenaXoffset = 0, -- Relative to left of target
 		arenaYoffset = 300,
 		largeScale = 1.0,
@@ -59,19 +92,16 @@ DraeUI.config = {
 		smallScale = 1.0,
 		-- Dimension of frames, large applies to player/target, small everything else
 		-- don't change these, change the scale
-		largeWidth = 270,
-		largeHeight = 270,
-		smallWidth = 120,
-		smallHeight = 20,
+		largeWidth = 280,
+		smallWidth = 140,
 		-- Aura settings
 		auras = {
 			-- Large are debuffs on players, buffs on targets, Sml are buffs on player,
 			-- debuffs on target and tiny are buffs/debuffs on other units
-			auraHge = 28,
-			auraLrg = 25,
-			auraSml = 22,
+			auraHge = 26,
+			auraLrg = 22,
+			auraSml = 20,
 			auraTny = 18,
-			auraMag = 1.8, -- Multiplier for the magnified view of auras
 			maxPlayerBuff = 7,
 			maxPlayerDebuff = 5,
 			maxPetBuff = 2,
@@ -103,8 +133,7 @@ DraeUI.config = {
 			showBuffsOnFriends = true, -- Buffs on friends (excluding 0 duration auras)
 			showDebuffsOnFriends = true,
 			showBuffsOnEnemies = true,
-			showDebuffsOnEnemies = true,
-			showStealableBuffs = true,
+			showDebuffsOnEnemies = false,
 			-- These auras are never displayed regardless of any other settings
 			blacklistAuraFilter = {
 				["Chill of the Throne"] = true,
@@ -123,60 +152,4 @@ DraeUI.config = {
 			}
 		}
 	},
-
-	raidframes = {
-		-- General frame parameters
-		width = 65,
-		height = 65,
-		petHeight = 25,
-		gridLayout = "HORIZONTAL", -- groups are arranged horizontally - one above (or below) the other,
-		-- VERTICAL would have groups appear to the right (or left) of each other
-		gridGroupsAnchor = "BOTTOMRIGHT", -- This is the anchor point for each group - groups will grow from this point
-		padding = 14, -- Distance between frames - the highlight border is 3px, so keep it >3
-		petOffset = 16, -- Offset from player frames for pet/vehicle frames
-		showPets = true, -- Pets will be shown as seperate units, vehicles will appear as pets if enabled
-		powerHeight = 4,	-- Height of power bar (shown only for healers)
-		colorSmooth = false,
-		colorPet = false,
-		colorCharmed = true,
-		-- X, Y position of frames - the 1, 2, 3, etc. tables
-		-- Equates to the total number of groups in the raid (not each group!). If you do not
-		-- specify a position for a total number of groups the position of the last highest
-		-- will be used
-		position = {
-			[1] = {"CENTER", UIParent, "CENTER", 0, -275},
-			[2] = {"BOTTOMLEFT", UIParent, "LEFT", 500, -80}
-		},
-		scale = {
-			[1] = 1.0,
-			[2] = 0.85
-		},
-		-- Button parameters
-		raidnamelength = 4,
-		showRaidHealthPct = false, -- Show health as a "remaining percentage" rather than an "absolute deficit"
-		showOnlyDispellable = true, -- true to only show dispellable unknown debuffs
-		-- These auras are never displayed regardless of any other settings
-		blacklistAuraFilter = {
-			["Chill of the Throne"] = true,
-			["Strength of Wrynn"] = true,
-			["Grasping Tendrils"] = true
-		},
-		filterType = "WHITELIST", -- dictates which filter we"ll use
-		-- If debuff filtering is enabled only the debuffs in the following list will appear on targets
-		whiteListFilter = {
-			["DEBUFF"] = {},
-			["BUFF"] = {}
-		},
-		blackListFilter = {
-			["DEBUFF"] = {},
-			["BUFF"] = {}
-		}
-	},
-
-	infobar = {
-		xp = {
-			enable = true,
-			altxp = "reputation"
-		}
-	}
 }

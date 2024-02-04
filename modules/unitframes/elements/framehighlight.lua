@@ -34,7 +34,7 @@ local GetDebuffType = function(unit)
 	return debuffType
 end
 
-local Update = function(self, event, unit)
+local Update = function(self, _, unit)
 	if (unit and self.unit ~= unit) then return end
 	unit = unit or self.unit
 
@@ -83,7 +83,7 @@ local Update = function(self, event, unit)
 	end
 end
 
-local Enable = function(self, unit)
+local Enable = function(self)
 	local backdrop = self.backdrop
 	local highlightTop = backdrop and backdrop.highlightTop or nil
 	local highlightBottom = backdrop and backdrop.highlightBottom or nil

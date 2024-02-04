@@ -14,15 +14,19 @@ do
 	local hiddenFrame = CreateFrame("Frame")
 	hiddenFrame:Hide()
 
+	local FrameShown = function(frame, shown)
+		if shown then frame:Hide() end
+	end
+
 	Kill = function(object)
 		if (object.UnregisterAllEvents) then
 			object:UnregisterAllEvents()
-			object:SetParent(hiddenFrame)
 		else
-			object.Show = object.Hide
+			hooksecurefunc(object, 'Show', object.Hide)
+			hooksecurefunc(object, 'SetShown', FrameShown)
 		end
 
-		object:Hide()
+		pcall(object.Hide, object)
 	end
 end
 

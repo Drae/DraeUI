@@ -11,7 +11,7 @@ local Element = DraeUI:NewModule("ElementRange")
 local RangeCheck = LibStub("LibRangeCheck-3.0", true)
 
 -- Localise a bunch of functions
-local pairs, ipairs, assert, type, tonumber, next, strfind = pairs, ipairs, assert, type, tonumber, next, strfind
+local pairs, ipairs, assert, type, tonumber, next, strfind = pairs, ipairs, assert, type, tonumber, next, string.find
 local CreateFrame, UnitIsConnected,  UnitCanAttack, UnitIsUnit, UnitPlayerOrPetInRaid, UnitInRange, CheckInteractDistance,  UnitPlayerOrPetInParty, UnitCanAssist, IsInRaid = CreateFrame, UnitIsConnected,  UnitCanAttack, UnitIsUnit, UnitPlayerOrPetInRaid,  UnitInRange, CheckInteractDistance,  UnitPlayerOrPetInParty, UnitCanAssist, IsInRaid
 
 local _FRAMES = {}

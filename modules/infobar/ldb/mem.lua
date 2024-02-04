@@ -56,7 +56,6 @@ local UpdateAddonMemCPUUse = function(watchCpu)
 	end
 
 	local total = 0
-	local i
 
 	for i = 1, GetNumAddOns() do
 		local value = (watchCpu and GetAddOnCPUUsage(i)) or GetAddOnMemoryUsage(i)

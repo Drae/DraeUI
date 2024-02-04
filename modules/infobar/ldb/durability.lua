@@ -5,7 +5,7 @@
 local DraeUI = select(2, ...)
 
 local IB = DraeUI:GetModule("Infobar")
-local DUR = IB:NewModule("Durability", "AceEvent-3.0", "AceTimer-3.0")
+local DUR = IB:NewModule("Durability", "AceEvent-3.0")
 
 local LDB = LibStub("LibDataBroker-1.1"):NewDataObject("DraeUIDurability", { type = "DraeUI", icon = nil, label = "DraeUIDurability" })
 

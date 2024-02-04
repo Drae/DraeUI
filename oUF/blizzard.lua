@@ -2,7 +2,7 @@ local _, ns = ...
 local oUF = ns.oUF
 
 -- sourced from FrameXML/TargetFrame.lua
-local MAX_BOSS_FRAMES = _G.MAX_BOSS_FRAMES or 5
+local MAX_BOSS_FRAMES = 8
 
 -- sourced from FrameXML/RaidFrame.lua
 local MEMBERS_PER_RAID_GROUP = _G.MEMBERS_PER_RAID_GROUP or 5

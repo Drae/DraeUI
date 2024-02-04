@@ -146,10 +146,20 @@ do
 	end
 
 	XP.EnableReputation = function(self)
+		if (self.Disable and self.enabled ~= "reputation") then
+			self:Disable()
+		end
+
+		self.enabled = "reputation"
+
 		self:RegisterEvent("UPDATE_FACTION", "UpdateReputation")
 
 		LDB.OnEnter = OnEnter
 		LDB.OnLeave = OnLeave
+
+		self:UpdateReputation()
+
+		self.Disable = XP.DisableReputation
 	end
 
 	XP.DisableReputation = function(self)
@@ -157,76 +167,7 @@ do
 
 		LDB.OnEnter = nil
 		LDB.OnLeave = nil
-	end
-end
-
-XP.UpdateHonor = function(self, event, unit)
-	local cur, max = UnitHonor("player"), UnitHonorMax("player")
-	local level, levelMax = UnitHonorLevel("player"), GetMaxPlayerHonorLevel()
-
-	local pct = cur / max * 100
-
-	if (level == levelmax) then
-		-- Force the bar to full for the max level
-		LDB.statusbar__xp_min_max = "0,1"
-		LDB.statusbar__xp_cur = 1
-	else
-		LDB.statusbar__xp_min_max = "0," .. max
-		LDB.statusbar__xp_cur = cur
-	end
-	LDB.statusbar__rested_hide = true
-
-	local affix = ""
-	if (level == levelmax) then
-		affix = " [|cff00ff00" .. MAX_HONOR_LEVEL .. "|r]"
-	else
-		affix = " [" .. level .. "]"
-	end
-
-	local r1, g1, b1 = DraeUI.ColorGradient(pct / 100 - 0.001, 1, 0, 0, 1, 1, 0, 0, 1, 0)
-
-	LDB.text = format("Honor: |cff%02x%02x%02x%d|r|cffffffff%%|r%s", r1 * 255, g1 * 255, b1 * 255, pct, affix)
-end
-
-do
-	local OnEnter = function(self)
-		GameTooltip:SetOwner(self, "ANCHOR_NONE")
-		GameTooltip:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 0, -10)
-
-		GameTooltip:ClearLines()
-
-		local cur, max = UnitHonor("player"), UnitHonorMax("player")
-		local level, levelMax = UnitHonorLevel("player"), GetMaxPlayerHonorLevel()
-
-		GameTooltip:AddLine(HONOR)
-
-		GameTooltip:AddDoubleLine("Current Level:", level, 1, 1, 1)
-		GameTooltip:AddLine(" ")
-
-		if (level == levelmax) then
-			GameTooltip:AddLine(MAX_HONOR_LEVEL)
-		else
-			GameTooltip:AddDoubleLine("Honor XP:", format(" %d / %d (%d%%)", cur, max, cur/max * 100), 1, 1, 1)
-			GameTooltip:AddDoubleLine("Honor Remaining:", format(" %d (%d%% - %d ".. "Bars)", max - cur, (max - cur) / max * 100, 20 * (max - cur) / max), 1, 1, 1)
-		end
-
-		GameTooltip:Show()
-	end
-
-	local OnLeave = function(self)
-		GameTooltip:Hide()
-	end
-
-	XP.EnableHonor = function(self)
-		LDB.OnEnter = OnEnter
-		LDB.OnLeave = OnLeave
-	end
-
-	XP.DisableHonor = function(self)
-		self:UnregisterEvent("HONOR_XP_UPDATE", "UpdateHonor")
-
-		LDB.OnEnter = nil
-		LDB.OnLeave = nil
+		LDB.ShowPlugin = false
 	end
 end
 
@@ -294,8 +235,8 @@ do
 	end
 
 	XP.EnableExperience = function(self, event)
-		if (event == "PLAYER_XP_UPDATE" or not IsXPUserDisabled() and UnitLevel("player") ~= MAX_PLAYER_LEVEL and self.db.enable) then
-			if (self.enabled ~= "xp") then
+		if ((event == "PLAYER_XP_UPDATE" or not IsXPUserDisabled()) and UnitLevel("player") ~= MAX_PLAYER_LEVEL and DraeUI.config["infobar"].xp.enable) then
+			if (self.Disable and self.enabled ~= "xp") then
 				self:Disable()
 			end
 
@@ -311,7 +252,6 @@ do
 
 			LDB.OnEnter = OnEnter
 			LDB.OnLeave = OnLeave
-
 			LDB.ShowPlugin = true
 
 			self:UpdateExperience()
@@ -324,31 +264,15 @@ do
 
 			self:RegisterEvent("UPDATE_EXPANSION_LEVEL", "EnableExperience")
 
-			if (self.enabled == "xp") then
+			if (self.Disable and self.enabled == "xp") then
 				self:Disable()
 			end
 
-			if (self.db["altxp"] == "honor") then
-				self.enabled = "honor"
+			self.enabled = "reputation"
 
-				LDB.ShowPlugin = true
+			LDB.ShowPlugin = true
 
-				self:EnableHonor()
-				self:UpdateHonor()
-
-				self.Disable = XP.DisableHonor
-			elseif (self.db["altxp"] == "reputation") then
-				self.enabled = "rep"
-
-				LDB.ShowPlugin = true
-
-				self:EnableReputation()
-				self:UpdateReputation()
-
-				self.Disable = XP.DisableReputation
-			else
-				LDB.ShowPlugin = false
-			end
+			self:EnableReputation()
 		end
 	end
 
@@ -361,19 +285,18 @@ do
 
 		LDB.OnEnter = nil
 		LDB.OnLeave = nil
+		LDB.ShowPlugin = false
 	end
 end
 
 XP.PlayerEnteringWorld = function(self)
 	self:UnregisterEvent("PLAYER_ENTERING_WORLD", "PlayerEnteringWorld")
 
-	self:EnableExperience()
+	self:EnableExperience("PLAYER_ENTERING_WORLD")
+
+	_G.StatusTrackingBarManager:Kill()
 end
 
 XP.OnInitialize = function(self)
-	IB.db = IB.db or {}
-	IB.db["xp"] = IB.db["xp"] or {}
-	self.db = IB.db["xp"]
-
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", "PlayerEnteringWorld")
 end

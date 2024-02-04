@@ -6,4 +6,3 @@ LSM:Register("font",		"Proza",			"Interface\\AddOns\\draeUI\\media\\fonts\\proza
 LSM:Register("font",		"Vollkorn",			"Interface\\AddOns\\draeUI\\media\\fonts\\vollkorn-medium.ttf")
 LSM:Register("font",		"LiberationSans",	"Interface\\AddOns\\draeUI\\media\\fonts\\liberationsans.ttf")
 LSM:Register("statusbar",	"striped",			"Interface\\AddOns\\draeUI\\media\\statusbars\\striped")
-LSM:Register("statusbar",	"hgrad",			"Interface\\AddOns\\draeUI\\media\\statusbars\\bar19")
